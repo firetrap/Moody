@@ -1,9 +1,9 @@
 package com.example.moody;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
 
 import android.os.Bundle;
-import com.actionbarsherlock.view.Menu;
 
 public class MainActivity extends SherlockActivity {
 
