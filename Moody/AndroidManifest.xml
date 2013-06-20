@@ -22,6 +22,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.moody.Menu_esq"
+            android:label="@string/title_activity_menu_esq" >
+        </activity>
+        <activity
+            android:name="com.example.moody.BaseActivity"
+            android:label="@string/title_activity_base" >
+        </activity>
+        <activity
+            android:name="com.example.moody.MainView"
+            android:label="@string/title_activity_main_view" >
+        </activity>
     </application>
 
 </manifest>
