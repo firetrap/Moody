@@ -365,8 +365,36 @@ svg:not(:root) {
 /*
  * Addresses margin not present in IE6/7/8/9, S5, O11
  */
-figure {
-  margin: 0;
+figure { 
+  width: 300px; 
+  float: left; 
+  margin: 0 20px 0 0; 
+  -webkit-transition: all 0.7s ease; 
+  -moz-transition: all 1s ease;
+  position: relative;
+}
+
+figcaption { 
+  text-align: center; 
+  display: block; 
+  font-size: 12px; 
+  font-style: italic; 
+}
+
+figure img { 
+  width: 100%; /* Scale down */
+}
+
+figure:hover {
+  -webkit-transform: rotate(-5deg); -moz-transform: rotate(5deg);
+  
+}
+
+figure:focus {
+  outline: none;
+  -webkit-transform: rotate(-3deg) scale(4); -moz-transform: rotate(-3deg) scale(2.5);
+
+  z-index: 9999;
 }
 
 /* =============================================================================
