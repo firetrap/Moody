@@ -34,6 +34,11 @@
             android:name="com.example.moody.MainView"
             android:label="@string/title_activity_main_view" >
         </activity>
+        <activity
+            android:name="com.example.moody.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
     </application>
 
 </manifest>

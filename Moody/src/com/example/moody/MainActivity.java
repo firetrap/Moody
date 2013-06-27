@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import com.actionbarsherlock.app.SherlockActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -47,9 +48,14 @@ public class MainActivity extends SherlockActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getSupportMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getSupportMenuInflater().inflate(R.menu.activity_main, menu);
+//		return true;
+		
+		Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+		return false;
 	}
 
 }
