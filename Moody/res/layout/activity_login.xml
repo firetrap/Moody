@@ -41,7 +41,7 @@
             android:orientation="vertical" >
 
             <EditText
-                android:id="@string/prompt_url"
+                android:id="@+id/prompt_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_url"

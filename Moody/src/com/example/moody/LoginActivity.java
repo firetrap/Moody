@@ -1,5 +1,12 @@
 package com.example.moody;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import com.example.MoodyConnections.Token;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -37,11 +44,14 @@ public class LoginActivity extends Activity {
 	 */
 	private UserLoginTask mAuthTask = null;
 
-	// Values for email and password at the time of the login attempt.
+	// Values for username and password at the time of the login attempt.
+	private String mUrl;
+	private String mToken;
 	private String mUser;
 	private String mPassword;
 
 	// UI references.
+	private EditText mUrlView;
 	private EditText mUserView;
 	private EditText mPasswordView;
 	private View mLoginFormView;
@@ -55,6 +65,7 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 
 		// Set up the login form.
+		mUrlView = (EditText) findViewById(R.id.prompt_url);
 		mUser = getIntent().getStringExtra(EXTRA_EMAIL);
 		mUserView = (EditText) findViewById(R.id.username);
 		mUserView.setText(mUser);
@@ -104,22 +115,37 @@ public class LoginActivity extends Activity {
 		}
 
 		// Reset errors.
+		mUrlView.setError(null);
 		mUserView.setError(null);
 		mPasswordView.setError(null);
 
 		// Store values at the time of the login attempt.
 		mUser = mUserView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
-
+		mUrl = mUrlView.getText().toString();
+		mToken = mUrlView.getText().toString() + "/login/token.php?username="
+				+ mUser + "&password=" + mPassword + "&service=moody_service";
 		boolean cancel = false;
 		View focusView = null;
+
+		// Check for url.
+		if (TextUtils.isEmpty(mUrl)) {
+			mUrlView.setError(getString(R.string.error_field_required));
+			focusView = mUrlView;
+			cancel = true;
+
+		} else if (mUrl.length() < 20) {
+			mUrlView.setError(getString(R.string.error_invalid_url));
+			focusView = mUrlView;
+			cancel = true;
+		}
 
 		// Check for a valid password.
 		if (TextUtils.isEmpty(mPassword)) {
 			mPasswordView.setError(getString(R.string.error_field_required));
 			focusView = mPasswordView;
 			cancel = true;
-			//vou usar este else if para se o token returnado nao for valido
+
 		} else if (mPassword.length() < 4) {
 			mPasswordView.setError(getString(R.string.error_invalid_password));
 			focusView = mPasswordView;
@@ -129,10 +155,6 @@ public class LoginActivity extends Activity {
 		// Check for a valid email address.
 		if (TextUtils.isEmpty(mUser)) {
 			mUserView.setError(getString(R.string.error_field_required));
-			focusView = mUserView;
-			cancel = true;
-		} else if (!mUser.contains("@")) {
-			mUserView.setError(getString(R.string.error_invalid_username));
 			focusView = mUserView;
 			cancel = true;
 		}
@@ -201,23 +223,51 @@ public class LoginActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
 
+			URL url = null;
 			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
+				url = new URL(mUrl);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 				return false;
 			}
+			try {
+				HttpURLConnection con = (HttpURLConnection) url
+						.openConnection();
+				con.connect();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
 
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mUser)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
 			}
+			// continuar aqui.........
+			Token userToken = new Token();
+			userToken.URL = mToken;
+
+			
+			if (userToken.URL.contains("username")
+					|| userToken.URL.length() < 32) {
+				mUserView.setError(getString(R.string.error_invalid_username));
+				mUserView.requestFocus();
+				mPasswordView
+						.setError(getString(R.string.error_incorrect_password));
+				mPasswordView.requestFocus();
+//				cancel(true);
+				return false;
+			}
+			return true;
+
+			// for (String credential : DUMMY_CREDENTIALS) {
+			// String[] pieces = credential.split(":");
+			// if (pieces[0].equals(mUser)) {
+			// // Account exists, return true if the password matches.
+			// return pieces[1].equals(mPassword);
+			// }
+			// }
 
 			// TODO: register the new account here.
-			return true;
+			// return true;
 		}
 
 		@Override
