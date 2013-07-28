@@ -226,7 +226,7 @@ public class LoginActivity extends Activity {
 			Log.d("MoodyDebug", "Entrou no Async");
 			URL url = null;
 
-			if (mUrl.subSequence(0, 7).equals("http://")) {;;
+			if (mUrl.subSequence(0, 7).equals("http://")) {
 
 			} else {
 				mUrl = "http://" + mUrl;
