@@ -12,6 +12,7 @@ import com.example.moody.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.widget.TextView;
  
 public class Token extends Activity {
@@ -28,10 +29,10 @@ public class Token extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         // init view layout
        
-    	StrictMode.ThreadPolicy policy = new StrictMode.
-    			ThreadPolicy.Builder().permitAll().build();
-    			StrictMode.setThreadPolicy(policy); 
-    			
+//    	StrictMode.ThreadPolicy policy = new StrictMode.
+//    			ThreadPolicy.Builder().permitAll().build();
+//    			StrictMode.setThreadPolicy(policy); 
+//    			
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
  
@@ -48,6 +49,7 @@ public class Token extends Activity {
             	           	
             }while(userToken.length()!=32);
           
+            Log.d("MoodyDebug",userToken);
             ((TextView)findViewById(R.id.textView1)).setText(userToken);
         } catch(Exception ex) {
         ((TextView)findViewById(R.id.textView1)).setText(ex.toString());
@@ -62,6 +64,7 @@ public class Token extends Activity {
         String stats = "";
  
         // config cleaner properties
+        
         HtmlCleaner htmlCleaner = new HtmlCleaner();
         CleanerProperties props = htmlCleaner.getProperties();
         props.setAllowHtmlInsideAttributes(false);

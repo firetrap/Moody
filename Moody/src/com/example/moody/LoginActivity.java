@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -222,13 +223,22 @@ public class LoginActivity extends Activity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
-
+			Log.d("MoodyDebug", "Entrou no Async");
 			URL url = null;
+
+			if (mUrl.subSequence(0, 7).equals("http://")) {
+
+			} else {
+				mUrl = "http://" + mUrl;
+			}
+
 			try {
 				url = new URL(mUrl);
+				Log.d("MoodyDebug", url.toString());
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				Log.d("MoodyErrorConnection", e.toString());
 				return false;
 			}
 			try {
@@ -238,14 +248,14 @@ public class LoginActivity extends Activity {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				Log.d("MoodyDebug", "Cant COnect");
 				return false;
 
 			}
 			// continuar aqui.........
 			Token userToken = new Token();
 			userToken.URL = mToken;
-
-			
+			Log.d("MoodyDebug", "Criou o token");
 			if (userToken.URL.contains("username")
 					|| userToken.URL.length() < 32) {
 				mUserView.setError(getString(R.string.error_invalid_username));
@@ -253,7 +263,7 @@ public class LoginActivity extends Activity {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
-//				cancel(true);
+				// cancel(true);
 				return false;
 			}
 			return true;
