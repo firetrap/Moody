@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -61,6 +62,7 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+	private String FinalToken;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +129,7 @@ public class LoginActivity extends Activity {
 		mUser = mUserView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
 		mUrl = mUrlView.getText().toString();
-	
+
 		boolean cancel = false;
 		View focusView = null;
 
@@ -142,14 +144,13 @@ public class LoginActivity extends Activity {
 			focusView = mUrlView;
 			cancel = true;
 		}
-		
-		// Check if URL contains the required http protocol. 
+
+		// Check if URL contains the required http protocol.
 		if (mUrl.subSequence(0, 7).equals("http://")) {
 
 		} else {
 			mUrl = "http://" + mUrl;
 		}
-
 
 		// Check for a valid password.
 		if (TextUtils.isEmpty(mPassword)) {
@@ -163,11 +164,25 @@ public class LoginActivity extends Activity {
 			cancel = true;
 		}
 
-		// Check for a valid email address.
+		// Check for a valid user.
 		if (TextUtils.isEmpty(mUser)) {
 			mUserView.setError(getString(R.string.error_field_required));
 			focusView = mUserView;
 			cancel = true;
+		}
+
+		// Inicialize the full context to generate token.
+		mToken = mUrlView.getText().toString() + "/login/token.php?username="
+				+ mUser + "&password=" + mPassword + "&service=moody_service";
+
+		// checks token integrity
+		if (getToken().length() < 32) {
+			cancel = true;
+
+			Log.d("MoodyDebug", "getToken failed");
+		} else {
+			FinalToken = getToken();
+
 		}
 
 		if (cancel) {
@@ -181,8 +196,7 @@ public class LoginActivity extends Activity {
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
 			mAuthTask.execute((Void) null);
-			mToken = mUrlView.getText().toString() + "/login/token.php?username="
-					+ mUser + "&password=" + mPassword + "&service=moody_service";
+
 			Log.d("MoodyDebug", mToken);
 		}
 	}
@@ -227,10 +241,6 @@ public class LoginActivity extends Activity {
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
 	}
-	
-	
-	
-	
 
 	/**
 	 * Represents an asynchronous login/registration task used to authenticate
@@ -243,7 +253,6 @@ public class LoginActivity extends Activity {
 			Log.d("MoodyDebug", "Entrou no Async");
 			URL url = null;
 
-			
 			try {
 				url = new URL(mUrl);
 				Log.d("AsyncTask", url.toString());
@@ -261,7 +270,7 @@ public class LoginActivity extends Activity {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				Log.d("MoodyDebug", "Cant COnect");
+				Log.d("MoodyDebug", "Cant Connect");
 				return false;
 
 			}
@@ -278,83 +287,10 @@ public class LoginActivity extends Activity {
 			// // cancel(true);
 			// return false;
 			// }
-//			Log.d("MoodyDebug", "Faz o get token");
-//			getToken();
+			// Log.d("MoodyDebug", "Faz o get token");
+
 			return true;
 
-			// for (String credential : DUMMY_CREDENTIALS) {
-			// String[] pieces = credential.split(":");
-			// if (pieces[0].equals(mUser)) {
-			// // Account exists, return true if the password matches.
-			// return pieces[1].equals(mPassword);
-			// }
-			// }
-
-			// TODO: register the new account here.
-			// return true;
-		}
-
-		
-	
-
-		public String getToken() {
-
-			// decide output
-			String value = "";
-			try {
-				value = getBlogStats();
-				StringTokenizer tokens = new StringTokenizer(value, "\"");
-				String userToken = "";
-				do {
-					userToken = tokens.nextToken();
-
-				} while (userToken.length() != 32);
-
-				Log.d("MoodyDebug", "aqui"+userToken);
-				((TextView) findViewById(R.id.textView1)).setText(userToken);
-				return userToken;
-			} catch (Exception ex) {
-				Log.d("MoodyDebug", "catch userToken ");
-				((TextView) findViewById(R.id.textView1))
-						.setText(ex.toString());
-
-			}
-			return value;
-
-		}
-
-		/*
-		 * get blog statistics
-		 */
-		public String getBlogStats() throws Exception {
-			String stats = "";
-
-			// config cleaner properties
-
-			HtmlCleaner htmlCleaner = new HtmlCleaner();
-			CleanerProperties props = htmlCleaner.getProperties();
-			props.setAllowHtmlInsideAttributes(false);
-			props.setAllowMultiWordAttributes(true);
-			props.setRecognizeUnicodeChars(true);
-			props.setOmitComments(true);
-
-			// create URL object
-			URL urlToken = new URL(mToken);
-			// get HTML page root node
-			TagNode root = htmlCleaner.clean(urlToken);
-
-			// query XPath
-			Object[] statsNode = root.evaluateXPath("");
-			// process data if found any node
-			if (statsNode.length > 0) {
-				// I already know there's only one node, so pick index at 0.
-				TagNode resultNode = (TagNode) statsNode[0];
-				// get text data from HTML node
-				stats = resultNode.getText().toString();
-			}
-
-			// return value
-			return stats;
 		}
 
 		@Override
@@ -367,8 +303,8 @@ public class LoginActivity extends Activity {
 			} else {
 				Log.d("MoodyDebug", "onPOstExecute-FAILED");
 				mPasswordView
-				
-						.setError(getString(R.string.error_incorrect_password));
+
+				.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
 			}
 		}
@@ -379,4 +315,77 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 		}
 	}
+
+	public String getToken() {
+
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
+		// decide output
+		String value = "";
+		String userToken = "";
+		try {
+			value = getBlogStats();
+			StringTokenizer tokens = new StringTokenizer(value, "\"");
+
+			do {
+				userToken = tokens.nextToken();
+
+			} while (userToken.length() != 32);
+
+			Log.d("MoodyDebug", "aqui" + userToken);
+			return userToken;
+		} catch (Exception ex) {
+			Log.d("MoodyDebug",
+					"userToken failed in: getToken()-> " + ex.toString());
+
+		}
+		return userToken;
+
+	}
+
+	/*
+	 * get blog statistics
+	 */
+	public String getBlogStats() throws Exception {
+		String stats = "";
+
+		// config cleaner properties
+
+		HtmlCleaner htmlCleaner = new HtmlCleaner();
+		CleanerProperties props = htmlCleaner.getProperties();
+		props.setAllowHtmlInsideAttributes(false);
+		props.setAllowMultiWordAttributes(true);
+		props.setRecognizeUnicodeChars(true);
+		props.setOmitComments(true);
+
+		// Check if token contains the required http protocol.
+		if (mToken.subSequence(0, 7).equals("http://")) {
+
+		} else {
+			mToken = "http://" + mToken;
+		}
+		Log.d("Check", mToken);
+
+		// create URL object
+		URL urlToken = new URL(mToken);
+		// get HTML page root node
+		TagNode root = htmlCleaner.clean(urlToken);
+
+		// query XPath
+		Object[] statsNode = root.evaluateXPath("");
+		// process data if found any node
+		if (statsNode.length > 0) {
+			// I already know there's only one node, so pick index at 0.
+			TagNode resultNode = (TagNode) statsNode[0];
+			// get text data from HTML node
+			stats = resultNode.getText().toString();
+		}
+
+		Log.d("MoodyDebug", stats);
+
+		return stats;
+	}
+
 }
