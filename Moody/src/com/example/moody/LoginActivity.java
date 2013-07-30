@@ -36,8 +36,6 @@ public class LoginActivity extends Activity {
 	 * A dummy authentication store containing known user names and passwords.
 	 * TODO: remove after connecting to a real authentication system.
 	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
 
 	/**
 	 * The default email to populate the email field with.
@@ -176,9 +174,13 @@ public class LoginActivity extends Activity {
 				+ mUser + "&password=" + mPassword + "&service=moody_service";
 
 		// checks token integrity
-		if (getToken().length() < 32) {
+		if (getToken().toString().length() != 32 || getToken().toString().contains("username")) {
+			mUserView.setError(getString(R.string.error_invalid_username));
+			focusView = mUserView;
+			mPasswordView
+					.setError(getString(R.string.error_incorrect_password));
+			focusView = mPasswordView;
 			cancel = true;
-
 			Log.d("MoodyDebug", "getToken failed");
 		} else {
 			FinalToken = getToken();
@@ -274,20 +276,6 @@ public class LoginActivity extends Activity {
 				return false;
 
 			}
-			// // continuar aqui.........
-			//
-			// Log.d("MoodyDebug", "Criou o token");
-			// if (mToken.contains("username")
-			// || mToken.length() < 32) {
-			// mUserView.setError(getString(R.string.error_invalid_username));
-			// mUserView.requestFocus();
-			// mPasswordView
-			// .setError(getString(R.string.error_incorrect_password));
-			// mPasswordView.requestFocus();
-			// // cancel(true);
-			// return false;
-			// }
-			// Log.d("MoodyDebug", "Faz o get token");
 
 			return true;
 
@@ -315,7 +303,10 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 		}
 	}
-
+	
+	/**
+	 * Inicialize the requirements for getSiteStats the required token from the site.
+	 */
 	public String getToken() {
 
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
@@ -326,7 +317,7 @@ public class LoginActivity extends Activity {
 		String value = "";
 		String userToken = "";
 		try {
-			value = getBlogStats();
+			value = getSiteStats();
 			StringTokenizer tokens = new StringTokenizer(value, "\"");
 
 			do {
@@ -344,11 +335,11 @@ public class LoginActivity extends Activity {
 		return userToken;
 
 	}
-
-	/*
-	 * get blog statistics
+	/**
+	
+ * Get the required token from the site.
 	 */
-	public String getBlogStats() throws Exception {
+	public String getSiteStats() throws Exception {
 		String stats = "";
 
 		// config cleaner properties
