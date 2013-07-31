@@ -28,7 +28,7 @@ public class MainActivity extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// Find the ListView resource.
-		mainListView = (ListView) findViewById(R.id.listView1);
+		mainListView = (ListView) findViewById(R.id.main_list_viewer);
 
 		// Create and populate a List of planet names.
 		String[] planets = new String[] { "Mercury", "Venus", "Earth", "Mars",
