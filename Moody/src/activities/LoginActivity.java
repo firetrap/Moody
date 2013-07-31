@@ -1,4 +1,4 @@
-package com.example.moody;
+package activities;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -6,9 +6,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.StringTokenizer;
 
+import managers.SessionManager;
+
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
+
+import com.example.moody.R;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -26,6 +30,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -62,12 +67,16 @@ public class LoginActivity extends Activity {
 	private TextView mLoginStatusMessageView;
 	private String FinalToken;
 
+	// Session Manager Class
+		SessionManager session;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
 
+		
 		// Set up the login form.
 		mUrlView = (EditText) findViewById(R.id.prompt_url);
 		mUser = getIntent().getStringExtra(EXTRA_EMAIL);
@@ -92,6 +101,14 @@ public class LoginActivity extends Activity {
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
+		
+		//shared pref
+		session = new SessionManager(getApplicationContext());
+        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "VALUES: " + session.getValues(mUser, null), Toast.LENGTH_LONG).show();
+
+		
+		
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
@@ -198,11 +215,15 @@ public class LoginActivity extends Activity {
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
 			mAuthTask.execute((Void) null);
-
+		
 			Log.d("MoodyDebug", mToken);
 		}
 	}
 
+
+    
+    
+    
 	/**
 	 * Shows the progress UI and hides the login form.
 	 */
@@ -287,6 +308,9 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 
 			if (success) {
+				// Session Manager and shared pref
+		        session = new SessionManager(getApplicationContext());
+		        session.createLoginSession(mUser, FinalToken);
 				finish();
 			} else {
 				Log.d("MoodyDebug", "onPOstExecute-FAILED");
