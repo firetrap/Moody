@@ -10,7 +10,10 @@ import com.actionbarsherlock.app.SherlockActivity;
 import android.content.Intent;
 import android.content.pm.FeatureInfo;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -58,6 +61,21 @@ public class MainActivity extends SherlockActivity {
 		mainListView.setAdapter(listAdapter);
 		leftListView.setAdapter(listAdapter);
 		rightListView.setAdapter(listAdapter);
+		
+		
+	ImageButton loginImageButton = (ImageButton)findViewById(R.id.login_image_button);
+ 		
+ 		loginImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+ 			public void onClick(View v) {
+ 				Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+ 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+ 				startActivity(intent);
+ 			}
+ 		});
+ 	
+ 		
+ 	
 
 	}
 
@@ -72,16 +90,16 @@ public class MainActivity extends SherlockActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_settings:
-			Intent intent = new Intent(this, LoginActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			break;
-
-		default:
-			return super.onOptionsItemSelected(item);
-		}
+//		switch (item.getItemId()) {
+//		case R.id.menu_settings:
+//			Intent intent = new Intent(this, LoginActivity.class);
+//			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//			startActivity(intent);
+//			break;
+//
+//		default:
+//			return super.onOptionsItemSelected(item);
+//		}
 
 		return true;
 	}
