@@ -8,6 +8,7 @@ import managers.SessionManager;
 import com.actionbarsherlock.app.SherlockActivity;
 
 import android.content.Intent;
+import android.content.pm.FeatureInfo;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -19,6 +20,8 @@ import com.example.moody.R;
 
 public class MainActivity extends SherlockActivity {
 	private ListView mainListView;
+	private ListView leftListView;
+	private ListView rightListView;
 	private ArrayAdapter<String> listAdapter;
 	
 
@@ -29,6 +32,8 @@ public class MainActivity extends SherlockActivity {
 		setContentView(R.layout.activity_main);
 		// Find the ListView resource.
 		mainListView = (ListView) findViewById(R.id.main_list_viewer);
+		leftListView = (ListView) findViewById(R.id.left_list_viewer);
+		rightListView = (ListView) findViewById(R.id.right_list_viewer);
 
 		// Create and populate a List of planet names.
 		String[] planets = new String[] { "Mercury", "Venus", "Earth", "Mars",
@@ -51,6 +56,8 @@ public class MainActivity extends SherlockActivity {
 
 		// Set the ArrayAdapter as the ListView's adapter.
 		mainListView.setAdapter(listAdapter);
+		leftListView.setAdapter(listAdapter);
+		rightListView.setAdapter(listAdapter);
 
 	}
 
