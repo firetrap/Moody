@@ -10,6 +10,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 import android.content.Intent;
 import android.content.pm.FeatureInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -21,13 +22,14 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.moody.R;
 
-public class MainActivity extends SherlockActivity {
+public class MainActivity extends SherlockActivity implements OnClickListener {
 	private ListView mainListView;
 	private ListView leftListView;
 	private ListView rightListView;
 	private ArrayAdapter<String> listAdapter;
-	
 
+	// Session Manager Class
+	SessionManager session;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,22 +63,46 @@ public class MainActivity extends SherlockActivity {
 		mainListView.setAdapter(listAdapter);
 		leftListView.setAdapter(listAdapter);
 		rightListView.setAdapter(listAdapter);
-		
-		
-	ImageButton loginImageButton = (ImageButton)findViewById(R.id.login_image_button);
- 		
- 		loginImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
- 			public void onClick(View v) {
- 				Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
- 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
- 				startActivity(intent);
- 			}
- 		});
- 	
- 		
- 	
 
+		// OnClickListener's for all button, after pressed it will send for the
+		// onClick method the button pressed
+		ImageButton loginImageButton = (ImageButton) findViewById(R.id.login_image_button);
+		loginImageButton.setOnClickListener(this);
+		ImageButton logouImageButton = (ImageButton) findViewById(R.id.logout_image_button);
+		logouImageButton.setOnClickListener(this);
+
+	}
+
+	// Method to decide what to do from what button was pressed
+	public void onClick(View v) {
+		session = new SessionManager(getApplicationContext());
+		switch (v.getId()) {
+		case R.id.login_image_button:
+			if (session.isLoggedIn() == false) {
+				Intent intent = new Intent(getApplicationContext(),
+						LoginActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			} else {
+				Log.d("MoodyDebud",
+						"Entrará aqui se o utilizador ja estiver logado e em vez de vir para aqui irá para as defeniçoes de utilizador");
+			}
+			break;
+		case R.id.logout_image_button:
+			if (session.isLoggedIn() == true) {
+				session.logoutUser();
+			} else {
+				// só entra neste else caso o utilizador ainda nao esteja
+				// loggado entao é reencaminhado para o LoginActivity
+				Intent intent = new Intent(getApplicationContext(),
+						LoginActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
+			break;
+		default:
+			throw new RuntimeException("Unknown button ID");
+		}
 	}
 
 	@Override
@@ -90,16 +116,16 @@ public class MainActivity extends SherlockActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		case R.id.menu_settings:
-//			Intent intent = new Intent(this, LoginActivity.class);
-//			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//			startActivity(intent);
-//			break;
-//
-//		default:
-//			return super.onOptionsItemSelected(item);
-//		}
+		// switch (item.getItemId()) {
+		// case R.id.menu_settings:
+		// Intent intent = new Intent(this, LoginActivity.class);
+		// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		// startActivity(intent);
+		// break;
+		//
+		// default:
+		// return super.onOptionsItemSelected(item);
+		// }
 
 		return true;
 	}
