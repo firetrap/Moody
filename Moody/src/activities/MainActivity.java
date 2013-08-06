@@ -8,7 +8,6 @@ import managers.SessionManager;
 import com.actionbarsherlock.app.SherlockActivity;
 
 import android.content.Intent;
-import android.content.pm.FeatureInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;

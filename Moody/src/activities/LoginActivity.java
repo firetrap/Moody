@@ -11,9 +11,17 @@ import managers.SessionManager;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import parser.XMLParser;
 
 import com.example.moody.R;
 
+import android.R.integer;
+import android.R.string;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -24,6 +32,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -67,16 +76,19 @@ public class LoginActivity extends Activity {
 	private TextView mLoginStatusMessageView;
 	private String FinalToken;
 
+	private String XMLurl = "";
+
+	private String UserId = "";
+
 	// Session Manager Class
-		SessionManager session;
-	
+	SessionManager session;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
 
-		
 		// Set up the login form.
 		mUrlView = (EditText) findViewById(R.id.prompt_url);
 		mUser = getIntent().getStringExtra(EXTRA_EMAIL);
@@ -101,14 +113,15 @@ public class LoginActivity extends Activity {
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-		
-		//shared pref
+		// shared pref
 		session = new SessionManager(getApplicationContext());
-        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), "VALUES: " + session.getValues(mUser, null), Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(),
+				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
+				.show();
+		Toast.makeText(getApplicationContext(),
+				"VALUES: " + session.getValues(mUser, null), Toast.LENGTH_LONG)
+				.show();
 
-		
-		
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
@@ -191,7 +204,8 @@ public class LoginActivity extends Activity {
 				+ mUser + "&password=" + mPassword + "&service=moody_service";
 
 		// checks token integrity
-		if (getToken().toString().length() != 32 || getToken().toString().contains("username")) {
+		if (getToken().toString().length() != 32
+				|| getToken().toString().contains("username")) {
 			mUserView.setError(getString(R.string.error_invalid_username));
 			focusView = mUserView;
 			mPasswordView
@@ -200,7 +214,32 @@ public class LoginActivity extends Activity {
 			cancel = true;
 			Log.d("MoodyDebug", "getToken failed");
 		} else {
+
 			FinalToken = getToken();
+
+			// Get user id URL
+			XMLurl = "http://" + mUrlView.getText().toString()
+					+ "/webservice/rest/server.php?wstoken=" + FinalToken
+					+ "&wsfunction=core_webservice_get_site_info";
+
+			// Parent node
+			String nodeParent = "KEY";
+			// init XMLparser
+			XMLParser parser = new XMLParser();
+			// getting XML
+			String xml = parser.getXmlFromUrl(XMLurl);
+			// getting DOM element
+			Document doc = parser.getDomElement(xml);
+
+			NodeList nl = doc.getElementsByTagName(nodeParent);
+
+			// looping through all item nodes <item>
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element e = (Element) nl.item(i);
+				if (e.getAttribute("name").equals("userid")) {
+					UserId = e.getTextContent();
+				}
+			}
 
 		}
 
@@ -215,15 +254,11 @@ public class LoginActivity extends Activity {
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
 			mAuthTask.execute((Void) null);
-		
+
 			Log.d("MoodyDebug", mToken);
 		}
 	}
 
-
-    
-    
-    
 	/**
 	 * Shows the progress UI and hides the login form.
 	 */
@@ -308,9 +343,10 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 
 			if (success) {
-				// Session Manager and shared pref
-		        session = new SessionManager(getApplicationContext());
-		        session.createLoginSession(mUser, FinalToken);
+				// Session Manager and shared pref send to shared pref:
+				// user-name, user-token, User-id in database
+				session = new SessionManager(getApplicationContext());
+				session.createLoginSession(mUser, FinalToken, UserId);
 				finish();
 			} else {
 				Log.d("MoodyDebug", "onPOstExecute-FAILED");
@@ -327,9 +363,10 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 		}
 	}
-	
+
 	/**
-	 * Inicialize the requirements for getSiteStats the required token from the site.
+	 * Inicialize the requirements for getSiteStats the required token from the
+	 * site.
 	 */
 	public String getToken() {
 
@@ -359,9 +396,10 @@ public class LoginActivity extends Activity {
 		return userToken;
 
 	}
+
 	/**
-	
- * Get the required token from the site.
+	 * 
+	 * Get the required token from the site.
 	 */
 	public String getSiteStats() throws Exception {
 		String stats = "";
