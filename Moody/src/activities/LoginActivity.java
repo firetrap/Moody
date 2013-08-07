@@ -20,6 +20,9 @@ import parser.XMLParser;
 
 import com.example.moody.R;
 
+import connections.Connections;
+import connections.Token;
+
 import android.R.integer;
 import android.R.string;
 import android.animation.Animator;
@@ -82,6 +85,9 @@ public class LoginActivity extends Activity {
 
 	// Session Manager Class
 	SessionManager session;
+
+	// Token Class
+	Token token;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -199,23 +205,25 @@ public class LoginActivity extends Activity {
 			cancel = true;
 		}
 
-		// Inicialize the full context to generate token.
+		// Inicialize the full context to generate token &&
 		mToken = mUrlView.getText().toString() + "/login/token.php?username="
 				+ mUser + "&password=" + mPassword + "&service=moody_service";
+		// send the generated token to verify.
+		token = new Token(mToken);
 
 		// checks token integrity
-		if (getToken().toString().length() != 32
-				|| getToken().toString().contains("username")) {
+		if (token.getToken().toString().length() != 32
+				|| token.getToken().toString().contains("username")) {
 			mUserView.setError(getString(R.string.error_invalid_username));
 			focusView = mUserView;
 			mPasswordView
 					.setError(getString(R.string.error_incorrect_password));
 			focusView = mPasswordView;
 			cancel = true;
-			Log.d("MoodyDebug", "getToken failed");
+			Log.d("MoodyDebug", "Token failed");
 		} else {
 
-			FinalToken = getToken();
+			FinalToken = token.getToken();
 
 			// Get user id URL
 			XMLurl = "http://" + mUrlView.getText().toString()
@@ -368,77 +376,77 @@ public class LoginActivity extends Activity {
 	 * Inicialize the requirements for getSiteStats the required token from the
 	 * site.
 	 */
-	public String getToken() {
-
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-				.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-
-		// decide output
-		String value = "";
-		String userToken = "";
-		try {
-			value = getSiteStats();
-			StringTokenizer tokens = new StringTokenizer(value, "\"");
-
-			do {
-				userToken = tokens.nextToken();
-
-			} while (userToken.length() != 32);
-
-			Log.d("MoodyDebug", "aqui" + userToken);
-			return userToken;
-		} catch (Exception ex) {
-			Log.d("MoodyDebug",
-					"userToken failed in: getToken()-> " + ex.toString());
-
-		}
-		return userToken;
-
-	}
-
-	/**
-	 * 
-	 * Get the required token from the site.
-	 */
-	public String getSiteStats() throws Exception {
-		String stats = "";
-
-		// config cleaner properties
-
-		HtmlCleaner htmlCleaner = new HtmlCleaner();
-		CleanerProperties props = htmlCleaner.getProperties();
-		props.setAllowHtmlInsideAttributes(false);
-		props.setAllowMultiWordAttributes(true);
-		props.setRecognizeUnicodeChars(true);
-		props.setOmitComments(true);
-
-		// Check if token contains the required http protocol.
-		if (mToken.subSequence(0, 7).equals("http://")) {
-
-		} else {
-			mToken = "http://" + mToken;
-		}
-		Log.d("Check", mToken);
-
-		// create URL object
-		URL urlToken = new URL(mToken);
-		// get HTML page root node
-		TagNode root = htmlCleaner.clean(urlToken);
-
-		// query XPath
-		Object[] statsNode = root.evaluateXPath("");
-		// process data if found any node
-		if (statsNode.length > 0) {
-			// I already know there's only one node, so pick index at 0.
-			TagNode resultNode = (TagNode) statsNode[0];
-			// get text data from HTML node
-			stats = resultNode.getText().toString();
-		}
-
-		Log.d("MoodyDebug", stats);
-
-		return stats;
-	}
+	// public String getToken() {
+	//
+	// StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+	// .permitAll().build();
+	// StrictMode.setThreadPolicy(policy);
+	//
+	// // decide output
+	// String value = "";
+	// String userToken = "";
+	// try {
+	// value = getSiteStats();
+	// StringTokenizer tokens = new StringTokenizer(value, "\"");
+	//
+	// do {
+	// userToken = tokens.nextToken();
+	//
+	// } while (userToken.length() != 32);
+	//
+	// Log.d("MoodyDebug", "aqui" + userToken);
+	// return userToken;
+	// } catch (Exception ex) {
+	// Log.d("MoodyDebug",
+	// "userToken failed in: Token()-> " + ex.toString());
+	//
+	// }
+	// return userToken;
+	//
+	// }
+	//
+	// /**
+	// *
+	// * Get the required token from the site.
+	// */
+	// public String getSiteStats() throws Exception {
+	// String stats = "";
+	//
+	// // config cleaner properties
+	//
+	// HtmlCleaner htmlCleaner = new HtmlCleaner();
+	// CleanerProperties props = htmlCleaner.getProperties();
+	// props.setAllowHtmlInsideAttributes(false);
+	// props.setAllowMultiWordAttributes(true);
+	// props.setRecognizeUnicodeChars(true);
+	// props.setOmitComments(true);
+	//
+	// // Check if token contains the required http protocol.
+	// if (mToken.subSequence(0, 7).equals("http://")) {
+	//
+	// } else {
+	// mToken = "http://" + mToken;
+	// }
+	// Log.d("Check", mToken);
+	//
+	// // create URL object
+	// URL urlToken = new URL(mToken);
+	// // get HTML page root node
+	// TagNode root = htmlCleaner.clean(urlToken);
+	//
+	// // query XPath
+	// Object[] statsNode = root.evaluateXPath("");
+	// // process data if found any node
+	// if (statsNode.length > 0) {
+	// // I already know there's only one node, so pick index at 0.
+	// TagNode resultNode = (TagNode) statsNode[0];
+	// // get text data from HTML node
+	// stats = resultNode.getText().toString();
+	// }
+	//
+	// Log.d("MoodyDebug", stats);
+	//
+	// return stats;
+	// }
 
 }
