@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.StringTokenizer;
+import java.util.concurrent.ExecutionException;
 
 import managers.SessionManager;
 
@@ -16,12 +17,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import parser.XMLParser;
-
 import com.example.moody.R;
 
 import connections.Connections;
+import connections.DownloadXmlTask;
 import connections.Token;
+import connections.XMLParser;
 
 import android.R.integer;
 import android.R.string;
@@ -49,10 +50,6 @@ import android.widget.Toast;
  * well.
  */
 public class LoginActivity extends Activity {
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
 
 	/**
 	 * The default email to populate the email field with.
@@ -78,15 +75,13 @@ public class LoginActivity extends Activity {
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
 	private String FinalToken;
-
 	private String XMLurl = "";
-
 	private String UserId = "";
-
+	private String urlName;
+	private String fullname;
 	// Session Manager Class
 	SessionManager session;
-
-	// Token Class
+	// Init Token Class
 	Token token;
 
 	@Override
@@ -215,7 +210,9 @@ public class LoginActivity extends Activity {
 		if (token.getToken().toString().length() != 32
 				|| token.getToken().toString().contains("username")) {
 			mUserView.setError(getString(R.string.error_invalid_username));
+
 			focusView = mUserView;
+
 			mPasswordView
 					.setError(getString(R.string.error_incorrect_password));
 			focusView = mPasswordView;
@@ -230,24 +227,20 @@ public class LoginActivity extends Activity {
 					+ "/webservice/rest/server.php?wstoken=" + FinalToken
 					+ "&wsfunction=core_webservice_get_site_info";
 
-			// Parent node
-			String nodeParent = "KEY";
-			// init XMLparser
-			XMLParser parser = new XMLParser();
-			// getting XML
-			String xml = parser.getXmlFromUrl(XMLurl);
-			// getting DOM element
-			Document doc = parser.getDomElement(xml);
-
-			NodeList nl = doc.getElementsByTagName(nodeParent);
-
-			// looping through all item nodes <item>
-			for (int i = 0; i < nl.getLength(); i++) {
-				Element e = (Element) nl.item(i);
-				if (e.getAttribute("name").equals("userid")) {
-					UserId = e.getTextContent();
-				}
+			// Send 2 params to async constructor the url and the required Tag
+			// for the XML parser
+			try {
+				UserId = new DownloadXmlTask().execute(XMLurl, "userid", "xml").get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+
+			Toast.makeText(getApplicationContext(), "ASYNNNNCCCC " + UserId,
+					Toast.LENGTH_LONG).show();
 
 		}
 
@@ -371,82 +364,5 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 		}
 	}
-
-	/**
-	 * Inicialize the requirements for getSiteStats the required token from the
-	 * site.
-	 */
-	// public String getToken() {
-	//
-	// StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-	// .permitAll().build();
-	// StrictMode.setThreadPolicy(policy);
-	//
-	// // decide output
-	// String value = "";
-	// String userToken = "";
-	// try {
-	// value = getSiteStats();
-	// StringTokenizer tokens = new StringTokenizer(value, "\"");
-	//
-	// do {
-	// userToken = tokens.nextToken();
-	//
-	// } while (userToken.length() != 32);
-	//
-	// Log.d("MoodyDebug", "aqui" + userToken);
-	// return userToken;
-	// } catch (Exception ex) {
-	// Log.d("MoodyDebug",
-	// "userToken failed in: Token()-> " + ex.toString());
-	//
-	// }
-	// return userToken;
-	//
-	// }
-	//
-	// /**
-	// *
-	// * Get the required token from the site.
-	// */
-	// public String getSiteStats() throws Exception {
-	// String stats = "";
-	//
-	// // config cleaner properties
-	//
-	// HtmlCleaner htmlCleaner = new HtmlCleaner();
-	// CleanerProperties props = htmlCleaner.getProperties();
-	// props.setAllowHtmlInsideAttributes(false);
-	// props.setAllowMultiWordAttributes(true);
-	// props.setRecognizeUnicodeChars(true);
-	// props.setOmitComments(true);
-	//
-	// // Check if token contains the required http protocol.
-	// if (mToken.subSequence(0, 7).equals("http://")) {
-	//
-	// } else {
-	// mToken = "http://" + mToken;
-	// }
-	// Log.d("Check", mToken);
-	//
-	// // create URL object
-	// URL urlToken = new URL(mToken);
-	// // get HTML page root node
-	// TagNode root = htmlCleaner.clean(urlToken);
-	//
-	// // query XPath
-	// Object[] statsNode = root.evaluateXPath("");
-	// // process data if found any node
-	// if (statsNode.length > 0) {
-	// // I already know there's only one node, so pick index at 0.
-	// TagNode resultNode = (TagNode) statsNode[0];
-	// // get text data from HTML node
-	// stats = resultNode.getText().toString();
-	// }
-	//
-	// Log.d("MoodyDebug", stats);
-	//
-	// return stats;
-	// }
 
 }

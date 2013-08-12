@@ -17,13 +17,15 @@ import android.util.Log;
  * @author firetrap
  * 
  */
+
+/**
+ * Inicialize the requirements for getSiteStats the required token from the
+ * site.
+ */
 public class Token {
 
 	private String mToken;
 
-	/**
-	 * 
-	 */
 	public Token(String mToken) {
 		this.mToken = mToken;
 	}

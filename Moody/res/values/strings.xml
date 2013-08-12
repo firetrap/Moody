@@ -9,5 +9,7 @@
     <string name="title_activity_base">BaseActivity</string>
     <string name="title_activity_main_view">MainView</string>
     <string name="login_image"></string>
+    <string name="title_activity_left">LeftActivity</string>
+    <string name="title_activity_right">RightActivity</string>
 
 </resources>

@@ -1,14 +1,10 @@
-package activities;
+package com.example.moody;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import managers.SessionManager;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
+import activities.LoginActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,34 +13,21 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.example.moody.R;
 
-import connections.XMLParser;
-
-public class MainActivity extends SherlockActivity implements OnClickListener {
-	private ListView mainListView;
+public class LeftActivity extends SherlockActivity implements OnClickListener{
 	private ListView leftListView;
-	private ListView rightListView;
 	private ArrayAdapter<String> listAdapter;
-	private String urlName;
-	private String fullname;
-
 	// Session Manager Class
 	SessionManager session;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		// Find the ListView resource.
-		mainListView = (ListView) findViewById(R.id.main_list_viewer);
+		setContentView(R.layout.activity_left);
+		moveTaskToBack(true);
 		leftListView = (ListView) findViewById(R.id.left_list_viewer);
-		rightListView = (ListView) findViewById(R.id.right_list_viewer);
 
 		// Create and populate a List of planet names.
 		String[] planets = new String[] { "Mercury", "Venus", "Earth", "Mars",
@@ -66,8 +49,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		listAdapter.add("Eris");
 
 		// Set the ArrayAdapter as the ListView's adapter.
-		mainListView.setAdapter(listAdapter);
-		rightListView.setAdapter(listAdapter);
 		leftListView.setAdapter(listAdapter);
 
 		// OnClickListener's for all button, after pressed it will send for the
@@ -77,33 +58,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		ImageButton logouImageButton = (ImageButton) findViewById(R.id.logout_image_button);
 		logouImageButton.setOnClickListener(this);
 
-	
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// // Inflate the menu; this adds items to the action bar if it is
-		// present.
-		getSupportMenuInflater().inflate(R.menu.activity_main, menu);
-
-		return true;
-
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// switch (item.getItemId()) {
-		// case R.id.menu_settings:
-		// Intent intent = new Intent(this, LoginActivity.class);
-		// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		// startActivity(intent);
-		// break;
-		//
-		// default:
-		// return super.onOptionsItemSelected(item);
-		// }
-
-		return true;
 	}
 
 	// Method to decide what to do from what button was pressed
@@ -139,4 +93,5 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 	}
 
 	
+
 }
