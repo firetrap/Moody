@@ -11,7 +11,7 @@ import org.w3c.dom.NodeList;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import connections.XMLParser;
+import connections.XMLparser;
 
 public class DataManager {
 
@@ -33,7 +33,7 @@ public class DataManager {
 //		// Parent node
 //		String nodeParent = "KEY";
 //		// init XMLparser
-//		XMLParser parser = new XMLParser();
+//		XMLparser parser = new XMLparser();
 //		// getting XML
 //		String xml = parser.getXmlFromUrl(url);
 //		// getting DOM element

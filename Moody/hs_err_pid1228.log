@@ -87,7 +87,7 @@ Dynamic libraries:
 
 VM Arguments:
 jvm_args: -Djava.library.path=C:\Users\firetrap\Documents\GitHub\Moody\Moody -Dfile.encoding=Cp1252 -Xbootclasspath:C:\adt-bundle-windows-x86_64\sdk\platforms\android-17\android.jar;C:\adt-bundle-windows-x86_64\sdk\add-ons\addon-google_apis-google-17\libs\effects.jar;C:\adt-bundle-windows-x86_64\sdk\add-ons\addon-google_apis-google-17\libs\usb.jar;C:\adt-bundle-windows-x86_64\sdk\add-ons\addon-google_apis-google-17\libs\maps.jar 
-java_command: connections.Token
+java_command: connections.HTMLparser
 Launcher Type: SUN_STANDARD
 
 Environment Variables:

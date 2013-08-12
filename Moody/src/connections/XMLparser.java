@@ -8,12 +8,11 @@ import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.util.Log;
 import android.util.Xml;
 
 
 
-public class XMLParser {
+public class XMLparser {
 
 	private static final String ns = null;
 
@@ -75,8 +74,7 @@ public class XMLParser {
 				skip(parser);
 			}
 		}
-		Log.d("parser", "1readResponse entries isEmpty?->"
-				+ (entries.isEmpty() ? "true" : "false"));
+		
 		return entries;
 	}
 
@@ -103,8 +101,6 @@ public class XMLParser {
 			}
 		}
 
-		Log.d("parser", "2readMultiple entries isEmpty?->"
-				+ (entries.isEmpty() ? "true" : "false"));
 		return entries;
 	}
 
@@ -142,9 +138,8 @@ public class XMLParser {
 			}
 		}
 
-		Log.d("parser", "3readSingle entries isEmpty?->"
-				+ (entries.isEmpty() ? "true" : "false"));
-		Log.d("parser", "Keyname?->" + keyName);
+	
+		
 		return entries;
 	}
 

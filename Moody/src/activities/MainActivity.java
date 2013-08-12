@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import managers.SessionManager;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,28 +12,31 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.moody.R;
 
-import connections.XMLParser;
-
 public class MainActivity extends SherlockActivity implements OnClickListener {
 	private ListView mainListView;
 	private ListView leftListView;
 	private ListView rightListView;
 	private ArrayAdapter<String> listAdapter;
-	private String urlName;
-	private String fullname;
 
 	// Session Manager Class
 	SessionManager session;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		// shared pref
+		session = new SessionManager(getApplicationContext());
+		Toast.makeText(getApplicationContext(),
+				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
+				.show();
+		
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// Find the ListView resource.
@@ -77,7 +75,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		ImageButton logouImageButton = (ImageButton) findViewById(R.id.logout_image_button);
 		logouImageButton.setOnClickListener(this);
 
-	
 	}
 
 	@Override
@@ -138,5 +135,4 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		}
 	}
 
-	
 }

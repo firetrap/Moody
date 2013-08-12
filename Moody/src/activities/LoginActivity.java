@@ -4,28 +4,9 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 
 import managers.SessionManager;
-
-import org.htmlcleaner.CleanerProperties;
-import org.htmlcleaner.HtmlCleaner;
-import org.htmlcleaner.TagNode;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import com.example.moody.R;
-
-import connections.Connections;
-import connections.DownloadXmlTask;
-import connections.Token;
-import connections.XMLParser;
-
-import android.R.integer;
-import android.R.string;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -33,17 +14,19 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.moody.R;
+
+import connections.DownloadDataTask;
+import connections.HTMLparser;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -77,12 +60,11 @@ public class LoginActivity extends Activity {
 	private String FinalToken;
 	private String XMLurl = "";
 	private String UserId = "";
-	private String urlName;
-	private String fullname;
+
 	// Session Manager Class
 	SessionManager session;
-	// Init Token Class
-	Token token;
+	// Init HTMLparser Class
+	HTMLparser token;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -113,15 +95,6 @@ public class LoginActivity extends Activity {
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-
-		// shared pref
-		session = new SessionManager(getApplicationContext());
-		Toast.makeText(getApplicationContext(),
-				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
-				.show();
-		Toast.makeText(getApplicationContext(),
-				"VALUES: " + session.getValues(mUser, null), Toast.LENGTH_LONG)
-				.show();
 
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
@@ -201,14 +174,27 @@ public class LoginActivity extends Activity {
 		}
 
 		// Inicialize the full context to generate token &&
-		mToken = mUrlView.getText().toString() + "/login/token.php?username="
-				+ mUser + "&password=" + mPassword + "&service=moody_service";
+		mToken = mUrl + "/login/token.php?username=" + mUser + "&password="
+				+ mPassword + "&service=moody_service";
+
 		// send the generated token to verify.
-		token = new Token(mToken);
+		try {
+			FinalToken = new DownloadDataTask().execute(mToken, null, "html")
+					.get();
+
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			Log.d("Async Error", "Error creating FinalToken1" + FinalToken);
+			e1.printStackTrace();
+		} catch (ExecutionException e1) {
+			// TODO Auto-generated catch block
+			Log.d("parser", "Error creating finalToken2" + FinalToken);
+			e1.printStackTrace();
+		}
 
 		// checks token integrity
-		if (token.getToken().toString().length() != 32
-				|| token.getToken().toString().contains("username")) {
+		if (FinalToken.toString().length() != 32
+				|| FinalToken.toString().contains("username")) {
 			mUserView.setError(getString(R.string.error_invalid_username));
 
 			focusView = mUserView;
@@ -216,11 +202,10 @@ public class LoginActivity extends Activity {
 			mPasswordView
 					.setError(getString(R.string.error_incorrect_password));
 			focusView = mPasswordView;
+			FinalToken = "error!";
 			cancel = true;
-			Log.d("MoodyDebug", "Token failed");
+			Log.d("MoodyDebug", "HTMLparser failed");
 		} else {
-
-			FinalToken = token.getToken();
 
 			// Get user id URL
 			XMLurl = "http://" + mUrlView.getText().toString()
@@ -230,7 +215,8 @@ public class LoginActivity extends Activity {
 			// Send 2 params to async constructor the url and the required Tag
 			// for the XML parser
 			try {
-				UserId = new DownloadXmlTask().execute(XMLurl, "userid", "xml").get();
+				UserId = new DownloadDataTask()
+						.execute(XMLurl, "userid", "xml").get();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -238,9 +224,6 @@ public class LoginActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			Toast.makeText(getApplicationContext(), "ASYNNNNCCCC " + UserId,
-					Toast.LENGTH_LONG).show();;;;
 
 		}
 
