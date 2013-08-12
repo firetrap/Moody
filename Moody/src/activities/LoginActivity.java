@@ -239,8 +239,8 @@ public class LoginActivity extends Activity {
 				e.printStackTrace();
 			}
 
-			Toast.makeText(getApplicationContext(), "ASYNNNNCCCC " + UserId,
-					Toast.LENGTH_LONG).show();
+//			Toast.makeText(getApplicationContext(), "ASYNNNNCCCC " + UserId,
+//					Toast.LENGTH_LONG).show();
 
 		}
 
