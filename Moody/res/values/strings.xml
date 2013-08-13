@@ -11,5 +11,6 @@
     <string name="login_image"></string>
     <string name="title_activity_left">LeftActivity</string>
     <string name="title_activity_right">RightActivity</string>
+    <string name="moodyButtonOk">OK</string>
 
 </resources>

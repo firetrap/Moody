@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 
+import managers.DialogsManager;
 import managers.SessionManager;
+import model.MoodyMessage;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -57,7 +60,7 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
-	private String FinalToken;
+	private String finalToken;
 	private String XMLurl = "";
 	private String UserId = "";
 
@@ -160,7 +163,7 @@ public class LoginActivity extends Activity {
 			focusView = mPasswordView;
 			cancel = true;
 
-		} else if (mPassword.length() < 4) {
+		} else if (mPassword.length() <= 4) {
 			mPasswordView.setError(getString(R.string.error_invalid_password));
 			focusView = mPasswordView;
 			cancel = true;
@@ -178,23 +181,26 @@ public class LoginActivity extends Activity {
 				+ mPassword + "&service=moody_service";
 
 		// send the generated token to verify.
+		String htmlResult = "";
 		try {
-			FinalToken = new DownloadDataTask().execute(mToken, null, "html")
+			htmlResult = new DownloadDataTask().execute(mToken, null, "html")
 					.get();
 
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
-			Log.d("Async Error", "Error creating FinalToken1" + FinalToken);
+			Log.d("Async Error", "Error creating FinalToken1" + htmlResult);
 			e1.printStackTrace();
 		} catch (ExecutionException e1) {
 			// TODO Auto-generated catch block
-			Log.d("parser", "Error creating finalToken2" + FinalToken);
+			Log.d("parser", "Error creating finalToken2" + htmlResult);
 			e1.printStackTrace();
 		}
 
 		// checks token integrity
-		if (FinalToken.toString().length() != 32
-				|| FinalToken.toString().contains("username")) {
+		if ((htmlResult.isEmpty())
+				|| ((htmlResult.length() != 44) || (htmlResult
+						.contains("username")))) {
+
 			mUserView.setError(getString(R.string.error_invalid_username));
 
 			focusView = mUserView;
@@ -202,14 +208,19 @@ public class LoginActivity extends Activity {
 			mPasswordView
 					.setError(getString(R.string.error_incorrect_password));
 			focusView = mPasswordView;
-			FinalToken = "error!";
+			htmlResult = "error!";
 			cancel = true;
 			Log.d("MoodyDebug", "HTMLparser failed");
 		} else {
+			StringTokenizer tokens = new StringTokenizer(htmlResult, "\"");
+
+			do {
+				finalToken = tokens.nextToken();
+			} while (finalToken.length() != 32);
 
 			// Get user id URL
 			XMLurl = "http://" + mUrlView.getText().toString()
-					+ "/webservice/rest/server.php?wstoken=" + FinalToken
+					+ "/webservice/rest/server.php?wstoken=" + finalToken
 					+ "&wsfunction=core_webservice_get_site_info";
 
 			// Send 2 params to async constructor the url and the required Tag
@@ -231,6 +242,8 @@ public class LoginActivity extends Activity {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
 			focusView.requestFocus();
+			DialogsManager.showMessageDialog(this, new MoodyMessage(
+					"Login Error", "User/Password error"), false);
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
@@ -330,7 +343,7 @@ public class LoginActivity extends Activity {
 				// Session Manager and shared pref send to shared pref:
 				// user-name, user-token, User-id in database
 				session = new SessionManager(getApplicationContext());
-				session.createLoginSession(mUser, FinalToken, UserId);
+				session.createLoginSession(mUser, finalToken, UserId);
 				finish();
 			} else {
 				Log.d("MoodyDebug", "onPOstExecute-FAILED");

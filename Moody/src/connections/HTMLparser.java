@@ -5,7 +5,6 @@ package connections;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.StringTokenizer;
 
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
@@ -55,14 +54,14 @@ public class HTMLparser {
 			stats = resultNode.getText().toString();
 		}
 
-		StringTokenizer tokens = new StringTokenizer(stats, "\"");
-		String userToken = "";
-		do {
-			userToken = tokens.nextToken();
-
-		} while (userToken.length() != 32);
+//		StringTokenizer tokens = new StringTokenizer(stats, "\"");
+//		String userToken = "";
+//		do {
+//			userToken = tokens.nextToken();
+//
+//		} while (userToken.length() != 32);
 
 	
-		return userToken;
+		return stats;
 	}
 }
