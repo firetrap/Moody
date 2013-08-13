@@ -212,6 +212,8 @@ public class LoginActivity extends Activity {
 			cancel = true;
 			Log.d("MoodyDebug", "HTMLparser failed");
 		} else {
+
+			// Clean retrieved html result to extract token
 			StringTokenizer tokens = new StringTokenizer(htmlResult, "\"");
 
 			do {
