@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="moodyWhite">#ffffff</color>
+    <color name="moodyBlack">#000000</color>
+    <color name="moodyBlueLight">#68d5fe</color>
+    <color name="moodyBlueMedium">#5ab8dc</color>
+    <color name="moodyBlueDark">#3d7f97</color>
+</resources>
