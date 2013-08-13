@@ -54,14 +54,6 @@ public class HTMLparser {
 			stats = resultNode.getText().toString();
 		}
 
-//		StringTokenizer tokens = new StringTokenizer(stats, "\"");
-//		String userToken = "";
-//		do {
-//			userToken = tokens.nextToken();
-//
-//		} while (userToken.length() != 32);
-
-	
 		return stats;
 	}
 }
