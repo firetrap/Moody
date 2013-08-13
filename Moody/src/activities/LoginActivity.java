@@ -345,7 +345,7 @@ public class LoginActivity extends Activity {
 				// Session Manager and shared pref send to shared pref:
 				// user-name, user-token, User-id in database
 				session = new SessionManager(getApplicationContext());
-				session.createLoginSession(mUser, finalToken, UserId);
+				session.createLoginSession(mUser, finalToken, UserId, mUrl);
 				finish();
 			} else {
 				Log.d("MoodyDebug", "onPOstExecute-FAILED");

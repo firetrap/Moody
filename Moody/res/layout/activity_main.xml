@@ -29,7 +29,7 @@
         </ListView>
 
         <TextView
-            android:id="@+id/fullName_textView"
+            android:id="@+id/coursename_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

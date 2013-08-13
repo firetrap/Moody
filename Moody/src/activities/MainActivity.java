@@ -2,6 +2,7 @@ package activities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 import managers.SessionManager;
 import android.content.Intent;
@@ -12,12 +13,15 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.moody.R;
+
+import connections.DownloadDataTask;
 
 public class MainActivity extends SherlockActivity implements OnClickListener {
 	private ListView mainListView;
@@ -35,8 +39,9 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		Toast.makeText(getApplicationContext(),
 				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
 				.show();
+
 		
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// Find the ListView resource.
@@ -74,6 +79,8 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		loginImageButton.setOnClickListener(this);
 		ImageButton logouImageButton = (ImageButton) findViewById(R.id.logout_image_button);
 		logouImageButton.setOnClickListener(this);
+		
+		InitComponents();
 
 	}
 
@@ -133,6 +140,28 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		default:
 			throw new RuntimeException("Unknown button ID");
 		}
+	}
+
+	public void InitComponents() {
+		
+		if (session.isLoggedIn() == true) {
+			TextView view = (TextView) findViewById(R.id.fullName_textView);
+			try {
+				view.setText(new DownloadDataTask()
+						.execute(
+								"http://193.137.46.10/default_site/Moody/webservice/rest/server.php?wstoken=1cfced5578e4c32fe857df433cdb7ba6&wsfunction=core_webservice_get_site_info",
+								"fullname", "xml").get().toString());
+
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
 	}
 
 }
