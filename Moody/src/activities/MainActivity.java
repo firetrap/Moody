@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import managers.SessionManager;
+import model.MoodyConstants;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,8 +40,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		Toast.makeText(getApplicationContext(),
 				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
 				.show();
-
-		
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -79,7 +78,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		loginImageButton.setOnClickListener(this);
 		ImageButton logouImageButton = (ImageButton) findViewById(R.id.logout_image_button);
 		logouImageButton.setOnClickListener(this);
-		
+
 		InitComponents();
 
 	}
@@ -128,6 +127,13 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		case R.id.logout_image_button:
 			if (session.isLoggedIn() == true) {
 				session.logoutUser();
+				
+				
+				Intent intent = new Intent(getApplicationContext(),
+						MainActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				
 			} else {
 				// só entra neste else caso o utilizador ainda nao esteja
 				// loggado entao é reencaminhado para o LoginActivity
@@ -143,14 +149,22 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 	}
 
 	public void InitComponents() {
-		
+
 		if (session.isLoggedIn() == true) {
 			TextView view = (TextView) findViewById(R.id.fullName_textView);
 			try {
+
+				String url = session.getValues(
+						MoodyConstants.MoodySession.KEY_URL, null);
+				String token = session.getValues(
+						MoodyConstants.MoodySession.KEY_TOKEN, null);
+
+				String con = String.format(MoodyConstants.MoodySession.KEY_WEB,
+						url, token, "core_webservice_get_site_info");
+				
+				
 				view.setText(new DownloadDataTask()
-						.execute(
-								"http://193.137.46.10/default_site/Moody/webservice/rest/server.php?wstoken=1cfced5578e4c32fe857df433cdb7ba6&wsfunction=core_webservice_get_site_info",
-								"fullname", "xml").get().toString());
+						.execute(con, "fullname", "xml").get().toString());
 
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

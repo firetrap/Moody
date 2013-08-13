@@ -14,6 +14,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -346,7 +347,13 @@ public class LoginActivity extends Activity {
 				// user-name, user-token, User-id in database
 				session = new SessionManager(getApplicationContext());
 				session.createLoginSession(mUser, finalToken, UserId, mUrl);
-				finish();
+
+				Intent intent = new Intent(getApplicationContext(),
+						MainActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+
+				// finish();
 			} else {
 				Log.d("MoodyDebug", "onPOstExecute-FAILED");
 				mPasswordView

@@ -2,6 +2,8 @@ package managers;
 
 import java.util.HashMap;
 
+import model.MoodyConstants;
+
 import activities.LoginActivity;
 import activities.MainActivity;
 import android.content.Context;
@@ -19,31 +21,33 @@ public class SessionManager {
 	// Context
 	Context _context;
 
-	// Shared pref mode
-	int PRIVATE_MODE = 0;
-
-	// Sharedpref file name
-	private static final String PREF_NAME = "MoodyPreferences";
-
-	// All Shared Preferences Keys
-	private static final String IS_LOGIN = "IsLoggedIn";
-
-	// User name (make variable public to access from outside)
-	public static final String KEY_NAME = "name";
-
-	// Email address (make variable public to access from outside)
-	public static final String KEY_TOKEN = "token";
-
-	// User ID
-	public static final String KEY_ID = "id";
-
-	// Moodle URL
-	public static final String KEY_URL = "url";
+	// // Shared pref mode
+	// int PRIVATE_MODE = 0;
+	//
+	// // Sharedpref file name
+	// private static final String PREF_NAME = "MoodyPreferences";
+	//
+	// // All Shared Preferences Keys
+	// private static final String IS_LOGIN = "IsLoggedIn";
+	//
+	// // User name (make variable public to access from outside)
+	// public static final String KEY_NAME = "name";
+	//
+	// // Email address (make variable public to access from outside)
+	// public static final String KEY_TOKEN = "token";
+	//
+	// // User ID
+	// public static final String KEY_ID = "id";
+	//
+	// // Moodle URL
+	// public static final String KEY_URL = "url";
 
 	// Constructor
 	public SessionManager(Context context) {
 		this._context = context;
-		pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+		pref = _context.getSharedPreferences(
+				MoodyConstants.MoodySession.PREF_NAME,
+				MoodyConstants.MoodySession.PRIVATE_MODE);
 		editor = pref.edit();
 	}
 
@@ -52,25 +56,27 @@ public class SessionManager {
 	 * 
 	 * @param mUrl
 	 * */
-	public void createLoginSession(String name, String token, String id, String mUrl){
+	public void createLoginSession(String name, String token, String id,
+			String mUrl) {
 		// Storing login value as TRUE
-		editor.putBoolean(IS_LOGIN, true);
-		
+		editor.putBoolean(MoodyConstants.MoodySession.IS_LOGIN, true);
+
 		// Storing name in preferences
-		editor.putString(KEY_NAME, name);
-		
+		editor.putString(MoodyConstants.MoodySession.KEY_NAME, name);
+
 		// Storing email in preferences
-		editor.putString(KEY_TOKEN, token);
-		
-		
+		editor.putString(MoodyConstants.MoodySession.KEY_TOKEN, token);
+
 		// Storing user id in preferences
-		editor.putString(KEY_ID, id);
-		
-		editor.putString(KEY_URL, mUrl);
-		
+		editor.putString(MoodyConstants.MoodySession.KEY_ID, id);
+
+		// Storing url in preferences
+		editor.putString(MoodyConstants.MoodySession.KEY_URL, mUrl);
+
 		// commit changes
 		editor.commit();
 	}
+
 	public String getValues(String name, String oppp) {
 
 		return pref.getString(name, oppp);
@@ -104,16 +110,20 @@ public class SessionManager {
 	public HashMap<String, String> getUserDetails() {
 		HashMap<String, String> user = new HashMap<String, String>();
 		// user name
-		user.put(KEY_NAME, pref.getString(KEY_NAME, null));
+		user.put(MoodyConstants.MoodySession.KEY_NAME,
+				pref.getString(MoodyConstants.MoodySession.KEY_NAME, null));
 
 		// user token
-		user.put(KEY_TOKEN, pref.getString(KEY_TOKEN, null));
+		user.put(MoodyConstants.MoodySession.KEY_TOKEN,
+				pref.getString(MoodyConstants.MoodySession.KEY_TOKEN, null));
 
 		// user token
-		user.put(KEY_ID, pref.getString(KEY_ID, null));
+		user.put(MoodyConstants.MoodySession.KEY_ID,
+				pref.getString(MoodyConstants.MoodySession.KEY_ID, null));
 
 		// user url
-		user.put(KEY_URL, pref.getString(KEY_URL, null));
+		user.put(MoodyConstants.MoodySession.KEY_URL,
+				pref.getString(MoodyConstants.MoodySession.KEY_URL, null));
 
 		// return user
 		return user;
@@ -128,7 +138,7 @@ public class SessionManager {
 		editor.commit();
 
 		// After logout redirect user to Main Activity
-		Intent i = new Intent(_context, MainActivity.class);
+		Intent i = new Intent(_context, LoginActivity.class);
 		// Closing all the Activities
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -144,6 +154,6 @@ public class SessionManager {
 	 * **/
 	// Get Login State
 	public boolean isLoggedIn() {
-		return pref.getBoolean(IS_LOGIN, false);
+		return pref.getBoolean(MoodyConstants.MoodySession.IS_LOGIN, false);
 	}
 }

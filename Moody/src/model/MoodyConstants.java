@@ -18,11 +18,31 @@ public final class MoodyConstants {
 		 * 
 		 **/
 		
-	    public static final int 	PRIVATE_SESSION_MODE 	= 0;
-	    public static final String 	KEY_MOODY_PREF_NAME 	= "MoodySessionPref";
-	    public static final String 	KEY_IS_LOGGEDIN 		= "IsLoggedIn";
-	    public static final String 	KEY_MOODY_USER_TOKEN 	= "MoodyUserToken";		
+		// Shared pref mode
+		public static final int PRIVATE_MODE = 0;
+	
+		// Sharedpref file name
+		public static final String PREF_NAME = "MoodyPreferences";
+	
+		// All Shared Preferences Keys
+		public static final String IS_LOGIN = "IsLoggedIn";
+	
+		// User name (make variable public to access from outside)
+		public static final String KEY_NAME = "name";
+	
+		// Email address (make variable public to access from outside)
+		public static final String KEY_TOKEN = "token";
+	
+		// User ID
+		public static final String KEY_ID = "id";
+	
+		// Moodle URL
+		public static final String KEY_URL = "url";
 		
+		public static final String KEY_WEB ="%s/webservice/rest/server.php?wstoken=%s&wsfunction=%s";
+		
+	
+	
 	    
 		/**
 		 * 
