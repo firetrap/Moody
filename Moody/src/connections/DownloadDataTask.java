@@ -10,7 +10,6 @@ import java.util.List;
 import org.htmlcleaner.XPatherException;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.R.integer;
 import android.os.AsyncTask;
 import connections.XMLparser.Key;
 
@@ -57,8 +56,9 @@ public class DownloadDataTask extends
 			for (Key entry : keys) {
 				for (int j = 1; j < keys.size(); j++) {
 					if (!xmlList.containsKey(entry.keyName + j)) {
-			
-						xmlList.put(entry.keyName + Integer.toString(j), entry.value);
+
+						xmlList.put(entry.keyName + Integer.toString(j),
+								entry.value);
 
 						break;
 					}

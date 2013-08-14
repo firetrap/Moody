@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import managers.SessionManager;
-import model.MoodyConstants;
-import android.R.xml;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +14,6 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -189,8 +186,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 			// }
 			//
 			// #############
-			
-			
+
 			String s = "http://193.137.46.10/default_site/Moody/webservice/rest/server.php?wstoken=1cfced5578e4c32fe857df433cdb7ba6&wsfunction=core_enrol_get_users_courses&userid=3";
 			try {
 				xmlList = new DownloadDataTask().execute(s, "xml").get();
