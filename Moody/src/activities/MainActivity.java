@@ -165,7 +165,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 						url, token, "core_webservice_get_site_info");
 
 				xmlList = new DownloadDataTask().execute(con,"xml").get();
-				view.setText(xmlList.get("fullname").toString());
+				view.setText(xmlList.get("fullname"));
 				xmlList.clear();
 
 			} catch (InterruptedException e) {
