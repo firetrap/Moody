@@ -234,7 +234,7 @@ public class LoginActivity extends Activity {
 			// for the XML parser
 			try {
 				xmlList = new DownloadDataTask().execute(XMLurl,"xml").get();
-				UserId = xmlList.get("userid");
+				UserId = xmlList.get("userid1");
 				xmlList.clear();
 
 			} catch (InterruptedException e) {

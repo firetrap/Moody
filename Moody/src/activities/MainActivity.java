@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import managers.SessionManager;
+import model.MoodyConstants;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -46,12 +48,13 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		setContentView(R.layout.activity_main);
 		// Find the ListView resource.
 		mainListView = (ListView) findViewById(R.id.main_list_viewer);
-		leftListView = (ListView) findViewById(R.id.left_list_viewer);
+
 		rightListView = (ListView) findViewById(R.id.right_list_viewer);
 
 		// Create and populate a List of planet names.
 		String[] planets = new String[] { "Mercury", "Venus", "Earth", "Mars",
 				"Jupiter", "Saturn", "Uranus", "Neptune" };
+
 		ArrayList<String> planetList = new ArrayList<String>();
 		planetList.addAll(Arrays.asList(planets));
 
@@ -71,7 +74,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		// Set the ArrayAdapter as the ListView's adapter.
 		mainListView.setAdapter(listAdapter);
 		rightListView.setAdapter(listAdapter);
-		leftListView.setAdapter(listAdapter);
 
 		// OnClickListener's for all button, after pressed it will send for the
 		// onClick method the button pressed
@@ -80,7 +82,8 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		ImageButton logouImageButton = (ImageButton) findViewById(R.id.logout_image_button);
 		logouImageButton.setOnClickListener(this);
 
-		InitComponents();
+		populateUsername();
+		populateLeftListview();
 
 	}
 
@@ -148,48 +151,25 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		}
 	}
 
-	public void InitComponents() {
+	public void populateUsername() {
 
 		if (session.isLoggedIn() == true) {
-			// TextView view = (TextView) findViewById(R.id.fullName_textView);
-			// try {
-			//
-			// String url = session.getValues(
-			// MoodyConstants.MoodySession.KEY_URL, null);
-			// String token = session.getValues(
-			// MoodyConstants.MoodySession.KEY_TOKEN, null);
-			//
-			// String con = String.format(MoodyConstants.MoodySession.KEY_WEB,
-			// url, token, "core_webservice_get_site_info");
-			//
-			// xmlList = new DownloadDataTask().execute(con,"xml").get();
-			// view.setText(xmlList.get("fullname"));
-			//
-			// xmlList.clear();
-			//
-			// } catch (InterruptedException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// } catch (ExecutionException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
-
-			// ##############################
-			//
-			// for (int i = 1; i < array.length; i++) {
-			// if(!hashmap.containsKey("id" + Integer.toString(i)){
-			// break;
-			// }else{
-			// hashmap.getvalue("id" + Integer.toString(i));
-			// }
-			// }
-			//
-			// #############
-
-			String s = "http://193.137.46.10/default_site/Moody/webservice/rest/server.php?wstoken=1cfced5578e4c32fe857df433cdb7ba6&wsfunction=core_enrol_get_users_courses&userid=3";
+			TextView view = (TextView) findViewById(R.id.fullName_textView);
 			try {
-				xmlList = new DownloadDataTask().execute(s, "xml").get();
+
+				String url = session.getValues(
+						MoodyConstants.MoodySession.KEY_URL, null);
+				String token = session.getValues(
+						MoodyConstants.MoodySession.KEY_TOKEN, null);
+
+				String con = String.format(MoodyConstants.MoodySession.KEY_N_PARAMS,
+						url, token, "core_webservice_get_site_info");
+
+				xmlList = new DownloadDataTask().execute(con, "xml").get();
+				view.setText(xmlList.get("fullname1"));
+
+				xmlList.clear();
+
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -202,4 +182,63 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 
 	}
 
+	public void populateLeftListview() {
+		leftListView = (ListView) findViewById(R.id.left_list_viewer);
+
+		if (session.isLoggedIn() == true) {
+			String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
+					null);
+			String token = session.getValues(
+					MoodyConstants.MoodySession.KEY_TOKEN, null);
+
+			String id = session.getValues(MoodyConstants.MoodySession.KEY_ID,
+					null);
+
+			String con = String.format(MoodyConstants.MoodySession.KEY_PARAMS,
+					url, token, "core_enrol_get_users_courses&userid", id);
+
+			try {
+				xmlList = new DownloadDataTask().execute(con, "xml").get();
+
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			ArrayList<String> coursesList = new ArrayList<String>();
+
+			for (String keyName : xmlList.keySet()) {
+				if (keyName.length() >= "fullname".length()
+						&& keyName.substring(0, 8).equals("fullname")) {
+					String coursesIndi = xmlList.get(keyName);
+					coursesList.add(coursesIndi);
+
+				}
+
+			}
+
+			listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow,
+					coursesList);
+			listAdapter.add("Ceres");
+			listAdapter.add("Pluto");
+			listAdapter.add("Haumea");
+			listAdapter.add("Makemake");
+			listAdapter.add("Eris");
+			listAdapter.add("Ceres");
+			listAdapter.add("Pluto");
+			listAdapter.add("Haumea");
+			listAdapter.add("Makemake");
+			listAdapter.add("Eris");
+			listAdapter.add("Ceres");
+			listAdapter.add("Pluto");
+			listAdapter.add("Haumea");
+			listAdapter.add("Makemake");
+			listAdapter.add("Eris");
+			leftListView.setAdapter(listAdapter);
+		}
+
+	}
 }
