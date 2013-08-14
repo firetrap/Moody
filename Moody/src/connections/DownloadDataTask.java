@@ -57,9 +57,8 @@ public class DownloadDataTask extends
 			for (Key entry : keys) {
 				for (int j = 1; j < keys.size(); j++) {
 					if (!xmlList.containsKey(entry.keyName + j)) {
-
-						String ve = entry.keyName + Integer.toString(j);
-						xmlList.put(ve, entry.value);
+			
+						xmlList.put(entry.keyName + Integer.toString(j), entry.value);
 
 						break;
 					}
