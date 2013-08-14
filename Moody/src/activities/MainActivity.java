@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutionException;
 
 import managers.SessionManager;
 import model.MoodyConstants;
+import android.R.xml;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -153,21 +154,46 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 	public void InitComponents() {
 
 		if (session.isLoggedIn() == true) {
-			TextView view = (TextView) findViewById(R.id.fullName_textView);
+			// TextView view = (TextView) findViewById(R.id.fullName_textView);
+			// try {
+			//
+			// String url = session.getValues(
+			// MoodyConstants.MoodySession.KEY_URL, null);
+			// String token = session.getValues(
+			// MoodyConstants.MoodySession.KEY_TOKEN, null);
+			//
+			// String con = String.format(MoodyConstants.MoodySession.KEY_WEB,
+			// url, token, "core_webservice_get_site_info");
+			//
+			// xmlList = new DownloadDataTask().execute(con,"xml").get();
+			// view.setText(xmlList.get("fullname"));
+			//
+			// xmlList.clear();
+			//
+			// } catch (InterruptedException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// } catch (ExecutionException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
+
+			// ##############################
+			//
+			// for (int i = 1; i < array.length; i++) {
+			// if(!hashmap.containsKey("id" + Integer.toString(i)){
+			// break;
+			// }else{
+			// hashmap.getvalue("id" + Integer.toString(i));
+			// }
+			// }
+			//
+			// #############
+			
+			
+			String s = "http://193.137.46.10/default_site/Moody/webservice/rest/server.php?wstoken=1cfced5578e4c32fe857df433cdb7ba6&wsfunction=core_enrol_get_users_courses&userid=3";
 			try {
-
-				String url = session.getValues(
-						MoodyConstants.MoodySession.KEY_URL, null);
-				String token = session.getValues(
-						MoodyConstants.MoodySession.KEY_TOKEN, null);
-
-				String con = String.format(MoodyConstants.MoodySession.KEY_WEB,
-						url, token, "core_webservice_get_site_info");
-
-				xmlList = new DownloadDataTask().execute(con,"xml").get();
-				view.setText(xmlList.get("fullname"));
-				xmlList.clear();
-
+				xmlList = new DownloadDataTask().execute(s, "xml").get();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

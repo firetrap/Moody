@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import managers.DialogsManager;
 import managers.SessionManager;
 import model.MoodyMessage;
