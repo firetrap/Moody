@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import managers.DialogsManager;
 import managers.SessionManager;
@@ -64,6 +67,7 @@ public class LoginActivity extends Activity {
 	private String finalToken;
 	private String XMLurl = "";
 	private String UserId = "";
+	private HashMap<String, String> xmlList;
 
 	// Session Manager Class
 	SessionManager session;
@@ -184,8 +188,10 @@ public class LoginActivity extends Activity {
 		// send the generated token to verify.
 		String htmlResult = "";
 		try {
-			htmlResult = new DownloadDataTask().execute(mToken, null, "html")
+			xmlList = new DownloadDataTask().execute(mToken,"html")
 					.get();
+			htmlResult = xmlList.get("HTML");
+			xmlList.clear();
 
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
@@ -229,8 +235,10 @@ public class LoginActivity extends Activity {
 			// Send 2 params to async constructor the url and the required Tag
 			// for the XML parser
 			try {
-				UserId = new DownloadDataTask()
-						.execute(XMLurl, "userid", "xml").get();
+				xmlList = new DownloadDataTask().execute(XMLurl,"xml").get();
+				UserId = xmlList.get("userid");
+				xmlList.clear();
+
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -238,6 +246,8 @@ public class LoginActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+						
 
 		}
 

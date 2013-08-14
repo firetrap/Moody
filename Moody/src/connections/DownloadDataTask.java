@@ -14,20 +14,26 @@ import android.os.AsyncTask;
 import connections.XMLparser.Key;
 
 //receives a String[] where params[0] it's an url, params[1] its an string required to parse, params[2] its an string to the required method above
-public class DownloadDataTask extends AsyncTask<String, Void, String> {
+public class DownloadDataTask extends
+		AsyncTask<String, Void, HashMap<String, String>> {
+
+	HashMap<String, String> xmlList = new HashMap<String, String>();
+
 	@Override
-	protected String doInBackground(String... params) {
+	protected HashMap<String, String> doInBackground(String... params) {
 
 		try {
-			return loadFromNetwork(params[0], params[1], params[2]);
+			return loadFromNetwork(params[0], params[1]);
 		} catch (IOException e) {
-			return e.getMessage();
+			xmlList.put("Error", e.getMessage().toString());
+			return xmlList;
 		} catch (XmlPullParserException e) {
-			return e.getMessage();
+			xmlList.put("Error", e.getMessage().toString());
+			return xmlList;
 		}
 	}
 
-	private String loadFromNetwork(String urlString, String parserString,
+	private HashMap<String, String> loadFromNetwork(String urlString,
 			String methodParams) throws XmlPullParserException, IOException {
 
 		if (methodParams.equalsIgnoreCase("xml")) {
@@ -47,57 +53,26 @@ public class DownloadDataTask extends AsyncTask<String, Void, String> {
 				}
 			}
 
-			for (Key entry : keys) {
-				if (entry.keyName.equals(parserString)) {
+			for (Key entry : keys) 
+				xmlList.put(entry.keyName, entry.value);
+				return xmlList;
 
-					return entry.value;
-
-				}
-
-			}
+			
 		}
+
 		if (methodParams.equalsIgnoreCase("html")) {
 			InputStream stream = null;
 			HTMLparser parser = new HTMLparser();
 
 			try {
 				stream = downloadUrl(urlString);
-				return parser.getSiteStats(stream);
+				xmlList.put("HTML", parser.getSiteStats(stream));
+				return xmlList;
 			} catch (XPatherException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-		}
-
-		if (urlString.equals(null) && parserString.equals(null)
-				&& methodParams.equals(null)) {
-//			InputStream stream = null;
-//			XMLparser moodyXmlParser = new XMLparser();
-//
-//			List<Key> keys = null;
-//			HashMap<String, String> xmlList = new HashMap<String, String>();
-//			try {
-//				stream = downloadUrl(urlString);
-//				keys = moodyXmlParser.parse(stream);
-//				// Makes sure that the InputStream is closed after the app is
-//				// finished using it.
-//			} finally {
-//				if (stream != null) {
-//					stream.close();
-//				}
-//			}
-//
-//			for (Key entry : keys) {
-//				if (entry.keyName.equals(parserString)) {
-//					xmlList.put(entry.keyName, entry.value);
-//
-//					return xmlList.;
-//
-//				}
-//
-//			}
-//
 		}
 
 		return null;
@@ -119,7 +94,7 @@ public class DownloadDataTask extends AsyncTask<String, Void, String> {
 	}
 
 	@Override
-	protected void onPostExecute(String result) {
+	protected void onPostExecute(HashMap<String, String> result) {
 
 	}
 

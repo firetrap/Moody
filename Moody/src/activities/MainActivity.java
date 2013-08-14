@@ -2,6 +2,7 @@ package activities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import managers.SessionManager;
@@ -32,6 +33,8 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 
 	// Session Manager Class
 	SessionManager session;
+
+	private HashMap<String, String> xmlList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -127,13 +130,12 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		case R.id.logout_image_button:
 			if (session.isLoggedIn() == true) {
 				session.logoutUser();
-				
-				
+
 				Intent intent = new Intent(getApplicationContext(),
 						MainActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
-				
+
 			} else {
 				// só entra neste else caso o utilizador ainda nao esteja
 				// loggado entao é reencaminhado para o LoginActivity
@@ -161,10 +163,10 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 
 				String con = String.format(MoodyConstants.MoodySession.KEY_WEB,
 						url, token, "core_webservice_get_site_info");
-				
-				
-				view.setText(new DownloadDataTask()
-						.execute(con, "fullname", "xml").get().toString());
+
+				xmlList = new DownloadDataTask().execute(con,"xml").get();
+				view.setText(xmlList.get("fullname").toString());
+				xmlList.clear();
 
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
