@@ -4,7 +4,6 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="left"
-    android:background="#111"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -16,10 +15,12 @@
 
         <ImageButton
             android:id="@+id/login_image_button"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:contentDescription="@string/login_image"
-            android:src="@drawable/ic_launcher" />
+            android:padding="2dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/no_logon_" />
 
         <ImageButton
             android:id="@+id/logout_image_button"
@@ -33,7 +34,6 @@
             android:layout_width="108dp"
             android:layout_height="wrap_content"
             android:text="@string/fullName_textView" />
-
     </LinearLayout>
 
     <ListView

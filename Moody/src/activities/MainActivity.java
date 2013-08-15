@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import managers.SessionManager;
 import model.MoodyConstants;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -84,6 +85,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 
 		populateUsername();
 		populateLeftListview();
+		populateUserPicture();
 
 	}
 
@@ -162,8 +164,9 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 				String token = session.getValues(
 						MoodyConstants.MoodySession.KEY_TOKEN, null);
 
-				String con = String.format(MoodyConstants.MoodySession.KEY_N_PARAMS,
-						url, token, "core_webservice_get_site_info");
+				String con = String.format(
+						MoodyConstants.MoodySession.KEY_N_PARAMS, url, token,
+						"core_webservice_get_site_info");
 
 				xmlList = new DownloadDataTask().execute(con, "xml").get();
 				view.setText(xmlList.get("fullname1"));
@@ -219,7 +222,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 				}
 
 			}
-
+			xmlList.clear();
 			listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow,
 					coursesList);
 			listAdapter.add("Ceres");
@@ -238,6 +241,42 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 			listAdapter.add("Makemake");
 			listAdapter.add("Eris");
 			leftListView.setAdapter(listAdapter);
+		}
+
+	}
+
+	public void populateUserPicture() {
+		if (session.isLoggedIn() == true) {
+			ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
+			try {
+
+				String url = session.getValues(
+						MoodyConstants.MoodySession.KEY_URL, null);
+				String token = session.getValues(
+						MoodyConstants.MoodySession.KEY_TOKEN, null);
+
+				String con = String.format(
+						MoodyConstants.MoodySession.KEY_N_PARAMS, url, token,
+						"core_webservice_get_site_info");
+
+				xmlList = new DownloadDataTask().execute(con, "xml").get();
+				String userPictureUrl = xmlList.get("userpictureurl1");
+
+				Drawable pic = DownloadDataTask
+						.createDrawableFromUrl(userPictureUrl);
+
+				
+				login_button.setBackgroundResource(R.drawable.bkgd_image_button);
+				login_button.setImageDrawable(pic);
+
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 
 	}

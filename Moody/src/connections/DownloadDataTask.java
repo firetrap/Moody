@@ -3,6 +3,7 @@ package connections;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,12 @@ import java.util.List;
 import org.htmlcleaner.XPatherException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import connections.XMLparser.Key;
 
 //receives a String[] where params[0] it's an url, params[1] its an string required to parse, params[2] its an string to the required method above
@@ -107,4 +113,46 @@ public class DownloadDataTask extends
 
 	}
 
+	/**
+	 * Returns a Drawable object containing the image located at
+	 * 'imageWebAddress' if successful, and null otherwise. (Pre:
+	 * 'imageWebAddress' is non-null and non-empty; method should not be called
+	 * from the main/ui thread.)
+	 */
+	public static Drawable createDrawableFromUrl(String imageWebAddress) {
+		Drawable drawable = null;
+
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
+		try {
+			InputStream inputStream = new URL(imageWebAddress).openStream();
+			drawable = Drawable.createFromStream(inputStream, null);
+			inputStream.close();
+		} catch (MalformedURLException ex) {
+		} catch (IOException ex) {
+		}
+
+		return drawable;
+	}
+
+	/**
+	 * Returns a Bitmap object containing the image located at 'imageWebAddress'
+	 * if successful, and null otherwise. (Pre: 'imageWebAddress' is non-null
+	 * and non-empty; method should not be called from the main/ui thread.)
+	 */
+	// public static Bitmap createBitmapFromUrl(String imageWebAddress) {
+	// Bitmap bitmap = null;
+	//
+	// try {
+	// InputStream inputStream = new URL(imageWebAddress).openStream();
+	// bitmap = BitmapFactory.decodeStream(inputStream);
+	// inputStream.close();
+	// } catch (MalformedURLException ex) {
+	// } catch (IOException ex) {
+	// }
+	//
+	// return bitmap;
+	// }
 }
