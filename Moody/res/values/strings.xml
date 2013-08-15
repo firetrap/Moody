@@ -30,6 +30,8 @@
     
     <!-- Strings related to populate -->
     <string name="fullName_textView">User Name</string>
+    <string name="change_user_picture_button">Change user picture</string>
+    <string name="edit_user_details_button">Edit user details</string>
     
 
 </resources>

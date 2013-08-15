@@ -5,12 +5,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
+import managers.DialogFragmentManager;
 import managers.SessionManager;
 import model.MoodyConstants;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -128,6 +132,14 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 			} else {
 				Log.d("MoodyDebud",
 						"Entrará aqui se o utilizador ja estiver logado e em vez de vir para aqui irá para as defeniçoes de utilizador");
+				
+				 FragmentManager fm = getFragmentManager();
+				 DialogFragmentManager userDetailsDialog = new DialogFragmentManager();
+//				 userDetailsDialog.setStyle(DialogFragment.STYLE_NORMAL,userDetailsDialog.getTheme());
+				
+				 userDetailsDialog.setRetainInstance(true);
+				 userDetailsDialog.show(fm, "fragment_name");
+			
 			}
 			break;
 		case R.id.logout_image_button:
