@@ -132,14 +132,12 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 			} else {
 				Log.d("MoodyDebud",
 						"Entrará aqui se o utilizador ja estiver logado e em vez de vir para aqui irá para as defeniçoes de utilizador");
-				
-				 FragmentManager fm = getFragmentManager();
-				 DialogFragmentManager userDetailsDialog = new DialogFragmentManager();
-//				 userDetailsDialog.setStyle(DialogFragment.STYLE_NORMAL,userDetailsDialog.getTheme());
-				
-				 userDetailsDialog.setRetainInstance(true);
-				 userDetailsDialog.show(fm, "fragment_name");
-			
+
+				FragmentManager fm = getFragmentManager();
+				DialogFragmentManager userDetailsDialog = new DialogFragmentManager();
+				userDetailsDialog.setRetainInstance(true);
+				userDetailsDialog.show(fm, "fragment_name");
+
 			}
 			break;
 		case R.id.logout_image_button:
@@ -277,7 +275,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 				Drawable pic = DownloadDataTask
 						.createDrawableFromUrl(userPictureUrl);
 
-				
 				login_button.setBackgroundResource(R.drawable.bkgd_imagebutton);
 				login_button.setImageDrawable(pic);
 
