@@ -20,14 +20,14 @@
             android:contentDescription="@string/login_image"
             android:padding="2dp"
             android:scaleType="fitXY"
-            android:src="@drawable/no_logon_" />
+            android:src="@drawable/no_logon" />
 
         <ImageButton
             android:id="@+id/logout_image_button"
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:contentDescription="@string/login_image"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/logout" />
 
         <TextView
             android:id="@+id/fullName_textView"

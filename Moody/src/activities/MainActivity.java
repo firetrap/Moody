@@ -266,7 +266,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 						.createDrawableFromUrl(userPictureUrl);
 
 				
-				login_button.setBackgroundResource(R.drawable.bkgd_image_button);
+				login_button.setBackgroundResource(R.drawable.bkgd_imagebutton);
 				login_button.setImageDrawable(pic);
 
 			} catch (InterruptedException e) {
