@@ -8,16 +8,21 @@ import java.util.concurrent.ExecutionException;
 import managers.DialogFragmentManager;
 import managers.SessionManager;
 import model.MoodyConstants;
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -87,6 +92,8 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		ImageButton logouImageButton = (ImageButton) findViewById(R.id.logout_image_button);
 		logouImageButton.setOnClickListener(this);
 
+		
+
 		populateUsername();
 		populateLeftListview();
 		populateUserPicture();
@@ -135,6 +142,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 
 				FragmentManager fm = getFragmentManager();
 				DialogFragmentManager userDetailsDialog = new DialogFragmentManager();
+
 				userDetailsDialog.setRetainInstance(true);
 				userDetailsDialog.show(fm, "fragment_name");
 
@@ -158,6 +166,15 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 				startActivity(intent);
 			}
 			break;
+
+		// case R.id.change_user_picture_button:
+		// // Intent i = new Intent(
+		// // Intent.ACTION_PICK,
+		// // android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		// //
+		// // startActivityForResult(i, 1);
+		// break;
+
 		default:
 			throw new RuntimeException("Unknown button ID");
 		}

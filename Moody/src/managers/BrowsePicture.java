@@ -1,69 +1,50 @@
 package managers;
 
-import android.app.ActionBar.LayoutParams;
-import android.app.DialogFragment;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.app.Activity;
-
 
 import com.example.moody.R;
 
-public class DialogFragmentManager extends DialogFragment{
+public class BrowsePicture extends Activity {
 
+	// YOU CAN EDIT THIS TO WHATEVER YOU WANT
 	private static final int SELECT_PICTURE = 1;
 
 	private String selectedImagePath;
-
+	// ADDED
 	private String filemanagerstring;
 
-	
-	
-//	Context context;
-//	public DialogFragmentManager(Context applicationContext) {
-//		context = applicationContext;
-//	}
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		getDialog().getWindow().setLayout(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT);
-		getDialog().getWindow().requestFeature(STYLE_NO_TITLE);
-		// getDialog().setTitle("User details");
-
-		View view = inflater.inflate(R.layout.user_details_dialog, container);
-
-		((Button) view.findViewById(R.id.change_user_picture_button))
+		((Button) findViewById(R.id.tabMode))
 				.setOnClickListener(new OnClickListener() {
 
-					@Override
-					public void onClick(View v) {
+					public void onClick(View arg0) {
+
+						// in onCreate or any event where your want the user to
+						// select a file
 						Intent intent = new Intent();
 						intent.setType("image/*");
 						intent.setAction(Intent.ACTION_GET_CONTENT);
 						startActivityForResult(
 								Intent.createChooser(intent, "Select Picture"),
 								SELECT_PICTURE);
-
 					}
 				});
-
-		return view;
 	}
 
+	// UPDATED
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	
+		if (resultCode == RESULT_OK) {
 			if (requestCode == SELECT_PICTURE) {
 				Uri selectedImageUri = data.getData();
 
@@ -92,20 +73,20 @@ public class DialogFragmentManager extends DialogFragment{
 							.println("filemanagerstring is the right one for you!");
 			}
 		}
-	
+	}
 
 	// UPDATED!
 	public String getPath(Uri uri) {
-		String res = null;
-		String[] proj = { MediaStore.Images.Media.DATA };
-		Cursor cursor = getActivity().getContentResolver().query(uri, proj, null, null, null);
-		if (cursor.moveToFirst()) {
-			;
+		String[] projection = { MediaStore.Images.Media.DATA };
+		Cursor cursor = managedQuery(uri, projection, null, null, null);
+		if (cursor != null) {
+			// HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
+			// THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
 			int column_index = cursor
 					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-			res = cursor.getString(column_index);
-		}
-		cursor.close();
-		return res;
+			cursor.moveToFirst();
+			return cursor.getString(column_index);
+		} else
+			return null;
 	}
 }
