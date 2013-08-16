@@ -1,5 +1,7 @@
 package activities;
 
+import interfaces.IgetDialogResult;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,21 +10,14 @@ import java.util.concurrent.ExecutionException;
 import managers.DialogFragmentManager;
 import managers.SessionManager;
 import model.MoodyConstants;
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.DialogFragment;
+import model.MoodyConstants.ActivityCode;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,7 +30,8 @@ import com.example.moody.R;
 
 import connections.DownloadDataTask;
 
-public class MainActivity extends SherlockActivity implements OnClickListener {
+public class MainActivity extends SherlockActivity implements OnClickListener,
+		IgetDialogResult {
 	private ListView mainListView;
 	private ListView leftListView;
 	private ListView rightListView;
@@ -85,15 +81,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		mainListView.setAdapter(listAdapter);
 		rightListView.setAdapter(listAdapter);
 
-		// OnClickListener's for all button, after pressed it will send for the
-		// onClick method the button pressed
-		// ImageButton loginImageButton = (ImageButton)
-		// findViewById(R.id.login_image_button);
-		// loginImageButton.setOnClickListener(this);
-		// ImageButton logouImageButton = (ImageButton)
-		// findViewById(R.id.logout_image_button);
-		// logouImageButton.setOnClickListener(this);
-
 		populateUsername();
 		populateLeftListview();
 		populateUserPicture();
@@ -137,12 +124,9 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 			} else {
-				Log.d("MoodyDebud",
-						"Entrará aqui se o utilizador ja estiver logado e em vez de vir para aqui irá para as defeniçoes de utilizador");
 
 				FragmentManager fm = getFragmentManager();
 				DialogFragmentManager userDetailsDialog = new DialogFragmentManager();
-
 				userDetailsDialog.setRetainInstance(true);
 				userDetailsDialog.show(fm, "fragment_name");
 
@@ -166,14 +150,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 				startActivity(intent);
 			}
 			break;
-
-//		case R.id.change_user_picture_button:
-//			Intent intent = new Intent();
-//			intent.setType("image/*");
-//			intent.setAction(Intent.ACTION_GET_CONTENT);
-//			startActivityForResult(
-//					Intent.createChooser(intent, "Select Picture"), 1);
-//			break;
 
 		default:
 			throw new RuntimeException("Unknown button ID");
@@ -306,4 +282,30 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 		}
 
 	}
+
+	/**
+	 * The first case of the switch it's not fully implemented as planned,
+	 * moodle doesn't support the users to update their own user details this
+	 * issue is described and reported here
+	 * https://tracker.moodle.org/browse/CONTRIB-4282 The next code it's ready
+	 * 
+	 * TO DO: implement the user update details in Moody when Moodle.org decide
+	 * to add the required web service function.
+	 * 
+	 */
+	@Override
+	public void onFinishEditDialog(String inputText, int code) {
+		switch (code) {
+		case ActivityCode.DIALOG_FRAG_USER_PIC:
+			ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
+			login_button.setImageDrawable(Drawable.createFromPath(inputText));
+
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
 }

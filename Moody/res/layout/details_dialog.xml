@@ -18,6 +18,7 @@
         android:id="@+id/change_user_picture_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="getActivity().onClick()"
         android:background="?android:attr/selectableItemBackground"
         android:text="@string/change_user_picture_button" />
 
