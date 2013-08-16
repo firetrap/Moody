@@ -7,7 +7,7 @@
     android:dividerPadding="2dp"
     android:orientation="vertical"
     android:showDividers="beginning"
-    tools:context="managers.DialogFragmentManager" >
+    tools:context="activities.MainActivity" >
 
     <View
         android:layout_width="fill_parent"

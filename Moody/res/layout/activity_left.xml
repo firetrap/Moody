@@ -18,6 +18,7 @@
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:contentDescription="@string/login_image"
+            android:onClick="onClick"
             android:padding="2dp"
             android:scaleType="fitXY"
             android:src="@drawable/no_logon" />
@@ -26,10 +27,11 @@
             android:id="@+id/logout_image_button"
             android:layout_width="50dip"
             android:layout_height="50dip"
+            android:background="@drawable/bkgd_imagebutton"
             android:contentDescription="@string/login_image"
+            android:onClick="onClick"
             android:padding="2dp"
             android:scaleType="fitXY"
-            android:background="@drawable/bkgd_imagebutton"
             android:src="@drawable/logout" />
 
         <TextView

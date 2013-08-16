@@ -87,12 +87,12 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 
 		// OnClickListener's for all button, after pressed it will send for the
 		// onClick method the button pressed
-		ImageButton loginImageButton = (ImageButton) findViewById(R.id.login_image_button);
-		loginImageButton.setOnClickListener(this);
-		ImageButton logouImageButton = (ImageButton) findViewById(R.id.logout_image_button);
-		logouImageButton.setOnClickListener(this);
-
-		
+		// ImageButton loginImageButton = (ImageButton)
+		// findViewById(R.id.login_image_button);
+		// loginImageButton.setOnClickListener(this);
+		// ImageButton logouImageButton = (ImageButton)
+		// findViewById(R.id.logout_image_button);
+		// logouImageButton.setOnClickListener(this);
 
 		populateUsername();
 		populateLeftListview();
@@ -167,13 +167,13 @@ public class MainActivity extends SherlockActivity implements OnClickListener {
 			}
 			break;
 
-		// case R.id.change_user_picture_button:
-		// // Intent i = new Intent(
-		// // Intent.ACTION_PICK,
-		// // android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		// //
-		// // startActivityForResult(i, 1);
-		// break;
+//		case R.id.change_user_picture_button:
+//			Intent intent = new Intent();
+//			intent.setType("image/*");
+//			intent.setAction(Intent.ACTION_GET_CONTENT);
+//			startActivityForResult(
+//					Intent.createChooser(intent, "Select Picture"), 1);
+//			break;
 
 		default:
 			throw new RuntimeException("Unknown button ID");
