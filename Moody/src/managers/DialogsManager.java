@@ -71,6 +71,7 @@ public final class DialogsManager {
 
 		showMessageDialog(context, mensagem, new DialogInterface.OnClickListener() {
 
+					@Override
 					public void onClick(DialogInterface dialog, int which) {
 
 						getAlertDialog().dismiss();

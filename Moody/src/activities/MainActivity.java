@@ -115,6 +115,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	}
 
 	// Method to decide what to do from what button was pressed
+	@Override
 	public void onClick(View v) {
 		session = new SessionManager(getApplicationContext());
 		switch (v.getId()) {

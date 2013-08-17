@@ -57,15 +57,18 @@ public class Connections extends AsyncTask<URL, Integer, Long> {
 
 	}
 
+	@Override
 	protected void onProgressUpdate(Integer... progress) {
 		// setProgressPercent(progress[0]);
 	}
 
+	@Override
 	protected void onPostExecute(Long result) {
 //		Toast.makeText( null, "Connectado com Sucesso",Toast.LENGTH_LONG).show();
 	}
 
 	
+	@Override
 	protected Long doInBackground(URL... urls) {
 		try {
 			// URL url = new URL("http://moodle.ests.ips.pt/");

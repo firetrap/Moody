@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,8 +32,8 @@ public class DialogFragmentManager extends DialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		getDialog().getWindow().setLayout(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT);
+		getDialog().getWindow().setLayout(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		getDialog().getWindow().requestFeature(STYLE_NO_TITLE);
 		// getDialog().setTitle("User details");
 
@@ -71,6 +72,7 @@ public class DialogFragmentManager extends DialogFragment {
 		return view;
 	}
 
+	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		getActivity();
@@ -95,12 +97,12 @@ public class DialogFragmentManager extends DialogFragment {
 	public String getPath(Uri uri) {
 		String selectedImagePath;
 		// 1:MEDIA GALLERY --- query from MediaStore.Images.Media.DATA
-		String[] projection = { MediaStore.Images.Media.DATA };
+		String[] projection = { MediaColumns.DATA };
 		Cursor cursor = getActivity().getContentResolver().query(uri,
 				projection, null, null, null);
 		if (cursor != null) {
 			int column_index = cursor
-					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+					.getColumnIndexOrThrow(MediaColumns.DATA);
 			cursor.moveToFirst();
 			selectedImagePath = cursor.getString(column_index);
 		} else {
