@@ -35,7 +35,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	private ListView mainListView;
 	private ListView leftListView;
 	private ListView rightListView;
-	private ArrayAdapter<String> listAdapter;
+	private ArrayAdapter<String> listAdapter;;;;;
 
 	// Session Manager Class
 	SessionManager session;
