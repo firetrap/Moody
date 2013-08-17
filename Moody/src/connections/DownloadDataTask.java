@@ -31,10 +31,10 @@ public class DownloadDataTask extends
 		try {
 			return loadFromNetwork(params[0], params[1]);
 		} catch (IOException e) {
-			xmlList.put("Error", e.getMessage().toString());
+			xmlList.put("Error", "Site");
 			return xmlList;
 		} catch (XmlPullParserException e) {
-			xmlList.put("Error", e.getMessage().toString());
+			xmlList.put("Error", "user/password");
 			return xmlList;
 		}
 	}

@@ -1,6 +1,6 @@
 package managers;
 
-import interfaces.IgetDialogResult;
+import interfaces.InterfaceDialogFrag;
 import model.MoodyConstants.ActivityCode;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -68,7 +68,7 @@ public class DialogFragmentManager extends DialogFragment {
 				// MEDIA GALLERY
 				selectedImagePath = getPath(selectedImageUri);
 
-				IgetDialogResult activity = (IgetDialogResult) getActivity();
+				InterfaceDialogFrag activity = (InterfaceDialogFrag) getActivity();
 				activity.onFinishEditDialog(selectedImagePath,
 						ActivityCode.DIALOG_FRAG_USER_PIC);
 				this.dismiss();

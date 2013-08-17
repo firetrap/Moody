@@ -51,6 +51,15 @@ public class SessionManager {
 		editor = pref.edit();
 	}
 
+	public void addPref(String preference) {
+
+		// Storing preference in preferences
+		editor.putString("PIC_PATH", preference);
+
+		// commit changes
+		editor.commit();
+	}
+
 	/**
 	 * Create login session
 	 * 

@@ -134,11 +134,12 @@ public class LoginActivity extends Activity {
 		mPasswordView.setError(null);
 
 		// Store values at the time of the login attempt.
+		mUrl = mUrlView.getText().toString();
 		mUser = mUserView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
-		mUrl = mUrlView.getText().toString();
 
 		boolean cancel = false;
+		String error = "Errors found: \n";
 		View focusView = null;
 
 		// Check for url.
@@ -146,18 +147,20 @@ public class LoginActivity extends Activity {
 			mUrlView.setError(getString(R.string.error_field_required));
 			focusView = mUrlView;
 			cancel = true;
+			error += "\t - URL\n";
 
 		} else if (mUrl.length() < 20) {
 			mUrlView.setError(getString(R.string.error_invalid_url));
 			focusView = mUrlView;
 			cancel = true;
+			error += "\t - URL\n";
 		}
 
 		// Check if URL contains the required http protocol.
-		if (mUrl.subSequence(0, 7).equals("http://")) {
-
-		} else {
-			mUrl = "http://" + mUrl;
+		else {
+			if (!mUrl.subSequence(0, 7).equals("http://")) {
+				mUrl = "http://" + mUrl;
+			}
 		}
 
 		// Check for a valid password.
@@ -165,11 +168,13 @@ public class LoginActivity extends Activity {
 			mPasswordView.setError(getString(R.string.error_field_required));
 			focusView = mPasswordView;
 			cancel = true;
+			error += "\t - Password\n";
 
 		} else if (mPassword.length() <= 4) {
 			mPasswordView.setError(getString(R.string.error_invalid_password));
 			focusView = mPasswordView;
 			cancel = true;
+			error += "\t - Password\n";
 		}
 
 		// Check for a valid user.
@@ -177,84 +182,112 @@ public class LoginActivity extends Activity {
 			mUserView.setError(getString(R.string.error_field_required));
 			focusView = mUserView;
 			cancel = true;
+			error += "\t - User\n";
 		}
 
-		// Inicialize the full context to generate token &&
-		mToken = mUrl + "/login/token.php?username=" + mUser + "&password="
-				+ mPassword + "&service=moody_service";
+		// Try to verify user&password with the services
+		if (!cancel) {
+			// Inicialize the full context to generate token &&
+			mToken = mUrl + "/login/token.php?username=" + mUser + "&password="
+					+ mPassword + "&service=moody_service";
 
-		// send the generated token to verify.
-		String htmlResult = "";
-		try {
-			xmlList = new DownloadDataTask().execute(mToken,"html")
-					.get();
-			htmlResult = xmlList.get("HTML");
-			xmlList.clear();
-
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			Log.d("Async Error", "Error creating FinalToken1" + htmlResult);
-			e1.printStackTrace();
-		} catch (ExecutionException e1) {
-			// TODO Auto-generated catch block
-			Log.d("parser", "Error creating finalToken2" + htmlResult);
-			e1.printStackTrace();
-		}
-
-		// checks token integrity
-		if ((htmlResult.isEmpty())
-				|| ((htmlResult.length() != 44) || (htmlResult
-						.contains("username")))) {
-
-			mUserView.setError(getString(R.string.error_invalid_username));
-
-			focusView = mUserView;
-
-			mPasswordView
-					.setError(getString(R.string.error_incorrect_password));
-			focusView = mPasswordView;
-			htmlResult = "error!";
-			cancel = true;
-			Log.d("MoodyDebug", "HTMLparser failed");
-		} else {
-
-			// Clean retrieved html result to extract token
-			StringTokenizer tokens = new StringTokenizer(htmlResult, "\"");
-
-			do {
-				finalToken = tokens.nextToken();
-			} while (finalToken.length() != 32);
-
-			// Get user id URL
-			XMLurl = "http://" + mUrlView.getText().toString()
-					+ "/webservice/rest/server.php?wstoken=" + finalToken
-					+ "&wsfunction=core_webservice_get_site_info";
-
-			// Send 2 params to async constructor the url and the required Tag
-			// for the XML parser
+			// send the generated token to verify.
+			String htmlResult = "";
 			try {
-				xmlList = new DownloadDataTask().execute(XMLurl,"xml").get();
-				UserId = xmlList.get("userid1");
-				xmlList.clear();
+				xmlList = new DownloadDataTask().execute(mToken, "html").get();
+				if (xmlList.get("HTML") == null) {
+					// htmlResult = "";
+					if (xmlList.get("Error").equals("Site")) {
+						cancel = true;
+						error += "\t - Error in Authentication service- check your internet service or the website\n";
 
-			} catch (InterruptedException e) {
+					}
+					if (xmlList.get("Error").equals("user/password")) {
+						cancel = true;
+						error += "\t - Error in Authentication service- check your user/password\n";
+
+					}
+
+				} else {
+					htmlResult = xmlList.get("HTML");
+
+				}
+				xmlList.clear();
+			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
+				Log.d("Async Error", "Error creating FinalToken1" + htmlResult);
+				cancel = true;
+				error += "\t - Error in Authentication service- check your internet service\n";
+				e1.printStackTrace();
+
+			} catch (ExecutionException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.d("parser", "Error creating finalToken2" + htmlResult);
+				cancel = true;
+				error += "\t - Error in Authentication service- check your internet service\n";
+				e1.printStackTrace();
 			}
 
-						
+			// checks token integrity
+			if ((htmlResult.isEmpty())
+					|| ((htmlResult.length() != 44) || (htmlResult
+							.contains("username")))) {
+
+				mUserView.setError(getString(R.string.error_invalid_username));
+
+				focusView = mUserView;
+
+				mPasswordView
+						.setError(getString(R.string.error_incorrect_password));
+				focusView = mPasswordView;
+				htmlResult = "error!";
+				cancel = true;
+				error += "\t - Error in Authentication service- check your user/password\n";
+
+				Log.d("MoodyDebug", "HTMLparser failed");
+			} else {
+
+				// Clean retrieved html result to extract token
+				StringTokenizer tokens = new StringTokenizer(htmlResult, "\"");
+
+				do {
+					finalToken = tokens.nextToken();
+				} while (finalToken.length() != 32);
+
+				// Get user id URL
+				XMLurl = "http://" + mUrlView.getText().toString()
+						+ "/webservice/rest/server.php?wstoken=" + finalToken
+						+ "&wsfunction=core_webservice_get_site_info";
+
+				// Send 2 params to async constructor the url and the required
+				// Tag
+				// for the XML parser
+				try {
+					xmlList = new DownloadDataTask().execute(XMLurl, "xml")
+							.get();
+					UserId = xmlList.get("userid1");
+					xmlList.clear();
+
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
 
 		}
 
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
+
 			focusView.requestFocus();
 			DialogsManager.showMessageDialog(this, new MoodyMessage(
-					"Login Error", "User/Password error"), false);
+					"Login Error", error), false);
+
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.

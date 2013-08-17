@@ -1,5 +1,5 @@
 package interfaces;
 
-public interface IgetDialogResult {
+public interface InterfaceDialogFrag {
 	void onFinishEditDialog(String inputText, int code);
 }

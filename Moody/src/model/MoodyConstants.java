@@ -45,6 +45,8 @@ public final class MoodyConstants {
 
 		// Moodle URL
 		public static final String KEY_URL = "url";
+		
+		
 
 		public static final String KEY_N_PARAMS = "%s/webservice/rest/server.php?wstoken=%s&wsfunction=%s";
 

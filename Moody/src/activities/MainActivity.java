@@ -1,6 +1,6 @@
 package activities;
 
-import interfaces.IgetDialogResult;
+import interfaces.InterfaceDialogFrag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +11,7 @@ import managers.DialogFragmentManager;
 import managers.SessionManager;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
+import model.MoodyConstants.MoodySession;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -31,7 +32,7 @@ import com.example.moody.R;
 import connections.DownloadDataTask;
 
 public class MainActivity extends SherlockActivity implements OnClickListener,
-		IgetDialogResult {
+		InterfaceDialogFrag {
 	private ListView mainListView;
 	private ListView leftListView;
 	private ListView rightListView;
@@ -83,6 +84,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 		populateUsername();
 		populateLeftListview();
+
 		populateUserPicture();
 
 	}
@@ -249,36 +251,44 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	}
 
 	public void populateUserPicture() {
+		ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
 		if (session.isLoggedIn() == true) {
-			ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
-			try {
+			if (session.getValues("PIC_PATH", null) == null) {
 
-				String url = session.getValues(
-						MoodyConstants.MoodySession.KEY_URL, null);
-				String token = session.getValues(
-						MoodyConstants.MoodySession.KEY_TOKEN, null);
+				try {
 
-				String con = String.format(
-						MoodyConstants.MoodySession.KEY_N_PARAMS, url, token,
-						"core_webservice_get_site_info");
+					String url = session.getValues(
+							MoodyConstants.MoodySession.KEY_URL, null);
+					String token = session.getValues(
+							MoodyConstants.MoodySession.KEY_TOKEN, null);
 
-				xmlList = new DownloadDataTask().execute(con, "xml").get();
-				String userPictureUrl = xmlList.get("userpictureurl1");
+					String con = String.format(
+							MoodyConstants.MoodySession.KEY_N_PARAMS, url,
+							token, "core_webservice_get_site_info");
 
-				Drawable pic = DownloadDataTask
-						.createDrawableFromUrl(userPictureUrl);
+					xmlList = new DownloadDataTask().execute(con, "xml").get();
+					String userPictureUrl = xmlList.get("userpictureurl1");
 
-				login_button.setBackgroundResource(R.drawable.bkgd_imagebutton);
-				login_button.setImageDrawable(pic);
+					Drawable pic = DownloadDataTask
+							.createDrawableFromUrl(userPictureUrl);
 
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+					login_button
+							.setBackgroundResource(R.drawable.bkgd_imagebutton);
+					login_button.setImageDrawable(pic);
+
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			} else {
+
+				login_button.setImageDrawable(Drawable.createFromPath(session
+						.getValues("PIC_PATH", null)));
 			}
-
 		}
 
 	}
@@ -297,6 +307,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	public void onFinishEditDialog(String inputText, int code) {
 		switch (code) {
 		case ActivityCode.DIALOG_FRAG_USER_PIC:
+			session.addPref(inputText);
 			ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
 			login_button.setImageDrawable(Drawable.createFromPath(inputText));
 
