@@ -51,6 +51,10 @@
             android:name="com.example.moody.RightActivity"
             android:label="@string/title_activity_right" >
         </activity>
+        <activity
+            android:name="activities.UserDetailsActivity"
+            android:label="@string/title_activity_user_details" >
+        </activity>
     </application>
 
 </manifest>

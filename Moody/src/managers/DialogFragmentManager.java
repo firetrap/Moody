@@ -2,6 +2,8 @@ package managers;
 
 import interfaces.InterfaceDialogFrag;
 import model.MoodyConstants.ActivityCode;
+import activities.LoginActivity;
+import activities.UserDetailsActivity;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -48,6 +50,21 @@ public class DialogFragmentManager extends DialogFragment {
 						startActivityForResult(
 								Intent.createChooser(intent, "Select Picture"),
 								SELECT_PICTURE);
+
+					}
+				});
+
+		((Button) view.findViewById(R.id.edit_user_details_button))
+				.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(getActivity()
+								.getApplicationContext(),
+								UserDetailsActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(intent);
+						dismiss();
 
 					}
 				});
