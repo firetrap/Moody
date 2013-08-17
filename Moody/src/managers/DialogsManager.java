@@ -7,7 +7,6 @@ import model.MoodyMessage;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.view.View.OnClickListener;
 
 import com.example.moody.R;
 

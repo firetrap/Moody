@@ -11,9 +11,6 @@ import java.util.List;
 import org.htmlcleaner.XPatherException;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.StrictMode;

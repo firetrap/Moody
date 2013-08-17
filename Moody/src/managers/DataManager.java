@@ -1,17 +1,5 @@
 package managers;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import android.os.AsyncTask;
-import android.util.Log;
-import connections.XMLparser;
 
 public class DataManager {
 

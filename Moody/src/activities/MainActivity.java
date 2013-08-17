@@ -11,7 +11,6 @@ import managers.DialogFragmentManager;
 import managers.SessionManager;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
-import model.MoodyConstants.MoodySession;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;

@@ -3,9 +3,7 @@ package managers;
 import java.util.HashMap;
 
 import model.MoodyConstants;
-
 import activities.LoginActivity;
-import activities.MainActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;

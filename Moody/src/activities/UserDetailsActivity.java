@@ -3,8 +3,6 @@ package activities;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-import javax.xml.XMLConstants;
-
 import managers.DialogsManager;
 import managers.SessionManager;
 import model.MoodyConstants.MoodySession;
@@ -12,7 +10,6 @@ import model.MoodyMessage;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Xml;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;

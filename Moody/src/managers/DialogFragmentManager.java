@@ -2,7 +2,6 @@ package managers;
 
 import interfaces.InterfaceDialogFrag;
 import model.MoodyConstants.ActivityCode;
-import activities.LoginActivity;
 import activities.UserDetailsActivity;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
