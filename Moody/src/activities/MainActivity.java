@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import bitmap.BitmapResizer;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -35,7 +36,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	private ListView mainListView;
 	private ListView leftListView;
 	private ListView rightListView;
-	private ArrayAdapter<String> listAdapter;;;;;
+	private ArrayAdapter<String> listAdapter;
 
 	// Session Manager Class
 	SessionManager session;
@@ -286,8 +287,11 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 			} else {
 
-				login_button.setImageDrawable(Drawable.createFromPath(session
-						.getValues("PIC_PATH", null)));
+				login_button.setImageBitmap(BitmapResizer
+						.decodeSampledBitmapFromResource(
+								session.getValues("PIC_PATH", null),
+								R.id.login_image_button, 100, 100));
+
 			}
 		}
 
@@ -309,8 +313,10 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		case ActivityCode.DIALOG_FRAG_USER_PIC:
 			session.addPref(inputText);
 			ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
-			login_button.setImageDrawable(Drawable.createFromPath(inputText));
 
+			login_button.setImageBitmap(BitmapResizer
+					.decodeSampledBitmapFromResource(inputText,
+							R.id.login_image_button, 100, 100));
 			break;
 
 		default:
