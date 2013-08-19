@@ -15,12 +15,12 @@
         android:background="@android:color/darker_gray" />
 
     <Button
-        android:id="@+id/change_user_picture_button"
+        android:id="@+id/upload_from_gallery_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="getActivity().onClick()"
         android:background="?android:attr/selectableItemBackground"
-        android:text="@string/change_user_picture_button" />
+        android:onClick="getActivity().onClick()"
+        android:text="@string/upload_from_gallery" />
 
     <View
         android:layout_width="fill_parent"
@@ -28,11 +28,11 @@
         android:background="@android:color/darker_gray" />
 
     <Button
-        android:id="@+id/edit_user_details_button"
+        android:id="@+id/upload_from_camera_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
-        android:text="@string/edit_user_details_button" />
+        android:text="@string/upload_from_camera" />
 
     <!-- android:src="@drawable/abs__ab_bottom_solid_light_holo" -->
 

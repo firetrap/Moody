@@ -30,14 +30,11 @@
 
     <!-- Strings related to populate -->
     <string name="fullName_textView">User Name</string>
-    <string name="change_user_picture_button">Change user picture</string>
-    <string name="edit_user_details_button">User details</string>
     <string name="title_activity_user_details">UserDetailsActivity</string>
     
     <!-- Strings related to user details -->
     <string name="working">Working&#8230;</string>
-    <string name="title_activity_user_details">User Details Activity</string>
-    <string name="user_details_title">Details: </string>
+    <string name="title_activity_user_details">User Details Activity</string><string name="user_details_title">Details: </string>
     
     <string name="user_details_hint_firstname">Fill First Name</string>
     <string name="user_details_text_firstname">First Name: </string>
@@ -68,5 +65,9 @@
     
     <string name="user_details_hint_description">Fill Your Description</string>
     <string name="user_details_text_description">Description: </string>
+    <string name="upload_from_gallery">Gallery</string>
+    <string name="upload_from_camera">Camera</string>
+    
+    
 
 </resources>

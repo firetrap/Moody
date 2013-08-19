@@ -38,7 +38,10 @@
             android:id="@+id/fullName_textView"
             android:layout_width="108dp"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
             android:text="@string/fullName_textView" />
+
     </LinearLayout>
 
     <ListView

@@ -154,6 +154,13 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			}
 			break;
 
+		case R.id.fullName_textView:
+			Intent intent = new Intent(getApplicationContext(),
+					UserDetailsActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			break;
+
 		default:
 			throw new RuntimeException("Unknown button ID");
 		}
