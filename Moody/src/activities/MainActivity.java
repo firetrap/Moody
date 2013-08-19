@@ -11,7 +11,9 @@ import managers.DialogFragmentManager;
 import managers.SessionManager;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -141,12 +143,33 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			break;
 		case R.id.logout_image_button:
 			if (session.isLoggedIn() == true) {
-				session.logoutUser();
 
-				Intent intent = new Intent(getApplicationContext(),
-						MainActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
+				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch (which) {
+						case DialogInterface.BUTTON_POSITIVE:
+							session.logoutUser();
+
+							Intent intent = new Intent(getApplicationContext(),
+									MainActivity.class);
+							intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							startActivity(intent);
+							break;
+
+						case DialogInterface.BUTTON_NEGATIVE:
+							dialog.dismiss();
+
+							break;
+						}
+					}
+				};
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("Logout");
+				builder.setMessage("Are you sure?")
+						.setPositiveButton("Yes", dialogClickListener)
+						.setNegativeButton("No", dialogClickListener).show();
 
 			} else {
 				// só entra neste else caso o utilizador ainda nao esteja
