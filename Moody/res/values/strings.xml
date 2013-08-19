@@ -67,6 +67,10 @@
     <string name="user_details_text_description">Description: </string>
     <string name="upload_from_gallery">Gallery</string>
     <string name="upload_from_camera">Camera</string>
+    <string name="favorites">Favorites</string>
+    <string name="latest">Latest</string>
+    <string name="cloud">Cloud</string>
+    <string name="wiki">Wiki</string>
     
     
 

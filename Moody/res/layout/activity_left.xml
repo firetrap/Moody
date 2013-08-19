@@ -10,7 +10,7 @@
         android:id="@+id/buttons_relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3"
+        android:layout_weight="1.25"
         android:background="@color/moodyWhite"
         android:orientation="horizontal" >
 
@@ -51,23 +51,91 @@
             android:clickable="true"
             android:onClick="onClick"
             android:text="@string/fullName_textView" />
-
     </RelativeLayout>
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="2dp"
-        android:background="@android:color/holo_blue_light" />
+        android:background="@android:color/darker_gray" />
 
     <ListView
         android:id="@+id/left_list_viewer"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@android:color/white"
         android:choiceMode="singleChoice"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" >
+        android:dividerHeight="1dp"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:paddingBottom="2dp"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp" >
+
     </ListView>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:divider="@android:color/darker_gray"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:showDividers="beginning|middle|end" >
+
+        <Button
+            android:id="@+id/latest_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableLeft="@drawable/latest"
+            android:drawablePadding="5dp"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="10dp"
+            android:text="@string/latest" />
+
+        <Button
+            android:id="@+id/favorites_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableLeft="@drawable/favorites"
+            android:drawablePadding="5dp"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="10dp"
+            android:text="@string/favorites" />
+
+        <Button
+            android:id="@+id/cloud_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableLeft="@drawable/cloud"
+            android:drawablePadding="5dp"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="10dp"
+            android:text="@string/cloud" />
+
+        <Button
+            android:id="@+id/wiki_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableLeft="@drawable/wiki"
+            android:drawablePadding="5dp"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="10dp"
+            android:text="@string/wiki" />
+    </LinearLayout>
 
 </LinearLayout>
