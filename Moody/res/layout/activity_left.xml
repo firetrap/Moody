@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:id="@+id/buttons_relative_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:background="@color/moodyWhite"
@@ -20,7 +20,7 @@
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
             android:contentDescription="@string/login_image"
             android:onClick="onClick"
