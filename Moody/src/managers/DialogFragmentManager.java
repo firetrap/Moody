@@ -5,9 +5,9 @@ import interfaces.InterfaceDialogFrag;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
 
 import model.MoodyConstants.ActivityCode;
+import model.MoodyMessage;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -33,16 +33,13 @@ public class DialogFragmentManager extends DialogFragment {
 
 	private String selectedImagePath;
 
-	private String filemanagerstring;
+	private String fileManagerImagePath;
 
 	// FOR CAMERA
-	private static final int REQUEST_IMAGE = 100;
-	private static final String TAG = "MainActivity";
+	private static final int REQUEST_IMAGE = 2;
 	File destination;
-	String imagePath;
+	String cameraImagePath;
 
-	
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -54,8 +51,21 @@ public class DialogFragmentManager extends DialogFragment {
 		// getDialog().setTitle("User details");
 
 		View view = inflater.inflate(R.layout.details_dialog, container);
-		String name =   new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").toString();
-        destination = new File(Environment.getExternalStorageDirectory(), name + ".jpg");
+		File folder = new File(Environment.getExternalStorageDirectory()
+				+ "/.moody");
+		String name = "thumbnail";
+		boolean success = true;
+		if (!folder.exists()) {
+			success = folder.mkdir();
+		}
+		if (success) {
+			destination = new File(folder, name + ".jpg");
+		} else {
+
+			DialogsManager.showMessageDialog(getActivity(), new MoodyMessage(
+					"Login Error",
+					"Sdcard needed to store picture but not available"), false);
+		}
 
 		((Button) view.findViewById(R.id.upload_from_gallery_button))
 				.setOnClickListener(new OnClickListener() {
@@ -84,12 +94,12 @@ public class DialogFragmentManager extends DialogFragment {
 						// startActivity(intent);
 						// dismiss();
 
-						Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(destination));
-		                startActivityForResult(intent, REQUEST_IMAGE);
+						Intent intent = new Intent(
+								MediaStore.ACTION_IMAGE_CAPTURE);
+						intent.putExtra(MediaStore.EXTRA_OUTPUT,
+								Uri.fromFile(destination));
+						startActivityForResult(intent, REQUEST_IMAGE);
 
-						
-						
 					}
 				});
 
@@ -105,7 +115,7 @@ public class DialogFragmentManager extends DialogFragment {
 				Uri selectedImageUri = data.getData();
 
 				// OI FILE Manager
-				filemanagerstring = selectedImageUri.getPath();
+				fileManagerImagePath = selectedImageUri.getPath();
 
 				// MEDIA GALLERY
 				selectedImagePath = getPath(selectedImageUri);
@@ -124,13 +134,12 @@ public class DialogFragmentManager extends DialogFragment {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 10;
-                imagePath = destination.getAbsolutePath();
-				
-				
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inSampleSize = 10;
+				cameraImagePath = destination.getAbsolutePath();
+
 				InterfaceDialogFrag activity = (InterfaceDialogFrag) getActivity();
-				activity.onFinishEditDialog(imagePath,
+				activity.onFinishEditDialog(cameraImagePath,
 						ActivityCode.DIALOG_FRAG_USER_PIC);
 				this.dismiss();
 
