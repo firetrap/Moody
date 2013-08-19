@@ -2,63 +2,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/left_drawer"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_gravity="left"
     android:orientation="vertical" >
 
     <RelativeLayout
         android:id="@+id/buttons_relative_layout"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
         android:background="@color/moodyWhite"
         android:orientation="horizontal" >
 
         <ImageButton
             android:id="@+id/logout_image_button"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
             android:contentDescription="@string/login_image"
             android:onClick="onClick"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:src="@drawable/logout" />
-
-        <TextView
-            android:id="@+id/fullName_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/logout_image_button"
-            android:layout_toRightOf="@+id/login_image_button"
-            android:clickable="true"
-            android:onClick="onClick"
-            android:paddingLeft="5dp"
-            android:text="@string/fullName_textView" />
 
         <ImageButton
             android:id="@+id/login_image_button"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="17dp"
             android:contentDescription="@string/login_image"
             android:onClick="onClick"
             android:padding="1dp"
             android:scaleType="fitXY"
             android:src="@drawable/no_logon" />
 
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/login_image_button"
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="14dp"
+            android:layout_toRightOf="@+id/login_image_button"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:text="@string/fullName_textView" />
+
     </RelativeLayout>
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:background="@android:color/holo_blue_light" />
 
     <ListView
         android:id="@+id/left_list_viewer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@android:color/white"
         android:choiceMode="singleChoice"
         android:divider="@android:color/darker_gray"

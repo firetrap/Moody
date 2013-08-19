@@ -181,7 +181,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			}
 			break;
 
-		case R.id.fullName_textView:
+		case R.id.textView1:
 			Intent intent = new Intent(getApplicationContext(),
 					UserDetailsActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -196,7 +196,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	public void populateUsername() {
 
 		if (session.isLoggedIn() == true) {
-			TextView view = (TextView) findViewById(R.id.fullName_textView);
+			TextView view = (TextView) findViewById(R.id.textView1);
 			try {
 
 				String url = session.getValues(
