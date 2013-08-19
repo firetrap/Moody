@@ -6,7 +6,7 @@
     android:layout_gravity="left"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/buttons_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,6 +17,8 @@
             android:id="@+id/login_image_button"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:contentDescription="@string/login_image"
             android:onClick="onClick"
             android:padding="2dp"
@@ -27,7 +29,8 @@
             android:id="@+id/logout_image_button"
             android:layout_width="50dip"
             android:layout_height="50dip"
-            android:background="@drawable/bkgd_imagebutton"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
             android:contentDescription="@string/login_image"
             android:onClick="onClick"
             android:padding="2dp"
@@ -38,11 +41,18 @@
             android:id="@+id/fullName_textView"
             android:layout_width="108dp"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/logout_image_button"
+            android:layout_toRightOf="@+id/login_image_button"
             android:clickable="true"
             android:onClick="onClick"
+            android:paddingLeft="5dp"
             android:text="@string/fullName_textView" />
+    </RelativeLayout>
 
-    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/holo_blue_light" />
 
     <ListView
         android:id="@+id/left_list_viewer"
@@ -50,8 +60,8 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:choiceMode="singleChoice"
-        android:divider="@android:color/black"
-        android:dividerHeight="0dp" >
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp" >
     </ListView>
 
 </LinearLayout>

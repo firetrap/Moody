@@ -19,7 +19,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_action_picture"
+        android:drawablePadding="5dp"
         android:onClick="getActivity().onClick()"
+        android:paddingLeft="10dp"
         android:text="@string/upload_from_gallery" />
 
     <View
@@ -32,8 +35,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_action_camera"
+        android:drawablePadding="5dp"
+        android:paddingLeft="10dp"
         android:text="@string/upload_from_camera" />
 
-    <!-- android:src="@drawable/abs__ab_bottom_solid_light_holo" -->
+
 
 </LinearLayout>

@@ -17,6 +17,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -32,7 +34,7 @@ import com.example.moody.R;
 import connections.DownloadDataTask;
 
 public class MainActivity extends SherlockActivity implements OnClickListener,
-		InterfaceDialogFrag {
+		InterfaceDialogFrag, OnItemClickListener {
 	private ListView mainListView;
 	private ListView leftListView;
 	private ListView rightListView;
@@ -42,6 +44,8 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	SessionManager session;
 
 	private HashMap<String, String> xmlList;
+
+	private ArrayList<String> coursesIdList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -200,6 +204,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	public void populateLeftListview() {
 		leftListView = (ListView) findViewById(R.id.left_list_viewer);
+		leftListView.setOnItemClickListener(this);
 
 		if (session.isLoggedIn() == true) {
 			String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
@@ -224,20 +229,31 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 				e.printStackTrace();
 			}
 
-			ArrayList<String> coursesList = new ArrayList<String>();
+			ArrayList<String> coursesNamesList = new ArrayList<String>();
+			coursesIdList = new ArrayList<String>();
 
 			for (String keyName : xmlList.keySet()) {
 				if (keyName.length() >= "fullname".length()
-						&& keyName.substring(0, 8).equals("fullname")) {
-					String coursesIndi = xmlList.get(keyName);
-					coursesList.add(coursesIndi);
+						&& keyName.substring(0, 8).equals("fullname"))
+					coursesNamesList.add(xmlList.get(keyName));
 
+				if (keyName.length() >= "id".length()
+						&& keyName.substring(0, 2).equals("id")) {
+					int number = 0;
+
+					try {
+						number = Integer.parseInt(keyName.substring(2));
+					} catch (NumberFormatException ex1) {
+					}
+
+					if (number > 0)
+						coursesIdList.add(xmlList.get(keyName));
 				}
 
 			}
 			xmlList.clear();
 			listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow,
-					coursesList);
+					coursesNamesList);
 			listAdapter.add("Ceres");
 			listAdapter.add("Pluto");
 			listAdapter.add("Haumea");
@@ -332,4 +348,21 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	}
 
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		// TODO Auto-generated method stub
+
+		// ############## JA TEM O ID, FALTA CHAMAR O GET_CONTENTS DA CADEIRA.
+		String id = "";
+
+		try {
+			id = coursesIdList.get(arg2);
+		} catch (Exception ex1) {
+
+		}
+
+		Toast.makeText(getApplicationContext(), "selected :" + id,
+				Toast.LENGTH_SHORT).show();
+
+	}
 }

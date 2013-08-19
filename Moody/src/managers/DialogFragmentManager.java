@@ -54,6 +54,8 @@ public class DialogFragmentManager extends DialogFragment {
 		File folder = new File(Environment.getExternalStorageDirectory()
 				+ "/.moody");
 		String name = "thumbnail";
+
+		// If ./moody doesn't exists create it
 		boolean success = true;
 		if (!folder.exists()) {
 			success = folder.mkdir();
@@ -61,7 +63,7 @@ public class DialogFragmentManager extends DialogFragment {
 		if (success) {
 			destination = new File(folder, name + ".jpg");
 		} else {
-
+			dismiss();
 			DialogsManager.showMessageDialog(getActivity(), new MoodyMessage(
 					"Login Error",
 					"Sdcard needed to store picture but not available"), false);
