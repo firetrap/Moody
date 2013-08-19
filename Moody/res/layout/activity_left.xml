@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/buttons_relative_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="100dp"
         android:background="@color/moodyWhite"
         android:orientation="horizontal" >
 
@@ -26,7 +26,7 @@
 
         <TextView
             android:id="@+id/fullName_textView"
-            android:layout_width="108dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/logout_image_button"
             android:layout_toRightOf="@+id/login_image_button"
@@ -40,11 +40,11 @@
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
             android:contentDescription="@string/login_image"
             android:onClick="onClick"
-            android:padding="2dp"
+            android:padding="1dp"
             android:scaleType="fitXY"
             android:src="@drawable/no_logon" />
 
