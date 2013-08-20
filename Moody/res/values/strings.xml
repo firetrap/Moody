@@ -71,6 +71,8 @@
     <string name="latest">Latest</string>
     <string name="cloud">Cloud</string>
     <string name="wiki">Wiki</string>
+    <string name="navigation_string">Navigation</string>
+    <string name="courses_TextView_string">Courses</string>
     
     
 

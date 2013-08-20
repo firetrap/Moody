@@ -11,18 +11,24 @@ import managers.DialogFragmentManager;
 import managers.SessionManager;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
+import android.R.attr;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -226,8 +232,8 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	}
 
 	public void populateLeftListview() {
-		leftListView = (ListView) findViewById(R.id.left_list_viewer);
-		leftListView.setOnItemClickListener(this);
+		// leftListView = (ListView) findViewById(R.id.left_list_viewer);
+		// leftListView.setOnItemClickListener(this);
 
 		if (session.isLoggedIn() == true) {
 			String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
@@ -277,22 +283,55 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			xmlList.clear();
 			listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow,
 					coursesNamesList);
-			listAdapter.add("Ceres");
-			listAdapter.add("Pluto");
-			listAdapter.add("Haumea");
-			listAdapter.add("Makemake");
-			listAdapter.add("Eris");
-			listAdapter.add("Ceres");
-			listAdapter.add("Pluto");
-			listAdapter.add("Haumea");
-			listAdapter.add("Makemake");
-			listAdapter.add("Eris");
-			listAdapter.add("Ceres");
-			listAdapter.add("Pluto");
-			listAdapter.add("Haumea");
-			listAdapter.add("Makemake");
-			listAdapter.add("Eris");
-			leftListView.setAdapter(listAdapter);
+			// listAdapter.add("Ceres");
+			// listAdapter.add("Pluto");
+			// listAdapter.add("Haumea");
+			// listAdapter.add("Makemake");
+			// listAdapter.add("Eris");
+			// listAdapter.add("Ceres");
+			// listAdapter.add("Pluto");
+			// listAdapter.add("Haumea");
+			// listAdapter.add("Makemake");
+			// listAdapter.add("Eris");
+			// listAdapter.add("Ceres");
+			// listAdapter.add("Pluto");
+			// listAdapter.add("Haumea");
+			// listAdapter.add("Makemake");
+			// listAdapter.add("Eris");
+			// leftListView.setAdapter(listAdapter);
+
+			LinearLayout layout = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
+			// Can also be done in
+			// xml by
+			// android:orientation="vertical"
+
+			for (int i = 9; i > 0; i--) {
+				LinearLayout row = new LinearLayout(this);
+				row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+						LayoutParams.WRAP_CONTENT));
+
+				Button btnTag = new Button(this);
+				btnTag.setLayoutParams(new LayoutParams(
+						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+				btnTag.setText("Button " + i);
+				btnTag.setId(i);
+				btnTag.setBackgroundColor(attr.selectableItemBackground);
+				if (i<9) {
+					btnTag.setBackgroundResource(R.drawable.border_inside);
+				}
+			
+				btnTag.setCompoundDrawablesWithIntrinsicBounds(
+						R.drawable.books, 0, 0, 0);
+				btnTag.setCompoundDrawablePadding(10);
+				btnTag.setPadding(10, 0, 0, 0);
+				btnTag.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+				btnTag.setOnClickListener(this);
+
+				row.addView(btnTag);
+
+				layout.addView(row, 3);
+			}
+
 		}
 
 	}
