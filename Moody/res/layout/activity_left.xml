@@ -8,7 +8,7 @@
 
     <ScrollView
         android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1" >
 
@@ -23,34 +23,20 @@
 
             <RelativeLayout
                 android:id="@+id/buttons_relative_layout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1.25"
                 android:background="@color/C_White"
                 android:orientation="horizontal" >
 
                 <ImageButton
-                    android:id="@+id/logout_image_button"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/border_shape"
-                    android:contentDescription="@string/login_image"
-                    android:onClick="onClick"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/logout" />
-
-                <ImageButton
                     android:id="@+id/login_image_button"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/border_shape"
                     android:contentDescription="@string/login_image"
                     android:onClick="onClick"
@@ -58,17 +44,38 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/no_logon" />
 
+                <ImageButton
+                    android:id="@+id/logout_image_button"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="140dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/login_image_button"
+                    android:background="@drawable/border_shape"
+                    android:contentDescription="@string/login_image"
+                    android:onClick="onClick"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/logout" />
+
                 <TextView
                     android:id="@+id/textView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/login_image_button"
-                    android:layout_marginBottom="13dp"
-                    android:layout_marginLeft="14dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/login_image_button"
                     android:clickable="true"
                     android:onClick="onClick"
                     android:text="@string/fullName_textView" />
+
+                <Space
+                    android:id="@+id/space1"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_alignTop="@+id/logout_image_button"
+                    android:layout_toRightOf="@+id/logout_image_button" />
+
             </RelativeLayout>
 
             <TextView
@@ -82,7 +89,7 @@
                 android:text="@string/courses_TextView_string" />
 
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_weight="1.25"
                 android:background="@android:color/darker_gray" />
@@ -114,7 +121,7 @@
 
             <View
                 android:id="@+id/view1"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_weight="1.25"
                 android:background="@android:color/darker_gray" />
@@ -166,7 +173,6 @@
                 android:gravity="left|center_vertical"
                 android:paddingLeft="10dp"
                 android:text="@string/wiki" />
-
         </LinearLayout>
     </ScrollView>
 
