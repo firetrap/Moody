@@ -52,6 +52,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	private HashMap<String, String> xmlList;
 
+	private ArrayList<String> coursesNamesList;
 	private ArrayList<String> coursesIdList;
 
 	@Override
@@ -257,7 +258,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 				e.printStackTrace();
 			}
 
-			ArrayList<String> coursesNamesList = new ArrayList<String>();
+			coursesNamesList = new ArrayList<String>();
 			coursesIdList = new ArrayList<String>();
 
 			for (String keyName : xmlList.keySet()) {
@@ -276,63 +277,92 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 					if (number > 0)
 						coursesIdList.add(xmlList.get(keyName));
+
 				}
 
 			}
 			xmlList.clear();
 			listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow,
 					coursesNamesList);
-			// listAdapter.add("Ceres");
-			// listAdapter.add("Pluto");
-			// listAdapter.add("Haumea");
-			// listAdapter.add("Makemake");
-			// listAdapter.add("Eris");
-			// listAdapter.add("Ceres");
-			// listAdapter.add("Pluto");
-			// listAdapter.add("Haumea");
-			// listAdapter.add("Makemake");
-			// listAdapter.add("Eris");
-			// listAdapter.add("Ceres");
-			// listAdapter.add("Pluto");
-			// listAdapter.add("Haumea");
-			// listAdapter.add("Makemake");
-			// listAdapter.add("Eris");
-			// leftListView.setAdapter(listAdapter);
 
-			LinearLayout layout = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
-			// Can also be done in
-			// xml by
-			// android:orientation="vertical"
+			coursesInit();
 
-			for (int i = 9; i > 0; i--) {
-				LinearLayout row = new LinearLayout(this);
-				row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-						LayoutParams.WRAP_CONTENT));
+		} else {
 
-				Button btnTag = new Button(this);
-				btnTag.setLayoutParams(new LayoutParams(
-						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-				btnTag.setText("Button " + i);
-				btnTag.setId(i);
-				btnTag.setBackgroundColor(attr.selectableItemBackground);
-				if (i<9) {
-					btnTag.setBackgroundResource(R.drawable.border_inside);
-				}
-			
-				btnTag.setCompoundDrawablesWithIntrinsicBounds(
-						R.drawable.books, 0, 0, 0);
-				btnTag.setCompoundDrawablePadding(10);
-				btnTag.setPadding(10, 0, 0, 0);
-				btnTag.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-				btnTag.setOnClickListener(this);
+			coursesInitEmpty();
+		}
+	}
 
-				row.addView(btnTag);
+	/**
+	 * @throws NumberFormatException
+	 */
+	private void coursesInit() throws NumberFormatException {
+		LinearLayout layout = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
 
-				layout.addView(row, 3);
+		for (int j = coursesIdList.size() - 1; j >= 0; j--) {
+
+			LinearLayout row = new LinearLayout(this);
+			row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+					LayoutParams.WRAP_CONTENT));
+
+			Button btnTag = new Button(this);
+			btnTag.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+					LayoutParams.WRAP_CONTENT));
+			btnTag.setText(coursesNamesList.get(j));
+			btnTag.setId(Integer.parseInt(coursesIdList.get(j)));
+			btnTag.setBackgroundColor(attr.selectableItemBackground);
+
+			if (j < coursesIdList.size() - 1) {
+				btnTag.setBackgroundResource(R.drawable.border_inside);
 			}
 
-		}
+			btnTag.setCompoundDrawablesWithIntrinsicBounds(R.drawable.books, 0,
+					0, 0);
+			btnTag.setCompoundDrawablePadding(10);
+			btnTag.setPadding(10, 0, 0, 0);
+			btnTag.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+			btnTag.setOnClickListener(this);
 
+			row.addView(btnTag);
+
+			layout.addView(row, 3);
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void coursesInitEmpty() {
+		LinearLayout layout = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
+
+		for (int j = 5; j >= 0; j--) {
+
+			LinearLayout row = new LinearLayout(this);
+			row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+					LayoutParams.WRAP_CONTENT));
+
+			Button btnTag = new Button(this);
+			btnTag.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+					LayoutParams.WRAP_CONTENT));
+			btnTag.setText("Your Course " + (j + 1));
+			btnTag.setId(j);
+			btnTag.setBackgroundColor(attr.selectableItemBackground);
+
+			if (j < 5) {
+				btnTag.setBackgroundResource(R.drawable.border_inside);
+			}
+
+			btnTag.setCompoundDrawablesWithIntrinsicBounds(R.drawable.books, 0,
+					0, 0);
+			btnTag.setCompoundDrawablePadding(10);
+			btnTag.setPadding(10, 0, 0, 0);
+			btnTag.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+			btnTag.setOnClickListener(this);
+
+			row.addView(btnTag);
+
+			layout.addView(row, 3);
+		}
 	}
 
 	public void populateUserPicture() {
