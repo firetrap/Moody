@@ -58,7 +58,7 @@
                     android:src="@drawable/logout" />
 
                 <TextView
-                    android:id="@+id/textView1"
+                    android:id="@+id/fullname_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/login_image_button"
@@ -69,13 +69,13 @@
                     android:onClick="onClick"
                     android:text="@string/fullName_textView" />
 
-                <Space
+                <View
                     android:id="@+id/space1"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_alignTop="@+id/logout_image_button"
-                    android:layout_toRightOf="@+id/logout_image_button" />
-
+                    android:layout_toRightOf="@+id/logout_image_button"
+                    android:visibility="invisible" />
             </RelativeLayout>
 
             <TextView
@@ -86,7 +86,7 @@
                 android:linksClickable="false"
                 android:paddingBottom="5dp"
                 android:paddingTop="10dp"
-                android:text="@string/courses_TextView_string" />
+                android:text="@string/courses_left_drawer" />
 
             <View
                 android:layout_width="match_parent"

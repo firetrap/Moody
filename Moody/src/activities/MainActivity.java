@@ -1,13 +1,12 @@
 package activities;
 
+import fragments.DialogFragmentManager;
 import interfaces.InterfaceDialogFrag;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-import managers.DialogFragmentManager;
 import managers.SessionManager;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
@@ -21,14 +20,10 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
@@ -41,11 +36,7 @@ import com.example.moody.R;
 import connections.DownloadDataTask;
 
 public class MainActivity extends SherlockActivity implements OnClickListener,
-		InterfaceDialogFrag, OnItemClickListener {
-	private ListView mainListView;
-	private ListView leftListView;
-	private ListView rightListView;
-	private ArrayAdapter<String> listAdapter;
+		InterfaceDialogFrag {
 
 	// Session Manager Class
 	SessionManager session;
@@ -65,34 +56,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		// Find the ListView resource.
-		mainListView = (ListView) findViewById(R.id.main_list_viewer);
-
-		rightListView = (ListView) findViewById(R.id.right_list_viewer);
-
-		// Create and populate a List of planet names.
-		String[] planets = new String[] { "Mercury", "Venus", "Earth", "Mars",
-				"Jupiter", "Saturn", "Uranus", "Neptune" };
-
-		ArrayList<String> planetList = new ArrayList<String>();
-		planetList.addAll(Arrays.asList(planets));
-
-		// Create ArrayAdapter using the planet list.
-		listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow,
-				planetList);
-
-		// Add more planets. If you passed a String[] instead of a List<String>
-		// into the ArrayAdapter constructor, you must not add more items.
-		// Otherwise an exception will occur.
-		listAdapter.add("Ceres");
-		listAdapter.add("Pluto");
-		listAdapter.add("Haumea");
-		listAdapter.add("Makemake");
-		listAdapter.add("Eris");
-
-		// Set the ArrayAdapter as the ListView's adapter.
-		mainListView.setAdapter(listAdapter);
-		rightListView.setAdapter(listAdapter);
 
 		populateUsername();
 		populateLeftListview();
@@ -187,7 +150,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			}
 			break;
 
-		case R.id.textView1:
+		case R.id.fullname_textview:
 			Intent intent = new Intent(getApplicationContext(),
 					UserDetailsActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -195,14 +158,17 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			break;
 
 		default:
-			throw new RuntimeException("Unknown button ID");
+			// Toast.makeText(getApplicationContext(),
+			// "ENTROU NO PRIMEIRO :" + v.getId(), Toast.LENGTH_SHORT)
+			// .show();
+			// throw new RuntimeException("Unknown button ID");
 		}
 	}
 
 	public void populateUsername() {
 
 		if (session.isLoggedIn() == true) {
-			TextView view = (TextView) findViewById(R.id.textView1);
+			TextView view = (TextView) findViewById(R.id.fullname_textview);
 			try {
 
 				String url = session.getValues(
@@ -282,9 +248,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 			}
 			xmlList.clear();
-			listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow,
-					coursesNamesList);
-
 			coursesInit();
 
 		} else {
@@ -296,6 +259,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	/**
 	 * @throws NumberFormatException
 	 */
+
 	private void coursesInit() throws NumberFormatException {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
 
@@ -310,6 +274,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 					LayoutParams.WRAP_CONTENT));
 			btnTag.setText(coursesNamesList.get(j));
 			btnTag.setId(Integer.parseInt(coursesIdList.get(j)));
+
 			btnTag.setBackgroundColor(attr.selectableItemBackground);
 
 			if (j < coursesIdList.size() - 1) {
@@ -321,7 +286,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			btnTag.setCompoundDrawablePadding(10);
 			btnTag.setPadding(10, 0, 0, 0);
 			btnTag.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-			btnTag.setOnClickListener(this);
+			btnTag.setOnClickListener(coursesClick);
 
 			row.addView(btnTag);
 
@@ -357,7 +322,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			btnTag.setCompoundDrawablePadding(10);
 			btnTag.setPadding(10, 0, 0, 0);
 			btnTag.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-			btnTag.setOnClickListener(this);
+			btnTag.setClickable(false);
 
 			row.addView(btnTag);
 
@@ -439,21 +404,29 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		// TODO Auto-generated method stub
-
-		// ############## JA TEM O ID, FALTA CHAMAR O GET_CONTENTS DA CADEIRA.
-		String id = "";
-
-		try {
-			id = coursesIdList.get(arg2);
-		} catch (Exception ex1) {
-
+	View.OnClickListener coursesClick = new OnClickListener() {
+		public void onClick(View v) {
+			Toast.makeText(getApplicationContext(),
+					"ID-> " + v.getId() + " POSITION->", Toast.LENGTH_SHORT)
+					.show();
 		}
+	};
 
-		Toast.makeText(getApplicationContext(), "selected :" + id,
-				Toast.LENGTH_SHORT).show();
+	// private void selectItem(int position) {
+	// // update the main content by replacing fragments
+	// Fragment fragment = new PlanetFragment();
+	// Bundle args = new Bundle();
+	// args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+	// fragment.setArguments(args);
+	//
+	// FragmentManager fragmentManager = getFragmentManager();
+	// fragmentManager.beginTransaction().replace(R.id.content_frame,
+	// fragment).commit();
+	//
+	// // update selected item and title, then close the drawer
+	// mDrawerList.setItemChecked(position, true);
+	// setTitle(mPlanetTitles[position]);
+	// mDrawerLayout.closeDrawer(mDrawerList);
+	// }
 
-	}
 }

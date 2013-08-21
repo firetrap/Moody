@@ -1,4 +1,4 @@
-package managers;
+package fragments;
 
 import interfaces.InterfaceDialogFrag;
 
@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import managers.DialogsManager;
 import model.MoodyConstants.ActivityCode;
 import model.MoodyMessage;
 import android.app.Activity;
