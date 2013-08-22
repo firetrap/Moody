@@ -9,12 +9,37 @@
 
 
     <!-- The main content view -->
-    <include layout="@layout/main_content" />
+
+    <ScrollView
+        android:id="@+id/scrollView_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:id="@+id/course_topics_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/course_path_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/C_White"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="10dp"
+                android:text="@string/course_path"
+                android:textColor="@color/C_Blue_Light" />
+        </LinearLayout>
+    </ScrollView>
 
     <!-- The left navigation drawer -->
+
     <include layout="@layout/activity_left" />
 
     <!-- The right navigation drawer -->
+
     <include layout="@layout/activity_right" />
 
 </android.support.v4.widget.DrawerLayout>
