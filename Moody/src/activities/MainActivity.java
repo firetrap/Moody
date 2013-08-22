@@ -266,12 +266,12 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		for (int j = coursesIdList.size() - 1; j >= 0; j--) {
 
 			LinearLayout row = new LinearLayout(this);
-			row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
+			row.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
 			Button btnTag = new Button(this);
-			btnTag.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
+			btnTag.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			btnTag.setText(coursesNamesList.get(j));
 			btnTag.setId(Integer.parseInt(coursesIdList.get(j)));
 
@@ -303,12 +303,12 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		for (int j = 5; j >= 0; j--) {
 
 			LinearLayout row = new LinearLayout(this);
-			row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
+			row.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
 			Button btnTag = new Button(this);
-			btnTag.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
+			btnTag.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			btnTag.setText("Your Course " + (j + 1));
 			btnTag.setId(j);
 			btnTag.setBackgroundColor(attr.selectableItemBackground);
@@ -405,6 +405,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	}
 
 	View.OnClickListener coursesClick = new OnClickListener() {
+		@Override
 		public void onClick(View v) {
 			Toast.makeText(getApplicationContext(),
 					"ID-> " + v.getId() + " POSITION->", Toast.LENGTH_SHORT)

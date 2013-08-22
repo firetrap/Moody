@@ -9,40 +9,12 @@
 
 
     <!-- The main content view -->
-
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:context=".MainActivity" >
-
-        <ListView
-            android:id="@+id/main_list_viewer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="1dp"
-            android:footerDividersEnabled="true"
-            android:paddingLeft="1dp" >
-        </ListView>
-
-        <TextView
-            android:id="@+id/coursename_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/hello_world" />
-    </RelativeLayout>
+    <include layout="@layout/main_content" />
 
     <!-- The left navigation drawer -->
-
     <include layout="@layout/activity_left" />
 
     <!-- The right navigation drawer -->
-
     <include layout="@layout/activity_right" />
 
 </android.support.v4.widget.DrawerLayout>
