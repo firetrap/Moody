@@ -5,6 +5,7 @@ import interfaces.InterfaceDialogFrag;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import managers.SessionManager;
@@ -13,17 +14,20 @@ import model.MoodyConstants.ActivityCode;
 import android.R.attr;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
@@ -57,11 +61,129 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		initMainContent();
 		populateUsername();
 		populateLeftListview();
 
 		populateUserPicture();
 
+	}
+
+	public void initMainContent() {
+
+		
+
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LinearLayout inserPoint = (LinearLayout) findViewById(R.id.course_topics_linear_layout);
+
+
+		for (int i = 0; i < 6; i++) {
+			View view = inflater.inflate(R.layout.customview, null);
+			LinearLayout row = new LinearLayout(this);
+			row.setLayoutParams(new LayoutParams(
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+			
+			row.addView(view);
+			inserPoint.addView(row, 1);
+		}
+		
+		// for(int i = 0; i<views.size(); i++)
+		// insertPoint.addView((View) views.get(i));
+		// }
+
+		// for (int j = 0; j < 5; j++) {
+
+		// RelativeLayout topics = new RelativeLayout(this);
+		// ImageButton arrow = new ImageButton(this);
+		// ImageButton addFavorites = new ImageButton(this);
+		// TextView topicName = new TextView(this);
+		// TextView contentPreview = new TextView(this);
+		//
+		// // RelativeLayout params
+		// topics.setLayoutParams(new LayoutParams(
+		// android.view.ViewGroup.LayoutParams.FILL_PARENT,
+		// android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		// topics.setBackgroundResource(R.drawable.fill_light_grey);
+		//
+		// // Arrow params
+		// arrow.setLayoutParams(new LayoutParams(
+		// android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+		// android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		// arrow.setBackgroundResource(R.color.transparent);
+		// arrow.setContentDescription(getString(R.string.arrow_description));
+		// arrow.setPadding(0, 0, 5, 0);
+		// arrow.setImageResource(R.drawable.right_arrow);
+		// arrow.setId(j + 1);
+		//
+		// RelativeLayout.LayoutParams arrowParams = new
+		// RelativeLayout.LayoutParams(
+		// arrow.getLayoutParams());
+		// arrowParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		// arrowParams.addRule(RelativeLayout.CENTER_VERTICAL);
+		//
+		// // Add favorits params
+		// addFavorites.setLayoutParams(new LayoutParams(
+		// android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+		// android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		// addFavorites.setBackgroundResource(R.color.transparent);
+		// addFavorites
+		// .setContentDescription(getString(R.string.add_favorite_description));
+		// addFavorites.setPadding(0, 0, 10, 0);
+		// addFavorites.setImageResource(R.drawable.add_favorites);
+		// addFavorites.setId(j + 2);
+		//
+		// RelativeLayout.LayoutParams addFavoritesParams = new
+		// RelativeLayout.LayoutParams(
+		// addFavorites.getLayoutParams());
+		// addFavoritesParams.addRule(RelativeLayout.CENTER_VERTICAL);
+		// addFavoritesParams.addRule(RelativeLayout.LEFT_OF,
+		// arrow.getId());
+		//
+		// // Add textview topics
+		// topicName.setLayoutParams(new LayoutParams(
+		// android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+		// android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		// topicName.setBackgroundResource(R.drawable.border_course_context);
+		// topicName.setPadding(20, 0, 20, 0);
+		// topicName.setText(getString(R.string.topic_string));
+		// topicName.setId(j + 3);
+		//
+		// RelativeLayout.LayoutParams topicsNameParams = new
+		// RelativeLayout.LayoutParams(
+		// topicName.getLayoutParams());
+		// topicsNameParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+		// topicsNameParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		//
+		// // Add textview content preview
+		// contentPreview.setLayoutParams(new LayoutParams(250, 100));
+		// contentPreview
+		// .setBackgroundResource(R.drawable.border_course_context);
+		// contentPreview.setPadding(0, 10, 10, 0);
+		// contentPreview.setText(getString(R.string.content_preview));
+		//
+		// RelativeLayout.LayoutParams contentPreviewParams = new
+		// RelativeLayout.LayoutParams(
+		// contentPreview.getLayoutParams());
+		// contentPreviewParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+		// contentPreviewParams.addRule(RelativeLayout.LEFT_OF,
+		// addFavorites.getId());
+		// contentPreviewParams.addRule(RelativeLayout.BELOW,
+		// topicName.getId());
+		//
+		// topics.addView(arrow);
+		// topics.addView(addFavorites);
+		// topics.addView(topicName);
+		// topics.addView(contentPreview);
+		//
+		// RelativeLayout rLayout = (RelativeLayout)
+		// v.findViewById(R.id.course_description_relative_layout);
+		//
+		// row.addView(rLayout);
+		// lLayout.addView(row, 1);
+
+		// }
 	}
 
 	@Override
@@ -266,11 +388,13 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		for (int j = coursesIdList.size() - 1; j >= 0; j--) {
 
 			LinearLayout row = new LinearLayout(this);
-			row.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+			row.setLayoutParams(new LayoutParams(
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
 			Button btnTag = new Button(this);
-			btnTag.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+			btnTag.setLayoutParams(new LayoutParams(
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			btnTag.setText(coursesNamesList.get(j));
 			btnTag.setId(Integer.parseInt(coursesIdList.get(j)));
@@ -303,11 +427,13 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		for (int j = 5; j >= 0; j--) {
 
 			LinearLayout row = new LinearLayout(this);
-			row.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+			row.setLayoutParams(new LayoutParams(
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
 			Button btnTag = new Button(this);
-			btnTag.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+			btnTag.setLayoutParams(new LayoutParams(
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			btnTag.setText("Your Course " + (j + 1));
 			btnTag.setId(j);

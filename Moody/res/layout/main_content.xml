@@ -5,80 +5,81 @@
     android:layout_height="wrap_content" >
 
     <LinearLayout
+        android:id="@+id/course_topics_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/course_path_textView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/C_White"
             android:paddingBottom="10dp"
             android:paddingLeft="5dp"
             android:paddingTop="10dp"
             android:text="@string/course_path"
             android:textColor="@color/C_Blue_Light" />
 
-        <RelativeLayout
-            android:id="@+id/course_description_relative_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/fill_light_grey"
-            android:orientation="horizontal" >
+        <!-- <RelativeLayout -->
+        <!-- android:id="@+id/course_description_relative_layout" -->
+        <!-- android:layout_width="fill_parent" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:background="@drawable/fill_light_grey" -->
+        <!-- android:orientation="horizontal" > -->
 
-            <ImageButton
-                android:id="@+id/imageButtonTESTE1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@color/transparent"
-                android:contentDescription="@string/arrow_description"
-                android:paddingRight="5dp"
-                android:src="@drawable/right_arrow" />
 
-            <ImageButton
-                android:id="@+id/imageButtonTESTE2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/imageButtonTESTE1"
-                android:adjustViewBounds="false"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/add_favorite_description"
-                android:cropToPadding="false"
-                android:paddingRight="10dp"
-                android:src="@drawable/add_favorites" />
+        <!-- <ImageButton -->
+        <!-- android:id="@+id/imageButtonTESTE1" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_alignParentRight="true" -->
+        <!-- android:layout_centerVertical="true" -->
+        <!-- android:background="@color/transparent" -->
+        <!-- android:contentDescription="@string/arrow_description" -->
+        <!-- android:paddingRight="5dp" -->
+        <!-- android:src="@drawable/right_arrow" /> -->
 
-            <TextView
-                android:id="@+id/topic_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/border_course_context"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text="@string/topic_string" />
 
-            <TextView
-                android:id="@+id/content_preview_textView"
-                android:layout_width="250dp"
-                android:layout_height="100dp"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/topic_name"
-                android:layout_toLeftOf="@+id/imageButtonTESTE2"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp"
-                android:text="@string/content_preview" />
-        </RelativeLayout>
+        <!-- <ImageButton -->
+        <!-- android:id="@+id/imageButtonTESTE2" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_centerVertical="true" -->
+        <!-- android:layout_toLeftOf="@+id/imageButtonTESTE1" -->
+        <!-- android:adjustViewBounds="false" -->
+        <!-- android:background="@android:color/transparent" -->
+        <!-- android:contentDescription="@string/add_favorite_description" -->
+        <!-- android:cropToPadding="false" -->
+        <!-- android:paddingRight="10dp" -->
+        <!-- android:src="@drawable/add_favorites" /> -->
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:background="@android:color/darker_gray" />
+
+        <!-- <TextView -->
+        <!-- android:id="@+id/topic_name" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_alignParentLeft="true" -->
+        <!-- android:layout_alignParentTop="true" -->
+        <!-- android:background="@drawable/border_course_context" -->
+        <!-- android:paddingLeft="20dp" -->
+        <!-- android:paddingRight="20dp" -->
+        <!-- android:text="@string/topic_string" /> -->
+
+
+        <!-- <TextView -->
+        <!-- android:id="@+id/content_preview_textView" -->
+        <!-- android:layout_width="250dp" -->
+        <!-- android:layout_height="100dp" -->
+        <!-- android:layout_alignParentLeft="true" -->
+        <!-- android:layout_below="@+id/topic_name" -->
+        <!-- android:layout_toLeftOf="@+id/imageButtonTESTE2" -->
+        <!-- android:paddingRight="10dp" -->
+        <!-- android:paddingTop="10dp" -->
+        <!-- android:text="@string/content_preview" /> -->
+        <!-- </RelativeLayout> -->
+
+        
     </LinearLayout>
 
 </ScrollView>
