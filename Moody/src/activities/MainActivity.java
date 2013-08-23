@@ -1,6 +1,7 @@
 package activities;
 
 import fragments.DialogFragmentManager;
+import fragments.MainContentFragment;
 import interfaces.InterfaceDialogFrag;
 
 import java.util.ArrayList;
@@ -10,15 +11,14 @@ import java.util.concurrent.ExecutionException;
 import managers.SessionManager;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
-import android.R.attr;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -59,27 +59,42 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		initMainContent();
+		initContentPreview();
 		populateUsername();
 		populateLeftListview();
 
 	}
 
-	public void initMainContent() {
+	public void initContentPreview() {
 
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		LinearLayout inserPoint = (LinearLayout) findViewById(R.id.course_topics_linear_layout);
+		// Fragment fragment = new MainContentFragment();
+		// FragmentManager fragmentManager = getFragmentManager();
+		// fragmentManager.beginTransaction()
+		// .replace(R.id.course_topics_linear_layout, fragment).commit();
 
-		for (int i = 0; i < 6; i++) {
-			View view = inflater.inflate(R.layout.main_custom_view, null);
-			LinearLayout row = new LinearLayout(this);
-			row.setLayoutParams(new LayoutParams(
-					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+//		 LayoutInflater inflater = (LayoutInflater) this
+//		 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//		 LinearLayout inserPoint = (LinearLayout)
+//		 findViewById(R.id.course_topics_linear_layout);
+//		
+//		 for (int i = 0; i < 6; i++) {
+//		 View view = inflater.inflate(R.layout.fragment_main, null);
+//		 LinearLayout row = new LinearLayout(this);
+//		 row.setLayoutParams(new LayoutParams(
+//		 android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+//		 android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+//		
+//		 row.addView(view);
+//		 inserPoint.addView(row, 1);
+//		 }
 
-			row.addView(view);
-			inserPoint.addView(row, 1);
+		MainContentFragment fragment = (MainContentFragment) getFragmentManager()
+				.findFragmentById(R.id.main_content_fragment);
+		
+		if (fragment != null && fragment.isInLayout()) {
+			Toast.makeText(getApplicationContext(), "ENTROUUUUU",
+					Toast.LENGTH_SHORT).show();
+
 		}
 
 	}
@@ -393,23 +408,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	public void coursesClick(View v) {
 		Toast.makeText(getApplicationContext(),
 				"ID-> " + v.getId() + " POSITION->", Toast.LENGTH_SHORT).show();
-	}
 
-	// private void selectItem(int position) {
-	// // update the main content by replacing fragments
-	// Fragment fragment = new PlanetFragment();
-	// Bundle args = new Bundle();
-	// args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-	// fragment.setArguments(args);
-	//
-	// FragmentManager fragmentManager = getFragmentManager();
-	// fragmentManager.beginTransaction().replace(R.id.content_frame,
-	// fragment).commit();
-	//
-	// // update selected item and title, then close the drawer
-	// mDrawerList.setItemChecked(position, true);
-	// setTitle(mPlanetTitles[position]);
-	// mDrawerLayout.closeDrawer(mDrawerList);
-	// }
+	}
 
 }

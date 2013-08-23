@@ -15,23 +15,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <LinearLayout
-            android:id="@+id/course_topics_linear_layout"
+        <fragment
+            android:id="@+id/main_content_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/course_path_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/C_White"
-                android:paddingBottom="10dp"
-                android:paddingLeft="5dp"
-                android:paddingTop="10dp"
-                android:text="@string/course_path"
-                android:textColor="@color/C_Blue_Light" />
-        </LinearLayout>
+            class="fragments.MainContentFragment" >
+        </fragment>
     </ScrollView>
 
     <!-- The left navigation drawer -->
