@@ -144,7 +144,7 @@ public class MainContentFragment extends Fragment {
 					viewTop.getLayoutParams());
 			viewTopParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 			viewTopParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-			viewTop.setLayoutParams(viewBottomParams);
+			viewTop.setLayoutParams(viewTopParams);
 
 			topics.addView(arrow);
 			topics.addView(addFavorites);
