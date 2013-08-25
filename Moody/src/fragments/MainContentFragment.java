@@ -22,6 +22,16 @@ public class MainContentFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
+		return numberOfRows(5);
+	}
+
+	public void setText(String item, View view) {
+		// TextView textPath = (TextView) view
+		// .findViewById(R.id.course_path_textView);
+		// textPath.setText(item);
+	}
+
+	public View numberOfRows(int rows) {
 		LinearLayout insertPoint = new LinearLayout(getActivity());
 		insertPoint.setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
@@ -36,13 +46,16 @@ public class MainContentFragment extends Fragment {
 		coursePath.setPadding(5, 10, 0, 10);
 		coursePath.setText(R.string.course_path);
 		coursePath.setTextColor(getResources().getColor(R.color.C_Blue_Light));
+		coursePath.setId(0);
+		coursePath.setTag("course_path_tag");
 		insertPoint.addView(coursePath);
 
-		for (int j = 0; j < 5; j++) {
+		for (int j = 0; j < rows; j++) {
 			LinearLayout row = new LinearLayout(getActivity());
 			row.setLayoutParams(new LayoutParams(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+			
 
 			RelativeLayout topics = new RelativeLayout(getActivity());
 			ImageButton arrow = new ImageButton(getActivity());
@@ -57,7 +70,10 @@ public class MainContentFragment extends Fragment {
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			topics.setBackgroundResource(R.drawable.fill_light_grey);
-
+			topics.setId(j+1);
+			topics.setTag("topic_tag_" + j);
+			
+			
 			// Arrow params
 			arrow.setLayoutParams(new LayoutParams(
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -66,7 +82,8 @@ public class MainContentFragment extends Fragment {
 			arrow.setContentDescription(getString(R.string.arrow_description));
 			arrow.setPadding(0, 0, 5, 0);
 			arrow.setImageResource(R.drawable.right_arrow);
-			arrow.setId(1);
+			arrow.setId(j+1);
+			arrow.setTag("arrow_tag");
 
 			RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(
 					arrow.getLayoutParams());
@@ -83,7 +100,8 @@ public class MainContentFragment extends Fragment {
 					.setContentDescription(getString(R.string.add_favorite_description));
 			addFavorites.setPadding(0, 0, 10, 0);
 			addFavorites.setImageResource(R.drawable.add_favorites);
-			addFavorites.setId(2);
+			addFavorites.setId(j+2);
+			addFavorites.setTag("add_favorites_tag");
 
 			RelativeLayout.LayoutParams addFavoritesParams = new RelativeLayout.LayoutParams(
 					addFavorites.getLayoutParams());
@@ -99,7 +117,8 @@ public class MainContentFragment extends Fragment {
 
 			topicName.setPadding(20, 0, 20, 0);
 			topicName.setText(getString(R.string.topic_string));
-			topicName.setId(3);
+			topicName.setId(j+3);
+			topicName.setTag("topic_name_tag");
 
 			RelativeLayout.LayoutParams topicsNameParams = new RelativeLayout.LayoutParams(
 					topicName.getLayoutParams());
@@ -122,8 +141,9 @@ public class MainContentFragment extends Fragment {
 			contentPreviewParams.addRule(RelativeLayout.BELOW,
 					topicName.getId());
 			contentPreviewParams.setMargins(0, 10, 20, 10);
+			contentPreview.setId(j+4);
+			contentPreview.setTag("content_preview_tag");
 			contentPreview.setLayoutParams(contentPreviewParams);
-			contentPreview.setId(4);
 
 			// Add view to fill space bottom of topics
 			viewBottom.setLayoutParams(new LayoutParams(
@@ -155,155 +175,9 @@ public class MainContentFragment extends Fragment {
 
 			row.addView(topics);
 			insertPoint.addView(row);
-		}
 
+		}
 		return insertPoint;
-	}
-
-	public void setText(String item, View view) {
-		TextView textPath = (TextView) view
-				.findViewById(R.id.course_path_textView);
-		textPath.setText(item);
-	}
-
-	public void numberOfRows(View view) {
-
-		// LinearLayout insertPoint = (LinearLayout)
-		// view.findViewById(R.id.linear_layout_inside_left);
-		//
-		// for (int j = 5; j >= 0; j--) {
-		//
-		// LinearLayout row = new LinearLayout(this.getActivity());
-		// row.setLayoutParams(new LayoutParams(
-		// android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-		// android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		// Button btnTag = new Button(this.getActivity());
-		// btnTag.setLayoutParams(new LayoutParams(
-		// android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-		// android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		// btnTag.setText("Your Course " + (j + 1));
-		// btnTag.setId(j);
-		// btnTag.setBackgroundColor(attr.selectableItemBackground);
-		//
-		// if (j < 5) {
-		// btnTag.setBackgroundResource(R.drawable.border_inside);
-		// }
-		//
-		// btnTag.setCompoundDrawablesWithIntrinsicBounds(R.drawable.books, 0,
-		// 0, 0);
-		// btnTag.setCompoundDrawablePadding(10);
-		// btnTag.setPadding(10, 0, 0, 0);
-		// btnTag.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-		// btnTag.setClickable(false);
-		//
-		// row.addView(btnTag);
-		//
-		// layout.addView(row, 3);
-		// }
-
-		LinearLayout insertPoint = (LinearLayout) view
-				.findViewById(R.id.course_topics_linear_layout);
-
-		LinearLayout row = new LinearLayout(getActivity());
-		row.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-
-		for (int j = 0; j < 5; j++) {
-
-			RelativeLayout topics = new RelativeLayout(getActivity());
-			ImageButton arrow = new ImageButton(getActivity());
-			ImageButton addFavorites = new ImageButton(getActivity());
-			TextView topicName = new TextView(getActivity());
-			TextView contentPreview = new TextView(getActivity());
-
-			// RelativeLayout params
-			topics.setLayoutParams(new LayoutParams(
-					android.view.ViewGroup.LayoutParams.FILL_PARENT,
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-			topics.setBackgroundResource(R.drawable.fill_light_grey);
-
-			// Arrow params
-			arrow.setLayoutParams(new LayoutParams(
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-			arrow.setBackgroundResource(R.color.transparent);
-			arrow.setContentDescription(getString(R.string.arrow_description));
-			arrow.setPadding(0, 0, 5, 0);
-			arrow.setImageResource(R.drawable.right_arrow);
-			arrow.setId(j + 1);
-
-			RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(
-					arrow.getLayoutParams());
-			arrowParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-			arrowParams.addRule(RelativeLayout.CENTER_VERTICAL);
-
-			// Add favorits params
-			addFavorites.setLayoutParams(new LayoutParams(
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-			addFavorites.setBackgroundResource(R.color.transparent);
-			addFavorites
-					.setContentDescription(getString(R.string.add_favorite_description));
-			addFavorites.setPadding(0, 0, 10, 0);
-			addFavorites.setImageResource(R.drawable.add_favorites);
-			addFavorites.setId(j + 2);
-
-			RelativeLayout.LayoutParams addFavoritesParams = new RelativeLayout.LayoutParams(
-					addFavorites.getLayoutParams());
-			addFavoritesParams.addRule(RelativeLayout.CENTER_VERTICAL);
-			addFavoritesParams.addRule(RelativeLayout.LEFT_OF, arrow.getId());
-
-			// Add textview topics
-			topicName.setLayoutParams(new LayoutParams(
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-			topicName.setBackgroundResource(R.drawable.border_course_context);
-			topicName.setPadding(20, 0, 20, 0);
-			topicName.setText(getString(R.string.topic_string));
-			topicName.setId(j + 3);
-
-			RelativeLayout.LayoutParams topicsNameParams = new RelativeLayout.LayoutParams(
-					topicName.getLayoutParams());
-			topicsNameParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-			topicsNameParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-
-			// Add textview content preview
-			contentPreview.setLayoutParams(new LayoutParams(250, 100));
-			contentPreview
-					.setBackgroundResource(R.drawable.border_course_context);
-			contentPreview.setPadding(0, 10, 10, 0);
-			contentPreview.setText(getString(R.string.content_preview));
-
-			RelativeLayout.LayoutParams contentPreviewParams = new RelativeLayout.LayoutParams(
-					contentPreview.getLayoutParams());
-			contentPreviewParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-			contentPreviewParams.addRule(RelativeLayout.LEFT_OF,
-					addFavorites.getId());
-			contentPreviewParams.addRule(RelativeLayout.BELOW,
-					topicName.getId());
-
-			topics.addView(arrow);
-			topics.addView(addFavorites);
-			topics.addView(topicName);
-			topics.addView(contentPreview);
-
-			row.addView(topics);
-			insertPoint.addView(row, 0);
-
-		}
 	}
 
 }

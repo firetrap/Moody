@@ -62,34 +62,18 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		initContentPreview();
 		populateUsername();
 		populateLeftListview();
+		populateUserPicture();
 
 	}
 
 	public void initContentPreview() {
 
-		// Fragment fragment = new MainContentFragment();
-		// FragmentManager fragmentManager = getFragmentManager();
-		// fragmentManager.beginTransaction()
-		// .replace(R.id.course_topics_linear_layout, fragment).commit();
-
-//		 LayoutInflater inflater = (LayoutInflater) this
-//		 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		 LinearLayout inserPoint = (LinearLayout)
-//		 findViewById(R.id.course_topics_linear_layout);
-//		
-//		 for (int i = 0; i < 6; i++) {
-//		 View view = inflater.inflate(R.layout.fragment_main, null);
-//		 LinearLayout row = new LinearLayout(this);
-//		 row.setLayoutParams(new LayoutParams(
-//		 android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-//		 android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-//		
-//		 row.addView(view);
-//		 inserPoint.addView(row, 1);
-//		 }
-
 		MainContentFragment fragment = (MainContentFragment) getFragmentManager()
 				.findFragmentById(R.id.main_content_fragment);
+				
+		
+//		ClassLoader sadsad = null;
+//		fragment.setArguments(new Bundle(sadsad));
 		
 		if (fragment != null && fragment.isInLayout()) {
 			Toast.makeText(getApplicationContext(), "ENTROUUUUU",
@@ -233,9 +217,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	}
 
 	public void populateLeftListview() {
-		// leftListView = (ListView) findViewById(R.id.left_list_viewer);
-		// leftListView.setOnItemClickListener(this);
-
 		if (session.isLoggedIn() == true) {
 			String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
 					null);
@@ -405,10 +386,16 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	}
 
-	public void coursesClick(View v) {
+	public void onCoursesClick(View v) {
+		
+		
+		
+		
 		Toast.makeText(getApplicationContext(),
 				"ID-> " + v.getId() + " POSITION->", Toast.LENGTH_SHORT).show();
 
 	}
+
+
 
 }
