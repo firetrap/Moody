@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.example.moody.R;
 
-import connections.DownloadDataTask;
+import connections.DataAsyncTask;
 
 public class UserDetailsActivity extends Activity
 // implements TextWatcher
@@ -75,7 +75,7 @@ public class UserDetailsActivity extends Activity
 			String con = String.format(MoodySession.KEY_PARAMS, url, token,
 					"core_user_get_users_by_id&userids[0]", id);
 
-			return new DownloadDataTask().execute(con, "xml").get();
+			return (HashMap<String, String>) new DataAsyncTask().execute(con, "xml").get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

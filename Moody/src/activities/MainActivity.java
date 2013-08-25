@@ -5,14 +5,22 @@ import fragments.MainContentFragment;
 import interfaces.InterfaceDialogFrag;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import managers.SessionManager;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,18 +43,22 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.moody.R;
 
-import connections.DownloadDataTask;
+import connections.DataAsyncTask;
 
+@SuppressWarnings("unchecked")
 public class MainActivity extends SherlockActivity implements OnClickListener,
 		InterfaceDialogFrag {
 
 	// Session Manager Class
 	SessionManager session;
 
-	private HashMap<String, String> xmlList;
+	private LinkedHashMap<String, String> xmlList;
+	private HashMap<String, JSONObject> jsonList;
 
 	private ArrayList<String> coursesNamesList = new ArrayList<String>();
 	private ArrayList<String> coursesIdList = new ArrayList<String>();
+
+	private HashMap<String, String> courses = new HashMap<String, String>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,11 +82,10 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 		MainContentFragment fragment = (MainContentFragment) getFragmentManager()
 				.findFragmentById(R.id.main_content_fragment);
-				
-		
-//		ClassLoader sadsad = null;
-//		fragment.setArguments(new Bundle(sadsad));
-		
+
+		// ClassLoader sadsad = null;
+		// fragment.setArguments(new Bundle(sadsad));
+
 		if (fragment != null && fragment.isInLayout()) {
 			Toast.makeText(getApplicationContext(), "ENTROUUUUU",
 					Toast.LENGTH_SHORT).show();
@@ -199,7 +210,8 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 						MoodyConstants.MoodySession.KEY_N_PARAMS, url, token,
 						"core_webservice_get_site_info");
 
-				xmlList = new DownloadDataTask().execute(con, "xml").get();
+				xmlList = (LinkedHashMap<String, String>) new DataAsyncTask()
+						.execute(con, "xml").get();
 				view.setText(xmlList.get("fullname1"));
 
 				xmlList.clear();
@@ -230,7 +242,9 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 					url, token, "core_enrol_get_users_courses&userid", id);
 
 			try {
-				xmlList = new DownloadDataTask().execute(con, "xml").get();
+
+				xmlList = ((LinkedHashMap<String, String>) new DataAsyncTask()
+						.execute(con, "xml").get());
 
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -240,28 +254,59 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 				e.printStackTrace();
 			}
 
-			for (String keyName : xmlList.keySet()) {
-				if (keyName.length() >= "fullname".length()
-						&& keyName.substring(0, 8).equals("fullname"))
-					coursesNamesList.add(xmlList.get(keyName));
+			// Iterator it = xmlList.entrySet().iterator();
+			//
+			// while (it.hasNext()) {
+			// Map.Entry entry = (Map.Entry) it.next();
+			//
+			// if (entry.getKey().toString().length() >= "fullname".length()
+			// && entry.getKey().toString().substring(0, 8)
+			// .equals("fullname"))
+			// coursesNamesList.add(entry.getValue().toString());
+			//
+			// if (entry.getKey().toString().length() >= "id".length()
+			// && entry.getKey().toString().substring(0, 2)
+			// .equals("id")) {
+			// int number = 0;
+			//
+			// try {
+			// number = Integer.parseInt(entry.getKey().toString()
+			// .substring(2));
+			// } catch (NumberFormatException ex1) {
+			// }
+			//
+			// if (number > 0)
+			// coursesIdList.add(entry.getValue().toString());
+			//
+			// }
+			// }
 
-				if (keyName.length() >= "id".length()
-						&& keyName.substring(0, 2).equals("id")) {
+			for (Map.Entry entry : xmlList.entrySet()) {
+
+				if (entry.getKey().toString().length() >= "fullname".length()
+						&& entry.getKey().toString().substring(0, 8)
+								.equals("fullname"))
+					coursesNamesList.add(entry.getValue().toString());
+
+				if (entry.getKey().toString().length() >= "id".length()
+						&& entry.getKey().toString().substring(0, 2)
+								.equals("id")) {
 					int number = 0;
 
 					try {
-						number = Integer.parseInt(keyName.substring(2));
+						number = Integer.parseInt(entry.getKey().toString()
+								.substring(2));
 					} catch (NumberFormatException ex1) {
 					}
 
 					if (number > 0)
-						coursesIdList.add(xmlList.get(keyName));
+						coursesIdList.add(entry.getValue().toString());
 
 				}
-
 			}
-			xmlList.clear();
-			coursesInit((coursesIdList.size() - 1));
+
+			// xmlList.clear();
+			coursesInit((coursesIdList.size()));
 
 		} else if (coursesIdList.isEmpty()) {
 			coursesInit(3);
@@ -275,7 +320,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	private void coursesInit(int coursesListSize) {
 
-		for (int j = coursesListSize; j >= 0; j--) {
+		for (int j = 0; j < coursesListSize; j++) {
 			LayoutInflater inflater = (LayoutInflater) this
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -296,12 +341,13 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			if (coursesIdList.isEmpty()) {
 				btnTag.setText("Your Course " + (j + 1));
 				btnTag.setId(j);
+
 			} else {
 				btnTag.setText(coursesNamesList.get(j));
 				btnTag.setId(Integer.parseInt(coursesIdList.get(j)));
 			}
 
-			if (j < coursesListSize) {
+			if (j != 0) {
 				btnTag.setBackgroundResource(R.drawable.border_inside);
 			}
 
@@ -328,10 +374,11 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 							MoodyConstants.MoodySession.KEY_N_PARAMS, url,
 							token, "core_webservice_get_site_info");
 
-					xmlList = new DownloadDataTask().execute(con, "xml").get();
+					xmlList = (LinkedHashMap<String, String>) new DataAsyncTask()
+							.execute(con, "xml").get();
 					String userPictureUrl = xmlList.get("userpictureurl1");
 
-					Drawable pic = DownloadDataTask
+					Drawable pic = DataAsyncTask
 							.createDrawableFromUrl(userPictureUrl);
 
 					login_button
@@ -387,15 +434,35 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	}
 
 	public void onCoursesClick(View v) {
-		
-		
-		
-		
-		Toast.makeText(getApplicationContext(),
-				"ID-> " + v.getId() + " POSITION->", Toast.LENGTH_SHORT).show();
+		String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
+				null);
+		String token = session.getValues(MoodyConstants.MoodySession.KEY_TOKEN,
+				null);
+
+		String con = String.format(MoodyConstants.MoodySession.KEY_PARAMS, url,
+				token, "core_course_get_contents&courseid", v.getId()
+						+ "&moodlewsrestformat=json");
+
+		try {
+			jsonList = (LinkedHashMap<String, JSONObject>) new DataAsyncTask()
+					.execute(con, "json").get();
+			JSONObject jsonO = jsonList.get("geral");
+
+			Toast.makeText(getApplicationContext(),
+					"ID-> " + jsonO.getInt("id") + " POSITION->",
+					Toast.LENGTH_SHORT).show();
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
-
-
 
 }

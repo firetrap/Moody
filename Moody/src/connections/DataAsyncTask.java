@@ -1,14 +1,20 @@
 package connections;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.htmlcleaner.XPatherException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.graphics.drawable.Drawable;
@@ -17,27 +23,27 @@ import android.os.StrictMode;
 import connections.XMLparser.Key;
 
 //receives a String[] where params[0] it's an url, params[1] its an string required to parse, params[2] its an string to the required method above
-public class DownloadDataTask extends
-		AsyncTask<String, Void, HashMap<String, String>> {
+public class DataAsyncTask extends AsyncTask<String, Void, Map> {
 
-	HashMap<String, String> xmlList = new HashMap<String, String>();
+	LinkedHashMap<String, String> returnList = new LinkedHashMap<String, String>();
 
 	@Override
-	protected HashMap<String, String> doInBackground(String... params) {
+	protected Map doInBackground(String... params) {
 
 		try {
+		
 			return loadFromNetwork(params[0], params[1]);
 		} catch (IOException e) {
-			xmlList.put("Error", "Site");
-			return xmlList;
+			returnList.put("Error", "Site");
+			return returnList;
 		} catch (XmlPullParserException e) {
-			xmlList.put("Error", "user/password");
-			return xmlList;
+			returnList.put("Error", "user/password");
+			return returnList;
 		}
 	}
 
-	private HashMap<String, String> loadFromNetwork(String urlString,
-			String methodParams) throws XmlPullParserException, IOException {
+	private Map loadFromNetwork(String urlString, String methodParams)
+			throws XmlPullParserException, IOException {
 
 		if (methodParams.equalsIgnoreCase("xml")) {
 			InputStream stream = null;
@@ -58,17 +64,19 @@ public class DownloadDataTask extends
 
 			for (Key entry : keys) {
 				for (int j = 1; j < keys.size(); j++) {
-					if (!xmlList.containsKey(entry.keyName + j)) {
+					if (!returnList.containsKey(entry.keyName + j)) {
 
-						xmlList.put(entry.keyName + Integer.toString(j),
+						returnList.put(entry.keyName + Integer.toString(j),
 								entry.value);
 
 						break;
 					}
 				}
 			}
+			
+			LinkedHashMap<String, String> teste = returnList;
 
-			return xmlList;
+			return returnList;
 
 		}
 
@@ -78,12 +86,56 @@ public class DownloadDataTask extends
 
 			try {
 				stream = downloadUrl(urlString);
-				xmlList.put("HTML", parser.getSiteStats(stream));
-				return xmlList;
+				returnList.put("HTML", parser.getSiteStats(stream));
+				return returnList;
 			} catch (XPatherException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+		}
+
+		if (methodParams.equalsIgnoreCase("json")) {
+
+			InputStream inputStream = null;
+			String result = null;
+
+			try {
+				inputStream = downloadUrl(urlString);
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(inputStream, "UTF-8"), 8);
+				StringBuilder sb = new StringBuilder();
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				result = sb.toString();
+				JSONArray jArray = new JSONArray(result);
+
+				LinkedHashMap<String, JSONObject> JsonTopics = new LinkedHashMap<String, JSONObject>();
+				for (int i = 0; i < jArray.length(); i++) {
+
+					if (i == 0) {
+						JsonTopics.put("geral", jArray.getJSONObject(i));
+					} else {
+						JsonTopics.put("topics" + i, jArray.getJSONObject(i));
+
+					}
+
+				}
+				return JsonTopics;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					if (inputStream != null)
+						inputStream.close();
+				} catch (Exception e) {
+				}
+			}
+
+			return null;
 
 		}
 
@@ -106,7 +158,7 @@ public class DownloadDataTask extends
 	}
 
 	@Override
-	protected void onPostExecute(HashMap<String, String> result) {
+	protected void onPostExecute(Map result) {
 
 	}
 
@@ -134,22 +186,4 @@ public class DownloadDataTask extends
 		return drawable;
 	}
 
-	/**
-	 * Returns a Bitmap object containing the image located at 'imageWebAddress'
-	 * if successful, and null otherwise. (Pre: 'imageWebAddress' is non-null
-	 * and non-empty; method should not be called from the main/ui thread.)
-	 */
-	// public static Bitmap createBitmapFromUrl(String imageWebAddress) {
-	// Bitmap bitmap = null;
-	//
-	// try {
-	// InputStream inputStream = new URL(imageWebAddress).openStream();
-	// bitmap = BitmapFactory.decodeStream(inputStream);
-	// inputStream.close();
-	// } catch (MalformedURLException ex) {
-	// } catch (IOException ex) {
-	// }
-	//
-	// return bitmap;
-	// }
 }

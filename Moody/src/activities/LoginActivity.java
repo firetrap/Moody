@@ -30,7 +30,7 @@ import android.widget.TextView;
 
 import com.example.moody.R;
 
-import connections.DownloadDataTask;
+import connections.DataAsyncTask;
 import connections.HTMLparser;
 
 /**
@@ -194,7 +194,7 @@ public class LoginActivity extends Activity {
 			// send the generated token to verify.
 			String htmlResult = "";
 			try {
-				xmlList = new DownloadDataTask().execute(mToken, "html").get();
+				xmlList = (HashMap<String, String>) new DataAsyncTask().execute(mToken, "html").get();
 				if (xmlList.get("HTML") == null) {
 					// htmlResult = "";
 					if (xmlList.get("Error").equals("Site")) {
@@ -263,7 +263,7 @@ public class LoginActivity extends Activity {
 				// Tag
 				// for the XML parser
 				try {
-					xmlList = new DownloadDataTask().execute(XMLurl, "xml")
+					xmlList = (HashMap<String, String>) new DataAsyncTask().execute(XMLurl, "xml")
 							.get();
 					UserId = xmlList.get("userid1");
 					xmlList.clear();
