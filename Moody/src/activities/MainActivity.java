@@ -5,10 +5,7 @@ import fragments.MainContentFragment;
 import interfaces.InterfaceDialogFrag;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -17,7 +14,6 @@ import managers.SessionManager;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
@@ -63,32 +59,33 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// shared pref
-		session = new SessionManager(getApplicationContext());
-		Toast.makeText(getApplicationContext(),
-				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
-				.show();
-
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		session = new SessionManager(getApplicationContext());
 
-		initContentPreview();
+		// MainContentFragment fragment = (MainContentFragment)
+		// getFragmentManager()
+		// .findFragmentById(R.id.main_content_fragment);
+		// fragment.getView().setVisibility(View.GONE);
+
 		populateUsername();
 		populateLeftListview();
 		populateUserPicture();
 
+		Toast.makeText(getApplicationContext(),
+				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
+				.show();
+
 	}
 
-	public void initContentPreview() {
+	public void initContentPreview(Bundle bundle) {
 
 		MainContentFragment fragment = (MainContentFragment) getFragmentManager()
 				.findFragmentById(R.id.main_content_fragment);
-
-		// ClassLoader sadsad = null;
-		// fragment.setArguments(new Bundle(sadsad));
+		fragment.getView().setVisibility(View.VISIBLE);
+		fragment.setArguments(bundle);
 
 		if (fragment != null && fragment.isInLayout()) {
-			Toast.makeText(getApplicationContext(), "ENTROUUUUU",
-					Toast.LENGTH_SHORT).show();
 
 		}
 
@@ -253,34 +250,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			// Iterator it = xmlList.entrySet().iterator();
-			//
-			// while (it.hasNext()) {
-			// Map.Entry entry = (Map.Entry) it.next();
-			//
-			// if (entry.getKey().toString().length() >= "fullname".length()
-			// && entry.getKey().toString().substring(0, 8)
-			// .equals("fullname"))
-			// coursesNamesList.add(entry.getValue().toString());
-			//
-			// if (entry.getKey().toString().length() >= "id".length()
-			// && entry.getKey().toString().substring(0, 2)
-			// .equals("id")) {
-			// int number = 0;
-			//
-			// try {
-			// number = Integer.parseInt(entry.getKey().toString()
-			// .substring(2));
-			// } catch (NumberFormatException ex1) {
-			// }
-			//
-			// if (number > 0)
-			// coursesIdList.add(entry.getValue().toString());
-			//
-			// }
-			// }
-
 			for (Map.Entry entry : xmlList.entrySet()) {
 
 				if (entry.getKey().toString().length() >= "fullname".length()
@@ -446,19 +415,18 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		try {
 			jsonList = (LinkedHashMap<String, JSONObject>) new DataAsyncTask()
 					.execute(con, "json").get();
-			JSONObject jsonO = jsonList.get("geral");
+			// JSONObject jsonO = jsonList.get("geral");
+			// jsonO.getInt("id");
 
-			Toast.makeText(getApplicationContext(),
-					"ID-> " + jsonO.getInt("id") + " POSITION->",
-					Toast.LENGTH_SHORT).show();
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("contents", jsonList);
+			bundle.putString("course", coursesNamesList.get(v.getId()));
+			initContentPreview(bundle);
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

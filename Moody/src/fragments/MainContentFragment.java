@@ -1,5 +1,9 @@
 package fragments;
 
+import java.util.LinkedHashMap;
+
+import org.json.JSONObject;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,14 +23,28 @@ public class MainContentFragment extends Fragment {
 	public MainContentFragment() {
 	}
 
+	LinkedHashMap<String, JSONObject> jsonList;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
+//		setText();
+
 		return numberOfRows(5);
 	}
 
-	public void setText(String item, View view) {
+	public void setText() {
+
+		Bundle b = this.getArguments();
+
+		jsonList = (LinkedHashMap<String, JSONObject>) b.getSerializable("contents");
+
+		String nome = b.getString("course");
+
+		Toast.makeText(getActivity().getApplicationContext(), "CURSO " + nome,
+				Toast.LENGTH_LONG).show();
+
 		// TextView textPath = (TextView) view
 		// .findViewById(R.id.course_path_textView);
 		// textPath.setText(item);
@@ -55,7 +74,6 @@ public class MainContentFragment extends Fragment {
 			row.setLayoutParams(new LayoutParams(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-			
 
 			RelativeLayout topics = new RelativeLayout(getActivity());
 			ImageButton arrow = new ImageButton(getActivity());
@@ -70,10 +88,9 @@ public class MainContentFragment extends Fragment {
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			topics.setBackgroundResource(R.drawable.fill_light_grey);
-			topics.setId(j+1);
+			topics.setId(j + 1);
 			topics.setTag("topic_tag_" + j);
-			
-			
+
 			// Arrow params
 			arrow.setLayoutParams(new LayoutParams(
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -82,7 +99,7 @@ public class MainContentFragment extends Fragment {
 			arrow.setContentDescription(getString(R.string.arrow_description));
 			arrow.setPadding(0, 0, 5, 0);
 			arrow.setImageResource(R.drawable.right_arrow);
-			arrow.setId(j+1);
+			arrow.setId(j + 1);
 			arrow.setTag("arrow_tag");
 
 			RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(
@@ -100,7 +117,7 @@ public class MainContentFragment extends Fragment {
 					.setContentDescription(getString(R.string.add_favorite_description));
 			addFavorites.setPadding(0, 0, 10, 0);
 			addFavorites.setImageResource(R.drawable.add_favorites);
-			addFavorites.setId(j+2);
+			addFavorites.setId(j + 2);
 			addFavorites.setTag("add_favorites_tag");
 
 			RelativeLayout.LayoutParams addFavoritesParams = new RelativeLayout.LayoutParams(
@@ -117,7 +134,7 @@ public class MainContentFragment extends Fragment {
 
 			topicName.setPadding(20, 0, 20, 0);
 			topicName.setText(getString(R.string.topic_string));
-			topicName.setId(j+3);
+			topicName.setId(j + 3);
 			topicName.setTag("topic_name_tag");
 
 			RelativeLayout.LayoutParams topicsNameParams = new RelativeLayout.LayoutParams(
@@ -141,7 +158,7 @@ public class MainContentFragment extends Fragment {
 			contentPreviewParams.addRule(RelativeLayout.BELOW,
 					topicName.getId());
 			contentPreviewParams.setMargins(0, 10, 20, 10);
-			contentPreview.setId(j+4);
+			contentPreview.setId(j + 4);
 			contentPreview.setTag("content_preview_tag");
 			contentPreview.setLayoutParams(contentPreviewParams);
 
