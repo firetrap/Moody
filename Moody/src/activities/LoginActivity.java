@@ -92,6 +92,7 @@ public class LoginActivity extends Activity {
 					MainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
+			finish();
 
 		} else {
 
@@ -383,8 +384,7 @@ public class LoginActivity extends Activity {
 						MainActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
-
-				// finish();
+				finish();
 			} else {
 				Log.d("MoodyDebug", "onPOstExecute-FAILED");
 				mPasswordView
@@ -401,4 +401,8 @@ public class LoginActivity extends Activity {
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		finish();
+	}
 }

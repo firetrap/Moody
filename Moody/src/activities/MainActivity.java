@@ -77,9 +77,9 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		populateLeftListview();
 		populateUserPicture();
 
-//		Toast.makeText(getApplicationContext(),
-//				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
-//				.show();
+		// Toast.makeText(getApplicationContext(),
+		// "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
+		// .show();
 
 	}
 
@@ -125,61 +125,44 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	// Method to decide what to do from what button was pressed
 	@Override
 	public void onClick(View v) {
-		session = new SessionManager(getApplicationContext());
+
 		switch (v.getId()) {
 		case R.id.login_image_button:
-			if (session.isLoggedIn() == false) {
-				Intent intent = new Intent(getApplicationContext(),
-						LoginActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-			} else {
 
-				FragmentManager fm = getFragmentManager();
-				DialogFragmentManager userDetailsDialog = new DialogFragmentManager();
-				userDetailsDialog.setRetainInstance(true);
-				userDetailsDialog.show(fm, "fragment_name");
+			FragmentManager fm = getFragmentManager();
+			DialogFragmentManager userDetailsDialog = new DialogFragmentManager();
+			userDetailsDialog.setRetainInstance(true);
+			userDetailsDialog.show(fm, "fragment_name");
 
-			}
 			break;
 		case R.id.logout_image_button:
-			if (session.isLoggedIn() == true) {
+			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						session.logoutUser();
+						Intent intent = new Intent(getApplicationContext(),
+								LoginActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+						startActivity(intent);
+						finish();
+						break;
 
-				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						switch (which) {
-						case DialogInterface.BUTTON_POSITIVE:
-							session.logoutUser();
+					case DialogInterface.BUTTON_NEGATIVE:
+						dialog.dismiss();
 
-							Intent intent = new Intent(getApplicationContext(),
-									MainActivity.class);
-							intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-							startActivity(intent);
-							break;
-
-						case DialogInterface.BUTTON_NEGATIVE:
-							dialog.dismiss();
-
-							break;
-						}
+						break;
 					}
-				};
+				}
+			};
 
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle("Logout");
-				builder.setMessage("Are you sure?")
-						.setPositiveButton("Yes", dialogClickListener)
-						.setNegativeButton("No", dialogClickListener).show();
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Logout");
+			builder.setMessage("Are you sure?")
+					.setPositiveButton("Yes", dialogClickListener)
+					.setNegativeButton("No", dialogClickListener).show();
 
-			} else {
-				// só entra neste else caso o utilizador ainda nao esteja
-				// loggado entao é reencaminhado para o LoginActivity
-				Intent intent = new Intent(getApplicationContext(),
-						LoginActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-			}
 			break;
 
 		case R.id.fullname_textview:
@@ -199,33 +182,30 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	public void populateUsername() {
 
-		if (session.isLoggedIn() == true) {
-			TextView view = (TextView) findViewById(R.id.fullname_textview);
-			try {
+		TextView view = (TextView) findViewById(R.id.fullname_textview);
+		try {
 
-				String url = session.getValues(
-						MoodyConstants.MoodySession.KEY_URL, null);
-				String token = session.getValues(
-						MoodyConstants.MoodySession.KEY_TOKEN, null);
+			String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
+					null);
+			String token = session.getValues(
+					MoodyConstants.MoodySession.KEY_TOKEN, null);
 
-				String con = String.format(
-						MoodyConstants.MoodySession.KEY_N_PARAMS, url, token,
-						"core_webservice_get_site_info");
+			String con = String.format(
+					MoodyConstants.MoodySession.KEY_N_PARAMS, url, token,
+					"core_webservice_get_site_info");
 
-				xmlList = (LinkedHashMap<String, String>) new DataAsyncTask()
-						.execute(con, "xml").get();
-				view.setText(xmlList.get("fullname1"));
+			xmlList = (LinkedHashMap<String, String>) new DataAsyncTask()
+					.execute(con, "xml").get();
+			view.setText(xmlList.get("fullname1"));
 
-				xmlList.clear();
+			xmlList.clear();
 
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
