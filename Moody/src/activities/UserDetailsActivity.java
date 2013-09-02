@@ -1,12 +1,16 @@
 package activities;
 
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import managers.DialogsManager;
 import managers.SessionManager;
 import model.MoodyConstants.MoodySession;
 import model.MoodyMessage;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -40,7 +44,7 @@ public class UserDetailsActivity extends Activity
 		 * ((EditText)findViewById
 		 * (R.id.editText_email)).addTextChangedListener(this);
 		 **/
-		HashMap<String, String> list = getData();
+		JSONObject list = getData();
 
 		if (list != null)
 			initText(list);
@@ -65,7 +69,7 @@ public class UserDetailsActivity extends Activity
 		return true;
 	}
 
-	public HashMap<String, String> getData() {
+	public JSONObject getData() {
 		try {
 			SessionManager session = new SessionManager(getApplicationContext());
 
@@ -73,9 +77,10 @@ public class UserDetailsActivity extends Activity
 			String token = session.getValues(MoodySession.KEY_TOKEN, null);
 			String id = session.getValues(MoodySession.KEY_ID, null);
 			String con = String.format(MoodySession.KEY_PARAMS, url, token,
-					"core_user_get_users_by_id&userids[0]", id);
+					"core_user_get_users_by_id&userids[0]", id
+							+ MoodySession.KEY_JSONFORMAT);
 
-			return (HashMap<String, String>) new DataAsyncTask().execute(con, "xml").get();
+			return new DataAsyncTask().execute(con, "json").get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,38 +94,66 @@ public class UserDetailsActivity extends Activity
 		return null;
 	}
 
-	public void initText(HashMap<String, String> list) {
+	public void initText(JSONObject list) {
+		try {
+			JSONArray coursesArray = list.getJSONArray("array");
 
-		String[] attributes = { "fullname1", "firstname1", "lastname1",
-				"email1", "address1", "phone11", "phone21", "description1",
-				"url1", "skype1", "yahoo1" };
+			String[] attributes = { "fullname", "firstname", "lastname",
+					"email", "address", "phone1", "phone2", "description",
+					"url", "skype", "yahoo" };
 
-		int[] textIds = { R.id.textView_full_name, R.id.editText_firstname,
-				R.id.editText_lastname, R.id.editText_email,
-				R.id.editText_address, R.id.editText_phonenumber,
-				R.id.editText_mobilephonenumber, R.id.editText_description,
-				R.id.editText_url, R.id.editText_skype, R.id.editText_yahoo };
+			int[] textIds = { R.id.textView_full_name, R.id.editText_firstname,
+					R.id.editText_lastname, R.id.editText_email,
+					R.id.editText_address, R.id.editText_phonenumber,
+					R.id.editText_mobilephonenumber, R.id.editText_description,
+					R.id.editText_url, R.id.editText_skype, R.id.editText_yahoo };
 
-		int[] layoutIds = { R.id.relativeLayout_fullname,
-				R.id.linearLayout_firstname, R.id.linearLayout_lastname,
-				R.id.linearLayout_email, R.id.linearLayout_address,
-				R.id.linearLayout_phonenumber,
-				R.id.linearLayout_mobilephonenumber,
-				R.id.linearLayout_description, R.id.linearLayout_url,
-				R.id.linearLayout_skype, R.id.linearLayout_yahoo };
+			int[] layoutIds = { R.id.relativeLayout_fullname,
+					R.id.linearLayout_firstname, R.id.linearLayout_lastname,
+					R.id.linearLayout_email, R.id.linearLayout_address,
+					R.id.linearLayout_phonenumber,
+					R.id.linearLayout_mobilephonenumber,
+					R.id.linearLayout_description, R.id.linearLayout_url,
+					R.id.linearLayout_skype, R.id.linearLayout_yahoo };
 
-		for (int i = 0; i < attributes.length; i++) {
-			if ((isValid(list.get(attributes[i]))))
-				((TextView) findViewById(textIds[i])).setText(list
-						.get(attributes[i]));
-			else
-				findViewById(layoutIds[i]).setVisibility(View.GONE);
+			for (int i = 0; i < coursesArray.length(); i++) {
+				JSONObject arrayCursor = coursesArray.getJSONObject(i);
+
+				for (int j = 0; j < attributes.length; j++) {
+					// String asdsa = (String) arrayCursor.get(attributes[j]);
+					if (isValid(arrayCursor.get(attributes[j])))
+						((TextView) findViewById(textIds[j]))
+								.setText((CharSequence) arrayCursor
+										.get(attributes[j]));
+					else
+						findViewById(layoutIds[i]).setVisibility(View.GONE);
+
+				}
+
+			}
+
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
 
-	public boolean isValid(String value) {
-		return ((value != null) && (!value.isEmpty()));
+	public boolean isValid(Object object) {
+		if (object != null) {
+			try {
+
+				String aux = (String) object;
+
+				if (!aux.isEmpty())
+					return true;
+
+			} catch (Exception ex) {
+
+			}
+		}
+
+		return false;
 	}
 
 	// @Override

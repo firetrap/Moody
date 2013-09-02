@@ -144,16 +144,16 @@ public class SessionManager {
 		editor.clear();
 		editor.commit();
 
-		// After logout redirect user to Main Activity
-		Intent i = new Intent(_context, LoginActivity.class);
-		// Closing all the Activities
-		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-		// Add new Flag to start new Activity
-		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-		// Staring Main Activity
-		_context.startActivity(i);
+//		// After logout redirect user to Main Activity
+//		Intent i = new Intent(_context, LoginActivity.class);
+//		// Closing all the Activities
+//		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//
+//		// Add new Flag to start new Activity
+//		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//		// Staring Main Activity
+//		_context.startActivity(i);
 	}
 
 	/**

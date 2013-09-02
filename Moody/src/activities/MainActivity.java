@@ -33,7 +33,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.moody.R;
-import connections.AsyncTest;
+import connections.DataAsyncTask;
 
 public class MainActivity extends SherlockActivity implements OnClickListener,
 		InterfaceDialogFrag {
@@ -97,64 +97,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		return true;
 	}
 
-	// Method to decide what to do from what button was pressed
-	@Override
-	public void onClick(View v) {
-
-		switch (v.getId()) {
-		case R.id.login_image_button:
-
-			FragmentManager fm = getFragmentManager();
-			DialogFragmentManager userDetailsDialog = new DialogFragmentManager();
-			userDetailsDialog.setRetainInstance(true);
-			userDetailsDialog.show(fm, "fragment_name");
-
-			break;
-		case R.id.logout_image_button:
-			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						session.logoutUser();
-						Intent intent = new Intent(getApplicationContext(),
-								LoginActivity.class);
-						intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-						startActivity(intent);
-						finish();
-						break;
-
-					case DialogInterface.BUTTON_NEGATIVE:
-						dialog.dismiss();
-
-						break;
-					}
-				}
-			};
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("Logout");
-			builder.setMessage("Are you sure?")
-					.setPositiveButton("Yes", dialogClickListener)
-					.setNegativeButton("No", dialogClickListener).show();
-
-			break;
-
-		case R.id.fullname_textview:
-			Intent intent = new Intent(getApplicationContext(),
-					UserDetailsActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			break;
-
-		default:
-			// Toast.makeText(getApplicationContext(),
-			// "ENTROU NO PRIMEIRO :" + v.getId(), Toast.LENGTH_SHORT)
-			// .show();
-			// throw new RuntimeException("Unknown button ID");
-		}
-	}
-
 	public void populateUsername() {
 
 		TextView view = (TextView) findViewById(R.id.fullname_textview);
@@ -168,7 +110,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 						+ MoodySession.KEY_JSONFORMAT);
 
 		try {
-			jsonObj = new AsyncTest().execute(con, "json").get();
+			jsonObj = new DataAsyncTask().execute(con, "json").get();
 			view.setText(jsonObj.getString("fullname"));
 
 		} catch (InterruptedException e) {
@@ -198,7 +140,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 						+ MoodySession.KEY_JSONFORMAT);
 
 		try {
-			jsonObj = new AsyncTest().execute(con, "json").get();
+			jsonObj = new DataAsyncTask().execute(con, "json").get();
 			JSONArray coursesArray = jsonObj.getJSONArray("array");
 			coursesInit(coursesArray);
 
@@ -271,10 +213,11 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 						"core_webservice_get_site_info"
 								+ MoodySession.KEY_JSONFORMAT);
 
-				jsonObj = new AsyncTest().execute(con, "json").get();
+				jsonObj = new DataAsyncTask().execute(con, "json").get();
 				String userPictureUrl = jsonObj.getString("userpictureurl");
 
-				Drawable pic = AsyncTest.createDrawableFromUrl(userPictureUrl);
+				Drawable pic = DataAsyncTask
+						.createDrawableFromUrl(userPictureUrl);
 
 				login_button.setBackgroundResource(R.drawable.bkgd_imagebutton);
 				login_button.setImageDrawable(pic);
@@ -326,6 +269,64 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			break;
 		}
 
+	}
+
+	// Method to decide what to do from what button was pressed
+	@Override
+	public void onClick(View v) {
+
+		switch (v.getId()) {
+		case R.id.login_image_button:
+
+			FragmentManager fm = getFragmentManager();
+			DialogFragmentManager userDetailsDialog = new DialogFragmentManager();
+			userDetailsDialog.setRetainInstance(true);
+			userDetailsDialog.show(fm, "fragment_name");
+
+			break;
+		case R.id.logout_image_button:
+			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						session.logoutUser();
+						Intent intent = new Intent(getApplicationContext(),
+								LoginActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+						startActivity(intent);
+						finish();
+						break;
+
+					case DialogInterface.BUTTON_NEGATIVE:
+						dialog.dismiss();
+
+						break;
+					}
+				}
+			};
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Logout");
+			builder.setMessage("Are you sure?")
+					.setPositiveButton("Yes", dialogClickListener)
+					.setNegativeButton("No", dialogClickListener).show();
+
+			break;
+
+		case R.id.fullname_textview:
+			Intent intent = new Intent(getApplicationContext(),
+					UserDetailsActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			break;
+
+		default:
+			// Toast.makeText(getApplicationContext(),
+			// "ENTROU NO PRIMEIRO :" + v.getId(), Toast.LENGTH_SHORT)
+			// .show();
+			// throw new RuntimeException("Unknown button ID");
+		}
 	}
 
 	public void onCoursesClick(View v) {

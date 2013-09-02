@@ -34,7 +34,7 @@ import android.widget.Toast;
 
 import com.example.moody.R;
 
-import connections.AsyncTest;
+import connections.DataAsyncTask;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -209,7 +209,7 @@ public class LoginActivity extends Activity {
 			mToken = mUrl + "/login/token.php?username=" + mUser + "&password="
 					+ mPassword + "&service=moody_service" + jsonFormat;
 			try {
-				getJson = new AsyncTest().execute(mToken, "json").get();
+				getJson = new DataAsyncTask().execute(mToken, "json").get();
 
 				if (getJson == null) {
 					cancel = true;
@@ -252,7 +252,7 @@ public class LoginActivity extends Activity {
 					+ "&wsfunction=core_webservice_get_site_info" + jsonFormat;
 
 			try {
-				getJson = new AsyncTest().execute(url, "json").get();
+				getJson = new DataAsyncTask().execute(url, "json").get();
 				UserId = Integer.toString((Integer) getJson.get("userid"));
 
 			} catch (InterruptedException e) {

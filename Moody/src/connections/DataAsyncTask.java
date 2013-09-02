@@ -7,138 +7,80 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.htmlcleaner.XPatherException;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParserException;
 
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.StrictMode;
-import connections.XMLparser.Key;
+import android.util.Log;
 
 //receives a String[] where params[0] it's an url, params[1] its an string required to parse, params[2] its an string to the required method above
-public class DataAsyncTask extends AsyncTask<String, Void, Map> {
+public class DataAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
-	LinkedHashMap<String, String> returnList = new LinkedHashMap<String, String>();
+	JSONObject jObj = null;
 
 	@Override
-	protected Map doInBackground(String... params) {
+	protected JSONObject doInBackground(String... params) {
 
 		try {
-		
 			return loadFromNetwork(params[0], params[1]);
 		} catch (IOException e) {
-			returnList.put("Error", "Site");
-			return returnList;
-		} catch (XmlPullParserException e) {
-			returnList.put("Error", "user/password");
-			return returnList;
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return jObj;
+
 	}
 
-	private Map loadFromNetwork(String urlString, String methodParams)
-			throws XmlPullParserException, IOException {
+	private JSONObject loadFromNetwork(String urlString, String methodParams)
+			throws IOException {
 
-		if (methodParams.equalsIgnoreCase("xml")) {
-			InputStream stream = null;
-			XMLparser moodyXmlParser = new XMLparser();
+		InputStream inputStream = null;
+		String json = null;
 
-			List<Key> keys = null;
+		try {
+			inputStream = downloadUrl(urlString);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					inputStream, "UTF-8"), 8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			json = sb.toString();
 
 			try {
-				stream = downloadUrl(urlString);
-				keys = moodyXmlParser.parse(stream);
-				// Makes sure that the InputStream is closed after the app is
-				// finished using it.
-			} finally {
-				if (stream != null) {
-					stream.close();
+
+				// If json is an Array it returns an JSONArray inside JSONobject
+				if (json.startsWith("[")) {
+					jObj = new JSONObject();
+					jObj.put("array", new JSONArray(json));
+				} 
+				
+				else {
+					jObj = new JSONObject(json);
 				}
+
+			} catch (JSONException e) {
+				Log.e("JSON Parser", "Error parsing data " + e.toString());
 			}
 
-			for (Key entry : keys) {
-				for (int j = 1; j < keys.size(); j++) {
-					if (!returnList.containsKey(entry.keyName + j)) {
-
-						returnList.put(entry.keyName + Integer.toString(j),
-								entry.value);
-
-						break;
-					}
-				}
-			}
-			
-			LinkedHashMap<String, String> teste = returnList;
-
-			return returnList;
+			// return JSON String
+			return jObj;
 
 		}
 
-		if (methodParams.equalsIgnoreCase("html")) {
-			InputStream stream = null;
-			HTMLparser parser = new HTMLparser();
-
+		finally {
 			try {
-				stream = downloadUrl(urlString);
-				returnList.put("HTML", parser.getSiteStats(stream));
-				return returnList;
-			} catch (XPatherException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
-		if (methodParams.equalsIgnoreCase("json")) {
-
-			InputStream inputStream = null;
-			String result = null;
-
-			try {
-				inputStream = downloadUrl(urlString);
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(inputStream, "UTF-8"), 8);
-				StringBuilder sb = new StringBuilder();
-				String line = null;
-				while ((line = reader.readLine()) != null) {
-					sb.append(line + "\n");
-				}
-				result = sb.toString();
-				JSONArray jArray = new JSONArray(result);
-
-				LinkedHashMap<String, JSONObject> JsonTopics = new LinkedHashMap<String, JSONObject>();
-				for (int i = 0; i < jArray.length(); i++) {
-
-					if (i == 0) {
-						JsonTopics.put("geral", jArray.getJSONObject(i));
-					} else {
-						JsonTopics.put("topics" + i, jArray.getJSONObject(i));
-
-					}
-
-				}
-				return JsonTopics;
+				if (inputStream != null)
+					inputStream.close();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				try {
-					if (inputStream != null)
-						inputStream.close();
-				} catch (Exception e) {
-				}
 			}
-
-			return null;
-
 		}
 
-		return null;
 	}
 
 	// Given a string representation of a URL, sets up a connection and gets
@@ -157,7 +99,7 @@ public class DataAsyncTask extends AsyncTask<String, Void, Map> {
 	}
 
 	@Override
-	protected void onPostExecute(Map result) {
+	protected void onPostExecute(JSONObject json) {
 
 	}
 
