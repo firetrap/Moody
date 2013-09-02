@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,7 +53,17 @@ public class AsyncTest extends AsyncTask<String, Void, JSONObject> {
 			json = sb.toString();
 
 			try {
-				jObj = new JSONObject(json);
+
+				// If json is an Array it returns an JSONArray inside JSONobject
+				if (json.startsWith("[")) {
+					jObj = new JSONObject();
+					jObj.put("array", new JSONArray(json));
+				} 
+				
+				else {
+					jObj = new JSONObject(json);
+				}
+
 			} catch (JSONException e) {
 				Log.e("JSON Parser", "Error parsing data " + e.toString());
 			}

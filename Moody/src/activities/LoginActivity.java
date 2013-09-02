@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import managers.DialogsManager;
@@ -36,7 +35,6 @@ import android.widget.Toast;
 import com.example.moody.R;
 
 import connections.AsyncTest;
-import connections.HTMLparser;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -76,8 +74,7 @@ public class LoginActivity extends Activity {
 
 	// Session Manager Class
 	SessionManager session;
-	// Init HTMLparser Class
-	HTMLparser token;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
