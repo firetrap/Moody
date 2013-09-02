@@ -6,7 +6,10 @@ import interfaces.InterfaceDialogFrag;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -14,6 +17,8 @@ import managers.SessionManager;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
@@ -72,9 +77,9 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		populateLeftListview();
 		populateUserPicture();
 
-		Toast.makeText(getApplicationContext(),
-				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
-				.show();
+//		Toast.makeText(getApplicationContext(),
+//				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
+//				.show();
 
 	}
 
@@ -288,12 +293,12 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	 */
 
 	private void coursesInit(int coursesListSize) {
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		LinearLayout inserPoint = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
 
 		for (int j = 0; j < coursesListSize; j++) {
-			LayoutInflater inflater = (LayoutInflater) this
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-			LinearLayout inserPoint = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
 
 			LinearLayout row = new LinearLayout(this);
 			row.setLayoutParams(new LayoutParams(
@@ -314,6 +319,9 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			} else {
 				btnTag.setText(coursesNamesList.get(j));
 				btnTag.setId(Integer.parseInt(coursesIdList.get(j)));
+
+				courses.put(coursesIdList.get(j), coursesNamesList.get(j));
+
 			}
 
 			if (j != 0) {
@@ -403,6 +411,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	}
 
 	public void onCoursesClick(View v) {
+
 		String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
 				null);
 		String token = session.getValues(MoodyConstants.MoodySession.KEY_TOKEN,
@@ -411,6 +420,8 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		String con = String.format(MoodyConstants.MoodySession.KEY_PARAMS, url,
 				token, "core_course_get_contents&courseid", v.getId()
 						+ "&moodlewsrestformat=json");
+
+		String asd = courses.get("6");
 
 		try {
 			jsonList = (LinkedHashMap<String, JSONObject>) new DataAsyncTask()

@@ -5,12 +5,16 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 
 import managers.DialogsManager;
 import managers.SessionManager;
+import model.MoodyConstants.MoodySession;
 import model.MoodyMessage;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -27,10 +31,11 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.moody.R;
 
-import connections.DataAsyncTask;
+import connections.AsyncTest;
 import connections.HTMLparser;
 
 /**
@@ -62,10 +67,12 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
-	private String finalToken;
-	private String XMLurl = "";
+	private String finalToken = "";
+	private String url = "";
 	private String UserId = "";
-	private HashMap<String, String> xmlList;
+	private JSONObject getJson;
+
+	private String jsonFormat = MoodySession.KEY_JSONFORMAT;
 
 	// Session Manager Class
 	SessionManager session;
@@ -75,40 +82,53 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		session = new SessionManager(getApplicationContext());
+		Toast.makeText(getApplicationContext(),
+				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
+				.show();
 
-		setContentView(R.layout.activity_login);
+		if (session.isLoggedIn()) {
+			Intent intent = new Intent(getApplicationContext(),
+					MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 
-		// Set up the login form.
-		mUrlView = (EditText) findViewById(R.id.prompt_url);
-		mUser = getIntent().getStringExtra(EXTRA_EMAIL);
-		mUserView = (EditText) findViewById(R.id.username);
-		mUserView.setText(mUser);
+		} else {
 
-		mPasswordView = (EditText) findViewById(R.id.password);
-		mPasswordView
-				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-					@Override
-					public boolean onEditorAction(TextView textView, int id,
-							KeyEvent keyEvent) {
-						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
-							return true;
+			setContentView(R.layout.activity_login);
+
+			// Set up the login form.
+			mUrlView = (EditText) findViewById(R.id.prompt_url);
+			mUser = getIntent().getStringExtra(EXTRA_EMAIL);
+			mUserView = (EditText) findViewById(R.id.username);
+			mUserView.setText(mUser);
+
+			mPasswordView = (EditText) findViewById(R.id.password);
+			mPasswordView
+					.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+						@Override
+						public boolean onEditorAction(TextView textView,
+								int id, KeyEvent keyEvent) {
+							if (id == R.id.login || id == EditorInfo.IME_NULL) {
+								attemptLogin();
+								return true;
+							}
+							return false;
 						}
-						return false;
-					}
-				});
+					});
 
-		mLoginFormView = findViewById(R.id.login_form);
-		mLoginStatusView = findViewById(R.id.login_status);
-		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+			mLoginFormView = findViewById(R.id.login_form);
+			mLoginStatusView = findViewById(R.id.login_status);
+			mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-		findViewById(R.id.sign_in_button).setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						attemptLogin();
-					}
-				});
+			findViewById(R.id.sign_in_button).setOnClickListener(
+					new View.OnClickListener() {
+						@Override
+						public void onClick(View view) {
+							attemptLogin();
+						}
+					});
+		}
 	}
 
 	@Override
@@ -134,9 +154,9 @@ public class LoginActivity extends Activity {
 		mPasswordView.setError(null);
 
 		// Store values at the time of the login attempt.
-		mUrl = mUrlView.getText().toString();
-		mUser = mUserView.getText().toString();
-		mPassword = mPasswordView.getText().toString();
+		mUrl = mUrlView.getText().toString().trim();
+		mUser = mUserView.getText().toString().trim();
+		mPassword = mPasswordView.getText().toString().trim();
 
 		boolean cancel = false;
 		String error = "Errors found: \n";
@@ -189,93 +209,63 @@ public class LoginActivity extends Activity {
 		if (!cancel) {
 			// Inicialize the full context to generate token &&
 			mToken = mUrl + "/login/token.php?username=" + mUser + "&password="
-					+ mPassword + "&service=moody_service";
-
-			// send the generated token to verify.
-			String htmlResult = "";
+					+ mPassword + "&service=moody_service" + jsonFormat;
 			try {
-				xmlList = (HashMap<String, String>) new DataAsyncTask().execute(mToken, "html").get();
-				if (xmlList.get("HTML") == null) {
-					// htmlResult = "";
-					if (xmlList.get("Error").equals("Site")) {
-						cancel = true;
-						error += "\t - Error in Authentication service- check your internet service or the website\n";
+				getJson = new AsyncTest().execute(mToken, "json").get();
 
-					}
-					if (xmlList.get("Error").equals("user/password")) {
-						cancel = true;
-						error += "\t - Error in Authentication service- check your user/password\n";
-
-					}
+				if (getJson == null) {
+					cancel = true;
+					error += "\t - Error in Authentication service- check your internet service or the website URL\n";
+					mUrlView.setError(getString(R.string.error_invalid_url));
+					focusView = mUrlView;
 
 				} else {
-					htmlResult = xmlList.get("HTML");
-
+					if (getJson.has("error")) {
+						cancel = true;
+						mUserView
+								.setError(getString(R.string.error_invalid_username));
+						mPasswordView
+								.setError(getString(R.string.error_incorrect_password));
+						focusView = mUserView;
+						error += "\t - Error in Authentication service - "
+								+ (String) getJson.get("error") + "\n";
+					}
+					if (getJson.has("token")) {
+						finalToken = (String) getJson.get("token");
+					}
 				}
-				xmlList.clear();
+
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
-				Log.d("Async Error", "Error creating FinalToken1" + htmlResult);
-				cancel = true;
-				error += "\t - Error in Authentication service- check your internet service\n";
 				e1.printStackTrace();
-
 			} catch (ExecutionException e1) {
 				// TODO Auto-generated catch block
-				Log.d("parser", "Error creating finalToken2" + htmlResult);
-				cancel = true;
-				error += "\t - Error in Authentication service- check your internet service\n";
 				e1.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+		}
 
-			// checks token integrity
-			if ((htmlResult.isEmpty())
-					|| ((htmlResult.length() != 44) || (htmlResult
-							.contains("username")))) {
+		if (!finalToken.isEmpty()) {
 
-				mUserView.setError(getString(R.string.error_invalid_username));
+			// Get user id URL
+			url = mUrl + "/webservice/rest/server.php?wstoken=" + finalToken
+					+ "&wsfunction=core_webservice_get_site_info" + jsonFormat;
 
-				focusView = mUserView;
+			try {
+				getJson = new AsyncTest().execute(url, "json").get();
+				UserId = Integer.toString((Integer) getJson.get("userid"));
 
-				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
-				focusView = mPasswordView;
-				htmlResult = "error!";
-				cancel = true;
-				error += "\t - Error in Authentication service- check your user/password\n";
-
-				Log.d("MoodyDebug", "HTMLparser failed");
-			} else {
-
-				// Clean retrieved html result to extract token
-				StringTokenizer tokens = new StringTokenizer(htmlResult, "\"");
-
-				do {
-					finalToken = tokens.nextToken();
-				} while (finalToken.length() != 32);
-
-				// Get user id URL
-				XMLurl = "http://" + mUrlView.getText().toString()
-						+ "/webservice/rest/server.php?wstoken=" + finalToken
-						+ "&wsfunction=core_webservice_get_site_info";
-
-				// Send 2 params to async constructor the url and the required
-				// Tag
-				// for the XML parser
-				try {
-					xmlList = (HashMap<String, String>) new DataAsyncTask().execute(XMLurl, "xml")
-							.get();
-					UserId = xmlList.get("userid1");
-					xmlList.clear();
-
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 		}

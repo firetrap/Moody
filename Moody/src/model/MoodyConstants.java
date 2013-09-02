@@ -51,6 +51,9 @@ public final class MoodyConstants {
 		public static final String KEY_N_PARAMS = "%s/webservice/rest/server.php?wstoken=%s&wsfunction=%s";
 
 		public static final String KEY_PARAMS = "%s/webservice/rest/server.php?wstoken=%s&wsfunction=%s=%s";
+		
+		public static final String KEY_JSONFORMAT= "&moodlewsrestformat=json";
+
 
 		/**
 		 * 
