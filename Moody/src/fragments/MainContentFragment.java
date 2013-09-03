@@ -49,59 +49,69 @@ public class MainContentFragment extends Fragment {
 	}
 
 	public View numberOfRows(JSONArray rows, String CourseName) {
+		
+		LayoutInflater inflater = (LayoutInflater) getActivity()
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
 		LinearLayout insertPoint = new LinearLayout(getActivity());
 		insertPoint.setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		insertPoint.setOrientation(LinearLayout.VERTICAL);
+	
+		View topicsHeaderView = inflater.inflate(
+				R.layout.topics_preview_header, null);
+		TextView courseName = (TextView) topicsHeaderView.findViewById(R.id.course_path_textView);
+		courseName.setText("Courses > "+ CourseName);
+		insertPoint.addView(topicsHeaderView);
 
-		RelativeLayout beforeTopics = new RelativeLayout(getActivity());
-		// RelativeLayout params
-		beforeTopics.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		beforeTopics.setBackgroundResource(R.color.C_White);
-		beforeTopics.setId(0);
-		beforeTopics.setTag("before_topic_tag");
+		
 
-		TextView coursePath = new TextView(getActivity());
-		coursePath.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		coursePath.setBackgroundColor(getResources().getColor(R.color.C_White));
-		coursePath.setPadding(5, 10, 0, 10);
-		coursePath.setText("Courses > " + CourseName);
-		coursePath.setTextColor(getResources().getColor(R.color.C_Blue_Light));
-		coursePath.setId(1);
-		coursePath.setTag("course_path_tag");
-		beforeTopics.addView(coursePath);
+//		RelativeLayout beforeTopics = new RelativeLayout(getActivity());
+//		// RelativeLayout params
+//		beforeTopics.setLayoutParams(new LayoutParams(
+//				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+//				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+//		beforeTopics.setBackgroundResource(R.color.C_White);
+//		beforeTopics.setId(0);
+//		beforeTopics.setTag("before_topic_tag");
+//
+//		TextView coursePath = new TextView(getActivity());
+//		coursePath.setLayoutParams(new LayoutParams(
+//				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+//				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+//		coursePath.setBackgroundColor(getResources().getColor(R.color.C_White));
+//		coursePath.setPadding(5, 10, 0, 10);
+//		coursePath.setText("Courses > " + CourseName);
+//		coursePath.setTextColor(getResources().getColor(R.color.C_Blue_Light));
+//		coursePath.setId(1);
+//		coursePath.setTag("course_path_tag");
+//		beforeTopics.addView(coursePath);
+//
+//		ImageButton addFavorites = new ImageButton(getActivity());
+//
+//		// Add favorits params
+//		addFavorites.setLayoutParams(new LayoutParams(
+//				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+//				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+//		addFavorites.setBackgroundResource(R.color.C_White);
+//		addFavorites
+//				.setContentDescription(getString(R.string.add_favorite_description));
+//		addFavorites.setPadding(0, 10, 50, 10);
+//		addFavorites.setImageResource(R.drawable.add_favorites);
+//		addFavorites.setId(2);
+//		addFavorites.setTag("add_favorites_tag");
+//
+//		RelativeLayout.LayoutParams addFavoritesParams = new RelativeLayout.LayoutParams(
+//				addFavorites.getLayoutParams());
+//
+//		addFavoritesParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//		addFavorites.setLayoutParams(addFavoritesParams);
+//		beforeTopics.addView(addFavorites);
 
-		ImageButton addFavorites = new ImageButton(getActivity());
+//		insertPoint.addView(beforeTopics);
 
-		// Add favorits params
-		addFavorites.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		addFavorites.setBackgroundResource(R.color.C_White);
-		addFavorites
-				.setContentDescription(getString(R.string.add_favorite_description));
-		addFavorites.setPadding(0, 10, 50, 10);
-		addFavorites.setImageResource(R.drawable.add_favorites);
-		addFavorites.setId(2);
-		addFavorites.setTag("add_favorites_tag");
-
-		RelativeLayout.LayoutParams addFavoritesParams = new RelativeLayout.LayoutParams(
-				addFavorites.getLayoutParams());
-
-		addFavoritesParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-		addFavorites.setLayoutParams(addFavoritesParams);
-		beforeTopics.addView(addFavorites);
-
-		insertPoint.addView(beforeTopics);
-
-		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+		
 		for (int j = 0; j < rows.length(); j++) {
 			try {
 				JSONObject arrayCursor = rows.getJSONObject(j);
@@ -111,7 +121,7 @@ public class MainContentFragment extends Fragment {
 						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 				View view = inflater.inflate(
-						R.layout.testes, null);
+						R.layout.topics_preview_context, null);
 				TextView topicName = (TextView) view.findViewById(R.id.topic_name);
 				topicName.setText(arrayCursor.getString("name"));
 				

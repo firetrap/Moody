@@ -1,47 +1,3 @@
-<!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" -->
-<!--     android:id="@+id/course_topics_linear_layout" -->
-<!--     android:layout_width="match_parent" -->
-<!--     android:layout_height="wrap_content" -->
-<!--     android:orientation="vertical" > -->
-
-    <!-- <RelativeLayout -->
-    <!-- android:id="@+id/course_name_favorites" -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:background="@drawable/fill_light_grey" -->
-    <!-- android:orientation="horizontal" > -->
-
-
-    <!-- <TextView -->
-    <!-- android:id="@+id/course_path_textView" -->
-    <!-- android:layout_width="match_parent" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:background="@color/C_White" -->
-    <!-- android:paddingBottom="10dp" -->
-    <!-- android:paddingLeft="5dp" -->
-    <!-- android:paddingTop="10dp" -->
-    <!-- android:text="@string/course_path" -->
-    <!-- android:textColor="@color/C_Blue_Light" /> -->
-
-
-    <!-- <ImageButton -->
-    <!-- android:id="@+id/imageButtonTESTE2" -->
-    <!-- android:layout_width="wrap_content" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:layout_alignParentRight="true" -->
-    <!-- android:layout_alignParentTop="true" -->
-    <!-- android:layout_marginRight="18dp" -->
-    <!-- android:adjustViewBounds="false" -->
-    <!-- android:background="@android:color/transparent" -->
-    <!-- android:contentDescription="@string/add_favorite_description" -->
-    <!-- android:cropToPadding="false" -->
-    <!-- android:paddingRight="10dp" -->
-    <!-- android:src="@drawable/add_favorites" /> -->
-
-
-    <!-- </RelativeLayout> -->
-
-
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/course_description_relative_layout"
         android:layout_width="fill_parent"
@@ -98,5 +54,3 @@
             android:layout_alignParentTop="true"
             android:background="@color/C_White" />
     </RelativeLayout>
-
-<!-- </LinearLayout> -->
