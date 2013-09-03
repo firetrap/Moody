@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,16 +59,24 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	}
 
-	public void initContentPreview(Bundle bundle) {
+	public void initContentPreview() {
 
-		MainContentFragment fragment = (MainContentFragment) getFragmentManager()
-				.findFragmentById(R.id.main_content_fragment);
-		fragment.getView().setVisibility(View.VISIBLE);
-		fragment.setArguments(bundle);
+		// MainContentFragment fragment = (MainContentFragment)
+		// getFragmentManager()
+		// .findFragmentById(R.id.main_content_fragment);
+		// fragment.getView().setVisibility(View.VISIBLE);
+		// fragment.setArguments(bundle);
+		//
+		// if (fragment != null && fragment.isInLayout()) {
+		//
+		// }
+		FragmentManager fragmentManager = getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
 
-		if (fragment != null && fragment.isInLayout()) {
-
-		}
+		MainContentFragment fragment = new MainContentFragment();
+		fragmentTransaction.replace(R.id.mainFragment, fragment);
+		fragmentTransaction.commit();
 
 	}
 
@@ -345,6 +354,8 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		Toast.makeText(getApplicationContext(),
 				"Curso-> " + asd + " ID-> " + v.getId(), Toast.LENGTH_SHORT)
 				.show();
+
+		initContentPreview();
 
 	}
 
