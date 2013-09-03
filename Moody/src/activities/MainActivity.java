@@ -59,7 +59,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	}
 
-	public void initContentPreview() {
+	public void initContentPreview(Bundle bundle) {
 
 		// MainContentFragment fragment = (MainContentFragment)
 		// getFragmentManager()
@@ -75,6 +75,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 				.beginTransaction();
 
 		MainContentFragment fragment = new MainContentFragment();
+		fragment.setArguments(bundle);
 		fragmentTransaction.replace(R.id.mainFragment, fragment);
 		fragmentTransaction.commit();
 
@@ -340,22 +341,18 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	public void onCoursesClick(View v) {
 
-		String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
-				null);
-		String token = session.getValues(MoodyConstants.MoodySession.KEY_TOKEN,
-				null);
 
-		String con = String.format(MoodyConstants.MoodySession.KEY_PARAMS, url,
-				token, "core_course_get_contents&courseid", v.getId()
-						+ MoodySession.KEY_JSONFORMAT);
-
-		String asd = organizedCourses.get(Integer.toString(v.getId()));
-
+		String courseName = organizedCourses.get(Integer.toString(v.getId()));
+		String courseId = Integer.toString(v.getId());
 		Toast.makeText(getApplicationContext(),
-				"Curso-> " + asd + " ID-> " + v.getId(), Toast.LENGTH_SHORT)
-				.show();
+				"Curso-> " + courseName + " ID-> " + v.getId(),
+				Toast.LENGTH_SHORT).show();
 
-		initContentPreview();
+		Bundle bundle = new Bundle();
+		bundle.putString("courseName", courseName);
+		bundle.putString("courseId", courseId);
+
+		initContentPreview(bundle);
 
 	}
 
