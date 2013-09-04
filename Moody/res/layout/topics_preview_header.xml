@@ -27,6 +27,7 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/add_favorite_description"
         android:cropToPadding="false"
+        android:onClick="onClick"
         android:paddingRight="10dp"
         android:src="@drawable/add_favorites" />
 

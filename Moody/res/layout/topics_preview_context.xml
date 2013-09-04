@@ -6,13 +6,14 @@
         android:orientation="horizontal" >
 
         <ImageButton
-            android:id="@+id/imageButtonTESTE1"
+            android:id="@+id/arrow_topics_image_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@color/transparent"
             android:contentDescription="@string/arrow_description"
+            android:onClick="onClick"
             android:paddingRight="5dp"
             android:src="@drawable/right_arrow" />
 
@@ -37,7 +38,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@+id/imageButtonTESTE1"
+            android:layout_toLeftOf="@+id/arrow_topics_image_button"
             android:text="@string/content_preview" />
 
         <View
