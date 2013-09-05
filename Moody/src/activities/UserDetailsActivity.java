@@ -58,6 +58,7 @@ public class UserDetailsActivity extends Activity
 							// TODO Auto-generated method stub
 							finish();
 						}
+						
 					}, false);
 		}
 	}
@@ -121,12 +122,24 @@ public class UserDetailsActivity extends Activity
 
 				for (int j = 0; j < attributes.length; j++) {
 					// String asdsa = (String) arrayCursor.get(attributes[j]);
-					if (isValid(arrayCursor.get(attributes[j])))
+					Object obj = null;
+					
+					// se não existir, rebenta e entra no catch, não faz nada, 
+					// manda null para o IsValid que invalida e o resto do código
+					// esconde as opções.
+					try {
+						obj = arrayCursor.get(attributes[j]);
+					}
+					catch(Exception ex){
+						
+					}
+					
+					if (isValid(obj))
 						((TextView) findViewById(textIds[j]))
-								.setText((CharSequence) arrayCursor
+								.setText((String) arrayCursor
 										.get(attributes[j]));
 					else
-						findViewById(layoutIds[i]).setVisibility(View.GONE);
+						findViewById(layoutIds[j]).setVisibility(View.GONE);
 
 				}
 
