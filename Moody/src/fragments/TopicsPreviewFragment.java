@@ -33,14 +33,14 @@ import com.example.moody.R;
 
 import connections.DataAsyncTask;
 
-public class MainContentFragment extends Fragment {
+public class TopicsPreviewFragment extends Fragment {
 
 	// Session Manager Class
 	SessionManager session;
 
 	private JSONObject jsonObj;
 
-	public MainContentFragment() {
+	public TopicsPreviewFragment() {
 	}
 
 	@Override

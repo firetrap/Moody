@@ -1,9 +1,10 @@
 package activities;
 
 import fragments.DialogFragmentManager;
-import fragments.MainContentFragment;
+import fragments.TopicsPreviewFragment;
 import interfaces.InterfaceDialogFrag;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import managers.SessionManager;
 import model.MoodyConstants;
@@ -62,12 +63,25 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		populateUsername();
 		populateLeftListview();
 		populateUserPicture();
+		
+		
+		
+		
+		//When its created it will get any course to populate the main fragment
+		Entry<String, String> course = organizedCourses.entrySet().iterator().next();
+		String courseName= course.getValue();
+		String courseId = course.getKey();
+		Bundle bundle = new Bundle();
+		bundle.putString("courseName", courseName);
+		bundle.putString("courseId", courseId);
+		initContentPreview(bundle);
+		
 
 	}
 
 	public void initContentPreview(Bundle bundle) {
 
-		// MainContentFragment fragment = (MainContentFragment)
+		// TopicsPreviewFragment fragment = (TopicsPreviewFragment)
 		// getFragmentManager()
 		// .findFragmentById(R.id.main_content_fragment);
 		// fragment.getView().setVisibility(View.VISIBLE);
@@ -80,7 +94,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 
-		MainContentFragment fragment = new MainContentFragment();
+		TopicsPreviewFragment fragment = new TopicsPreviewFragment();
 		fragment.setArguments(bundle);
 		fragmentTransaction.replace(R.id.mainFragment, fragment);
 		fragmentTransaction.commit();
@@ -366,13 +380,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		myDrawerLayout.closeDrawer(Gravity.LEFT);
 	}
 
-	public void onContentPreviewClick(View v) {
-
-		Toast.makeText(getApplicationContext(), " ID-> " + v.getId(),
-				Toast.LENGTH_SHORT).show();
-
-	}
-
 	public void onAddFavoritesClick(View v) {
 
 		// The add to favorites button id its the same of the course so we can
@@ -387,6 +394,13 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 					"Curso-> " + courseName + " ID-> " + v.getId(),
 					Toast.LENGTH_SHORT).show();
 		}
+
+	}
+
+	public void onContentPreviewClick(View v) {
+
+		Toast.makeText(getApplicationContext(), " ID-> " + v.getId(),
+				Toast.LENGTH_SHORT).show();
 
 	}
 
