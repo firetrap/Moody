@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    
     <string name="app_name">Moody</string>
     <string name="menu_settings">Settings</string>
     <string name="hello_world">Hello Sergio</string>
@@ -30,7 +30,7 @@
 
     <!-- Strings related to populate -->
     <string name="fullName_textView">User Name</string>
-    <string name="title_activity_user_details">UserDetailsActivity</string>
+    <string name="title_activity_user_details">Details:</string>
     
     <!-- Strings related to user details -->
     <string name="working">Working&#8230;</string>
