@@ -58,7 +58,7 @@ public class UserDetailsActivity extends Activity
 							// TODO Auto-generated method stub
 							finish();
 						}
-						
+
 					}, false);
 		}
 	}
@@ -123,18 +123,18 @@ public class UserDetailsActivity extends Activity
 				for (int j = 0; j < attributes.length; j++) {
 					// String asdsa = (String) arrayCursor.get(attributes[j]);
 					Object obj = null;
-					
-					// se não existir, rebenta e entra no catch, não faz nada, 
-					// manda null para o IsValid que invalida e o resto do código
+
+					// se não existir, rebenta e entra no catch, não faz nada,
+					// manda null para o IsValid que invalida e o resto do
+					// código
 					// esconde as opções.
 					try {
 						obj = arrayCursor.get(attributes[j]);
+					} catch (Exception ex) {
+
 					}
-					catch(Exception ex){
-						
-					}
-					
-					if (isValid(obj))
+
+					if (isValidObject(obj))
 						((TextView) findViewById(textIds[j]))
 								.setText((String) arrayCursor
 										.get(attributes[j]));
@@ -152,21 +152,8 @@ public class UserDetailsActivity extends Activity
 
 	}
 
-	public boolean isValid(Object object) {
-		if (object != null) {
-			try {
-
-				String aux = (String) object;
-
-				if (!aux.isEmpty())
-					return true;
-
-			} catch (Exception ex) {
-
-			}
-		}
-
-		return false;
+	public boolean isValidObject(Object object) {
+		return ((object != null) && (!((String) object).isEmpty()));
 	}
 
 	// @Override
