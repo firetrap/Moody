@@ -17,7 +17,7 @@
         android:textColor="@color/C_Blue_Light" />
 
     <ImageButton
-        android:id="@+id/add_favorites_button"
+        android:id="@+id/add_favorites_button_"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -27,7 +27,7 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/add_favorite_description"
         android:cropToPadding="false"
-        android:onClick="onClick"
+        android:onClick="onContentPreviewClick"
         android:paddingRight="10dp"
         android:src="@drawable/add_favorites" />
 

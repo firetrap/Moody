@@ -19,7 +19,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +42,8 @@ import connections.DataAsyncTask;
 public class MainActivity extends SherlockActivity implements OnClickListener,
 		InterfaceDialogFrag {
 
+	private DrawerLayout myDrawerLayout;
+
 	// Session Manager Class
 	SessionManager session;
 
@@ -52,6 +57,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		session = new SessionManager(getApplicationContext());
+		myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 		populateUsername();
 		populateLeftListview();
@@ -328,10 +334,13 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			Intent intent = new Intent(getApplicationContext(),
 					UserDetailsActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			myDrawerLayout.closeDrawer(Gravity.LEFT);
 			startActivity(intent);
 			break;
 
 		default:
+			// myDrawerLayout.closeDrawer(Gravity.LEFT);
+
 			// Toast.makeText(getApplicationContext(),
 			// "ENTROU NO PRIMEIRO :" + v.getId(), Toast.LENGTH_SHORT)
 			// .show();
@@ -341,6 +350,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	public void onCoursesClick(View v) {
 
+		// The view id is the same of the course id
 
 		String courseName = organizedCourses.get(Integer.toString(v.getId()));
 		String courseId = Integer.toString(v.getId());
@@ -353,6 +363,30 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		bundle.putString("courseId", courseId);
 
 		initContentPreview(bundle);
+		myDrawerLayout.closeDrawer(Gravity.LEFT);
+	}
+
+	public void onContentPreviewClick(View v) {
+
+		Toast.makeText(getApplicationContext(), " ID-> " + v.getId(),
+				Toast.LENGTH_SHORT).show();
+
+	}
+
+	public void onAddFavoritesClick(View v) {
+
+		// The add to favorites button id its the same of the course so we can
+		// send the button id to future development
+
+		if (organizedCourses.get(Integer.toString(v.getId())) != null) {
+			String courseName = organizedCourses
+					.get(Integer.toString(v.getId()));
+			String courseId = Integer.toString(v.getId());
+
+			Toast.makeText(getApplicationContext(),
+					"Curso-> " + courseName + " ID-> " + v.getId(),
+					Toast.LENGTH_SHORT).show();
+		}
 
 	}
 

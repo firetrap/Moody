@@ -1,57 +1,64 @@
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/course_description_relative_layout"
-        android:layout_width="fill_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/course_description_relative_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fill_light_grey"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/topic_name"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/fill_light_grey"
-        android:orientation="horizontal" >
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border_course_context"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/topic_string" />
 
-        <ImageButton
-            android:id="@+id/arrow_topics_image_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@color/transparent"
-            android:contentDescription="@string/arrow_description"
-            android:onClick="onClick"
-            android:paddingRight="5dp"
-            android:src="@drawable/right_arrow" />
+    <TextView
+        android:id="@+id/content_preview_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topic_name"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:drawablePadding="10dp"
+        android:drawableRight="@drawable/right_arrow"
+        android:onClick="onContentPreviewClick"
+        android:text="@string/content_preview" />
 
-        <TextView
-            android:id="@+id/topic_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/border_course_context"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/topic_string" />
+    <!-- <ImageButton -->
+    <!-- android:id="@+id/arrow_topics_image_button_" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_alignParentRight="true" -->
+    <!-- android:layout_centerVertical="true" -->
+    <!-- android:layout_marginRight="10dp" -->
+    <!-- android:background="@color/transparent" -->
+    <!-- android:contentDescription="@string/arrow_description" -->
+    <!-- android:fitsSystemWindows="false" -->
+    <!-- android:onClick="onContentPreviewClick" -->
+    <!-- android:paddingRight="5dp" -->
+    <!-- android:src="@drawable/right_arrow" /> -->
 
-        <TextView
-            android:id="@+id/content_preview_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/topic_name"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@+id/arrow_topics_image_button"
-            android:text="@string/content_preview" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:layout_alignBottom="@id/content_preview_textView"
+        android:layout_marginBottom="-10dp"
+        android:background="@drawable/border_inside"
+        android:clickable="false" />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="10dp"
-            android:layout_alignBottom="@id/content_preview_textView"
-            android:layout_marginBottom="-10dp"
-            android:background="@drawable/border_inside" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/C_White"
+        android:clickable="false" />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="10dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:background="@color/C_White" />
-    </RelativeLayout>
+</RelativeLayout>

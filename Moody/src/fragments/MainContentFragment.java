@@ -21,9 +21,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,55 +50,12 @@ public class MainContentFragment extends Fragment {
 
 		String courseName = getArguments().getString("courseName");
 		String courseId = getArguments().getString("courseId");
+		JSONArray getTopics = getTopics(courseId);
 
-		return numberOfRows(getJsonArray(courseId), courseName);
+		return createTopicsRows(getTopics, courseName, courseId);
 	}
 
-	public View numberOfRows(JSONArray rows, String CourseName) {
-
-		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		LinearLayout insertPoint = new LinearLayout(getActivity());
-		insertPoint.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		insertPoint.setOrientation(LinearLayout.VERTICAL);
-
-		View topicsHeaderView = inflater.inflate(
-				R.layout.topics_preview_header, null);
-		TextView courseName = (TextView) topicsHeaderView
-				.findViewById(R.id.course_path_textView);
-		courseName.setText("Courses > " + CourseName);
-		insertPoint.addView(topicsHeaderView);
-
-		for (int j = 0; j < rows.length(); j++) {
-			try {
-				JSONObject arrayCursor = rows.getJSONObject(j);
-
-				LinearLayout row = new LinearLayout(getActivity());
-				row.setLayoutParams(new LayoutParams(
-						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-				View view = inflater.inflate(R.layout.topics_preview_context,
-						null);
-				TextView topicName = (TextView) view
-						.findViewById(R.id.topic_name);
-				topicName.setText(arrayCursor.getString("name"));
-				row.addView(view);
-				insertPoint.addView(row);
-
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return insertPoint;
-
-	}
-
-	public JSONArray getJsonArray(String courseId) {
+	public JSONArray getTopics(String courseId) {
 		String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
 				null);
 		String token = session.getValues(MoodyConstants.MoodySession.KEY_TOKEN,
@@ -124,24 +83,107 @@ public class MainContentFragment extends Fragment {
 
 	}
 
-	public void onClick(View v) {
+	public View createTopicsRows(JSONArray rows, String CourseName,
+			String courseId) {
+		LayoutInflater inflater = (LayoutInflater) getActivity()
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		switch (v.getId()) {
-		case R.id.add_favorites_button:
-			Toast.makeText(getActivity().getApplicationContext(),
-					"ADD FAVORITOS" + v.getId(), Toast.LENGTH_SHORT).show();
-			break;
-		case R.id.arrow_topics_image_button:
-			Toast.makeText(getActivity().getApplicationContext(),
-					"ENTROU NO TOPICO" + v.getId(), Toast.LENGTH_SHORT).show();
+		LinearLayout insertPoint = new LinearLayout(getActivity());
+		insertPoint.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		insertPoint.setOrientation(LinearLayout.VERTICAL);
 
-			break;
+		View topicsHeaderView = createTopicsHeader(CourseName, courseId,
+				inflater);
 
-		default:
-			// Toast.makeText(getApplicationContext(),
-			// "ENTROU NO PRIMEIRO :" + v.getId(), Toast.LENGTH_SHORT)
-			// .show();
-			// throw new RuntimeException("Unknown button ID");
+		insertPoint.addView(topicsHeaderView);
+
+		createTopicsContent(rows, inflater, insertPoint);
+
+		return insertPoint;
+
+	}
+
+	/**
+	 * @param CourseName
+	 * @param courseId
+	 * @param inflater
+	 * @return
+	 */
+	private View createTopicsHeader(String CourseName, String courseId,
+			LayoutInflater inflater) {
+		View topicsHeaderView = inflater.inflate(
+				R.layout.topics_preview_header, null);
+
+		TextView courseName = (TextView) topicsHeaderView
+				.findViewById(R.id.course_path_textView);
+		courseName.setText("Courses > " + CourseName);
+
+		ImageButton addFavorites = (ImageButton) topicsHeaderView
+				.findViewById(R.id.add_favorites_button_);
+		addFavorites.setId(Integer.parseInt(courseId));
+		addFavorites.setTag("add_favorites_button_" + courseId);
+		return topicsHeaderView;
+	}
+
+	/**
+	 * @param rows
+	 * @param inflater
+	 * @param insertPoint
+	 */
+	private void createTopicsContent(JSONArray rows, LayoutInflater inflater,
+			LinearLayout insertPoint) {
+		for (int j = 0; j < rows.length(); j++) {
+			try {
+
+				JSONObject arrayCursor = rows.getJSONObject(j);
+				JSONArray modules = arrayCursor.getJSONArray("modules");
+				if (modules.length() != 0) {
+					LinearLayout row = new LinearLayout(getActivity());
+					row.setLayoutParams(new LayoutParams(
+							android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+							android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+					View topicsView = inflater.inflate(
+							R.layout.topics_preview_context, null);
+					TextView topicName = (TextView) topicsView
+							.findViewById(R.id.topic_name);
+					topicName.setText(arrayCursor.getString("name"));
+
+					String moduleName = "";
+					// Loop for the modules array
+					for (int i = 0; i < modules.length(); i++) {
+						JSONObject singleModule = modules.getJSONObject(i);
+						String getName = (String) singleModule.get("name");
+
+						if (getName.length() >= 30) {
+							getName = getName.substring(0, 30);
+						}
+
+						moduleName += ("-" + getName + "\n");
+
+						if (i >= 4) {
+							moduleName += ".....";
+							break;
+						}
+
+					}
+					TextView topicModule = (TextView) topicsView
+							.findViewById(R.id.content_preview_textView);
+					topicModule.setText(moduleName);
+
+					// Where the textview id will be topic id
+					topicModule.setId(Integer.parseInt(arrayCursor
+							.getString("id")));
+
+					row.addView(topicsView);
+					insertPoint.addView(row);
+				}
+
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
