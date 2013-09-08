@@ -1,18 +1,22 @@
 package activities;
 
-import fragments.DialogFragmentManager;
+import fragments.PictureDialogFragment;
 import fragments.TopicsPreviewFragment;
 import interfaces.InterfaceDialogFrag;
+
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
+
 import managers.SessionManager;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
 import model.MoodyConstants.MoodySession;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -20,7 +24,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
@@ -34,10 +37,12 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
+
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.moody.R;
+
 import connections.DataAsyncTask;
 
 public class MainActivity extends SherlockActivity implements OnClickListener,
@@ -306,7 +311,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		case R.id.login_image_button:
 
 			FragmentManager fm = getFragmentManager();
-			DialogFragmentManager userDetailsDialog = new DialogFragmentManager();
+			PictureDialogFragment userDetailsDialog = new PictureDialogFragment();
 			userDetailsDialog.setRetainInstance(true);
 			userDetailsDialog.show(fm, "fragment_name");
 
@@ -353,10 +358,12 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			Toast.makeText(getApplicationContext(), "CLOUD", Toast.LENGTH_SHORT)
 					.show();
 
-//			Intent intents = getPackageManager().getLaunchIntentForPackage(
-//					"com.dropbox.android");
-//			intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//			startActivity(intents);
+			
+			
+			// Intent intents = getPackageManager().getLaunchIntentForPackage(
+			// "com.dropbox.android");
+			// intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			// startActivity(intents);
 
 			break;
 
@@ -372,24 +379,21 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	public void onCoursesClick(View v) {
 
-		
+		// The view id is the same of the course id
 
-			// The view id is the same of the course id
+		String courseName = organizedCourses.get(Integer.toString(v.getId()));
+		String courseId = Integer.toString(v.getId());
+		Toast.makeText(getApplicationContext(),
+				"Curso-> " + courseName + " ID-> " + v.getId(),
+				Toast.LENGTH_SHORT).show();
 
-			String courseName = organizedCourses
-					.get(Integer.toString(v.getId()));
-			String courseId = Integer.toString(v.getId());
-			Toast.makeText(getApplicationContext(),
-					"Curso-> " + courseName + " ID-> " + v.getId(),
-					Toast.LENGTH_SHORT).show();
+		Bundle bundle = new Bundle();
+		bundle.putString("courseName", courseName);
+		bundle.putString("courseId", courseId);
 
-			Bundle bundle = new Bundle();
-			bundle.putString("courseName", courseName);
-			bundle.putString("courseId", courseId);
+		initContentPreview(bundle);
+		myDrawerLayout.closeDrawer(Gravity.LEFT);
 
-			initContentPreview(bundle);
-			myDrawerLayout.closeDrawer(Gravity.LEFT);
-		
 	}
 
 	public void onAddFavoritesClick(View v) {

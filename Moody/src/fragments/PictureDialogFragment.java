@@ -27,7 +27,7 @@ import android.widget.Button;
 
 import com.example.moody.R;
 
-public class DialogFragmentManager extends DialogFragment {
+public class PictureDialogFragment extends DialogFragment {
 
 	// FOR GALLERY
 	private static final int PICTURE_GALLERY = 1;
@@ -61,6 +61,7 @@ public class DialogFragmentManager extends DialogFragment {
 		if (!folder.exists()) {
 			success = folder.mkdir();
 		}
+		
 		if (success) {
 			destination = new File(folder, name + ".jpg");
 		} else {
