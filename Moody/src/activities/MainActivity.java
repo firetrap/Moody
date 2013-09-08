@@ -63,19 +63,16 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		populateUsername();
 		populateLeftListview();
 		populateUserPicture();
-		
-		
-		
-		
-		//When its created it will get any course to populate the main fragment
-		Entry<String, String> course = organizedCourses.entrySet().iterator().next();
-		String courseName= course.getValue();
+
+		// When its created it will get any course to populate the main fragment
+		Entry<String, String> course = organizedCourses.entrySet().iterator()
+				.next();
+		String courseName = course.getValue();
 		String courseId = course.getKey();
 		Bundle bundle = new Bundle();
 		bundle.putString("courseName", courseName);
 		bundle.putString("courseId", courseId);
 		initContentPreview(bundle);
-		
 
 	}
 
@@ -352,6 +349,17 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			startActivity(intent);
 			break;
 
+		case R.id.cloud_button:
+			Toast.makeText(getApplicationContext(), "CLOUD", Toast.LENGTH_SHORT)
+					.show();
+
+			Intent intents = getPackageManager().getLaunchIntentForPackage(
+					"com.dropbox.android");
+			intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intents);
+
+			break;
+
 		default:
 			// myDrawerLayout.closeDrawer(Gravity.LEFT);
 
@@ -364,20 +372,24 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	public void onCoursesClick(View v) {
 
-		// The view id is the same of the course id
+		
 
-		String courseName = organizedCourses.get(Integer.toString(v.getId()));
-		String courseId = Integer.toString(v.getId());
-		Toast.makeText(getApplicationContext(),
-				"Curso-> " + courseName + " ID-> " + v.getId(),
-				Toast.LENGTH_SHORT).show();
+			// The view id is the same of the course id
 
-		Bundle bundle = new Bundle();
-		bundle.putString("courseName", courseName);
-		bundle.putString("courseId", courseId);
+			String courseName = organizedCourses
+					.get(Integer.toString(v.getId()));
+			String courseId = Integer.toString(v.getId());
+			Toast.makeText(getApplicationContext(),
+					"Curso-> " + courseName + " ID-> " + v.getId(),
+					Toast.LENGTH_SHORT).show();
 
-		initContentPreview(bundle);
-		myDrawerLayout.closeDrawer(Gravity.LEFT);
+			Bundle bundle = new Bundle();
+			bundle.putString("courseName", courseName);
+			bundle.putString("courseId", courseId);
+
+			initContentPreview(bundle);
+			myDrawerLayout.closeDrawer(Gravity.LEFT);
+		
 	}
 
 	public void onAddFavoritesClick(View v) {

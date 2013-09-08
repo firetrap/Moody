@@ -144,6 +144,7 @@
                 android:drawableLeft="@drawable/cloud"
                 android:drawablePadding="10dp"
                 android:gravity="left|center_vertical"
+                android:onClick="onClick"
                 android:paddingLeft="10dp"
                 android:text="@string/cloud" />
 
