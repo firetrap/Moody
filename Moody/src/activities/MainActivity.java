@@ -353,10 +353,10 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			Toast.makeText(getApplicationContext(), "CLOUD", Toast.LENGTH_SHORT)
 					.show();
 
-			Intent intents = getPackageManager().getLaunchIntentForPackage(
-					"com.dropbox.android");
-			intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intents);
+//			Intent intents = getPackageManager().getLaunchIntentForPackage(
+//					"com.dropbox.android");
+//			intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//			startActivity(intents);
 
 			break;
 
