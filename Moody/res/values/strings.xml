@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string name="app_name">Moody</string>
     <string name="menu_settings">Settings</string>
     <string name="hello_world">Hello Sergio</string>
@@ -31,38 +31,28 @@
     <!-- Strings related to populate -->
     <string name="fullName_textView">User Name</string>
     <string name="title_activity_user_details">Details:</string>
-    
+
     <!-- Strings related to user details -->
     <string name="working">Working&#8230;</string>
     <string name="user_details_title">Details: </string>
-    
     <string name="user_details_hint_firstname">Fill First Name</string>
     <string name="user_details_text_firstname">First Name: </string>
-    
     <string name="user_details_hint_lastname">Fill Surname</string>
     <string name="user_details_text_lastname">Surname: </string>
-    
     <string name="user_details_hint_email">Fill Email Contact</string>
     <string name="user_details_text_email">Email: </string>
-    
     <string name="user_details_hint_address">Fill Address</string>
     <string name="user_details_text_address">Address: </string>
-    
     <string name="user_details_hint_phone">Fill Phone Contact</string>
     <string name="user_details_text_phone">Phone: </string>
-    
     <string name="user_details_hint_mobile_phone">Fill Mobile Phone Contact</string>
     <string name="user_details_text_mobile_phone">Mobile Phone: </string>
-    
     <string name="user_details_hint_skype">Fill Skype ID</string>
     <string name="user_details_text_skype">Skype ID: </string>
-    
     <string name="user_details_hint_yahoo">Fill Yahoo ID</string>
     <string name="user_details_text_yahoo">Yahoo ID: </string>
-    
     <string name="user_details_hint_url">Fill Personal Web Page </string>
     <string name="user_details_text_url">Web Page ID: </string>
-    
     <string name="user_details_hint_description">Fill Your Description</string>
     <string name="user_details_text_description">Description: </string>
     <string name="upload_from_gallery">Gallery</string>
@@ -80,10 +70,6 @@
     <string name="topic_string">Topic</string>
     <string name="content_preview">Módulo 1: A Importância do e-learning. A metodolog...SUMÁRIO: Questões preliminares ao modo de funciona...OJECTOS DE APRENDIZAGEM: Algumas questões e respostas preliminares Ways the Internet Has Changed Our World: Music</string>
     <string name="topic_title">Your Topic TItle</string>
-
-
-
-
-    
+    <string name="title_activity_main_activity1">MainActivity1</string>
 
 </resources>

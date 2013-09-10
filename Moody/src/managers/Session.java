@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-public class SessionManager {
+public class Session {
 	// Shared Preferences
 	SharedPreferences pref;
 
@@ -41,7 +41,7 @@ public class SessionManager {
 	// public static final String KEY_URL = "url";
 
 	// Constructor
-	public SessionManager(Context context) {
+	public Session(Context context) {
 		this._context = context;
 		pref = _context.getSharedPreferences(
 				MoodyConstants.MoodySession.PREF_NAME,

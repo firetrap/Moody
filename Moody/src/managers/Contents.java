@@ -18,11 +18,11 @@ import com.example.moody.R;
 
 import connections.DataAsyncTask;
 
-//ESTA CLASSE É DESNECESSARIA APENAS FOIR CRIADA DEVIDO AO BUG DO MOODLE NO FUTURO O ELSE ABAIXO IRA SER MOVIDO PARA O TOPICS FRAGMENT
+//ESTA CLASSE É DESNECESSARIA APENAS FOI CRIADA DEVIDO AO BUG DO MOODLE NO FUTURO O ELSE ABAIXO IRA SER MOVIDO PARA O TOPICS FRAGMENT
 public class Contents {
 
 	// Session Manager Class
-	SessionManager session;
+	Session session;
 
 	private JSONObject jsonObj;
 
@@ -31,7 +31,7 @@ public class Contents {
 	public JSONObject getCourseContent(String courseId, Resources resources,
 			Context context) {
 
-		session = new SessionManager(context);
+		session = new Session(context);
 
 		// ESTE IF SO FOI CRIADO DEVIDO AO NOSSO MOODLE ESTAR COM BUGS AO
 		// DEVOLVER OS COURSES CONTENTS SO DEVOLVER 50 CHARACTERES ENQUANTO O

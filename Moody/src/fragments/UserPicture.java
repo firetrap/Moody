@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import managers.DialogsManager;
+import managers.AlertDialogs;
 import model.MoodyConstants.ActivityCode;
 import model.MoodyMessage;
 import android.app.Activity;
@@ -27,7 +27,7 @@ import android.widget.Button;
 
 import com.example.moody.R;
 
-public class PictureDialogFragment extends DialogFragment {
+public class UserPicture extends DialogFragment {
 
 	// FOR GALLERY
 	private static final int PICTURE_GALLERY = 1;
@@ -66,7 +66,7 @@ public class PictureDialogFragment extends DialogFragment {
 			destination = new File(folder, name + ".jpg");
 		} else {
 			dismiss();
-			DialogsManager.showMessageDialog(getActivity(), new MoodyMessage(
+			AlertDialogs.showMessageDialog(getActivity(), new MoodyMessage(
 					"Login Error",
 					"Sdcard needed to store picture but not available"), false);
 		}

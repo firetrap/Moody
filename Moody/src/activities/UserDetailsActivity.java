@@ -2,8 +2,8 @@ package activities;
 
 import java.util.concurrent.ExecutionException;
 
-import managers.DialogsManager;
-import managers.SessionManager;
+import managers.AlertDialogs;
+import managers.Session;
 import model.MoodyConstants.MoodySession;
 import model.MoodyMessage;
 
@@ -49,7 +49,7 @@ public class UserDetailsActivity extends Activity
 		if (list != null)
 			initText(list);
 		else {
-			DialogsManager.showMessageDialog(this, new MoodyMessage(
+			AlertDialogs.showMessageDialog(this, new MoodyMessage(
 					"Moody Error", "An Error Ocurred Retrieving Data"),
 					new DialogInterface.OnClickListener() {
 
@@ -72,7 +72,7 @@ public class UserDetailsActivity extends Activity
 
 	public JSONObject getData() {
 		try {
-			SessionManager session = new SessionManager(getApplicationContext());
+			Session session = new Session(getApplicationContext());
 
 			String url = session.getValues(MoodySession.KEY_URL, null);
 			String token = session.getValues(MoodySession.KEY_TOKEN, null);

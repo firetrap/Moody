@@ -19,7 +19,7 @@ import com.example.moody.R;
  * @author Sérgio Andaluz Ramos
  * 
  */
-public final class DialogsManager {
+public final class AlertDialogs {
 
 	/**
 	 * 
@@ -47,7 +47,7 @@ public final class DialogsManager {
 	 * Construtor privado - Assegura que classe não é instanciavel.
 	 * 
 	 **/
-	private DialogsManager() {
+	private AlertDialogs() {
 		throw new AssertionError();
 	}
 

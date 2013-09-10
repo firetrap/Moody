@@ -1,8 +1,0 @@
-/**
- * 
- */
-/**
- * @author firetrap
- *
- */
-package interfaces;

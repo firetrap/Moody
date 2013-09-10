@@ -2,7 +2,7 @@ package fragments;
 
 import managers.Contents;
 import managers.DataStore;
-import managers.SessionManager;
+import managers.Session;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,19 +21,19 @@ import android.widget.TextView;
 
 import com.example.moody.R;
 
-public class TopicsPreviewFragment extends Fragment {
+public class TopicsPreview extends Fragment {
 
 	// Session Manager Class
-	SessionManager session;
+	Session session;
 	JSONObject jsonObject;
 
-	public TopicsPreviewFragment() {
+	public TopicsPreview() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		session = new SessionManager(getActivity().getApplicationContext());
+		session = new Session(getActivity().getApplicationContext());
 
 		String courseName = getArguments().getString("courseName");
 		String courseId = getArguments().getString("courseId");

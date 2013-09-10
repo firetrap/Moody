@@ -56,6 +56,10 @@
             android:name="activities.UserDetailsActivity"
             android:label="@string/title_activity_user_details" >
         </activity>
+        <activity
+            android:name="activities.MainActivity1"
+            android:label="@string/title_activity_main_activity1" >
+        </activity>
     </application>
 
 </manifest>

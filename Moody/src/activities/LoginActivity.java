@@ -6,8 +6,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
-import managers.DialogsManager;
-import managers.SessionManager;
+import managers.AlertDialogs;
+import managers.Session;
 import model.MoodyConstants.MoodySession;
 import model.MoodyMessage;
 
@@ -73,13 +73,13 @@ public class LoginActivity extends Activity {
 	private String jsonFormat = MoodySession.KEY_JSONFORMAT;
 
 	// Session Manager Class
-	SessionManager session;
+	Session session;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		session = new SessionManager(getApplicationContext());
+		session = new Session(getApplicationContext());
 		Toast.makeText(getApplicationContext(),
 				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
 				.show();
@@ -273,7 +273,7 @@ public class LoginActivity extends Activity {
 			// form field with an error.
 
 			focusView.requestFocus();
-			DialogsManager.showMessageDialog(this, new MoodyMessage(
+			AlertDialogs.showMessageDialog(this, new MoodyMessage(
 					"Login Error", error), false);
 
 		} else {
@@ -374,7 +374,7 @@ public class LoginActivity extends Activity {
 			if (success) {
 				// Session Manager and shared pref send to shared pref:
 				// user-name, user-token, User-id in database
-				session = new SessionManager(getApplicationContext());
+				session = new Session(getApplicationContext());
 				session.createLoginSession(mUser, finalToken, UserId, mUrl);
 
 				Intent intent = new Intent(getApplicationContext(),

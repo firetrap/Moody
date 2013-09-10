@@ -1,14 +1,14 @@
 package activities;
 
-import fragments.PictureDialogFragment;
-import fragments.TopicsPreviewFragment;
+import fragments.TopicsPreview;
+import fragments.UserPicture;
 import interfaces.InterfaceDialogFrag;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
-import managers.SessionManager;
+import managers.Session;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
 import model.MoodyConstants.MoodySession;
@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -28,6 +29,8 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,20 +41,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.example.moody.R;
 
 import connections.DataAsyncTask;
 
-public class MainActivity extends SherlockActivity implements OnClickListener,
+public class MainActivity extends Activity implements OnClickListener,
 		InterfaceDialogFrag {
 
 	private DrawerLayout myDrawerLayout;
 
 	// Session Manager Class
-	SessionManager session;
+	Session session;
 
 	private HashMap<String, String> organizedCourses = new HashMap<String, String>();
 
@@ -59,10 +59,11 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// shared pref
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		session = new SessionManager(getApplicationContext());
+		// shared pref
+		session = new Session(getApplicationContext());
 		myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 		populateUsername();
@@ -83,20 +84,11 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 
 	public void initContentPreview(Bundle bundle) {
 
-		// TopicsPreviewFragment fragment = (TopicsPreviewFragment)
-		// getFragmentManager()
-		// .findFragmentById(R.id.main_content_fragment);
-		// fragment.getView().setVisibility(View.VISIBLE);
-		// fragment.setArguments(bundle);
-		//
-		// if (fragment != null && fragment.isInLayout()) {
-		//
-		// }
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 
-		TopicsPreviewFragment fragment = new TopicsPreviewFragment();
+		TopicsPreview fragment = new TopicsPreview();
 		fragment.setArguments(bundle);
 		fragmentTransaction.replace(R.id.mainFragment, fragment);
 		fragmentTransaction.commit();
@@ -107,25 +99,24 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// // Inflate the menu; this adds items to the action bar if it is
 		// present.
-		getSupportMenuInflater().inflate(R.menu.activity_main, menu);
+		getMenuInflater().inflate(R.menu.activity_main, menu);
 
 		return true;
 
 	}
 
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// switch (item.getItemId()) {
-		// case R.id.menu_settings:
-		// Intent intent = new Intent(this, LoginActivity.class);
-		// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		// startActivity(intent);
-		// break;
+		// // switch (item.getItemId()) {
+		// // case R.id.menu_settings:
+		// // Intent intent = new Intent(this, LoginActivity.class);
+		// // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		// // startActivity(intent);
+		// // break;
+		// //
+		// // default:
+		// // return super.onOptionsItemSelected(item);
+		// // }
 		//
-		// default:
-		// return super.onOptionsItemSelected(item);
-		// }
-
 		return true;
 	}
 
@@ -311,7 +302,7 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 		case R.id.login_image_button:
 
 			FragmentManager fm = getFragmentManager();
-			PictureDialogFragment userDetailsDialog = new PictureDialogFragment();
+			UserPicture userDetailsDialog = new UserPicture();
 			userDetailsDialog.setRetainInstance(true);
 			userDetailsDialog.show(fm, "fragment_name");
 
@@ -358,8 +349,6 @@ public class MainActivity extends SherlockActivity implements OnClickListener,
 			Toast.makeText(getApplicationContext(), "CLOUD", Toast.LENGTH_SHORT)
 					.show();
 
-			
-			
 			// Intent intents = getPackageManager().getLaunchIntentForPackage(
 			// "com.dropbox.android");
 			// intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
