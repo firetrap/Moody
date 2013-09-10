@@ -55,8 +55,8 @@ public class Contents {
 
 				// STORE COURSE JSON DATA CONTENT FOR FUTURE ACCESS
 				DataStore data = new DataStore();
-				data.storeJsonData(context, jsonObj,
-						("coursesContent" + courseId));
+				String fileName = "coursesContent-" + courseId;
+				data.storeJsonData(context, jsonObj, fileName);
 
 				return jsonObj;
 
@@ -84,7 +84,9 @@ public class Contents {
 
 				// STORE COURSE JSON DATA CONTENT FOR FUTURE ACCESS
 				DataStore data = new DataStore();
-				data.storeJsonData(context, jsonObj, "coursesContent");
+				String fileName = "coursesContent-" + courseId;
+
+				data.storeJsonData(context, jsonObj, fileName);
 
 				return jsonObj;
 			} catch (InterruptedException e) {

@@ -24,8 +24,8 @@ public class DataStore {
 		try {
 
 			File file = new File(context.getCacheDir(), "");
-			FileOutputStream fileO = new FileOutputStream(file + "/" + name
-					+ ".data");
+			String filePath = "/" + name + ".data";
+			FileOutputStream fileO = new FileOutputStream(file + filePath);
 			ObjectOutput out = new ObjectOutputStream(fileO);
 
 			// As JSON object is not serializable so it will be converted to
@@ -45,11 +45,11 @@ public class DataStore {
 
 	// Load in an object
 	public JSONObject getJsonData(Context context, String name) {
-
+		String filePath = "/" + name + ".data";
 		try {
+			
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(
-					new File(new File(context.getCacheDir(), "") + "/" + name
-							+ ".data")));
+					new File(new File(context.getCacheDir(), "") + filePath)));
 
 			String jsonString = (String) in.readObject();
 			JSONObject jsonObject = new JSONObject(jsonString);
