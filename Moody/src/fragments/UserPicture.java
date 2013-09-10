@@ -32,14 +32,78 @@ public class UserPicture extends DialogFragment {
 	// FOR GALLERY
 	private static final int PICTURE_GALLERY = 1;
 
-	private String selectedImagePath;
-
-	private String fileManagerImagePath;
-
 	// FOR CAMERA
 	private static final int REQUEST_IMAGE = 2;
-	File destination;
+
 	String cameraImagePath;
+
+	File destination;
+	private String fileManagerImagePath;
+	private String selectedImagePath;
+
+	public String getPath(Uri uri) {
+		String selectedImagePath;
+		// 1:MEDIA GALLERY --- query from MediaStore.Images.Media.DATA
+		final String[] projection = { MediaColumns.DATA };
+		final Cursor cursor = getActivity().getContentResolver().query(uri,
+				projection, null, null, null);
+		if (cursor != null) {
+			final int column_index = cursor
+					.getColumnIndexOrThrow(MediaColumns.DATA);
+			cursor.moveToFirst();
+			selectedImagePath = cursor.getString(column_index);
+		} else {
+			selectedImagePath = null;
+		}
+
+		if (selectedImagePath == null) {
+			// 2:OI FILE Manager --- call method: uri.getPath()
+			selectedImagePath = uri.getPath();
+		}
+		return selectedImagePath;
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		getActivity();
+		if (resultCode == Activity.RESULT_OK) {
+			if (requestCode == PICTURE_GALLERY) {
+				final Uri selectedImageUri = data.getData();
+
+				// OI FILE Manager
+				fileManagerImagePath = selectedImageUri.getPath();
+
+				// MEDIA GALLERY
+				selectedImagePath = getPath(selectedImageUri);
+
+				final InterfaceDialogFrag activity = (InterfaceDialogFrag) getActivity();
+				activity.onFinishEditDialog(selectedImagePath,
+						ActivityCode.DIALOG_FRAG_USER_PIC);
+				this.dismiss();
+			}
+
+			if (requestCode == REQUEST_IMAGE) {
+
+				try {
+					new FileInputStream(destination);
+				} catch (final FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				final BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inSampleSize = 10;
+				cameraImagePath = destination.getAbsolutePath();
+
+				final InterfaceDialogFrag activity = (InterfaceDialogFrag) getActivity();
+				activity.onFinishEditDialog(cameraImagePath,
+						ActivityCode.DIALOG_FRAG_USER_PIC);
+				this.dismiss();
+
+			}
+		}
+
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,17 +115,17 @@ public class UserPicture extends DialogFragment {
 		getDialog().getWindow().requestFeature(STYLE_NO_TITLE);
 		// getDialog().setTitle("User details");
 
-		View view = inflater.inflate(R.layout.details_dialog, container);
-		File folder = new File(Environment.getExternalStorageDirectory()
+		final View view = inflater.inflate(R.layout.details_dialog, container);
+		final File folder = new File(Environment.getExternalStorageDirectory()
 				+ "/.moody");
-		String name = "thumbnail";
+		final String name = "thumbnail";
 
 		// If ./moody doesn't exists create it
 		boolean success = true;
 		if (!folder.exists()) {
 			success = folder.mkdir();
 		}
-		
+
 		if (success) {
 			destination = new File(folder, name + ".jpg");
 		} else {
@@ -76,7 +140,7 @@ public class UserPicture extends DialogFragment {
 
 					@Override
 					public void onClick(View v) {
-						Intent intent = new Intent();
+						final Intent intent = new Intent();
 						intent.setType("image/*");
 						intent.setAction(Intent.ACTION_GET_CONTENT);
 						startActivityForResult(
@@ -98,7 +162,7 @@ public class UserPicture extends DialogFragment {
 						// startActivity(intent);
 						// dismiss();
 
-						Intent intent = new Intent(
+						final Intent intent = new Intent(
 								MediaStore.ACTION_IMAGE_CAPTURE);
 						intent.putExtra(MediaStore.EXTRA_OUTPUT,
 								Uri.fromFile(destination));
@@ -108,69 +172,6 @@ public class UserPicture extends DialogFragment {
 				});
 
 		return view;
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		getActivity();
-		if (resultCode == Activity.RESULT_OK) {
-			if (requestCode == PICTURE_GALLERY) {
-				Uri selectedImageUri = data.getData();
-
-				// OI FILE Manager
-				fileManagerImagePath = selectedImageUri.getPath();
-
-				// MEDIA GALLERY
-				selectedImagePath = getPath(selectedImageUri);
-
-				InterfaceDialogFrag activity = (InterfaceDialogFrag) getActivity();
-				activity.onFinishEditDialog(selectedImagePath,
-						ActivityCode.DIALOG_FRAG_USER_PIC);
-				this.dismiss();
-			}
-
-			if (requestCode == REQUEST_IMAGE) {
-
-				try {
-					FileInputStream in = new FileInputStream(destination);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inSampleSize = 10;
-				cameraImagePath = destination.getAbsolutePath();
-
-				InterfaceDialogFrag activity = (InterfaceDialogFrag) getActivity();
-				activity.onFinishEditDialog(cameraImagePath,
-						ActivityCode.DIALOG_FRAG_USER_PIC);
-				this.dismiss();
-
-			}
-		}
-
-	}
-
-	public String getPath(Uri uri) {
-		String selectedImagePath;
-		// 1:MEDIA GALLERY --- query from MediaStore.Images.Media.DATA
-		String[] projection = { MediaColumns.DATA };
-		Cursor cursor = getActivity().getContentResolver().query(uri,
-				projection, null, null, null);
-		if (cursor != null) {
-			int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
-			cursor.moveToFirst();
-			selectedImagePath = cursor.getString(column_index);
-		} else {
-			selectedImagePath = null;
-		}
-
-		if (selectedImagePath == null) {
-			// 2:OI FILE Manager --- call method: uri.getPath()
-			selectedImagePath = uri.getPath();
-		}
-		return selectedImagePath;
 	}
 
 }

@@ -17,103 +17,56 @@ import android.content.Context;
 
 public class DataStore {
 
-	// Save the JSONObject in cacheDir
-	public void storeJsonData(Context context, JSONObject jsonObject,
-			String name) {
-
-		try {
-
-			File file = new File(context.getCacheDir(), "");
-			String filePath = "/" + name + ".data";
-			FileOutputStream fileO = new FileOutputStream(file + filePath);
-			ObjectOutput out = new ObjectOutputStream(fileO);
-
-			// As JSON object is not serializable so it will be converted to
-			// string
-			String jsonString = jsonObject.toString();
-			out.writeObject(jsonString);
-			out.close();
-		} catch (FileNotFoundException e) {
-			e.getMessage();
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.getMessage();
-			e.printStackTrace();
-		}
-
-	}
 
 	// Load in an object
 	public JSONObject getJsonData(Context context, String name) {
-		String filePath = "/" + name + ".data";
+		final String filePath = "/" + name + ".data";
 		try {
-			
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream(
-					new File(new File(context.getCacheDir(), "") + filePath)));
 
-			String jsonString = (String) in.readObject();
-			JSONObject jsonObject = new JSONObject(jsonString);
+			final ObjectInputStream in = new ObjectInputStream(
+					new FileInputStream(new File(new File(
+							context.getCacheDir(), "") + filePath)));
+
+			final String jsonString = (String) in.readObject();
+			final JSONObject jsonObject = new JSONObject(jsonString);
 			in.close();
 			return jsonObject;
 
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			e.printStackTrace();
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	// Save the course organized by id->name
-	public void storeCourses(Context context,
-			HashMap<String, String> organizedCourses, String name) {
+	// Save the JSONObject in cacheDir
+	public void storeJsonData(Context context, JSONObject jsonObject,
+			String name) {
 
 		try {
 
-			File file = new File(context.getCacheDir(), "");
-			FileOutputStream fileO = new FileOutputStream(file + "/" + name
-					+ ".data");
-			ObjectOutput out = new ObjectOutputStream(fileO);
+			final File file = new File(context.getCacheDir(), "");
+			final String filePath = "/" + name + ".data";
+			final FileOutputStream fileO = new FileOutputStream(file + filePath);
+			final ObjectOutput out = new ObjectOutputStream(fileO);
 
-			out.writeObject(organizedCourses);
+			// As JSON object is not serializable so it will be converted to
+			// string
+			final String jsonString = jsonObject.toString();
+			out.writeObject(jsonString);
 			out.close();
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			e.getMessage();
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.getMessage();
 			e.printStackTrace();
 		}
 
-	}
-
-	// Load courses organized
-	public HashMap<String, String> getCourses(Context context, String name) {
-
-		try {
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream(
-					new File(new File(context.getCacheDir(), "") + "/" + name
-							+ ".data")));
-
-			@SuppressWarnings("unchecked")
-			HashMap<String, String> courses = (HashMap<String, String>) in
-					.readObject();
-			in.close();
-			return courses;
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		catch (Exception e) {
-			// TODO: handle exception
-		}
-		return null;
 	}
 
 }

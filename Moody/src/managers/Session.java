@@ -10,14 +10,14 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 public class Session {
-	// Shared Preferences
-	SharedPreferences pref;
+	// Context
+	Context _context;
 
 	// Editor for Shared preferences
 	Editor editor;
 
-	// Context
-	Context _context;
+	// Shared Preferences
+	SharedPreferences pref;
 
 	// // Shared pref mode
 	// int PRIVATE_MODE = 0;
@@ -59,6 +59,27 @@ public class Session {
 	}
 
 	/**
+	 * Check login method will check user login status If false it will redirect
+	 * user to login page Else won't do anything
+	 * */
+	public void checkLogin() {
+		// Check login status
+		if (!this.isLoggedIn()) {
+			// user is not logged in redirect him to Login Activity
+			final Intent i = new Intent(_context, LoginActivity.class);
+			// Closing all the Activities
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+			// Add new Flag to start new Activity
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+			// Staring Login Activity
+			_context.startActivity(i);
+		}
+
+	}
+
+	/**
 	 * Create login session
 	 * 
 	 * @param mUrl
@@ -84,38 +105,11 @@ public class Session {
 		editor.commit();
 	}
 
-	public String getValues(String name, String oppp) {
-
-		return pref.getString(name, oppp);
-
-	}
-
-	/**
-	 * Check login method will check user login status If false it will redirect
-	 * user to login page Else won't do anything
-	 * */
-	public void checkLogin() {
-		// Check login status
-		if (!this.isLoggedIn()) {
-			// user is not logged in redirect him to Login Activity
-			Intent i = new Intent(_context, LoginActivity.class);
-			// Closing all the Activities
-			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-			// Add new Flag to start new Activity
-			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-			// Staring Login Activity
-			_context.startActivity(i);
-		}
-
-	}
-
 	/**
 	 * Get stored session data
 	 * */
 	public HashMap<String, String> getUserDetails() {
-		HashMap<String, String> user = new HashMap<String, String>();
+		final HashMap<String, String> user = new HashMap<String, String>();
 		// user name
 		user.put(MoodyConstants.MoodySession.KEY_NAME,
 				pref.getString(MoodyConstants.MoodySession.KEY_NAME, null));
@@ -136,24 +130,10 @@ public class Session {
 		return user;
 	}
 
-	/**
-	 * Clear session details
-	 * */
-	public void logoutUser() {
-		// Clearing all data from Shared Preferences
-		editor.clear();
-		editor.commit();
+	public String getValues(String name, String oppp) {
 
-//		// After logout redirect user to Main Activity
-//		Intent i = new Intent(_context, LoginActivity.class);
-//		// Closing all the Activities
-//		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//
-//		// Add new Flag to start new Activity
-//		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//		// Staring Main Activity
-//		_context.startActivity(i);
+		return pref.getString(name, oppp);
+
 	}
 
 	/**
@@ -162,5 +142,25 @@ public class Session {
 	// Get Login State
 	public boolean isLoggedIn() {
 		return pref.getBoolean(MoodyConstants.MoodySession.IS_LOGIN, false);
+	}
+
+	/**
+	 * Clear session details
+	 * */
+	public void logoutUser() {
+		// Clearing all data from Shared Preferences
+		editor.clear();
+		editor.commit();
+
+		// // After logout redirect user to Main Activity
+		// Intent i = new Intent(_context, LoginActivity.class);
+		// // Closing all the Activities
+		// i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		//
+		// // Add new Flag to start new Activity
+		// i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		//
+		// // Staring Main Activity
+		// _context.startActivity(i);
 	}
 }

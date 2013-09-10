@@ -44,15 +44,6 @@ public final class AlertDialogs {
 
 	/**
 	 * 
-	 * Construtor privado - Assegura que classe não é instanciavel.
-	 * 
-	 **/
-	private AlertDialogs() {
-		throw new AssertionError();
-	}
-
-	/**
-	 * 
 	 * Método showMessageDialog - Para mensagens de erro, sucesso ou simples
 	 * Debugging
 	 * 
@@ -69,7 +60,8 @@ public final class AlertDialogs {
 	public static void showMessageDialog(Activity context,
 			MoodyMessage mensagem, Boolean status) {
 
-		showMessageDialog(context, mensagem, new DialogInterface.OnClickListener() {
+		showMessageDialog(context, mensagem,
+				new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -82,7 +74,8 @@ public final class AlertDialogs {
 	}
 
 	public static void showMessageDialog(Activity context,
-			MoodyMessage mensagem, DialogInterface.OnClickListener onClick, Boolean status) {
+			MoodyMessage mensagem, DialogInterface.OnClickListener onClick,
+			Boolean status) {
 
 		builder = new AlertDialog.Builder(context);
 
@@ -99,11 +92,19 @@ public final class AlertDialogs {
 		alertDialog = getBuilder().create();
 
 		getAlertDialog().setButton(DialogInterface.BUTTON_POSITIVE,
-				context.getString(R.string.moodyButtonOk),
-				onClick);
+				context.getString(R.string.moodyButtonOk), onClick);
 
 		getAlertDialog().show();
 
 	}
-	
+
+	/**
+	 * 
+	 * Construtor privado - Assegura que classe não é instanciavel.
+	 * 
+	 **/
+	private AlertDialogs() {
+		throw new AssertionError();
+	}
+
 }

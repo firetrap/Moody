@@ -26,12 +26,30 @@ public class UserDetailsActivity extends Activity
 // implements TextWatcher
 {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_user_details);
+	public JSONObject getData() {
+		try {
+			final Session session = new Session(getApplicationContext());
 
-		initComponents();
+			final String url = session.getValues(MoodySession.KEY_URL, null);
+			final String token = session
+					.getValues(MoodySession.KEY_TOKEN, null);
+			final String id = session.getValues(MoodySession.KEY_ID, null);
+			final String con = String.format(MoodySession.KEY_PARAMS, url,
+					token, "core_user_get_users_by_id&userids[0]", id
+							+ MoodySession.KEY_JSONFORMAT);
+
+			return new DataAsyncTask().execute(con, "json").get();
+		} catch (final InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	public void initComponents() {
@@ -44,11 +62,11 @@ public class UserDetailsActivity extends Activity
 		 * ((EditText)findViewById
 		 * (R.id.editText_email)).addTextChangedListener(this);
 		 **/
-		JSONObject list = getData();
+		final JSONObject list = getData();
 
-		if (list != null)
+		if (list != null) {
 			initText(list);
-		else {
+		} else {
 			AlertDialogs.showMessageDialog(this, new MoodyMessage(
 					"Moody Error", "An Error Ocurred Retrieving Data"),
 					new DialogInterface.OnClickListener() {
@@ -63,53 +81,22 @@ public class UserDetailsActivity extends Activity
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.user_details, menu);
-		return true;
-	}
-
-	public JSONObject getData() {
-		try {
-			Session session = new Session(getApplicationContext());
-
-			String url = session.getValues(MoodySession.KEY_URL, null);
-			String token = session.getValues(MoodySession.KEY_TOKEN, null);
-			String id = session.getValues(MoodySession.KEY_ID, null);
-			String con = String.format(MoodySession.KEY_PARAMS, url, token,
-					"core_user_get_users_by_id&userids[0]", id
-							+ MoodySession.KEY_JSONFORMAT);
-
-			return new DataAsyncTask().execute(con, "json").get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
 	public void initText(JSONObject list) {
 		try {
-			JSONArray coursesArray = list.getJSONArray("array");
+			final JSONArray coursesArray = list.getJSONArray("array");
 
-			String[] attributes = { "fullname", "firstname", "lastname",
+			final String[] attributes = { "fullname", "firstname", "lastname",
 					"email", "address", "phone1", "phone2", "description",
 					"url", "skype", "yahoo" };
 
-			int[] textIds = { R.id.textView_full_name, R.id.editText_firstname,
-					R.id.editText_lastname, R.id.editText_email,
-					R.id.editText_address, R.id.editText_phonenumber,
-					R.id.editText_mobilephonenumber, R.id.editText_description,
-					R.id.editText_url, R.id.editText_skype, R.id.editText_yahoo };
+			final int[] textIds = { R.id.textView_full_name,
+					R.id.editText_firstname, R.id.editText_lastname,
+					R.id.editText_email, R.id.editText_address,
+					R.id.editText_phonenumber, R.id.editText_mobilephonenumber,
+					R.id.editText_description, R.id.editText_url,
+					R.id.editText_skype, R.id.editText_yahoo };
 
-			int[] layoutIds = { R.id.relativeLayout_fullname,
+			final int[] layoutIds = { R.id.relativeLayout_fullname,
 					R.id.linearLayout_firstname, R.id.linearLayout_lastname,
 					R.id.linearLayout_email, R.id.linearLayout_address,
 					R.id.linearLayout_phonenumber,
@@ -118,7 +105,7 @@ public class UserDetailsActivity extends Activity
 					R.id.linearLayout_skype, R.id.linearLayout_yahoo };
 
 			for (int i = 0; i < coursesArray.length(); i++) {
-				JSONObject arrayCursor = coursesArray.getJSONObject(i);
+				final JSONObject arrayCursor = coursesArray.getJSONObject(i);
 
 				for (int j = 0; j < attributes.length; j++) {
 					// String asdsa = (String) arrayCursor.get(attributes[j]);
@@ -130,22 +117,23 @@ public class UserDetailsActivity extends Activity
 					// esconde as opções.
 					try {
 						obj = arrayCursor.get(attributes[j]);
-					} catch (Exception ex) {
+					} catch (final Exception ex) {
 
 					}
 
-					if (isValidObject(obj))
+					if (isValidObject(obj)) {
 						((TextView) findViewById(textIds[j]))
 								.setText((String) arrayCursor
 										.get(attributes[j]));
-					else
+					} else {
 						findViewById(layoutIds[j]).setVisibility(View.GONE);
+					}
 
 				}
 
 			}
 
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -153,9 +141,22 @@ public class UserDetailsActivity extends Activity
 	}
 
 	public boolean isValidObject(Object object) {
-		return ((object != null) && (!((String) object).isEmpty()));
+		return object != null && !((String) object).isEmpty();
 	}
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_user_details);
 
+		initComponents();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.user_details, menu);
+		return true;
+	}
 
 }

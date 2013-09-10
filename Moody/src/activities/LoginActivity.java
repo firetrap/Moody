@@ -43,98 +43,106 @@ import connections.DataAsyncTask;
 public class LoginActivity extends Activity {
 
 	/**
+	 * Represents an asynchronous login/registration task used to authenticate
+	 * the user.
+	 */
+	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			// TODO: attempt authentication against a network service.
+			Log.d("MoodyDebug", "Entrou no Async");
+			URL url = null;
+
+			try {
+				url = new URL(mUrl);
+				Log.d("AsyncTask", url.toString());
+			} catch (final MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.d("MoodyErrorConnection", e.toString());
+				return false;
+			}
+			try {
+				Log.d("MoodyDebug", "Connect");
+				final HttpURLConnection con = (HttpURLConnection) url
+						.openConnection();
+				con.connect();
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.d("MoodyDebug", "Cant Connect");
+				return false;
+
+			}
+
+			return true;
+
+		}
+
+		@Override
+		protected void onCancelled() {
+			mAuthTask = null;
+			showProgress(false);
+		}
+
+		@Override
+		protected void onPostExecute(final Boolean success) {
+			mAuthTask = null;
+			showProgress(false);
+
+			if (success) {
+				// Session Manager and shared pref send to shared pref:
+				// user-name, user-token, User-id in database
+				session = new Session(getApplicationContext());
+				session.createLoginSession(mUser, finalToken, UserId, mUrl);
+
+				final Intent intent = new Intent(getApplicationContext(),
+						MainActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				finish();
+			} else {
+				Log.d("MoodyDebug", "onPOstExecute-FAILED");
+				mPasswordView
+
+				.setError(getString(R.string.error_incorrect_password));
+				mPasswordView.requestFocus();
+			}
+		}
+	}
+
+	/**
 	 * The default email to populate the email field with.
 	 */
 	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
 
+	private String finalToken = "";
+	private JSONObject getJson;
+	private String jsonFormat = MoodySession.KEY_JSONFORMAT;
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
 
+	private View mLoginFormView;
+	private TextView mLoginStatusMessageView;
+	private View mLoginStatusView;
+	private String mPassword;
+	private EditText mPasswordView;
+	private String mToken;
 	// Values for username and password at the time of the login attempt.
 	private String mUrl;
-	private String mToken;
-	private String mUser;
-	private String mPassword;
-
 	// UI references.
 	private EditText mUrlView;
+	private String mUser;
 	private EditText mUserView;
-	private EditText mPasswordView;
-	private View mLoginFormView;
-	private View mLoginStatusView;
-	private TextView mLoginStatusMessageView;
-	private String finalToken = "";
-	private String url = "";
-	private String UserId = "";
-	private JSONObject getJson;
-
-	private String jsonFormat = MoodySession.KEY_JSONFORMAT;
 
 	// Session Manager Class
 	Session session;
 
+	private String url = "";
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		session = new Session(getApplicationContext());
-		Toast.makeText(getApplicationContext(),
-				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
-				.show();
-
-		if (session.isLoggedIn()) {
-			Intent intent = new Intent(getApplicationContext(),
-					MainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			finish();
-
-		} else {
-
-			setContentView(R.layout.activity_login);
-
-			// Set up the login form.
-			mUrlView = (EditText) findViewById(R.id.prompt_url);
-			mUser = getIntent().getStringExtra(EXTRA_EMAIL);
-			mUserView = (EditText) findViewById(R.id.username);
-			mUserView.setText(mUser);
-
-			mPasswordView = (EditText) findViewById(R.id.password);
-			mPasswordView
-					.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-						@Override
-						public boolean onEditorAction(TextView textView,
-								int id, KeyEvent keyEvent) {
-							if (id == R.id.login || id == EditorInfo.IME_NULL) {
-								attemptLogin();
-								return true;
-							}
-							return false;
-						}
-					});
-
-			mLoginFormView = findViewById(R.id.login_form);
-			mLoginStatusView = findViewById(R.id.login_status);
-			mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-
-			findViewById(R.id.sign_in_button).setOnClickListener(
-					new View.OnClickListener() {
-						@Override
-						public void onClick(View view) {
-							attemptLogin();
-						}
-					});
-		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
-	}
+	private String UserId = "";
 
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
@@ -233,13 +241,13 @@ public class LoginActivity extends Activity {
 					}
 				}
 
-			} catch (InterruptedException e1) {
+			} catch (final InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			} catch (ExecutionException e1) {
+			} catch (final ExecutionException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			} catch (JSONException e) {
+			} catch (final JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -255,13 +263,13 @@ public class LoginActivity extends Activity {
 				getJson = new DataAsyncTask().execute(url, "json").get();
 				UserId = Integer.toString((Integer) getJson.get("userid"));
 
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (ExecutionException e) {
+			} catch (final ExecutionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (JSONException e) {
+			} catch (final JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -288,6 +296,71 @@ public class LoginActivity extends Activity {
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		finish();
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		session = new Session(getApplicationContext());
+		Toast.makeText(getApplicationContext(),
+				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
+				.show();
+
+		if (session.isLoggedIn()) {
+			final Intent intent = new Intent(getApplicationContext(),
+					MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			finish();
+
+		} else {
+
+			setContentView(R.layout.activity_login);
+
+			// Set up the login form.
+			mUrlView = (EditText) findViewById(R.id.prompt_url);
+			mUser = getIntent().getStringExtra(EXTRA_EMAIL);
+			mUserView = (EditText) findViewById(R.id.username);
+			mUserView.setText(mUser);
+
+			mPasswordView = (EditText) findViewById(R.id.password);
+			mPasswordView
+					.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+						@Override
+						public boolean onEditorAction(TextView textView,
+								int id, KeyEvent keyEvent) {
+							if (id == R.id.login || id == EditorInfo.IME_NULL) {
+								attemptLogin();
+								return true;
+							}
+							return false;
+						}
+					});
+
+			mLoginFormView = findViewById(R.id.login_form);
+			mLoginStatusView = findViewById(R.id.login_status);
+			mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+
+			findViewById(R.id.sign_in_button).setOnClickListener(
+					new View.OnClickListener() {
+						@Override
+						public void onClick(View view) {
+							attemptLogin();
+						}
+					});
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.login, menu);
+		return true;
+	}
+
 	/**
 	 * Shows the progress UI and hides the login form.
 	 */
@@ -297,7 +370,7 @@ public class LoginActivity extends Activity {
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			int shortAnimTime = getResources().getInteger(
+			final int shortAnimTime = getResources().getInteger(
 					android.R.integer.config_shortAnimTime);
 
 			mLoginStatusView.setVisibility(View.VISIBLE);
@@ -327,79 +400,5 @@ public class LoginActivity extends Activity {
 			mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
-	}
-
-	/**
-	 * Represents an asynchronous login/registration task used to authenticate
-	 * the user.
-	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-			Log.d("MoodyDebug", "Entrou no Async");
-			URL url = null;
-
-			try {
-				url = new URL(mUrl);
-				Log.d("AsyncTask", url.toString());
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				Log.d("MoodyErrorConnection", e.toString());
-				return false;
-			}
-			try {
-				Log.d("MoodyDebug", "Connect");
-				HttpURLConnection con = (HttpURLConnection) url
-						.openConnection();
-				con.connect();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				Log.d("MoodyDebug", "Cant Connect");
-				return false;
-
-			}
-
-			return true;
-
-		}
-
-		@Override
-		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
-			showProgress(false);
-
-			if (success) {
-				// Session Manager and shared pref send to shared pref:
-				// user-name, user-token, User-id in database
-				session = new Session(getApplicationContext());
-				session.createLoginSession(mUser, finalToken, UserId, mUrl);
-
-				Intent intent = new Intent(getApplicationContext(),
-						MainActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-				finish();
-			} else {
-				Log.d("MoodyDebug", "onPOstExecute-FAILED");
-				mPasswordView
-
-				.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
-			}
-		}
-
-		@Override
-		protected void onCancelled() {
-			mAuthTask = null;
-			showProgress(false);
-		}
-	}
-
-	@Override
-	public void onBackPressed() {
-		finish();
 	}
 }

@@ -2,14 +2,12 @@ package model;
 
 /**
  * 
- * MoodyMessage
- * 	- Classe abstrata, mãe das mensagens do Moody.
+ * MoodyMessage - Classe abstrata, mãe das mensagens do Moody.
  * 
  * @author MoodyProject Team
- *
+ * 
  */
 public class MoodyMessage {
-
 
 	/**
 	 * 
@@ -17,9 +15,38 @@ public class MoodyMessage {
 	 * 
 	 **/
 
-	private String 	assunto;
-	private String 	corpo;
+	private String assunto;
+	private String corpo;
 
+	/**
+	 * 
+	 * Construtor Público com 1 parâmetros.
+	 * 
+	 * @param mensagem
+	 *            - Conteúdo da mensagem.
+	 * 
+	 **/
+	public MoodyMessage(String corpo) {
+
+		initiateAttributes("Moody Moodle App", corpo);
+
+	}
+
+	/**
+	 * 
+	 * Construtor Público com 2 parâmetros.
+	 * 
+	 * @param assunto
+	 *            - Assunto da Mensagem.
+	 * @param mensagem
+	 *            - Conteúdo da mensagem.
+	 * 
+	 **/
+	public MoodyMessage(String assunto, String corpo) {
+
+		initiateAttributes(assunto, corpo);
+
+	}
 
 	/**
 	 * 
@@ -27,8 +54,30 @@ public class MoodyMessage {
 	 * 
 	 **/
 
-	public 	String 	getAssunto() 					{ return assunto; }
-	public 	String 	getCorpo() 						{ return corpo; }
+	public String getAssunto() {
+		return assunto;
+	}
+
+	public String getCorpo() {
+		return corpo;
+	}
+
+	/**
+	 * 
+	 * Método que inicializa os atributos da mensagem.
+	 * 
+	 * @param assunto
+	 *            - Assunto da Mensagem.
+	 * @param mensagem
+	 *            - Conteúdo da mensagem.
+	 * 
+	 **/
+	public void initiateAttributes(String assunto, String corpo) {
+
+		setAssunto(assunto);
+		setCorpo(corpo);
+
+	}
 
 	/**
 	 * 
@@ -36,51 +85,11 @@ public class MoodyMessage {
 	 * 
 	 **/
 
-	public 	void 	setAssunto(String assunto) 		{ this.assunto = assunto; }
-	public 	void 	setCorpo(String corpo) 			{ this.corpo = corpo; }
-
-
-	/**
-	 * 
-	 * Construtor Público com 2 parâmetros.
-	 * 
-	 * @param assunto 	- Assunto da Mensagem.
-	 * @param mensagem  - Conteúdo da mensagem.
-	 * 
-	 **/
-	public MoodyMessage(String assunto, String corpo) { 
-
-		initiateAttributes(assunto, corpo); 
-
+	public void setAssunto(String assunto) {
+		this.assunto = assunto;
 	}
 
-
-	/**
-	 * 
-	 * Construtor Público com 1 parâmetros.
-	 * 
-	 * @param mensagem  - Conteúdo da mensagem.
-	 *  
-	 **/
-	public MoodyMessage(String corpo) { 
-
-		initiateAttributes("Moody Moodle App", corpo); 
-
-	}
-
-
-	/**
-	 * 
-	 * Método que inicializa os atributos da mensagem.
-	 * 
-	 * @param assunto 	- Assunto da Mensagem.
-	 * @param mensagem  - Conteúdo da mensagem.
-	 * 
-	 **/
-	public void initiateAttributes(String assunto, String corpo){
-
-		setAssunto(assunto);
-		setCorpo(corpo);
-
+	public void setCorpo(String corpo) {
+		this.corpo = corpo;
 	}
 }
