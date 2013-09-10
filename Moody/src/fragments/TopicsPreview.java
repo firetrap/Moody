@@ -40,9 +40,9 @@ public class TopicsPreview extends Fragment {
 		Context activityContext = getActivity().getApplicationContext();
 
 		// Always tries to get the JSON from cache if it doesn't exist it will
-		// return, so it will download from moodle site
+		// return null, so it will download from moodle site
 		jsonObject = new DataStore().getJsonData(activityContext,
-				"coursesContent");
+				("coursesContent" + courseId));
 		if (jsonObject == null) {
 			// Get the topics from internet in json
 			jsonObject = new Contents().getCourseContent(courseId,

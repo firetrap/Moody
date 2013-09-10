@@ -53,11 +53,11 @@ public class Contents {
 				jsonObj = new JSONObject();
 				jsonObj.put("array", new JSONArray(json));
 
-				//STORE COURSE JSON DATA CONTENT FOR FUTURE ACCESS
-				DataStore data = new DataStore(); 
-				data.storeJsonData(context, jsonObj, "coursesContent");
+				// STORE COURSE JSON DATA CONTENT FOR FUTURE ACCESS
+				DataStore data = new DataStore();
+				data.storeJsonData(context, jsonObj,
+						("coursesContent" + courseId));
 
-				
 				return jsonObj;
 
 			} catch (IOException e) {
@@ -82,10 +82,10 @@ public class Contents {
 			try {
 				jsonObj = new DataAsyncTask().execute(con, "json").get();
 
-				//STORE COURSE JSON DATA CONTENT FOR FUTURE ACCESS
-				DataStore data = new DataStore(); 
+				// STORE COURSE JSON DATA CONTENT FOR FUTURE ACCESS
+				DataStore data = new DataStore();
 				data.storeJsonData(context, jsonObj, "coursesContent");
-				
+
 				return jsonObj;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
