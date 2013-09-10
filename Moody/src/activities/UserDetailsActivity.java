@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
@@ -117,14 +118,19 @@ public class UserDetailsActivity extends Activity
 					// esconde as opções.
 					try {
 						obj = arrayCursor.get(attributes[j]);
+					} catch (final JSONException ex) {
+
 					} catch (final Exception ex) {
 
 					}
 
 					if (isValidObject(obj)) {
+						String text = (String) arrayCursor.get(attributes[j]);
+
 						((TextView) findViewById(textIds[j]))
-								.setText((String) arrayCursor
-										.get(attributes[j]));
+								.setText((attributes[j]
+										.equalsIgnoreCase("description")) ? Html
+										.fromHtml(text) : text);
 					} else {
 						findViewById(layoutIds[j]).setVisibility(View.GONE);
 					}
