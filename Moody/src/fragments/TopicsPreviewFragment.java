@@ -1,12 +1,8 @@
 package fragments;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.ExecutionException;
-
+import managers.Contents;
+import managers.DataStore;
 import managers.SessionManager;
-import model.MoodyConstants;
-import model.MoodyConstants.MoodySession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,14 +21,11 @@ import android.widget.TextView;
 
 import com.example.moody.R;
 
-import connections.DataAsyncTask;
-
 public class TopicsPreviewFragment extends Fragment {
 
 	// Session Manager Class
 	SessionManager session;
-
-	private JSONObject jsonObj;
+	JSONObject jsonObject;
 
 	public TopicsPreviewFragment() {
 	}
@@ -44,102 +37,36 @@ public class TopicsPreviewFragment extends Fragment {
 
 		String courseName = getArguments().getString("courseName");
 		String courseId = getArguments().getString("courseId");
-		JSONArray getTopics = getTopics(courseId);
+		Context activityContext = getActivity().getApplicationContext();
 
-		return createTopicsRows(getTopics, courseName, courseId);
-	}
+		// Always tries to get the JSON from cache if it doesn't exist it will
+		// return, so it will download from moodle site
+		jsonObject = new DataStore().getJsonData(activityContext,
+				"coursesContent");
+		if (jsonObject == null) {
+			// Get the topics from internet in json
+			jsonObject = new Contents().getCourseContent(courseId,
+					getResources(), activityContext);
+		}
 
-	public JSONArray getTopics(String courseId) {
-
-		// ESTE IF SO FOI CRIADO DEVIDO AO NOSSO MOODLE ESTAR COM BUGS AO
-		// DEVOLVER OS COURSES CONTENTS SO DEVOLVER 50 CHARACTERES ENQUANTO O
-		// MOODLE NAO FOR ACTUALIZADO
-		// IRA SER CRIADO O JSON ARRAY MANUALMENTE
-		if (courseId.equalsIgnoreCase("5")) {
-
-			String json = null;
-			InputStream is = getResources().openRawResource(R.raw.json);
-
-			int size;
-			try {
-				size = is.available();
-				byte[] buffer = new byte[size];
-				is.read(buffer);
-				is.close();
-				json = new String(buffer, "UTF-8");
-				
-				
-				JSONArray jsonArrays = new JSONArray(json);
-				return jsonArrays;			
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		} else {
-
-			String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
-					null);
-			String token = session.getValues(
-					MoodyConstants.MoodySession.KEY_TOKEN, null);
-
-			String con = String.format(MoodyConstants.MoodySession.KEY_PARAMS,
-					url, token, "core_course_get_contents&courseid", courseId
-							+ MoodySession.KEY_JSONFORMAT);
-
-			try {
-				jsonObj = new DataAsyncTask().execute(con, "json").get();
-				JSONArray topicsArray = jsonObj.getJSONArray("array");
-				return topicsArray;
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+		try {
+			return createTopicsRows(jsonObject, courseName, courseId);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return null;
-
 	}
 
-	public View createTopicsRows(JSONArray rows, String CourseName,
-			String courseId) {
-		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		LinearLayout insertPoint = new LinearLayout(getActivity());
-		insertPoint.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		insertPoint.setOrientation(LinearLayout.VERTICAL);
-
-		View topicsHeaderView = createTopicsHeader(CourseName, courseId,
-				inflater);
-
-		insertPoint.addView(topicsHeaderView);
-
-		createTopicsContent(rows, inflater, insertPoint);
-
-		return insertPoint;
-
-	}
-
+	// Method to create the header of the topics preview with the course path
+	// and the "add favorites" button
 	/**
 	 * @param CourseName
 	 * @param courseId
 	 * @param inflater
 	 * @return
 	 */
-	private View createTopicsHeader(String CourseName, String courseId,
+	protected View createTopicsHeader(String CourseName, String courseId,
 			LayoutInflater inflater) {
 		View topicsHeaderView = inflater.inflate(
 				R.layout.topics_preview_header, null);
@@ -155,13 +82,20 @@ public class TopicsPreviewFragment extends Fragment {
 		return topicsHeaderView;
 	}
 
+	// Method to create the topics preview with the courses content and add this
+	// content to the "row"
 	/**
 	 * @param rows
 	 * @param inflater
 	 * @param insertPoint
+	 * @throws JSONException
 	 */
-	private void createTopicsContent(JSONArray rows, LayoutInflater inflater,
-			LinearLayout insertPoint) {
+	protected void createTopicsContent(JSONObject jsonContent,
+			LayoutInflater inflater, LinearLayout insertPoint)
+			throws JSONException {
+
+		JSONArray rows = jsonContent.getJSONArray("array");
+
 		for (int j = 0; j < rows.length(); j++) {
 			try {
 
@@ -188,14 +122,19 @@ public class TopicsPreviewFragment extends Fragment {
 						String getNamePure = "";
 
 						for (int n = 0; n < nameTokens.length; n++) {
-							if (n == 5 ) {
-								if(nameTokens.length > 5)
+							if (n == 5) {
+								if (nameTokens.length > 5)
 									getNamePure += "...";
-								
+
 								break;
 							}
 
 							getNamePure += nameTokens[n] + " ";
+
+						}
+						if (i >= 4) {
+							moduleName += ".....";
+							break;
 						}
 
 						moduleName += ("-" + getNamePure + "\n");
@@ -218,4 +157,28 @@ public class TopicsPreviewFragment extends Fragment {
 			}
 		}
 	}
+
+	// Create the "row" with the header and the content
+	protected View createTopicsRows(JSONObject jsonContent, String CourseName,
+			String courseId) throws JSONException {
+		LayoutInflater inflater = (LayoutInflater) getActivity()
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		LinearLayout insertPoint = new LinearLayout(getActivity());
+		insertPoint.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		insertPoint.setOrientation(LinearLayout.VERTICAL);
+
+		View topicsHeaderView = createTopicsHeader(CourseName, courseId,
+				inflater);
+
+		insertPoint.addView(topicsHeaderView);
+
+		createTopicsContent(jsonContent, inflater, insertPoint);
+
+		return insertPoint;
+
+	}
+
 }
