@@ -1,6 +1,7 @@
 package activities;
 
 import fragments.TopicsPreview;
+import fragments.UserCloud;
 import fragments.UserPicture;
 import interfaces.InterfaceDialogFrag;
 
@@ -183,6 +184,11 @@ public class MainActivity extends Activity implements OnClickListener,
 			Toast.makeText(getApplicationContext(), "CLOUD", Toast.LENGTH_SHORT)
 					.show();
 
+//			final FragmentManager fm = getFragmentManager();
+//			final UserCloud userCloudDialog = new UserCloud();
+//			userCloudDialog.setRetainInstance(true);
+//			userCloudDialog.show(fm, "fragment_name");
+			
 			// Intent intents = getPackageManager().getLaunchIntentForPackage(
 			// "com.dropbox.android");
 			// intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
