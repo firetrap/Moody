@@ -1,7 +1,7 @@
 package activities;
 
+import fragments.InsideTopics;
 import fragments.TopicsPreview;
-import fragments.UserCloud;
 import fragments.UserPicture;
 import interfaces.InterfaceDialogFrag;
 
@@ -184,11 +184,11 @@ public class MainActivity extends Activity implements OnClickListener,
 			Toast.makeText(getApplicationContext(), "CLOUD", Toast.LENGTH_SHORT)
 					.show();
 
-//			final FragmentManager fm = getFragmentManager();
-//			final UserCloud userCloudDialog = new UserCloud();
-//			userCloudDialog.setRetainInstance(true);
-//			userCloudDialog.show(fm, "fragment_name");
-			
+			// final FragmentManager fm = getFragmentManager();
+			// final UserCloud userCloudDialog = new UserCloud();
+			// userCloudDialog.setRetainInstance(true);
+			// userCloudDialog.show(fm, "fragment_name");
+
 			// Intent intents = getPackageManager().getLaunchIntentForPackage(
 			// "com.dropbox.android");
 			// intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -207,9 +207,30 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	public void onContentPreviewClick(View v) {
+		final String courseId = Integer.toString(v.getId());
+		final String courseName = organizedCourses.get(Integer.toString(v
+				.getId()));
+		final String topicId = (String) v.getTag();
 
-		Toast.makeText(getApplicationContext(), " ID-> " + v.getId(),
-				Toast.LENGTH_SHORT).show();
+		Toast.makeText(
+				getApplicationContext(),
+				" COURSE ID-> " + courseId + " TOPIC ID-> " + topicId
+						+ "COURSE NAME ->" + courseName, Toast.LENGTH_SHORT)
+				.show();
+
+		final Bundle bundle = new Bundle();
+		bundle.putString("courseId", courseId);
+		bundle.putString("courseName", courseName);
+		bundle.putString("topicId", topicId);
+
+		final FragmentManager fragmentManager = getFragmentManager();
+		final FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
+
+		final InsideTopics fragment = new InsideTopics();
+		fragment.setArguments(bundle);
+		fragmentTransaction.replace(R.id.mainFragment, fragment);
+		fragmentTransaction.commit();
 
 	}
 

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,16 +31,45 @@ public class TopicsPreview extends Fragment {
 	public TopicsPreview() {
 	}
 
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		session = new Session(getActivity().getApplicationContext());
+
+		final String courseName = getArguments().getString("courseName");
+		final String courseId = getArguments().getString("courseId");
+		final Context activityContext = getActivity().getApplicationContext();
+
+		// Always tries to get the JSON from cache if it doesn't exist it will
+		// return null, so it will download from moodle site
+		final String fileName = "coursesContent-" + courseId;
+		jsonObject = new DataStore().getJsonData(activityContext, fileName);
+		if (jsonObject == null) {
+			// Get the topics from internet in json
+			jsonObject = new Contents().getCourse(courseId, getResources(),
+					activityContext);
+		}
+
+		try {
+			return createTopicsRows(jsonObject, courseName, courseId);
+		} catch (final JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	// Method to create the topics preview with the courses content and add this
 	// content to the "row"
 	/**
 	 * @param rows
 	 * @param inflater
 	 * @param insertPoint
+	 * @param courseId
 	 * @throws JSONException
 	 */
 	protected void createTopicsContent(JSONObject jsonContent,
-			LayoutInflater inflater, LinearLayout insertPoint)
+			LayoutInflater inflater, LinearLayout insertPoint, String courseId)
 			throws JSONException {
 
 		final JSONArray rows = jsonContent.getJSONArray("array");
@@ -58,6 +88,7 @@ public class TopicsPreview extends Fragment {
 							R.layout.topics_preview_context, null);
 					final TextView topicName = (TextView) topicsView
 							.findViewById(R.id.topic_name);
+
 					topicName.setText(arrayCursor.getString("name"));
 
 					String moduleName = "";
@@ -94,9 +125,10 @@ public class TopicsPreview extends Fragment {
 							.findViewById(R.id.content_preview_textView);
 					topicModule.setText(moduleName);
 
-					// Where the textview id will be topic id
-					topicModule.setId(Integer.parseInt(arrayCursor
-							.getString("id")));
+					// Where the textview id will be course id and the textview
+					// tag will be the topic id
+					topicModule.setId(Integer.parseInt(courseId));
+					topicModule.setTag(arrayCursor.getString("id"));
 
 					row.addView(topicsView);
 					insertPoint.addView(row);
@@ -124,7 +156,9 @@ public class TopicsPreview extends Fragment {
 
 		final TextView courseName = (TextView) topicsHeaderView
 				.findViewById(R.id.course_path_textView);
-		courseName.setText("Courses > " + CourseName);
+
+		courseName.setText(Html.fromHtml("Courses > " + "<font color=#68d5fe>"
+				+ CourseName + "</font>"));
 
 		final ImageButton addFavorites = (ImageButton) topicsHeaderView
 				.findViewById(R.id.add_favorites_button_);
@@ -150,40 +184,10 @@ public class TopicsPreview extends Fragment {
 
 		insertPoint.addView(topicsHeaderView);
 
-		createTopicsContent(jsonContent, inflater, insertPoint);
+		createTopicsContent(jsonContent, inflater, insertPoint, courseId);
 
 		return insertPoint;
 
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		session = new Session(getActivity().getApplicationContext());
-
-		final String courseName = getArguments().getString("courseName");
-		final String courseId = getArguments().getString("courseId");
-		final Context activityContext = getActivity().getApplicationContext();
-
-		// Always tries to get the JSON from cache if it doesn't exist it will
-		// return null, so it will download from moodle site
-
-		final String fileName = "coursesContent-" + courseId;
-
-		jsonObject = new DataStore().getJsonData(activityContext, fileName);
-		if (jsonObject == null) {
-			// Get the topics from internet in json
-			jsonObject = new Contents().getCourseContent(courseId,
-					getResources(), activityContext);
-		}
-
-		try {
-			return createTopicsRows(jsonObject, courseName, courseId);
-		} catch (final JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 }
