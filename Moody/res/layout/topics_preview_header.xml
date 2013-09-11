@@ -30,9 +30,10 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/add_favorite_description"
         android:cropToPadding="false"
-        android:onClick="onContentPreviewClick"
+        android:onClick="onAddFavoritesClick"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:paddingTop="5dp"
         android:src="@drawable/add_favorites" />
 
 </LinearLayout>
