@@ -6,7 +6,7 @@
     android:orientation="horizontal" >
 
     <TextView
-        android:id="@+id/topic_name"
+        android:id="@+id/topic_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -21,7 +21,7 @@
         android:id="@+id/content_preview_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topic_name"
+        android:layout_below="@+id/topic_label"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="2dp"
         android:layout_marginTop="10dp"

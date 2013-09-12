@@ -8,21 +8,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.moody.R;
-
 import android.app.Fragment;
 import android.content.Context;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+
+import com.example.moody.R;
 
 public class InsideTopics extends Fragment {
 
@@ -76,7 +74,12 @@ public class InsideTopics extends Fragment {
 
 		insertPoint.addView(inflateHeader);
 
-		// createTopicsContent(jsonContent, inflater, insertPoint, courseId);
+		try {
+			createTopicsContent(jsonObject, inflater, insertPoint, topicId);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return insertPoint;
 	}
@@ -128,6 +131,60 @@ public class InsideTopics extends Fragment {
 		addFavorites.setVisibility(View.GONE);
 		return topicsHeaderView;
 
+	}
+
+	protected void createTopicsContent(JSONObject jsonContent,
+			LayoutInflater inflater, LinearLayout insertPoint, String topicId)
+			throws JSONException {
+
+		final JSONArray topics = jsonContent.getJSONArray("array");
+
+		for (int j = 0; j < topics.length(); j++) {
+			try {
+
+				final JSONObject arrayCursor = topics.getJSONObject(j);
+				final JSONArray modules = arrayCursor.getJSONArray("modules");
+
+				String getCorrectTopic = arrayCursor.getString("id");
+				if (getCorrectTopic.equalsIgnoreCase(topicId)
+						&& modules.length() != 0) {
+
+					for (int i = 0; i < modules.length(); i++) {
+						final JSONObject singleModule = modules
+								.getJSONObject(i);
+
+						final LinearLayout row = new LinearLayout(getActivity());
+						row.setLayoutParams(new LayoutParams(
+								android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+								android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+						final View topicsContent = inflater.inflate(
+								R.layout.topic, null);
+
+						String moduleName = singleModule.getString("name");
+						final TextView topicLabel = (TextView) topicsContent
+								.findViewById(R.id.topic_label);
+						topicLabel.setText(moduleName);
+
+						final TextView topicContent = (TextView) topicsContent
+								.findViewById(R.id.topic_content);
+						if (!singleModule.isNull("description")) {
+							String moduleDescription = singleModule
+									.getString("description");
+							topicContent.setText(Html
+									.fromHtml(moduleDescription));
+						}
+
+						row.addView(topicsContent);
+						insertPoint.addView(row);
+					}
+
+				}
+
+			} catch (final JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

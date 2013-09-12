@@ -73,5 +73,7 @@
     <string name="cloud_dialog_dropbox">Dropbox</string>
     <string name="cloud_dialog_drive">Google Drive</string>
     <string name="content_preview">Módulo 1: A Importância do e-learning. A metodolog...SUMÁRIO: Questões preliminares ao modo de funciona...OJECTOS DE APRENDIZAGEM: Algumas questões e respostas preliminares Ways the Internet Has Changed Our World: Music</string>
+    <string name="topics_contents">Your topics contents</string>
+    <string name="topic_label">Your Topic Label</string>
 
 </resources>

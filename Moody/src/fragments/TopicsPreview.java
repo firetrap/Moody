@@ -87,7 +87,7 @@ public class TopicsPreview extends Fragment {
 					final View topicsView = inflater.inflate(
 							R.layout.topics_preview_context, null);
 					final TextView topicName = (TextView) topicsView
-							.findViewById(R.id.topic_name);
+							.findViewById(R.id.topic_label);
 
 					topicName.setText(arrayCursor.getString("name"));
 
