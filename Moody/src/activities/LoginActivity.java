@@ -1,10 +1,11 @@
 package activities;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 import managers.AlertDialogs;
 import managers.Session;
@@ -14,10 +15,17 @@ import model.MoodyMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import restPackage.MoodleCallRestWebService;
+import restPackage.MoodleRestException;
+import restPackage.MoodleRestWebService;
+import restPackage.MoodleRestWebServiceException;
+import restPackage.MoodleWebService;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -34,82 +42,11 @@ import android.widget.Toast;
 
 import com.example.moody.R;
 
-import connections.DataAsyncTask;
-
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
 public class LoginActivity extends Activity {
-
-	/**
-	 * Represents an asynchronous login/registration task used to authenticate
-	 * the user.
-	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-			Log.d("MoodyDebug", "Entrou no Async");
-			URL url = null;
-
-			try {
-				url = new URL(mUrl);
-				Log.d("AsyncTask", url.toString());
-			} catch (final MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				Log.d("MoodyErrorConnection", e.toString());
-				return false;
-			}
-			try {
-				Log.d("MoodyDebug", "Connect");
-				final HttpURLConnection con = (HttpURLConnection) url
-						.openConnection();
-				con.connect();
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				Log.d("MoodyDebug", "Cant Connect");
-				return false;
-
-			}
-
-			return true;
-
-		}
-
-		@Override
-		protected void onCancelled() {
-			mAuthTask = null;
-			showProgress(false);
-		}
-
-		@Override
-		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
-			showProgress(false);
-
-			if (success) {
-				// Session Manager and shared pref send to shared pref:
-				// user-name, user-token, User-id in database
-				session = new Session(getApplicationContext());
-				session.createLoginSession(mUser, finalToken, UserId, mUrl);
-
-				final Intent intent = new Intent(getApplicationContext(),
-						MainActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-				finish();
-			} else {
-				Log.d("MoodyDebug", "onPOstExecute-FAILED");
-				mPasswordView
-
-				.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
-			}
-		}
-	}
 
 	/**
 	 * The default email to populate the email field with.
@@ -143,6 +80,67 @@ public class LoginActivity extends Activity {
 	private String url = "";
 
 	private String UserId = "";
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		session = new Session(getApplicationContext());
+		Toast.makeText(getApplicationContext(),
+				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
+				.show();
+
+		if (session.isLoggedIn()) {
+			final Intent intent = new Intent(getApplicationContext(),
+					MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			finish();
+
+		} else {
+
+			setContentView(R.layout.activity_login);
+
+			// Set up the login form.
+			mUrlView = (EditText) findViewById(R.id.prompt_url);
+			mUser = getIntent().getStringExtra(EXTRA_EMAIL);
+			mUserView = (EditText) findViewById(R.id.username);
+			mUserView.setText(mUser);
+
+			mPasswordView = (EditText) findViewById(R.id.password);
+			mPasswordView
+					.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+						@Override
+						public boolean onEditorAction(TextView textView,
+								int id, KeyEvent keyEvent) {
+							if (id == R.id.login || id == EditorInfo.IME_NULL) {
+								attemptLogin();
+								return true;
+							}
+							return false;
+						}
+					});
+
+			mLoginFormView = findViewById(R.id.login_form);
+			mLoginStatusView = findViewById(R.id.login_status);
+			mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+
+			findViewById(R.id.sign_in_button).setOnClickListener(
+					new View.OnClickListener() {
+						@Override
+						public void onClick(View view) {
+							attemptLogin();
+						}
+					});
+
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.login, menu);
+		return true;
+	}
 
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
@@ -211,70 +209,48 @@ public class LoginActivity extends Activity {
 			error += "\t - User\n";
 		}
 
-		// Try to verify user&password with the services
-		if (!cancel) {
-			// Inicialize the full context to generate token &&
-			mToken = mUrl + "/login/token.php?username=" + mUser + "&password="
-					+ mPassword + "&service=moody_service" + jsonFormat;
-			try {
-				getJson = new DataAsyncTask().execute(mToken, "json").get();
-
-				if (getJson == null) {
-					cancel = true;
-					error += "\t - Error in Authentication service- check your internet service or the website URL\n";
-					mUrlView.setError(getString(R.string.error_invalid_url));
-					focusView = mUrlView;
-
-				} else {
-					if (getJson.has("error")) {
-						cancel = true;
-						mUserView
-								.setError(getString(R.string.error_invalid_username));
-						mPasswordView
-								.setError(getString(R.string.error_incorrect_password));
-						focusView = mUserView;
-						error += "\t - Error in Authentication service - "
-								+ (String) getJson.get("error") + "\n";
-					}
-					if (getJson.has("token")) {
-						finalToken = (String) getJson.get("token");
-					}
-				}
-
-			} catch (final InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (final ExecutionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (final JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		if (!finalToken.isEmpty()) {
-
-			// Get user id URL
-			url = mUrl + "/webservice/rest/server.php?wstoken=" + finalToken
-					+ "&wsfunction=core_webservice_get_site_info" + jsonFormat;
-
-			try {
-				getJson = new DataAsyncTask().execute(url, "json").get();
-				UserId = Integer.toString((Integer) getJson.get("userid"));
-
-			} catch (final InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (final ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (final JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
+		// // Try to verify user&password with the services
+		// if (!cancel) {
+		// // Inicialize the full context to generate token &&
+		// mToken = mUrl + "/login/token.php?username=" + mUser + "&password="
+		// + mPassword + "&service=moody_service" + jsonFormat;
+		// try {
+		// getJson = new DataAsyncTask().execute(mToken, "json").get();
+		//
+		// if (getJson == null) {
+		// cancel = true;
+		// error +=
+		// "\t - Error in Authentication service- check your internet service or the website URL\n";
+		// mUrlView.setError(getString(R.string.error_invalid_url));
+		// focusView = mUrlView;
+		//
+		// } else {
+		// if (getJson.has("error")) {
+		// cancel = true;
+		// mUserView
+		// .setError(getString(R.string.error_invalid_username));
+		// mPasswordView
+		// .setError(getString(R.string.error_incorrect_password));
+		// focusView = mUserView;
+		// error += "\t - Error in Authentication service - "
+		// + (String) getJson.get("error") + "\n";
+		// }
+		// if (getJson.has("token")) {
+		// finalToken = (String) getJson.get("token");
+		// }
+		// }
+		//
+		// } catch (InterruptedException e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// } catch (ExecutionException e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// } catch (JSONException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
 
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
@@ -292,73 +268,159 @@ public class LoginActivity extends Activity {
 			mAuthTask = new UserLoginTask();
 			mAuthTask.execute((Void) null);
 
-			Log.d("MoodyDebug", mToken);
+			// Log.d("MoodyDebug", mToken);
 		}
 	}
 
-	@Override
-	public void onBackPressed() {
-		finish();
-	}
+	/**
+	 * Represents an asynchronous login/registration task used to authenticate
+	 * the user.
+	 */
+	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		session = new Session(getApplicationContext());
-		Toast.makeText(getApplicationContext(),
-				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
-				.show();
+		JSONObject jObj = null;
 
-		if (session.isLoggedIn()) {
-			final Intent intent = new Intent(getApplicationContext(),
-					MainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			finish();
+		String error = "Errors found: \n";
+		View focusView = null;
 
-		} else {
+		@Override
+		protected Boolean doInBackground(Void... params) {
 
-			setContentView(R.layout.activity_login);
+			String url = mUrl + "/login/token.php?username=" + mUser
+					+ "&password=" + mPassword + "&service=moody_service";
 
-			// Set up the login form.
-			mUrlView = (EditText) findViewById(R.id.prompt_url);
-			mUser = getIntent().getStringExtra(EXTRA_EMAIL);
-			mUserView = (EditText) findViewById(R.id.username);
-			mUserView.setText(mUser);
+			try {
+				return loadFromNetwork(url);
+			} catch (IOException e) {
+				e.printStackTrace();
+				error += "\t - Error in Authentication service- check your internet service or the website URL\n";
+				mUrlView.setError(getString(R.string.error_invalid_url));
+				focusView = mUrlView;
+				return false;
+			}
 
-			mPasswordView = (EditText) findViewById(R.id.password);
-			mPasswordView
-					.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-						@Override
-						public boolean onEditorAction(TextView textView,
-								int id, KeyEvent keyEvent) {
-							if (id == R.id.login || id == EditorInfo.IME_NULL) {
-								attemptLogin();
-								return true;
-							}
-							return false;
-						}
-					});
-
-			mLoginFormView = findViewById(R.id.login_form);
-			mLoginStatusView = findViewById(R.id.login_status);
-			mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-
-			findViewById(R.id.sign_in_button).setOnClickListener(
-					new View.OnClickListener() {
-						@Override
-						public void onClick(View view) {
-							attemptLogin();
-						}
-					});
 		}
-	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
+		private Boolean loadFromNetwork(String urlString) throws IOException {
+
+			InputStream inputStream = null;
+			String json = null;
+
+			try {
+				inputStream = downloadUrl(urlString);
+				final BufferedReader reader = new BufferedReader(
+						new InputStreamReader(inputStream, "UTF-8"), 8);
+				final StringBuilder sb = new StringBuilder();
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				json = sb.toString();
+
+				jObj = new JSONObject(json);
+
+				if (jObj == null) {
+					error += "\t - Error in Authentication service- check your internet service or the website URL\n";
+					mUrlView.setError(getString(R.string.error_invalid_url));
+					focusView = mUrlView;
+					return false;
+
+				} else {
+					if (jObj.has("error")) {
+						mUserView
+								.setError(getString(R.string.error_invalid_username));
+						mPasswordView
+								.setError(getString(R.string.error_incorrect_password));
+						focusView = mUserView;
+						error += "\t - Error in Authentication service - "
+								+ (String) jObj.get("error") + "\n";
+						return false;
+					}
+					//On getToken sucess it will get the user id
+					if (jObj.has("token")) {
+						finalToken = (String) jObj.get("token");
+						MoodleCallRestWebService.init(mUrl+"/webservice/rest/server.php", finalToken);
+						MoodleWebService getSiteInfo = MoodleRestWebService.getSiteInfo();
+						UserId = Long.toString(getSiteInfo.getUserId());
+											}
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+				error += "\t - Error in Authentication service- check your internet service or the website URL\n";
+				mUrlView.setError(getString(R.string.error_invalid_url));
+				focusView = mUrlView;
+				return false;
+			} catch (MoodleRestWebServiceException e) {
+				e.printStackTrace();
+				error += "\t - Error getting user information - contact your Moodle administrator\n";
+				mUrlView.setError(getString(R.string.error_invalid_url));
+				focusView = mUrlView;
+				return false;
+			} catch (MoodleRestException e) {
+				e.printStackTrace();
+				e.printStackTrace();
+				error += "\t - Error getting user information - contact your Moodle administrator\n";
+				mUrlView.setError(getString(R.string.error_invalid_url));
+				focusView = mUrlView;
+				return false;
+			}
+
+			finally {
+				try {
+					if (inputStream != null) {
+						inputStream.close();
+					}
+				} catch (final Exception e) {
+					return false;
+				}
+			}
+			return true;
+
+		}
+
+		private InputStream downloadUrl(String urlString) throws IOException {
+			final URL url = new URL(urlString);
+			final HttpURLConnection conn = (HttpURLConnection) url
+					.openConnection();
+			conn.setReadTimeout(10000 /* milliseconds */);
+			conn.setConnectTimeout(15000 /* milliseconds */);
+			conn.setRequestMethod("GET");
+			conn.setDoInput(true);
+			// Starts the query
+			conn.connect();
+			final InputStream stream = conn.getInputStream();
+			return stream;
+		}
+
+		@Override
+		protected void onCancelled() {
+			mAuthTask = null;
+			showProgress(false);
+		}
+
+		@Override
+		protected void onPostExecute(final Boolean success) {
+			mAuthTask = null;
+			showProgress(false);
+
+			if (success) {
+				// Session Manager and shared pref send to shared pref:
+				// user-name, user-token, User-id in database
+				session = new Session(getApplicationContext());
+				session.createLoginSession(mUser, finalToken, UserId, mUrl);
+
+				final Intent intent = new Intent(getApplicationContext(),
+						MainActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				finish();
+			} else {
+				Log.d("MoodyDebug", "onPOstExecute-FAILED");
+				focusView.requestFocus();
+				AlertDialogs.showMessageDialog(LoginActivity.this,
+						new MoodyMessage("Login Error", error), false);
+			}
+		}
 	}
 
 	/**
@@ -401,4 +463,10 @@ public class LoginActivity extends Activity {
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
 	}
+
+	@Override
+	public void onBackPressed() {
+		finish();
+	}
+
 }

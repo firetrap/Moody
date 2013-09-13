@@ -20,31 +20,6 @@ import android.util.Log;
 //receives a String[] where params[0] it's an url, params[1] its an string required to parse, params[2] its an string to the required method above
 public class DataAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
-	/**
-	 * Returns a Drawable object containing the image located at
-	 * 'imageWebAddress' if successful, and null otherwise. (Pre:
-	 * 'imageWebAddress' is non-null and non-empty; method should not be called
-	 * from the main/ui thread.)
-	 */
-	public static Drawable createDrawableFromUrl(String imageWebAddress) {
-		Drawable drawable = null;
-
-		final StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-				.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-
-		try {
-			final InputStream inputStream = new URL(imageWebAddress)
-					.openStream();
-			drawable = Drawable.createFromStream(inputStream, null);
-			inputStream.close();
-		} catch (final MalformedURLException ex) {
-		} catch (final IOException ex) {
-		}
-
-		return drawable;
-	}
-
 	JSONObject jObj = null;
 
 	@Override
@@ -59,22 +34,7 @@ public class DataAsyncTask extends AsyncTask<String, Void, JSONObject> {
 		return jObj;
 
 	}
-
-	// Given a string representation of a URL, sets up a connection and gets
-	// an input stream.
-	private InputStream downloadUrl(String urlString) throws IOException {
-		final URL url = new URL(urlString);
-		final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setReadTimeout(10000 /* milliseconds */);
-		conn.setConnectTimeout(15000 /* milliseconds */);
-		conn.setRequestMethod("GET");
-		conn.setDoInput(true);
-		// Starts the query
-		conn.connect();
-		final InputStream stream = conn.getInputStream();
-		return stream;
-	}
-
+	
 	private JSONObject loadFromNetwork(String urlString, String methodParams)
 			throws IOException {
 
@@ -123,10 +83,51 @@ public class DataAsyncTask extends AsyncTask<String, Void, JSONObject> {
 		}
 
 	}
+	
 
+	// Given a string representation of a URL, sets up a connection and gets
+	// an input stream.
+	private InputStream downloadUrl(String urlString) throws IOException {
+		final URL url = new URL(urlString);
+		final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setReadTimeout(10000 /* milliseconds */);
+		conn.setConnectTimeout(15000 /* milliseconds */);
+		conn.setRequestMethod("GET");
+		conn.setDoInput(true);
+		// Starts the query
+		conn.connect();
+		final InputStream stream = conn.getInputStream();
+		return stream;
+	}
+
+	
 	@Override
 	protected void onPostExecute(JSONObject json) {
 
 	}
 
+	/**
+	 * Returns a Drawable object containing the image located at
+	 * 'imageWebAddress' if successful, and null otherwise. (Pre:
+	 * 'imageWebAddress' is non-null and non-empty; method should not be called
+	 * from the main/ui thread.)
+	 */
+	public static Drawable createDrawableFromUrl(String imageWebAddress) {
+		Drawable drawable = null;
+
+		final StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
+		try {
+			final InputStream inputStream = new URL(imageWebAddress)
+					.openStream();
+			drawable = Drawable.createFromStream(inputStream, null);
+			inputStream.close();
+		} catch (final MalformedURLException ex) {
+		} catch (final IOException ex) {
+		}
+
+		return drawable;
+	}
 }
