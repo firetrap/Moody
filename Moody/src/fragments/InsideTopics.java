@@ -41,11 +41,9 @@ public class InsideTopics extends Fragment {
 		final String topicId = getArguments().getString("topicId");
 		final Context activityContext = getActivity().getApplicationContext();
 
+		final String fileName = "coursesContent-" + courseId;
 		// Always tries to get the JSON from cache if it doesn't exist it will
 		// return null, so it will download from moodle site
-
-		final String fileName = "coursesContent-" + courseId;
-
 		jsonObject = new DataStore().getJsonData(activityContext, fileName);
 		if (jsonObject == null) {
 			// Get the topics from internet in json
@@ -82,36 +80,6 @@ public class InsideTopics extends Fragment {
 		}
 
 		return insertPoint;
-	}
-
-	/**
-	 * @param jsonObject
-	 * @param topicId
-	 * @return
-	 */
-	private String getTopicName(JSONObject jsonObject, String topicId) {
-		String topicName = "";
-		JSONArray topics;
-		try {
-			topics = jsonObject.getJSONArray("array");
-
-			for (int j = 0; j < topics.length(); j++) {
-				final JSONObject arrayCursor = topics.getJSONObject(j);
-				String idValue = arrayCursor.getString("id");
-				if (idValue.equalsIgnoreCase(topicId)) {
-					topicName = arrayCursor.getString("name");
-					break;
-				}
-
-			}
-
-		}
-
-		catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return topicName;
 	}
 
 	private View createTopicsHeader(String courseName, String topicName,
@@ -185,6 +153,36 @@ public class InsideTopics extends Fragment {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * @param jsonObject
+	 * @param topicId
+	 * @return
+	 */
+	private String getTopicName(JSONObject jsonObject, String topicId) {
+		String topicName = "";
+		JSONArray topics;
+		try {
+			topics = jsonObject.getJSONArray("array");
+
+			for (int j = 0; j < topics.length(); j++) {
+				final JSONObject arrayCursor = topics.getJSONObject(j);
+				String idValue = arrayCursor.getString("id");
+				if (idValue.equalsIgnoreCase(topicId)) {
+					topicName = arrayCursor.getString("name");
+					break;
+				}
+
+			}
+
+		}
+
+		catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return topicName;
 	}
 
 }

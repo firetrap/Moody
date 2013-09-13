@@ -2,12 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/fill_light_grey"
     android:orientation="horizontal" >
 
     <TextView
         android:id="@+id/topic_label"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -17,12 +16,28 @@
 
     <TextView
         android:id="@+id/topic_content"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/topic_label"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/topics_contents" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/C_White"
+        android:clickable="false" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/topic_content"
+        android:background="@drawable/border_inside"
+        android:clickable="false" />
 
 </RelativeLayout>

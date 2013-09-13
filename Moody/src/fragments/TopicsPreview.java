@@ -59,6 +59,55 @@ public class TopicsPreview extends Fragment {
 		return null;
 	}
 
+	// Method to create the header of the topics preview with the course path
+	// and the "add favorites" button
+	/**
+	 * @param CourseName
+	 * @param courseId
+	 * @param inflater
+	 * @return
+	 */
+	protected View createTopicsHeader(String CourseName, String courseId,
+			LayoutInflater inflater) {
+		final View topicsHeaderView = inflater.inflate(
+				R.layout.topics_preview_header, null);
+
+		final TextView courseName = (TextView) topicsHeaderView
+				.findViewById(R.id.course_path_textView);
+
+		courseName.setText(Html.fromHtml("Courses > " + "<font color=#68d5fe>"
+				+ CourseName + "</font>"));
+
+		final ImageButton addFavorites = (ImageButton) topicsHeaderView
+				.findViewById(R.id.add_favorites_button_);
+		addFavorites.setId(Integer.parseInt(courseId));
+		addFavorites.setTag("add_favorites_button_" + courseId);
+		return topicsHeaderView;
+	}
+
+	// Create the "row" with the header and the content
+	protected View createTopicsRows(JSONObject jsonContent, String CourseName,
+			String courseId) throws JSONException {
+		final LayoutInflater inflater = (LayoutInflater) getActivity()
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		final LinearLayout insertPoint = new LinearLayout(getActivity());
+		insertPoint.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		insertPoint.setOrientation(LinearLayout.VERTICAL);
+
+		final View topicsHeaderView = createTopicsHeader(CourseName, courseId,
+				inflater);
+
+		insertPoint.addView(topicsHeaderView);
+
+		createTopicsContent(jsonContent, inflater, insertPoint, courseId);
+
+		return insertPoint;
+
+	}
+
 	// Method to create the topics preview with the courses content and add this
 	// content to the "row"
 	/**
@@ -140,54 +189,4 @@ public class TopicsPreview extends Fragment {
 			}
 		}
 	}
-
-	// Method to create the header of the topics preview with the course path
-	// and the "add favorites" button
-	/**
-	 * @param CourseName
-	 * @param courseId
-	 * @param inflater
-	 * @return
-	 */
-	protected View createTopicsHeader(String CourseName, String courseId,
-			LayoutInflater inflater) {
-		final View topicsHeaderView = inflater.inflate(
-				R.layout.topics_preview_header, null);
-
-		final TextView courseName = (TextView) topicsHeaderView
-				.findViewById(R.id.course_path_textView);
-
-		courseName.setText(Html.fromHtml("Courses > " + "<font color=#68d5fe>"
-				+ CourseName + "</font>"));
-
-		final ImageButton addFavorites = (ImageButton) topicsHeaderView
-				.findViewById(R.id.add_favorites_button_);
-		addFavorites.setId(Integer.parseInt(courseId));
-		addFavorites.setTag("add_favorites_button_" + courseId);
-		return topicsHeaderView;
-	}
-
-	// Create the "row" with the header and the content
-	protected View createTopicsRows(JSONObject jsonContent, String CourseName,
-			String courseId) throws JSONException {
-		final LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		final LinearLayout insertPoint = new LinearLayout(getActivity());
-		insertPoint.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		insertPoint.setOrientation(LinearLayout.VERTICAL);
-
-		final View topicsHeaderView = createTopicsHeader(CourseName, courseId,
-				inflater);
-
-		insertPoint.addView(topicsHeaderView);
-
-		createTopicsContent(jsonContent, inflater, insertPoint, courseId);
-
-		return insertPoint;
-
-	}
-
 }
