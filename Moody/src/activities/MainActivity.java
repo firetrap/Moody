@@ -149,10 +149,13 @@ public class MainActivity extends Activity implements OnClickListener,
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
 						session.logoutUser();
+//						getCacheDir().
+						
 						final Intent intent = new Intent(
 								getApplicationContext(), LoginActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 						startActivity(intent);
+						
 						finish();
 						break;
 
