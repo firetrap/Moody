@@ -17,7 +17,6 @@ import android.content.Context;
 
 public class DataStore {
 
-
 	// Load in an object
 	public JSONObject getJsonData(Context context, String name) {
 		final String filePath = "/" + name + ".data";
@@ -69,4 +68,23 @@ public class DataStore {
 
 	}
 
+	public void deleteCache(Context context) {
+		try {
+
+			if (context.getCacheDir().exists()) {
+
+				File[] cacheFiles = context.getCacheDir().listFiles();
+
+				if (cacheFiles.length > 0) {
+
+					for (int i = 0; i < cacheFiles.length; i++)
+						cacheFiles[i].delete();
+
+				}
+			}
+
+		} catch (Exception e) {
+
+		}
+	}
 }

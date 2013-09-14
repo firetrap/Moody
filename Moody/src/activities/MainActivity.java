@@ -2,6 +2,7 @@ package activities;
 
 import fragments.InsideTopics;
 import fragments.TopicsPreview;
+import fragments.UserCloud;
 import fragments.UserPicture;
 import interfaces.InterfaceDialogFrag;
 
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
+import managers.DataStore;
 import managers.Session;
 import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
@@ -149,13 +151,15 @@ public class MainActivity extends Activity implements OnClickListener,
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
 						session.logoutUser();
-//						getCacheDir().
-						
+
+						// limpa cache ao fazer logout.
+						new DataStore().deleteCache(getApplicationContext());
+
 						final Intent intent = new Intent(
 								getApplicationContext(), LoginActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 						startActivity(intent);
-						
+
 						finish();
 						break;
 
@@ -187,10 +191,10 @@ public class MainActivity extends Activity implements OnClickListener,
 			Toast.makeText(getApplicationContext(), "CLOUD", Toast.LENGTH_SHORT)
 					.show();
 
-			// final FragmentManager fm = getFragmentManager();
-			// final UserCloud userCloudDialog = new UserCloud();
-			// userCloudDialog.setRetainInstance(true);
-			// userCloudDialog.show(fm, "fragment_name");
+			FragmentManager frag = getFragmentManager();
+			UserCloud userCloudDialog = new UserCloud();
+			userCloudDialog.setRetainInstance(true);
+			userCloudDialog.show(frag, "fragment_name");
 
 			// Intent intents = getPackageManager().getLaunchIntentForPackage(
 			// "com.dropbox.android");
