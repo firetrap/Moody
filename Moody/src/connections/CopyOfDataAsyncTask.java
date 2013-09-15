@@ -6,17 +6,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import managers.Session;
 import model.EnumWebServices;
-import model.MoodyConstants;
 import restPackage.MoodleCallRestWebService;
 import restPackage.MoodleCourse;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleRestCourse;
 import restPackage.MoodleRestEnrol;
 import restPackage.MoodleRestException;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleUser;
-import activities.MainActivity;
-import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.StrictMode;
@@ -46,21 +44,28 @@ public class CopyOfDataAsyncTask extends AsyncTask<Object, Void, Object> {
 			EnumWebServices webService, String webServiceParams)
 			throws UnsupportedEncodingException, MoodleRestException {
 
-		long userId = Long.parseLong(webServiceParams);
+		long userId;
+		long courseId;
 
 		MoodleCallRestWebService.init(
 				urlString + "/webservice/rest/server.php", token);
 
 		switch (webService) {
 		case CORE_ENROL_GET_USERS_COURSES:
+			userId = Long.parseLong(webServiceParams);
 			MoodleCourse[] courses = MoodleRestEnrol.getUsersCourses(userId);
-			String adsasd = "asdasd";
-			adsasd.trim();
 			return courses;
 
 		case CORE_USER_GET_USERS_BY_ID:
+			userId = Long.parseLong(webServiceParams);
 			MoodleUser user = MoodleRestUser.getUserById(userId);
 			return user;
+
+		case CORE_COURSE_GET_CONTENTS:
+			courseId = Long.parseLong(webServiceParams);
+			MoodleCourseContent[] courseContent = MoodleRestCourse
+					.getCourseContent(courseId, null);
+			return courseContent;
 
 		default:
 			return null;

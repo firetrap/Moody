@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import managers.AlertDialogs;
+import managers.CopyOfDataStore;
 import managers.DataStore;
 import managers.Session;
 import model.EnumWebServices;
@@ -393,16 +394,16 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	public void populateUsername() {
 
-		final TextView view = (TextView) findViewById(R.id.fullname_textview);
-		final String url = session.getValues(
+		 TextView view = (TextView) findViewById(R.id.fullname_textview);
+		 String url = session.getValues(
 				MoodyConstants.MoodySession.KEY_URL, null);
-		final String token = session.getValues(
+		 String token = session.getValues(
 				MoodyConstants.MoodySession.KEY_TOKEN, null);
 
-		final String id = session.getValues(MoodyConstants.MoodySession.KEY_ID,
+		 String id = session.getValues(MoodyConstants.MoodySession.KEY_ID,
 				null);
 
-		Object getContent;
+		Object getContent = null;
 		try {
 			getContent = new CopyOfDataAsyncTask().execute(url, token,
 					EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
