@@ -33,11 +33,10 @@ public class UserDetailsActivity extends Activity
 
 	public MoodleUser getData() {
 
-		final Session session = new Session(getApplicationContext());
-
-		final String url = session.getValues(MoodySession.KEY_URL, null);
-		final String token = session.getValues(MoodySession.KEY_TOKEN, null);
-		final String id = session.getValues(MoodySession.KEY_ID, null);
+		Session session = new Session(getApplicationContext());
+		String url = session.getValues(MoodySession.KEY_URL, null);
+		String token = session.getValues(MoodySession.KEY_TOKEN, null);
+		String id = session.getValues(MoodySession.KEY_ID, null);
 
 		Object getContent = null;
 
@@ -53,10 +52,7 @@ public class UserDetailsActivity extends Activity
 			e.printStackTrace();
 		}
 
-		MoodleUser user = (MoodleUser) getContent;
-
-		
-		return user;
+		return (MoodleUser) getContent;
 	}
 
 	public void initComponents() {
@@ -69,10 +65,10 @@ public class UserDetailsActivity extends Activity
 		 * ((EditText)findViewById
 		 * (R.id.editText_email)).addTextChangedListener(this);
 		 **/
-		final MoodleUser list = getData();
+		MoodleUser user = getData();
 
-		if (list != null) {
-			initText(list);
+		if (user != null) {
+			initDetails(user);
 		} else {
 			AlertDialogs.showMessageDialog(this, new MoodyMessage(
 					"Moody Error", "An Error Ocurred Retrieving Data"),
@@ -88,72 +84,47 @@ public class UserDetailsActivity extends Activity
 		}
 	}
 
-	public void initText(JSONObject list) {
-		try {
-			final JSONArray coursesArray = list.getJSONArray("array");
+	public void showHideLayout(int lID, Boolean show) {
 
-			final String[] attributes = { "fullname", "firstname", "lastname",
-					"email", "address", "phone1", "phone2", "description",
-					"url", "skype", "yahoo" };
-
-			final int[] textIds = { R.id.textView_full_name,
-					R.id.editText_firstname, R.id.editText_lastname,
-					R.id.editText_email, R.id.editText_address,
-					R.id.editText_phonenumber, R.id.editText_mobilephonenumber,
-					R.id.editText_description, R.id.editText_url,
-					R.id.editText_skype, R.id.editText_yahoo };
-
-			final int[] layoutIds = { R.id.relativeLayout_fullname,
-					R.id.linearLayout_firstname, R.id.linearLayout_lastname,
-					R.id.linearLayout_email, R.id.linearLayout_address,
-					R.id.linearLayout_phonenumber,
-					R.id.linearLayout_mobilephonenumber,
-					R.id.linearLayout_description, R.id.linearLayout_url,
-					R.id.linearLayout_skype, R.id.linearLayout_yahoo };
-
-			for (int i = 0; i < coursesArray.length(); i++) {
-				final JSONObject arrayCursor = coursesArray.getJSONObject(i);
-
-				for (int j = 0; j < attributes.length; j++) {
-					// String asdsa = (String) arrayCursor.get(attributes[j]);
-					Object obj = null;
-
-					// se não existir, rebenta e entra no catch, não faz nada,
-					// manda null para o IsValid que invalida e o resto do
-					// código
-					// esconde as opções.
-					try {
-						obj = arrayCursor.get(attributes[j]);
-					} catch (final JSONException ex) {
-
-					} catch (final Exception ex) {
-
-					}
-
-					if (isValidObject(obj)) {
-						String text = (String) arrayCursor.get(attributes[j]);
-
-						((TextView) findViewById(textIds[j]))
-								.setText((attributes[j]
-										.equalsIgnoreCase("description")) ? Html
-										.fromHtml(text) : text);
-					} else {
-						findViewById(layoutIds[j]).setVisibility(View.GONE);
-					}
-
-				}
-
-			}
-
-		} catch (final JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		findViewById(lID).setVisibility(show ? View.VISIBLE : View.GONE);
 
 	}
 
-	public boolean isValidObject(Object object) {
-		return object != null && !((String) object).isEmpty();
+	public void initTextView(int vID, String text, boolean hasHTML) {
+
+		// precisa de cast porque a View não tem text.
+		// se for campo que tenha HTML formata.
+		((TextView) findViewById(vID)).setText((hasHTML) ? Html.fromHtml(text)
+				: text);
+
+	}
+
+	public void processTextView(int vID, int lID, String text, boolean hasHTML) {
+
+		if (isValid(text))
+			initTextView(vID, text, hasHTML);
+		else
+			showHideLayout(lID, false);
+	}
+
+	public void initDetails(MoodleUser user) {
+		
+		processTextView(R.id.textView_full_name, R.id.relativeLayout_fullname, user.getFullname(), false);
+		processTextView(R.id.editText_firstname, R.id.linearLayout_firstname, user.getFirstname(), false);
+		processTextView(R.id.editText_lastname, R.id.linearLayout_lastname, user.getLastname(), false);
+		processTextView(R.id.editText_email, R.id.linearLayout_email, user.getEmail(), false);
+		processTextView(R.id.editText_address, R.id.linearLayout_address, user.getAddress(), false);
+		processTextView(R.id.editText_phonenumber, R.id.linearLayout_phonenumber, user.getPhone1(), false);
+		processTextView(R.id.editText_mobilephonenumber, R.id.linearLayout_mobilephonenumber, user.getPhone2(), false);
+		processTextView(R.id.editText_description, R.id.linearLayout_description, user.getDescription(), true);
+		processTextView(R.id.editText_url, R.id.linearLayout_url, user.getURL(), false);
+		processTextView(R.id.editText_skype, R.id.editText_skype, user.getSkype(), false);
+		processTextView(R.id.editText_yahoo, R.id.linearLayout_yahoo, user.getYahoo(), false);
+		
+	}
+
+	public boolean isValid(String propertie) {
+		return ((propertie != null) && (!propertie.isEmpty()));
 	}
 
 	@Override
