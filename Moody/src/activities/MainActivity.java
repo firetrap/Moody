@@ -8,7 +8,6 @@ import interfaces.InterfaceDialogFrag;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutionException;
 
 import managers.AlertDialogs;
@@ -16,13 +15,8 @@ import managers.DataStore;
 import managers.Session;
 import model.EnumWebServices;
 import model.MoodyConstants;
-import model.MoodyMessage;
 import model.MoodyConstants.ActivityCode;
-import model.MoodyConstants.MoodySession;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import model.MoodyMessage;
 import restPackage.MoodleCourse;
 import restPackage.MoodleUser;
 import android.app.Activity;
@@ -52,12 +46,9 @@ import bitmap.BitmapResizer;
 import com.example.moody.R;
 
 import connections.CopyOfDataAsyncTask;
-import connections.DataAsyncTask;
 
 public class MainActivity extends Activity implements OnClickListener,
 		InterfaceDialogFrag {
-
-	private JSONObject jsonObj;
 
 	private DrawerLayout myDrawerLayout;
 
@@ -98,7 +89,7 @@ public class MainActivity extends Activity implements OnClickListener,
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		final LinearLayout inserPoint = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
-		
+
 		if (courses == null || courses.length == 0) {
 
 			fatalError("Moody Fatal Error - Get Courses",
@@ -416,7 +407,6 @@ public class MainActivity extends Activity implements OnClickListener,
 			getContent = new CopyOfDataAsyncTask().execute(url, token,
 					EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
 			MoodleUser user = (MoodleUser) getContent;
-			String jgjhg = user.getFullname();
 			view.setText(user.getFullname());
 
 		} catch (InterruptedException e) {
@@ -433,38 +423,35 @@ public class MainActivity extends Activity implements OnClickListener,
 		final ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
 		if (session.getValues("PIC_PATH", null) == null) {
 
+			final String url = session.getValues(
+					MoodyConstants.MoodySession.KEY_URL, null);
+			final String token = session.getValues(
+					MoodyConstants.MoodySession.KEY_TOKEN, null);
+
+			final String id = session.getValues(
+					MoodyConstants.MoodySession.KEY_ID, null);
+
+			Object getContent;
+			Drawable pic = null;
+			MoodleUser user = null;
 			try {
+				getContent = new CopyOfDataAsyncTask().execute(url, token,
+						EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
+				user = (MoodleUser) getContent;
 
-				final String url = session.getValues(
-						MoodyConstants.MoodySession.KEY_URL, null);
-				final String token = session.getValues(
-						MoodyConstants.MoodySession.KEY_TOKEN, null);
-
-				final String con = String.format(
-						MoodyConstants.MoodySession.KEY_N_PARAMS, url, token,
-						"core_webservice_get_site_info"
-								+ MoodySession.KEY_JSONFORMAT);
-
-				jsonObj = new DataAsyncTask().execute(con, "json").get();
-				final String userPictureUrl = jsonObj
-						.getString("userpictureurl");
-
-				final Drawable pic = DataAsyncTask
-						.createDrawableFromUrl(userPictureUrl);
-
-				login_button.setBackgroundResource(R.drawable.bkgd_imagebutton);
-				login_button.setImageDrawable(pic);
-
-			} catch (final InterruptedException e) {
+			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (final ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (final JSONException e) {
+			} catch (ExecutionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+			user.getProfileImageURL();
+			pic = CopyOfDataAsyncTask.createDrawableFromUrl(user
+					.getProfileImageURL());
+			login_button.setBackgroundResource(R.drawable.bkgd_imagebutton);
+			login_button.setImageDrawable(pic);
 
 		} else {
 
