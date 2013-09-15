@@ -5,11 +5,14 @@ import java.util.concurrent.ExecutionException;
 import managers.AlertDialogs;
 import managers.Session;
 import model.MoodyConstants.MoodySession;
+import model.EnumWebServices;
 import model.MoodyMessage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import restPackage.MoodleUser;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -21,36 +24,39 @@ import android.widget.TextView;
 
 import com.example.moody.R;
 
+import connections.CopyOfDataAsyncTask;
 import connections.DataAsyncTask;
 
 public class UserDetailsActivity extends Activity
 // implements TextWatcher
 {
 
-	public JSONObject getData() {
+	public MoodleUser getData() {
+
+		final Session session = new Session(getApplicationContext());
+
+		final String url = session.getValues(MoodySession.KEY_URL, null);
+		final String token = session.getValues(MoodySession.KEY_TOKEN, null);
+		final String id = session.getValues(MoodySession.KEY_ID, null);
+
+		Object getContent = null;
+
 		try {
-			final Session session = new Session(getApplicationContext());
+			getContent = new CopyOfDataAsyncTask().execute(url, token,
+					EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
 
-			final String url = session.getValues(MoodySession.KEY_URL, null);
-			final String token = session
-					.getValues(MoodySession.KEY_TOKEN, null);
-			final String id = session.getValues(MoodySession.KEY_ID, null);
-			final String con = String.format(MoodySession.KEY_PARAMS, url,
-					token, "core_user_get_users_by_id&userids[0]", id
-							+ MoodySession.KEY_JSONFORMAT);
-
-			return new DataAsyncTask().execute(con, "json").get();
-		} catch (final InterruptedException e) {
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (final ExecutionException e) {
+		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
-		return null;
+		MoodleUser user = (MoodleUser) getContent;
+
+		
+		return user;
 	}
 
 	public void initComponents() {
@@ -63,7 +69,7 @@ public class UserDetailsActivity extends Activity
 		 * ((EditText)findViewById
 		 * (R.id.editText_email)).addTextChangedListener(this);
 		 **/
-		final JSONObject list = getData();
+		final MoodleUser list = getData();
 
 		if (list != null) {
 			initText(list);
