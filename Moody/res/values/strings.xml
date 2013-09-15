@@ -11,7 +11,9 @@
     <string name="login_image"></string>
     <string name="title_activity_left">LeftActivity</string>
     <string name="title_activity_right">RightActivity</string>
-    <string name="moodyButtonOk">OK</string>
+    <string name="moody_ok">OK</string>
+    <string name="moody_yes">Yes</string>
+    <string name="moody_no">No</string>
 
     <!-- Strings related to login -->
     <string name="title_activity_login">Sign in</string>

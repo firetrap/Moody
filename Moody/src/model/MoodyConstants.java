@@ -12,6 +12,8 @@ public final class MoodyConstants {
 	public final class ActivityCode {
 
 		public static final int DIALOG_FRAG_USER_PIC = 0;
+		public static final String DIALOG_FRAG_USER_CLOUD_DROPBOX = "com.dropbox.android";
+		public static final String DIALOG_FRAG_USER_CLOUD_DRIVE = "com.google.android.apps.docs";
 
 		/**
 		 * 
@@ -67,6 +69,8 @@ public final class MoodyConstants {
 		}
 
 	}
+	
+	
 
 	/**
 	 * 

@@ -77,6 +77,34 @@ public final class AlertDialogs {
 			MoodyMessage mensagem, DialogInterface.OnClickListener onClick,
 			Boolean status) {
 
+		initBuilder(context, mensagem, status);
+
+		getAlertDialog().setButton(DialogInterface.BUTTON_POSITIVE,
+				context.getString(R.string.moody_ok), onClick);
+
+		getAlertDialog().show();
+
+	}
+
+	public static void showMessageDialog(Activity context,
+			MoodyMessage mensagem, DialogInterface.OnClickListener frtOnClick,
+			DialogInterface.OnClickListener sndOnClick, Boolean status) {
+
+		initBuilder(context, mensagem, status);
+
+		getAlertDialog().setButton(DialogInterface.BUTTON_POSITIVE,
+				context.getString(R.string.moody_yes), frtOnClick);
+
+		getAlertDialog().setButton(DialogInterface.BUTTON_NEGATIVE,
+				context.getString(R.string.moody_no), sndOnClick);
+
+		getAlertDialog().show();
+
+	}
+
+	private static void initBuilder(Activity context, MoodyMessage mensagem,
+			Boolean status) {
+
 		builder = new AlertDialog.Builder(context);
 
 		getBuilder().setTitle(mensagem.getAssunto());
@@ -90,11 +118,6 @@ public final class AlertDialogs {
 		// #########################################################################################################
 
 		alertDialog = getBuilder().create();
-
-		getAlertDialog().setButton(DialogInterface.BUTTON_POSITIVE,
-				context.getString(R.string.moodyButtonOk), onClick);
-
-		getAlertDialog().show();
 
 	}
 
