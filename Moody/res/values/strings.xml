@@ -52,7 +52,7 @@
     <string name="user_details_hint_yahoo">Fill Yahoo ID</string>
     <string name="user_details_text_yahoo">Yahoo ID: </string>
     <string name="user_details_hint_url">Fill Personal Web Page </string>
-    <string name="user_details_text_url">Web Page ID: </string>
+    <string name="user_details_text_url">Web Page: </string>
     <string name="user_details_hint_description">Fill Your Description</string>
     <string name="user_details_text_description">Description: </string>
     <string name="upload_from_gallery">Gallery</string>

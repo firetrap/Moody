@@ -8,18 +8,23 @@ import interfaces.InterfaceDialogFrag;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutionException;
 
+import managers.AlertDialogs;
 import managers.DataStore;
 import managers.Session;
+import model.EnumWebServices;
 import model.MoodyConstants;
+import model.MoodyMessage;
 import model.MoodyConstants.ActivityCode;
 import model.MoodyConstants.MoodySession;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import restPackage.MoodleCourse;
+import restPackage.MoodleUser;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
@@ -46,6 +51,7 @@ import bitmap.BitmapResizer;
 
 import com.example.moody.R;
 
+import connections.CopyOfDataAsyncTask;
 import connections.DataAsyncTask;
 
 public class MainActivity extends Activity implements OnClickListener,
@@ -60,45 +66,100 @@ public class MainActivity extends Activity implements OnClickListener,
 	// Session Manager Class
 	Session session;
 
-	private void coursesInit(JSONArray coursesArray) throws JSONException {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		// shared pref
+		session = new Session(getApplicationContext());
+		myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+		populateUsername();
+		populateLeftListview();
+		populateUserPicture();
+
+		// When its created it will get any course to populate the main
+		// fragment
+		final Entry<String, String> course = organizedCourses.entrySet()
+				.iterator().next();
+		final String courseName = course.getValue();
+		final String courseId = course.getKey();
+		final Bundle bundle = new Bundle();
+		bundle.putString("courseName", courseName);
+		bundle.putString("courseId", courseId);
+		initContentPreview(bundle);
+
+	}
+
+	private void coursesInit(MoodleCourse[] courses) {
 
 		final LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		final LinearLayout inserPoint = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
+		
+		if (courses == null || courses.length == 0) {
 
-		for (int j = 0; j < coursesArray.length(); j++) {
+			fatalError("Moody Fatal Error - Get Courses",
+					"An Error Ocurred Retrieving Data contact your Moodle Administrator");
 
-			final JSONObject arrayCursor = coursesArray.getJSONObject(j);
+		} else {
+			for (int j = 0; j < courses.length; j++) {
 
-			final LinearLayout row = new LinearLayout(this);
-			row.setLayoutParams(new LayoutParams(
-					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-			final View view = inflater.inflate(
-					R.layout.courses_button_left_drawer, null);
+				final LinearLayout row = new LinearLayout(this);
+				row.setLayoutParams(new LayoutParams(
+						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+				final View view = inflater.inflate(
+						R.layout.courses_button_left_drawer, null);
 
-			final Button btnTag = (Button) view.findViewById(R.id.course_id);
-			btnTag.setLayoutParams(new LayoutParams(
-					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+				final Button btnTag = (Button) view
+						.findViewById(R.id.course_id);
+				btnTag.setLayoutParams(new LayoutParams(
+						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
-			final String name = arrayCursor.getString("fullname");
-			final int id = arrayCursor.getInt("id");
-			btnTag.setText(name);
-			btnTag.setId(id);
+				final String name = courses[j].getFullname();
+				final int id = courses[j].getId().intValue();
+				btnTag.setText(name);
+				btnTag.setId(id);
 
-			organizedCourses.put(Integer.toString(id), name);
+				organizedCourses.put(Integer.toString(id), name);
 
-			if (j != 0) {
-				btnTag.setBackgroundResource(R.drawable.border_inside);
+				if (j != 0) {
+					btnTag.setBackgroundResource(R.drawable.border_inside);
+				}
+
+				row.addView(view);
+
+				inserPoint.addView(row, 3);
+
 			}
 
-			row.addView(view);
-
-			inserPoint.addView(row, 3);
 		}
 
+	}
+
+	/**
+	 * Moody Fatal Error Method it will display an alert dialog with the message
+	 * and it will clear app data and kill the app
+	 */
+	private void fatalError(String title, String msg) {
+		AlertDialogs.showMessageDialog(this, new MoodyMessage(title, msg),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						session.logoutUser();
+						// limpa cache ao fazer logout.
+						new DataStore().deleteCache(getApplicationContext());
+						finish();
+						android.os.Process.killProcess(android.os.Process
+								.myPid());
+					}
+
+				}, false);
 	}
 
 	public void initContentPreview(Bundle bundle) {
@@ -262,31 +323,6 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		// shared pref
-		session = new Session(getApplicationContext());
-		myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-		populateUsername();
-		populateLeftListview();
-		populateUserPicture();
-
-		// When its created it will get any course to populate the main fragment
-		final Entry<String, String> course = organizedCourses.entrySet()
-				.iterator().next();
-		final String courseName = course.getValue();
-		final String courseId = course.getKey();
-		final Bundle bundle = new Bundle();
-		bundle.putString("courseName", courseName);
-		bundle.putString("courseId", courseId);
-		initContentPreview(bundle);
-
-	}
-
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// // Inflate the menu; this adds items to the action bar if it is
 		// present.
@@ -341,7 +377,6 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	public void populateLeftListview() {
-
 		final String url = session.getValues(
 				MoodyConstants.MoodySession.KEY_URL, null);
 		final String token = session.getValues(
@@ -350,25 +385,18 @@ public class MainActivity extends Activity implements OnClickListener,
 		final String id = session.getValues(MoodyConstants.MoodySession.KEY_ID,
 				null);
 
-		final String con = String.format(
-				MoodyConstants.MoodySession.KEY_PARAMS, url, token,
-				"core_enrol_get_users_courses&userid", id
-						+ MoodySession.KEY_JSONFORMAT);
-
+		Object getContent;
 		try {
-			jsonObj = new DataAsyncTask().execute(con, "json").get();
-			final JSONArray coursesArray = jsonObj.getJSONArray("array");
-			coursesInit(coursesArray);
-
-		} catch (final InterruptedException e) {
+			getContent = new CopyOfDataAsyncTask().execute(url, token,
+					EnumWebServices.CORE_ENROL_GET_USERS_COURSES, id).get();
+			MoodleCourse[] courses = (MoodleCourse[]) getContent;
+			coursesInit(courses);
+		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final ExecutionException e) {
+			e1.printStackTrace();
+		} catch (ExecutionException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
 	}
 
@@ -380,21 +408,21 @@ public class MainActivity extends Activity implements OnClickListener,
 		final String token = session.getValues(
 				MoodyConstants.MoodySession.KEY_TOKEN, null);
 
-		final String con = String.format(
-				MoodyConstants.MoodySession.KEY_N_PARAMS, url, token,
-				"core_webservice_get_site_info" + MoodySession.KEY_JSONFORMAT);
+		final String id = session.getValues(MoodyConstants.MoodySession.KEY_ID,
+				null);
 
+		Object getContent;
 		try {
-			jsonObj = new DataAsyncTask().execute(con, "json").get();
-			view.setText(jsonObj.getString("fullname"));
+			getContent = new CopyOfDataAsyncTask().execute(url, token,
+					EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
+			MoodleUser user = (MoodleUser) getContent;
+			String jgjhg = user.getFullname();
+			view.setText(user.getFullname());
 
-		} catch (final InterruptedException e) {
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (final ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final JSONException e) {
+		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
