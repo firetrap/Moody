@@ -44,12 +44,12 @@ public class CopyOfDataAsyncTask extends AsyncTask<Object, Void, Object> {
 			EnumWebServices webService, String webServiceParams)
 			throws UnsupportedEncodingException, MoodleRestException {
 
-		long userId;
-		long courseId;
-
 		MoodleCallRestWebService.init(
 				urlString + "/webservice/rest/server.php", token);
+		webServiceParams = webServiceParams.trim();
 
+		long userId;
+		long courseId;
 		switch (webService) {
 		case CORE_ENROL_GET_USERS_COURSES:
 			userId = Long.parseLong(webServiceParams);
@@ -65,6 +65,7 @@ public class CopyOfDataAsyncTask extends AsyncTask<Object, Void, Object> {
 			courseId = Long.parseLong(webServiceParams);
 			MoodleCourseContent[] courseContent = MoodleRestCourse
 					.getCourseContent(courseId, null);
+			courseContent[0].getName();
 			return courseContent;
 
 		default:

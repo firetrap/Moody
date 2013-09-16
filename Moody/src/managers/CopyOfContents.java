@@ -8,16 +8,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import connections.CopyOfDataAsyncTask;
 
-//ESTA CLASSE É DESNECESSARIA APENAS FOI CRIADA DEVIDO AO BUG DO MOODLE NO FUTURO O ELSE ABAIXO IRA SER MOVIDO PARA O TOPICS FRAGMENT
 public class CopyOfContents {
-
 
 	// Session Manager Class
 	Session session;
 
-	// DEVIDO AO BUG DESCRITO ABAIXO ESTE getTopics ESTA A RECEBER MERDA A MAIS
-	// = RESOURCES.
-	public Object getCourse(String courseId, Resources resources,
+	// Get data from server and store
+	public Object getCourseContents(String courseId, Resources resources,
 			Context context) {
 
 		session = new Session(context);
