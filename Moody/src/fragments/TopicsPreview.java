@@ -140,16 +140,15 @@ public class TopicsPreview extends Fragment {
 				topicName.setText(courseContent[j].getName());
 
 				// Loop for the modules array
-
-				String name = "";
+				String moduleName = "";
 				for (int i = 0; i < modules.length; i++) {
 
-					name += modules[i].getName();
+					moduleName += "- " + modules[i].getName() + "\n";
 
 				}
 				TextView topicModule = (TextView) topicsView
 						.findViewById(R.id.content_preview_textView);
-				topicModule.setText(name);
+				topicModule.setText(moduleName);
 
 				// Where the textview id will be course id and the textview
 				// tag will be the topic id

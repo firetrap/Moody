@@ -28,6 +28,8 @@
         android:clickable="true"
         android:drawablePadding="10dp"
         android:drawableRight="@drawable/right_arrow"
+        android:ellipsize="end"
+        android:maxLines="5"
         android:onClick="onContentPreviewClick"
         android:text="@string/content_preview" />
 
