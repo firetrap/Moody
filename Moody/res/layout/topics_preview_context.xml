@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/content_preview_textView"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/topic_label"
         android:layout_marginBottom="10dp"
@@ -28,26 +28,12 @@
         android:clickable="true"
         android:drawablePadding="10dp"
         android:drawableRight="@drawable/right_arrow"
-        android:ellipsize="end"
         android:maxLines="5"
         android:onClick="onContentPreviewClick"
         android:text="@string/content_preview" />
 
-    <!-- <ImageButton -->
-    <!-- android:id="@+id/arrow_topics_image_button_" -->
-    <!-- android:layout_width="wrap_content" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:layout_alignParentRight="true" -->
-    <!-- android:layout_centerVertical="true" -->
-    <!-- android:layout_marginRight="10dp" -->
-    <!-- android:background="@color/transparent" -->
-    <!-- android:contentDescription="@string/arrow_description" -->
-    <!-- android:fitsSystemWindows="false" -->
-    <!-- android:onClick="onContentPreviewClick" -->
-    <!-- android:paddingRight="5dp" -->
-    <!-- android:src="@drawable/right_arrow" /> -->
-
     <View
+        android:id="@+id/view1"
         android:layout_width="fill_parent"
         android:layout_height="10dp"
         android:layout_alignBottom="@id/content_preview_textView"

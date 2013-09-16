@@ -4,9 +4,6 @@ import managers.CopyOfContents;
 import managers.CopyOfDataStore;
 import managers.Session;
 import model.EnumWebServices;
-
-import org.json.JSONException;
-
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import android.app.Fragment;
@@ -55,19 +52,13 @@ public class TopicsPreview extends Fragment {
 		}
 		courseContent = (MoodleCourseContent[]) Object;
 
-		try {
-			return createTopicsRows(courseContent, courseName, courseId);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return createTopicsRows(courseContent, courseName, courseId);
 
-		return null;
 	}
 
 	// Create the "row" with the header and the content
 	protected View createTopicsRows(MoodleCourseContent[] courseContent,
-			String CourseName, String courseId) throws JSONException {
+			String CourseName, String courseId) {
 		LayoutInflater inflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -139,11 +130,22 @@ public class TopicsPreview extends Fragment {
 						.findViewById(R.id.topic_label);
 				topicName.setText(courseContent[j].getName());
 
-				// Loop for the modules array
 				String moduleName = "";
+				// Loop for the modules array
 				for (int i = 0; i < modules.length; i++) {
 
-					moduleName += "- " + modules[i].getName() + "\n";
+					String getNameDirty = modules[i].getName();
+					String getNamePure = "";
+
+					for (int n = 0; n < getNameDirty.split("\\s+").length; n++) {
+						if (n == 5) {
+							break;
+						}
+
+						getNamePure += getNameDirty.split("\\s+")[n] + " ";
+					}
+
+					moduleName += "-" + getNamePure + "\n";
 
 				}
 				TextView topicModule = (TextView) topicsView
