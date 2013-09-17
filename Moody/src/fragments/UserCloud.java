@@ -4,7 +4,7 @@
 package fragments;
 
 import managers.AlertDialogs;
-import model.MoodyConstants.ActivityCode;
+import model.MoodyConstants;
 import model.MoodyMessage;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
@@ -46,9 +46,8 @@ public class UserCloud extends DialogFragment {
 						Toast.makeText(getActivity().getBaseContext(),
 								"dropbox", Toast.LENGTH_SHORT).show();
 
+						processCloud(MoodyConstants.DIALOG_FRAG_USER_CLOUD_DROPBOX);
 
-						processCloud(ActivityCode.DIALOG_FRAG_USER_CLOUD_DROPBOX);
-						
 					}
 				});
 
@@ -61,7 +60,7 @@ public class UserCloud extends DialogFragment {
 						Toast.makeText(getActivity().getBaseContext(), "drive",
 								Toast.LENGTH_SHORT).show();
 
-						processCloud(ActivityCode.DIALOG_FRAG_USER_CLOUD_DRIVE);
+						processCloud(MoodyConstants.DIALOG_FRAG_USER_CLOUD_DRIVE);
 
 					}
 				});
@@ -86,29 +85,28 @@ public class UserCloud extends DialogFragment {
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
 
-						//Se tem google play chama, senão chama o browser.
+						// Se tem google play chama, senão chama o browser.
 						try {
-							
+
 							callOnline("market://details?id=" + appName);
-							
-						} catch (Exception e) { 
-							
-							//google play app is not installed
-							callOnline("https://play.google.com/store/apps/details?id="  + appName);
-						
+
+						} catch (Exception e) {
+
+							// google play app is not installed
+							callOnline("https://play.google.com/store/apps/details?id="
+									+ appName);
+
 						}
 
 						break;
 
 					case DialogInterface.BUTTON_NEGATIVE:
-						
+
 						dialog.dismiss();
 
 						break;
 					}
 				}
-				
-				
 
 			};
 
@@ -121,14 +119,13 @@ public class UserCloud extends DialogFragment {
 
 	}
 
-	private void callOnline(String uri){
-		Intent intent = new Intent(Intent.ACTION_VIEW,
-				Uri.parse(uri));
+	private void callOnline(String uri) {
+		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
 
 		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivity(intent);
 	}
-	
+
 	private boolean isInstalled(String uri) {
 
 		try {

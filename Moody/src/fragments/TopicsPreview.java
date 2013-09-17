@@ -22,8 +22,6 @@ public class TopicsPreview extends Fragment {
 
 	// Session Manager Class
 	Session session;
-	private Object Object;
-	private MoodleCourseContent[] courseContent = null;
 
 	public TopicsPreview() {
 	}
@@ -31,25 +29,23 @@ public class TopicsPreview extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		session = new Session(getActivity().getApplicationContext());
 
+		session = new Session(getActivity().getApplicationContext());
 		String courseName = getArguments().getString("courseName");
 		String courseId = getArguments().getString("courseId");
-		Context activityContext = getActivity().getApplicationContext();
 
-	
-		Object = new Contents().getSingleCourse(courseId, getResources(),
-				activityContext);
-
-		courseContent = (MoodleCourseContent[]) Object;
-
-		return createTopicsRows(courseContent, courseName, courseId);
-
+		return createTopicsRows(courseName, courseId);
 	}
 
-	// Create the "row" with the header and the content
-	protected View createTopicsRows(MoodleCourseContent[] courseContent,
-			String CourseName, String courseId) {
+	/**
+	 * 
+	 * Create the "row" with the header and the content
+	 * 
+	 * @param CourseName
+	 * @param courseId
+	 * @return View
+	 */
+	protected View createTopicsRows(String CourseName, String courseId) {
 		LayoutInflater inflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -64,19 +60,20 @@ public class TopicsPreview extends Fragment {
 
 		insertPoint.addView(topicsHeaderView);
 
-		createTopicsContent(courseContent, inflater, insertPoint, courseId);
+		createTopicsContent(inflater, insertPoint, courseId);
 
 		return insertPoint;
 
 	}
 
-	// Method to create the header of the topics preview with the course path
-	// and the "add favorites" button
 	/**
+	 * Method to create the header of the topics preview with the course path
+	 * and the "add favorites" button
+	 * 
 	 * @param CourseName
 	 * @param courseId
 	 * @param inflater
-	 * @return
+	 * @return View
 	 */
 	protected View createTopicsHeader(String CourseName, String courseId,
 			LayoutInflater inflater) {
@@ -96,16 +93,21 @@ public class TopicsPreview extends Fragment {
 		return topicsHeaderView;
 	}
 
-	// Method to create the topics preview with the courses content and add this
-	// content to the "row"
 	/**
+	 * Method to create the topics preview with the courses content and add this
+	 * content to the "row"
+	 * 
 	 * @param rows
 	 * @param inflater
 	 * @param insertPoint
 	 * @param courseId
 	 */
-	protected void createTopicsContent(MoodleCourseContent[] courseContent,
-			LayoutInflater inflater, LinearLayout insertPoint, String courseId) {
+	protected void createTopicsContent(LayoutInflater inflater,
+			LinearLayout insertPoint, String courseId) {
+
+		MoodleCourseContent[] courseContent = new Contents()
+				.getCourseContent(courseId, getResources(), getActivity()
+						.getApplicationContext());
 
 		for (int j = 0; j < courseContent.length; j++) {
 

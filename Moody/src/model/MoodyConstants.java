@@ -9,68 +9,45 @@ package model;
  */
 public final class MoodyConstants {
 
-	public final class ActivityCode {
+	// All Shared Preferences Keys
+	public static final String IS_LOGIN = "IsLoggedIn";
 
-		public static final int DIALOG_FRAG_USER_PIC = 0;
-		public static final String DIALOG_FRAG_USER_CLOUD_DROPBOX = "com.dropbox.android";
-		public static final String DIALOG_FRAG_USER_CLOUD_DRIVE = "com.google.android.apps.docs";
+	// User ID
+	public static final String KEY_ID = "id";
 
-		/**
-		 * 
-		 * - Construtor privado - Assegura que classe não é instanciavel.
-		 * 
-		 **/
-		private ActivityCode() {
-		}
+	public static final String KEY_JSONFORMAT = "&moodlewsrestformat=json";
 
-	}
+	public static final String KEY_N_PARAMS = "%s/webservice/rest/server.php?wstoken=%s&wsfunction=%s";
 
-	public final class MoodySession {
+	// User name (make variable public to access from outside)
+	public static final String KEY_NAME = "name";
 
-		// All Shared Preferences Keys
-		public static final String IS_LOGIN = "IsLoggedIn";
+	public static final String KEY_PARAMS = "%s/webservice/rest/server.php?wstoken=%s&wsfunction=%s=%s";
 
-		// User ID
-		public static final String KEY_ID = "id";
+	// Email address (make variable public to access from outside)
+	public static final String KEY_TOKEN = "token";
 
-		public static final String KEY_JSONFORMAT = "&moodlewsrestformat=json";
+	// Moodle URL
+	public static final String KEY_URL = "url";
 
-		public static final String KEY_N_PARAMS = "%s/webservice/rest/server.php?wstoken=%s&wsfunction=%s";
+	// Sharedpref file name
+	public static final String PREF_NAME = "MoodyPreferences";
 
-		// User name (make variable public to access from outside)
-		public static final String KEY_NAME = "name";
+	/**
+	 * 
+	 * Atributos Constants da Sessão do Moody.
+	 * 
+	 **/
 
-		public static final String KEY_PARAMS = "%s/webservice/rest/server.php?wstoken=%s&wsfunction=%s=%s";
+	// Shared pref mode
+	public static final int PRIVATE_MODE = 0;
 
-		// Email address (make variable public to access from outside)
-		public static final String KEY_TOKEN = "token";
+	// Check if user has picture! it's a workaround because moodle bug
+	public static final int DIALOG_FRAG_USER_PIC = 0;
 
-		// Moodle URL
-		public static final String KEY_URL = "url";
-
-		// Sharedpref file name
-		public static final String PREF_NAME = "MoodyPreferences";
-
-		/**
-		 * 
-		 * Atributos Constants da Sessão do Moody.
-		 * 
-		 **/
-
-		// Shared pref mode
-		public static final int PRIVATE_MODE = 0;
-
-		/**
-		 * 
-		 * - Construtor privado - Assegura que classe não é instanciavel.
-		 * 
-		 **/
-		private MoodySession() {
-		}
-
-	}
-	
-	
+	// PlayStore constants
+	public static final String DIALOG_FRAG_USER_CLOUD_DROPBOX = "com.dropbox.android";
+	public static final String DIALOG_FRAG_USER_CLOUD_DRIVE = "com.google.android.apps.docs";
 
 	/**
 	 * 

@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import managers.AlertDialogs;
-import model.MoodyConstants.ActivityCode;
+import model.MoodyConstants;
 import model.MoodyMessage;
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -79,7 +79,7 @@ public class UserPicture extends DialogFragment {
 
 				final InterfaceDialogFrag activity = (InterfaceDialogFrag) getActivity();
 				activity.onFinishEditDialog(selectedImagePath,
-						ActivityCode.DIALOG_FRAG_USER_PIC);
+						MoodyConstants.DIALOG_FRAG_USER_PIC);
 				this.dismiss();
 			}
 
@@ -97,7 +97,7 @@ public class UserPicture extends DialogFragment {
 
 				final InterfaceDialogFrag activity = (InterfaceDialogFrag) getActivity();
 				activity.onFinishEditDialog(cameraImagePath,
-						ActivityCode.DIALOG_FRAG_USER_PIC);
+						MoodyConstants.DIALOG_FRAG_USER_PIC);
 				this.dismiss();
 
 			}

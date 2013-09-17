@@ -18,7 +18,7 @@ public class UserDetailsActivity extends Activity
 // implements TextWatcher
 {
 
-		public void initComponents() {
+	public void initComponents() {
 		/**
 		 * ADDS LISTENERS, SO INPUT CAN BE VALIDATED
 		 * ((EditText)findViewById(R.id
@@ -28,7 +28,7 @@ public class UserDetailsActivity extends Activity
 		 * ((EditText)findViewById
 		 * (R.id.editText_email)).addTextChangedListener(this);
 		 **/
-		MoodleUser user = (MoodleUser) new Contents().getUser(getResources(),
+		MoodleUser user = new Contents().getUser(getResources(),
 				getApplicationContext());
 
 		if (user != null) {

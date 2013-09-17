@@ -9,7 +9,7 @@ import java.net.URL;
 
 import managers.AlertDialogs;
 import managers.Session;
-import model.MoodyConstants.MoodySession;
+import model.MoodyConstants;
 import model.MoodyMessage;
 
 import org.json.JSONException;
@@ -49,11 +49,11 @@ public class LoginActivity extends Activity {
 	/**
 	 * The default email to populate the email field with.
 	 */
-	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+	public static String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
 
 	private String finalToken = "";
 	private JSONObject getJson;
-	private String jsonFormat = MoodySession.KEY_JSONFORMAT;
+	private String jsonFormat = MoodyConstants.KEY_JSONFORMAT;
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -306,9 +306,9 @@ public class LoginActivity extends Activity {
 
 			try {
 				inputStream = downloadUrl(urlString);
-				final BufferedReader reader = new BufferedReader(
+				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(inputStream, "UTF-8"), 8);
-				final StringBuilder sb = new StringBuilder();
+				StringBuilder sb = new StringBuilder();
 				String line = null;
 				while ((line = reader.readLine()) != null) {
 					sb.append(line + "\n");
@@ -334,13 +334,15 @@ public class LoginActivity extends Activity {
 								+ (String) jObj.get("error") + "\n";
 						return false;
 					}
-					//On getToken sucess it will get the user id
+					// On getToken sucess it will get the user id
 					if (jObj.has("token")) {
 						finalToken = (String) jObj.get("token");
-						MoodleCallRestWebService.init(mUrl+"/webservice/rest/server.php", finalToken);
-						MoodleWebService getSiteInfo = MoodleRestWebService.getSiteInfo();
+						MoodleCallRestWebService.init(mUrl
+								+ "/webservice/rest/server.php", finalToken);
+						MoodleWebService getSiteInfo = MoodleRestWebService
+								.getSiteInfo();
 						UserId = Long.toString(getSiteInfo.getUserId());
-											}
+					}
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -368,7 +370,7 @@ public class LoginActivity extends Activity {
 					if (inputStream != null) {
 						inputStream.close();
 					}
-				} catch (final Exception e) {
+				} catch (Exception e) {
 					return false;
 				}
 			}
@@ -377,16 +379,15 @@ public class LoginActivity extends Activity {
 		}
 
 		private InputStream downloadUrl(String urlString) throws IOException {
-			final URL url = new URL(urlString);
-			final HttpURLConnection conn = (HttpURLConnection) url
-					.openConnection();
+			URL url = new URL(urlString);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setReadTimeout(10000 /* milliseconds */);
 			conn.setConnectTimeout(15000 /* milliseconds */);
 			conn.setRequestMethod("GET");
 			conn.setDoInput(true);
 			// Starts the query
 			conn.connect();
-			final InputStream stream = conn.getInputStream();
+			InputStream stream = conn.getInputStream();
 			return stream;
 		}
 
@@ -397,7 +398,7 @@ public class LoginActivity extends Activity {
 		}
 
 		@Override
-		protected void onPostExecute(final Boolean success) {
+		protected void onPostExecute(Boolean success) {
 			mAuthTask = null;
 			showProgress(false);
 
@@ -407,7 +408,7 @@ public class LoginActivity extends Activity {
 				session = new Session(getApplicationContext());
 				session.createLoginSession(mUser, finalToken, UserId, mUrl);
 
-				final Intent intent = new Intent(getApplicationContext(),
+				Intent intent = new Intent(getApplicationContext(),
 						MainActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
@@ -430,7 +431,7 @@ public class LoginActivity extends Activity {
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			final int shortAnimTime = getResources().getInteger(
+			int shortAnimTime = getResources().getInteger(
 					android.R.integer.config_shortAnimTime);
 
 			mLoginStatusView.setVisibility(View.VISIBLE);

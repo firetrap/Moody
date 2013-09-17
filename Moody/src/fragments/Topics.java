@@ -19,13 +19,13 @@ import android.widget.TextView;
 
 import com.example.moody.R;
 
-public class InsideTopics extends Fragment {
+public class Topics extends Fragment {
 
 	Object course;
 	// Session Manager Class
 	Session session;
 
-	public InsideTopics() {
+	public Topics() {
 	}
 
 	@Override
@@ -115,19 +115,18 @@ public class InsideTopics extends Fragment {
 			for (int i = 0; i < modulesArray.length; i++) {
 				MoodleModule singleModule = modulesArray[i];
 
-				final LinearLayout row = new LinearLayout(getActivity());
+				LinearLayout row = new LinearLayout(getActivity());
 				row.setLayoutParams(new LayoutParams(
 						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-				final View topicsContent = inflater.inflate(R.layout.topic,
-						null);
+				View topicsContent = inflater.inflate(R.layout.topic, null);
 
 				String moduleName = singleModule.getName();
-				final TextView topicLabel = (TextView) topicsContent
+				TextView topicLabel = (TextView) topicsContent
 						.findViewById(R.id.topic_label);
 				topicLabel.setText(moduleName);
 
-				final TextView topicContent = (TextView) topicsContent
+				TextView topicContent = (TextView) topicsContent
 						.findViewById(R.id.topic_content);
 				if (!singleModule.getDescription().isEmpty()) {
 					String moduleDescription = singleModule.getDescription();
@@ -135,6 +134,7 @@ public class InsideTopics extends Fragment {
 					topicContent.setText(Html.fromHtml(moduleDescription));
 				}
 
+				
 				row.addView(topicsContent);
 				insertPoint.addView(row);
 			}

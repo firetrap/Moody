@@ -1,6 +1,6 @@
 package activities;
 
-import fragments.InsideTopics;
+import fragments.Topics;
 import fragments.TopicsPreview;
 import fragments.UserCloud;
 import fragments.UserPicture;
@@ -8,15 +8,12 @@ import interfaces.InterfaceDialogFrag;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutionException;
 
 import managers.AlertDialogs;
 import managers.Contents;
 import managers.DataStore;
 import managers.Session;
-import model.EnumWebServices;
-import model.MoodyConstants.ActivityCode;
-import model.MoodyConstants.MoodySession;
+import model.MoodyConstants;
 import model.MoodyMessage;
 import restPackage.MoodleCourse;
 import restPackage.MoodleUser;
@@ -30,6 +27,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,9 +56,12 @@ public class MainActivity extends Activity implements OnClickListener,
 	// Session Manager Class
 	Session session;
 
+	public long startTime;
+	public long endTime;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
+		startTime = System.currentTimeMillis();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// shared pref
@@ -84,25 +85,10 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void populateUsername() {
 
 		TextView view = (TextView) findViewById(R.id.fullname_textview);
-		String url = session.getValues(MoodySession.KEY_URL, null);
-		String token = session.getValues(MoodySession.KEY_TOKEN, null);
 
-		String id = session.getValues(MoodySession.KEY_ID, null);
-
-		Object getContent = null;
-		try {
-			getContent = new DataAsyncTask().execute(url, token,
-					EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
-			MoodleUser user = (MoodleUser) getContent;
-			view.setText(user.getFullname());
-
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		MoodleUser user = new Contents().getUser(getResources(),
+				getApplicationContext());
+		view.setText(user.getFullname());
 
 	}
 
@@ -111,9 +97,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		if (session.getValues("PIC_PATH", null) == null) {
 
 			Drawable pic = null;
-			MoodleUser user = null;
-
-			user = (MoodleUser) new Contents().getUser(getResources(),
+			MoodleUser user = new Contents().getUser(getResources(),
 					getApplicationContext());
 
 			user.getProfileImageURL();
@@ -135,8 +119,8 @@ public class MainActivity extends Activity implements OnClickListener,
 	private void populateUserCourses() {
 
 		// Get all the courses from current user
-		MoodleCourse[] courses = (MoodleCourse[]) new Contents()
-				.getUserCourses(getResources(), getApplicationContext());
+		MoodleCourse[] courses = new Contents().getUserCourses(getResources(),
+				getApplicationContext());
 
 		// Start populating the menus and views
 		LayoutInflater inflater = (LayoutInflater) this
@@ -305,7 +289,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 
-		InsideTopics insideTopicsFrag = new InsideTopics();
+		Topics insideTopicsFrag = new Topics();
 		insideTopicsFrag.setArguments(bundle);
 		fragmentTransaction.replace(R.id.mainFragment, insideTopicsFrag);
 		fragmentTransaction.commit();
@@ -360,7 +344,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	@Override
 	public void onFinishEditDialog(String inputText, int code) {
 		switch (code) {
-		case ActivityCode.DIALOG_FRAG_USER_PIC:
+		case MoodyConstants.DIALOG_FRAG_USER_PIC:
 			session.addPref(inputText);
 			ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
 
@@ -411,4 +395,18 @@ public class MainActivity extends Activity implements OnClickListener,
 
 				}, false);
 	}
+
+	@Override
+	protected void onResume() {
+		endTime = System.currentTimeMillis();
+		Log.d("MoodyPerformance",
+				Long.toString(performanceMeasure(startTime, endTime)));
+		super.onResume();
+	}
+
+	public long performanceMeasure(long startTime, long endTime) {
+		long timestamp = endTime - startTime;
+		return timestamp;
+	}
+
 }

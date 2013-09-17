@@ -24,6 +24,16 @@
         android:layout_marginTop="10dp"
         android:text="@string/topics_contents" />
 
+    <TextView
+        android:id="@+id/topic_file"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/topic_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/topics_contents" />
+
     <View
         android:layout_width="fill_parent"
         android:layout_height="10dp"
@@ -33,10 +43,11 @@
         android:clickable="false" />
 
     <View
+        android:id="@+id/view1"
         android:layout_width="fill_parent"
         android:layout_height="10dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/topic_content"
+        android:layout_below="@id/topic_file"
         android:background="@drawable/border_inside"
         android:clickable="false" />
 

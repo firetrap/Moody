@@ -3,7 +3,11 @@ package managers;
 import java.util.concurrent.ExecutionException;
 
 import model.EnumWebServices;
-import model.MoodyConstants.MoodySession;
+import model.MoodyConstants;
+import restPackage.MoodleCourse;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleModule;
+import restPackage.MoodleUser;
 import android.content.Context;
 import android.content.res.Resources;
 import connections.DataAsyncTask;
@@ -26,26 +30,26 @@ public class Contents {
 	/**
 	 * @param resources
 	 * @param context
-	 * @return
+	 * @return MoodleUser
 	 */
-	public Object getUser(Resources resources, Context context) {
+	public MoodleUser getUser(Resources resources, Context context) {
 		session = new Session(context);
-		String url = session.getValues(MoodySession.KEY_URL, null);
-		String token = session.getValues(MoodySession.KEY_TOKEN, null);
-		String userId = session.getValues(MoodySession.KEY_ID, null);
+		String url = session.getValues(MoodyConstants.KEY_URL, null);
+		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
+		String userId = session.getValues(MoodyConstants.KEY_ID, null);
 		try {
 
 			String fileName = EnumWebServices.CORE_USER_GET_USERS_BY_ID.name()
 					+ userId;
 
 			if (isInCache(context, fileName)) {
-				return getContent = data.getData(context, fileName);
+				return (MoodleUser) data.getData(context, fileName);
 			} else {
 				getContent = new DataAsyncTask().execute(url, token,
 						EnumWebServices.CORE_USER_GET_USERS_BY_ID, userId)
 						.get();
 				data.storeData(context, getContent, fileName);
-				return getContent;
+				return (MoodleUser) getContent;
 			}
 
 		} catch (InterruptedException e) {
@@ -63,13 +67,13 @@ public class Contents {
 	/**
 	 * @param resources
 	 * @param context
-	 * @return
+	 * @return MoodleCourse[]
 	 */
-	public Object getUserCourses(Resources resources, Context context) {
+	public MoodleCourse[] getUserCourses(Resources resources, Context context) {
 		session = new Session(context);
-		String url = session.getValues(MoodySession.KEY_URL, null);
-		String token = session.getValues(MoodySession.KEY_TOKEN, null);
-		String userId = session.getValues(MoodySession.KEY_ID, null);
+		String url = session.getValues(MoodyConstants.KEY_URL, null);
+		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
+		String userId = session.getValues(MoodyConstants.KEY_ID, null);
 
 		try {
 
@@ -77,13 +81,13 @@ public class Contents {
 					.name() + userId;
 
 			if (isInCache(context, fileName)) {
-				return getContent = data.getData(context, fileName);
+				return (MoodleCourse[]) data.getData(context, fileName);
 			} else {
 				getContent = new DataAsyncTask().execute(url, token,
 						EnumWebServices.CORE_ENROL_GET_USERS_COURSES, userId)
 						.get();
 				data.storeData(context, getContent, fileName);
-				return getContent;
+				return (MoodleCourse[]) getContent;
 			}
 
 		} catch (InterruptedException e) {
@@ -102,14 +106,14 @@ public class Contents {
 	 * @param courseId
 	 * @param resources
 	 * @param context
-	 * @return
+	 * @return MoodleCourseContent[]
 	 */
-	public Object getSingleCourse(String courseId, Resources resources,
-			Context context) {
+	public MoodleCourseContent[] getCourseContent(String courseId,
+			Resources resources, Context context) {
 
 		session = new Session(context);
-		String url = session.getValues(MoodySession.KEY_URL, null);
-		String token = session.getValues(MoodySession.KEY_TOKEN, null);
+		String url = session.getValues(MoodyConstants.KEY_URL, null);
+		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
 
 		try {
 
@@ -117,13 +121,14 @@ public class Contents {
 					+ courseId;
 
 			if (isInCache(context, fileName)) {
-				return getContent = data.getData(context, fileName);
+
+				return (MoodleCourseContent[]) data.getData(context, fileName);
 			} else {
 				getContent = new DataAsyncTask().execute(url, token,
 						EnumWebServices.CORE_COURSE_GET_CONTENTS, courseId)
 						.get();
 				data.storeData(context, getContent, fileName);
-				return getContent;
+				return (MoodleCourseContent[]) getContent;
 			}
 
 		} catch (InterruptedException e) {
@@ -138,18 +143,36 @@ public class Contents {
 
 	}
 
-	public Object getSingleCourseTopics(String courseId, Resources resources,
-			Context context) {
-		return data;
+	/**
+	 * @param courseId
+	 * @param topicId
+	 * @param resources
+	 * @param context
+	 * @return MoodleModule[]
+	 */
+	public MoodleModule[] getTopicModules(String courseId, String topicId,
+			Resources resources, Context context) {
+
+		MoodleCourseContent[] course = getCourseContent(courseId, resources,
+				context);
+
+		for (int i = 0; i < course.length; i++) {
+			if (course[i].getId() == Long.parseLong(topicId)) {
+				return course[i].getMoodleModules();
+
+			}
+		}
+
+		return null;
 	}
 
 	/**
 	 * @param context
 	 * @param fileName
-	 * @return
+	 * @return boolean
 	 */
 	public boolean isInCache(Context context, String fileName) {
 		Object content = new DataStore().getData(context, fileName);
-		return content == null ? false : true;
+		return !(content == null) ? true : false;
 	}
 }
