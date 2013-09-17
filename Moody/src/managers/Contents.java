@@ -8,6 +8,14 @@ import android.content.Context;
 import android.content.res.Resources;
 import connections.DataAsyncTask;
 
+/**
+ * @author firetrap
+ * 
+ *         This class return the requested data, the procedure is always tries
+ *         to get data from cache if it doesn't exist it will download from
+ *         server and store in cache
+ * 
+ */
 public class Contents {
 
 	// Session Manager Class
@@ -15,8 +23,11 @@ public class Contents {
 	DataStore data = new DataStore();
 	Object getContent;
 
-	// Always tries to get data from cache if it doesn't exist it will download
-	// from moodle site and store in cache
+	/**
+	 * @param resources
+	 * @param context
+	 * @return
+	 */
 	public Object getUser(Resources resources, Context context) {
 		session = new Session(context);
 		String url = session.getValues(MoodySession.KEY_URL, null);
@@ -24,8 +35,8 @@ public class Contents {
 		String userId = session.getValues(MoodySession.KEY_ID, null);
 		try {
 
-			String fileName = EnumWebServices.CORE_USER_GET_USERS_BY_ID
-					.name() + userId;
+			String fileName = EnumWebServices.CORE_USER_GET_USERS_BY_ID.name()
+					+ userId;
 
 			if (isInCache(context, fileName)) {
 				return getContent = data.getData(context, fileName);
@@ -48,7 +59,12 @@ public class Contents {
 		return null;
 
 	}
-	
+
+	/**
+	 * @param resources
+	 * @param context
+	 * @return
+	 */
 	public Object getUserCourses(Resources resources, Context context) {
 		session = new Session(context);
 		String url = session.getValues(MoodySession.KEY_URL, null);
@@ -82,6 +98,12 @@ public class Contents {
 
 	}
 
+	/**
+	 * @param courseId
+	 * @param resources
+	 * @param context
+	 * @return
+	 */
 	public Object getSingleCourse(String courseId, Resources resources,
 			Context context) {
 
@@ -121,6 +143,11 @@ public class Contents {
 		return data;
 	}
 
+	/**
+	 * @param context
+	 * @param fileName
+	 * @return
+	 */
 	public boolean isInCache(Context context, String fileName) {
 		Object content = new DataStore().getData(context, fileName);
 		return content == null ? false : true;
