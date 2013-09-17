@@ -110,26 +110,11 @@ public class MainActivity extends Activity implements OnClickListener,
 		ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
 		if (session.getValues("PIC_PATH", null) == null) {
 
-			String url = session.getValues(MoodySession.KEY_URL, null);
-			String token = session.getValues(MoodySession.KEY_TOKEN, null);
-
-			String id = session.getValues(MoodySession.KEY_ID, null);
-
-			Object getContent;
 			Drawable pic = null;
 			MoodleUser user = null;
-			try {
-				getContent = new DataAsyncTask().execute(url, token,
-						EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
-				user = (MoodleUser) getContent;
 
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			user = (MoodleUser) new Contents().getUser(getResources(),
+					getApplicationContext());
 
 			user.getProfileImageURL();
 			pic = DataAsyncTask

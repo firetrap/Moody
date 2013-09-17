@@ -17,7 +17,38 @@ public class Contents {
 
 	// Always tries to get data from cache if it doesn't exist it will download
 	// from moodle site and store in cache
+	public Object getUser(Resources resources, Context context) {
+		session = new Session(context);
+		String url = session.getValues(MoodySession.KEY_URL, null);
+		String token = session.getValues(MoodySession.KEY_TOKEN, null);
+		String userId = session.getValues(MoodySession.KEY_ID, null);
+		try {
 
+			String fileName = EnumWebServices.CORE_USER_GET_USERS_BY_ID
+					.name() + userId;
+
+			if (isInCache(context, fileName)) {
+				return getContent = data.getData(context, fileName);
+			} else {
+				getContent = new DataAsyncTask().execute(url, token,
+						EnumWebServices.CORE_USER_GET_USERS_BY_ID, userId)
+						.get();
+				data.storeData(context, getContent, fileName);
+				return getContent;
+			}
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
+	
 	public Object getUserCourses(Resources resources, Context context) {
 		session = new Session(context);
 		String url = session.getValues(MoodySession.KEY_URL, null);

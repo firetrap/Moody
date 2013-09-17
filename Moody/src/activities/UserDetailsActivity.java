@@ -1,11 +1,7 @@
 package activities;
 
-import java.util.concurrent.ExecutionException;
-
 import managers.AlertDialogs;
-import managers.Session;
-import model.EnumWebServices;
-import model.MoodyConstants.MoodySession;
+import managers.Contents;
 import model.MoodyMessage;
 import restPackage.MoodleUser;
 import android.app.Activity;
@@ -18,37 +14,11 @@ import android.widget.TextView;
 
 import com.example.moody.R;
 
-import connections.DataAsyncTask;
-
 public class UserDetailsActivity extends Activity
 // implements TextWatcher
 {
 
-	public MoodleUser getData() {
-
-		Session session = new Session(getApplicationContext());
-		String url = session.getValues(MoodySession.KEY_URL, null);
-		String token = session.getValues(MoodySession.KEY_TOKEN, null);
-		String id = session.getValues(MoodySession.KEY_ID, null);
-
-		Object getContent = null;
-
-		try {
-			getContent = new DataAsyncTask().execute(url, token,
-					EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
-
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return (MoodleUser) getContent;
-	}
-
-	public void initComponents() {
+		public void initComponents() {
 		/**
 		 * ADDS LISTENERS, SO INPUT CAN BE VALIDATED
 		 * ((EditText)findViewById(R.id
@@ -58,7 +28,8 @@ public class UserDetailsActivity extends Activity
 		 * ((EditText)findViewById
 		 * (R.id.editText_email)).addTextChangedListener(this);
 		 **/
-		MoodleUser user = getData();
+		MoodleUser user = (MoodleUser) new Contents().getUser(getResources(),
+				getApplicationContext());
 
 		if (user != null) {
 			initDetails(user);
@@ -102,7 +73,7 @@ public class UserDetailsActivity extends Activity
 	}
 
 	public void initDetails(MoodleUser user) {
-		
+
 		processTextView(R.id.textView_full_name, R.id.relativeLayout_fullname,
 				user.getFullname(), false);
 		processTextView(R.id.editText_firstname, R.id.linearLayout_firstname,
