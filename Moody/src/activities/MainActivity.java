@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import managers.AlertDialogs;
-import managers.CopyOfDataStore;
 import managers.DataStore;
 import managers.Session;
 import model.EnumWebServices;
@@ -46,7 +45,7 @@ import bitmap.BitmapResizer;
 
 import com.example.moody.R;
 
-import connections.CopyOfDataAsyncTask;
+import connections.DataAsyncTask;
 
 public class MainActivity extends Activity implements OnClickListener,
 		InterfaceDialogFrag {
@@ -73,11 +72,11 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		// When its created it will get any course to populate the main
 		// fragment
-		final Entry<String, String> course = organizedCourses.entrySet()
-				.iterator().next();
-		final String courseName = course.getValue();
-		final String courseId = course.getKey();
-		final Bundle bundle = new Bundle();
+		Entry<String, String> course = organizedCourses.entrySet().iterator()
+				.next();
+		String courseName = course.getValue();
+		String courseId = course.getKey();
+		Bundle bundle = new Bundle();
 		bundle.putString("courseName", courseName);
 		bundle.putString("courseId", courseId);
 		initContentPreview(bundle);
@@ -86,10 +85,10 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	private void coursesInit(MoodleCourse[] courses) {
 
-		final LayoutInflater inflater = (LayoutInflater) this
+		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		final LinearLayout inserPoint = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
+		LinearLayout inserPoint = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
 
 		if (courses == null || courses.length == 0) {
 
@@ -99,21 +98,20 @@ public class MainActivity extends Activity implements OnClickListener,
 		} else {
 			for (int j = 0; j < courses.length; j++) {
 
-				final LinearLayout row = new LinearLayout(this);
+				LinearLayout row = new LinearLayout(this);
 				row.setLayoutParams(new LayoutParams(
 						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-				final View view = inflater.inflate(
+				View view = inflater.inflate(
 						R.layout.courses_button_left_drawer, null);
 
-				final Button btnTag = (Button) view
-						.findViewById(R.id.course_id);
+				Button btnTag = (Button) view.findViewById(R.id.course_id);
 				btnTag.setLayoutParams(new LayoutParams(
 						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
-				final String name = courses[j].getFullname();
-				final int id = courses[j].getId().intValue();
+				String name = courses[j].getFullname();
+				int id = courses[j].getId().intValue();
 				btnTag.setText(name);
 				btnTag.setId(id);
 
@@ -156,11 +154,11 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	public void initContentPreview(Bundle bundle) {
 
-		final FragmentManager fragmentManager = getFragmentManager();
-		final FragmentTransaction fragmentTransaction = fragmentManager
+		FragmentManager fragmentManager = getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 
-		final TopicsPreview fragment = new TopicsPreview();
+		TopicsPreview fragment = new TopicsPreview();
 		fragment.setArguments(bundle);
 		fragmentTransaction.replace(R.id.mainFragment, fragment);
 		fragmentTransaction.commit();
@@ -173,8 +171,8 @@ public class MainActivity extends Activity implements OnClickListener,
 		// send the button id to future development
 
 		if (organizedCourses.get(Integer.toString(v.getId())) != null) {
-			final String courseName = organizedCourses.get(Integer.toString(v
-					.getId()));
+			String courseName = organizedCourses
+					.get(Integer.toString(v.getId()));
 			Integer.toString(v.getId());
 
 			Toast.makeText(getApplicationContext(),
@@ -191,14 +189,14 @@ public class MainActivity extends Activity implements OnClickListener,
 		switch (v.getId()) {
 		case R.id.login_image_button:
 
-			final FragmentManager fm = getFragmentManager();
-			final UserPicture userDetailsDialog = new UserPicture();
+			FragmentManager fm = getFragmentManager();
+			UserPicture userDetailsDialog = new UserPicture();
 			userDetailsDialog.setRetainInstance(true);
 			userDetailsDialog.show(fm, "fragment_name");
 
 			break;
 		case R.id.logout_image_button:
-			final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					switch (which) {
@@ -208,8 +206,8 @@ public class MainActivity extends Activity implements OnClickListener,
 						// limpa cache ao fazer logout.
 						new DataStore().deleteCache(getApplicationContext());
 
-						final Intent intent = new Intent(
-								getApplicationContext(), LoginActivity.class);
+						Intent intent = new Intent(getApplicationContext(),
+								LoginActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 						startActivity(intent);
 
@@ -224,7 +222,7 @@ public class MainActivity extends Activity implements OnClickListener,
 				}
 			};
 
-			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Logout");
 			builder.setMessage("Are you sure?")
 					.setPositiveButton("Yes", dialogClickListener)
@@ -233,7 +231,7 @@ public class MainActivity extends Activity implements OnClickListener,
 			break;
 
 		case R.id.fullname_textview:
-			final Intent intent = new Intent(getApplicationContext(),
+			Intent intent = new Intent(getApplicationContext(),
 					UserDetailsActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			myDrawerLayout.closeDrawer(Gravity.LEFT);
@@ -267,29 +265,29 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	public void onContentPreviewClick(View v) {
-		final String courseId = Integer.toString(v.getId());
-		final String courseName = organizedCourses.get(Integer.toString(v
-				.getId()));
-		final String topicId = (String) v.getTag();
+		String courseId = Integer.toString(v.getId());
+		String courseName = organizedCourses.get(Integer.toString(v.getId()));
+		String topicId = (String) v.getTag();
 
+		topicId.trim();
 		Toast.makeText(
 				getApplicationContext(),
 				" COURSE ID-> " + courseId + " TOPIC ID-> " + topicId
 						+ "COURSE NAME ->" + courseName, Toast.LENGTH_SHORT)
 				.show();
 
-		final Bundle bundle = new Bundle();
+		Bundle bundle = new Bundle();
 		bundle.putString("courseId", courseId);
 		bundle.putString("courseName", courseName);
 		bundle.putString("topicId", topicId);
 
-		final FragmentManager fragmentManager = getFragmentManager();
-		final FragmentTransaction fragmentTransaction = fragmentManager
+		FragmentManager fragmentManager = getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 
-		final InsideTopics fragment = new InsideTopics();
-		fragment.setArguments(bundle);
-		fragmentTransaction.replace(R.id.mainFragment, fragment);
+		InsideTopics insideTopicsFrag = new InsideTopics();
+		insideTopicsFrag.setArguments(bundle);
+		fragmentTransaction.replace(R.id.mainFragment, insideTopicsFrag);
 		fragmentTransaction.commit();
 
 	}
@@ -298,14 +296,13 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		// The view id is the same of the course id
 
-		final String courseName = organizedCourses.get(Integer.toString(v
-				.getId()));
-		final String courseId = Integer.toString(v.getId());
+		String courseName = organizedCourses.get(Integer.toString(v.getId()));
+		String courseId = Integer.toString(v.getId());
 		Toast.makeText(getApplicationContext(),
 				"Curso-> " + courseName + " ID-> " + v.getId(),
 				Toast.LENGTH_SHORT).show();
 
-		final Bundle bundle = new Bundle();
+		Bundle bundle = new Bundle();
 		bundle.putString("courseName", courseName);
 		bundle.putString("courseId", courseId);
 
@@ -339,7 +336,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		switch (code) {
 		case ActivityCode.DIALOG_FRAG_USER_PIC:
 			session.addPref(inputText);
-			final ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
+			ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
 
 			login_button.setImageBitmap(BitmapResizer
 					.decodeSampledBitmapFromResource(inputText,
@@ -369,17 +366,16 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	public void populateLeftListview() {
-		final String url = session.getValues(
-				MoodyConstants.MoodySession.KEY_URL, null);
-		final String token = session.getValues(
-				MoodyConstants.MoodySession.KEY_TOKEN, null);
-
-		final String id = session.getValues(MoodyConstants.MoodySession.KEY_ID,
+		String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
 				null);
+		String token = session.getValues(MoodyConstants.MoodySession.KEY_TOKEN,
+				null);
+
+		String id = session.getValues(MoodyConstants.MoodySession.KEY_ID, null);
 
 		Object getContent;
 		try {
-			getContent = new CopyOfDataAsyncTask().execute(url, token,
+			getContent = new DataAsyncTask().execute(url, token,
 					EnumWebServices.CORE_ENROL_GET_USERS_COURSES, id).get();
 			MoodleCourse[] courses = (MoodleCourse[]) getContent;
 			coursesInit(courses);
@@ -394,18 +390,17 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	public void populateUsername() {
 
-		 TextView view = (TextView) findViewById(R.id.fullname_textview);
-		 String url = session.getValues(
-				MoodyConstants.MoodySession.KEY_URL, null);
-		 String token = session.getValues(
-				MoodyConstants.MoodySession.KEY_TOKEN, null);
-
-		 String id = session.getValues(MoodyConstants.MoodySession.KEY_ID,
+		TextView view = (TextView) findViewById(R.id.fullname_textview);
+		String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
 				null);
+		String token = session.getValues(MoodyConstants.MoodySession.KEY_TOKEN,
+				null);
+
+		String id = session.getValues(MoodyConstants.MoodySession.KEY_ID, null);
 
 		Object getContent = null;
 		try {
-			getContent = new CopyOfDataAsyncTask().execute(url, token,
+			getContent = new DataAsyncTask().execute(url, token,
 					EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
 			MoodleUser user = (MoodleUser) getContent;
 			view.setText(user.getFullname());
@@ -421,22 +416,22 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	public void populateUserPicture() {
-		final ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
+		ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
 		if (session.getValues("PIC_PATH", null) == null) {
 
-			final String url = session.getValues(
-					MoodyConstants.MoodySession.KEY_URL, null);
-			final String token = session.getValues(
+			String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
+					null);
+			String token = session.getValues(
 					MoodyConstants.MoodySession.KEY_TOKEN, null);
 
-			final String id = session.getValues(
-					MoodyConstants.MoodySession.KEY_ID, null);
+			String id = session.getValues(MoodyConstants.MoodySession.KEY_ID,
+					null);
 
 			Object getContent;
 			Drawable pic = null;
 			MoodleUser user = null;
 			try {
-				getContent = new CopyOfDataAsyncTask().execute(url, token,
+				getContent = new DataAsyncTask().execute(url, token,
 						EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
 				user = (MoodleUser) getContent;
 
@@ -449,7 +444,7 @@ public class MainActivity extends Activity implements OnClickListener,
 			}
 
 			user.getProfileImageURL();
-			pic = CopyOfDataAsyncTask.createDrawableFromUrl(user
+			pic = DataAsyncTask.createDrawableFromUrl(user
 					.getProfileImageURL());
 			login_button.setBackgroundResource(R.drawable.bkgd_imagebutton);
 			login_button.setImageDrawable(pic);

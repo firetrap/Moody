@@ -1,13 +1,10 @@
 package fragments;
 
-import managers.Contents;
 import managers.DataStore;
 import managers.Session;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import model.EnumWebServices;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleModule;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -24,7 +21,7 @@ import com.example.moody.R;
 
 public class InsideTopics extends Fragment {
 
-	JSONObject jsonObject;
+	Object course;
 	// Session Manager Class
 	Session session;
 
@@ -36,48 +33,55 @@ public class InsideTopics extends Fragment {
 			Bundle savedInstanceState) {
 		session = new Session(getActivity().getApplicationContext());
 
-		final String courseId = getArguments().getString("courseId");
-		final String courseName = getArguments().getString("courseName");
-		final String topicId = getArguments().getString("topicId");
-		final Context activityContext = getActivity().getApplicationContext();
+		String courseId = getArguments().getString("courseId");
+		Long topicId = Long.parseLong(getArguments().getString("topicId"));
+		String courseName = getArguments().getString("courseName");
+		Context activityContext = getActivity().getApplicationContext();
 
-		final String fileName = "coursesContent-" + courseId;
-		// Always tries to get the JSON from cache if it doesn't exist it will
-		// return null, so it will download from moodle site
-		jsonObject = new DataStore().getJsonData(activityContext, fileName);
-		if (jsonObject == null) {
-			// Get the topics from internet in json
-			jsonObject = new Contents().getCourse(courseId, getResources(),
-					activityContext);
-		}
+		String fileName = EnumWebServices.CORE_COURSE_GET_CONTENTS.name()
+				+ courseId;
 
-		return createTopicsRows(jsonObject, courseName, courseId, topicId);
+		course = new DataStore().getData(activityContext, fileName);
+		MoodleCourseContent[] courseTopics = (MoodleCourseContent[]) course;
+		MoodleCourseContent topic = getTopic(topicId, courseTopics);
+
+		return createTopics(topic, courseName, courseId, topicId);
 	}
 
-	private View createTopicsRows(JSONObject jsonObject, String courseName,
-			String courseId, String topicId) {
-		final LayoutInflater inflater = (LayoutInflater) getActivity()
+	/**
+	 * @param topicId
+	 * @param courseContent
+	 * @return
+	 */
+	private MoodleCourseContent getTopic(Long topicId,
+			MoodleCourseContent[] courseContent) {
+		for (int j = 0; j < courseContent.length; j++) {
+			if (courseContent[j].getId() == topicId) {
+				return courseContent[j];
+			}
+
+		}
+		return null;
+	}
+
+	private View createTopics(MoodleCourseContent topic, String courseName,
+			String courseId, Long topicId) {
+		LayoutInflater inflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		final LinearLayout insertPoint = new LinearLayout(getActivity());
+		LinearLayout insertPoint = new LinearLayout(getActivity());
 		insertPoint.setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		insertPoint.setOrientation(LinearLayout.VERTICAL);
 
-		String topicName = getTopicName(jsonObject, topicId);
+		String topicName = topic.getName();
 
-		final View inflateHeader = createTopicsHeader(courseName, topicName,
-				inflater);
+		View inflateHeader = createTopicsHeader(courseName, topicName, inflater);
 
 		insertPoint.addView(inflateHeader);
 
-		try {
-			createTopicsContent(jsonObject, inflater, insertPoint, topicId);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		createTopicsContent(topic, inflater, insertPoint, topicId);
 
 		return insertPoint;
 	}
@@ -101,88 +105,42 @@ public class InsideTopics extends Fragment {
 
 	}
 
-	protected void createTopicsContent(JSONObject jsonContent,
-			LayoutInflater inflater, LinearLayout insertPoint, String topicId)
-			throws JSONException {
+	protected void createTopicsContent(MoodleCourseContent topic,
+			LayoutInflater inflater, LinearLayout insertPoint, Long topicId) {
 
-		final JSONArray topics = jsonContent.getJSONArray("array");
+		MoodleModule[] modulesArray = topic.getMoodleModules();
 
-		for (int j = 0; j < topics.length(); j++) {
-			try {
+		if (modulesArray != null) {
 
-				final JSONObject arrayCursor = topics.getJSONObject(j);
-				final JSONArray modules = arrayCursor.getJSONArray("modules");
+			for (int i = 0; i < modulesArray.length; i++) {
+				MoodleModule singleModule = modulesArray[i];
 
-				String getCorrectTopic = arrayCursor.getString("id");
-				if (getCorrectTopic.equalsIgnoreCase(topicId)
-						&& modules.length() != 0) {
+				final LinearLayout row = new LinearLayout(getActivity());
+				row.setLayoutParams(new LayoutParams(
+						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+				final View topicsContent = inflater.inflate(R.layout.topic,
+						null);
 
-					for (int i = 0; i < modules.length(); i++) {
-						final JSONObject singleModule = modules
-								.getJSONObject(i);
+				String moduleName = singleModule.getName();
+				final TextView topicLabel = (TextView) topicsContent
+						.findViewById(R.id.topic_label);
+				topicLabel.setText(moduleName);
 
-						final LinearLayout row = new LinearLayout(getActivity());
-						row.setLayoutParams(new LayoutParams(
-								android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-								android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-						final View topicsContent = inflater.inflate(
-								R.layout.topic, null);
+				final TextView topicContent = (TextView) topicsContent
+						.findViewById(R.id.topic_content);
+				if (!singleModule.getDescription().isEmpty()) {
+					String moduleDescription = singleModule.getDescription();
 
-						String moduleName = singleModule.getString("name");
-						final TextView topicLabel = (TextView) topicsContent
-								.findViewById(R.id.topic_label);
-						topicLabel.setText(moduleName);
-
-						final TextView topicContent = (TextView) topicsContent
-								.findViewById(R.id.topic_content);
-						if (!singleModule.isNull("description")) {
-							String moduleDescription = singleModule
-									.getString("description");
-							topicContent.setText(Html
-									.fromHtml(moduleDescription));
-						}
-
-						row.addView(topicsContent);
-						insertPoint.addView(row);
-					}
-
+					topicContent.setText(Html.fromHtml(moduleDescription));
 				}
 
-			} catch (final JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
-	/**
-	 * @param jsonObject
-	 * @param topicId
-	 * @return
-	 */
-	private String getTopicName(JSONObject jsonObject, String topicId) {
-		String topicName = "";
-		JSONArray topics;
-		try {
-			topics = jsonObject.getJSONArray("array");
-
-			for (int j = 0; j < topics.length(); j++) {
-				final JSONObject arrayCursor = topics.getJSONObject(j);
-				String idValue = arrayCursor.getString("id");
-				if (idValue.equalsIgnoreCase(topicId)) {
-					topicName = arrayCursor.getString("name");
-					break;
-				}
-
+				row.addView(topicsContent);
+				insertPoint.addView(row);
 			}
 
 		}
 
-		catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return topicName;
 	}
 
 }

@@ -4,16 +4,10 @@ import java.util.concurrent.ExecutionException;
 
 import managers.AlertDialogs;
 import managers.Session;
-import model.MoodyConstants.MoodySession;
 import model.EnumWebServices;
+import model.MoodyConstants.MoodySession;
 import model.MoodyMessage;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import restPackage.MoodleUser;
-
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -24,7 +18,6 @@ import android.widget.TextView;
 
 import com.example.moody.R;
 
-import connections.CopyOfDataAsyncTask;
 import connections.DataAsyncTask;
 
 public class UserDetailsActivity extends Activity
@@ -41,7 +34,7 @@ public class UserDetailsActivity extends Activity
 		Object getContent = null;
 
 		try {
-			getContent = new CopyOfDataAsyncTask().execute(url, token,
+			getContent = new DataAsyncTask().execute(url, token,
 					EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
 
 		} catch (InterruptedException e) {

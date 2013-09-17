@@ -1,5 +1,7 @@
 package managers;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,64 +10,67 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 
 public class DataStore {
 
-	// Load in an object
-	public JSONObject getJsonData(Context context, String name) {
-		final String filePath = "/" + name + ".data";
+	private static byte[] serialize(Object obj) throws IOException {
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		ObjectOutputStream o = new ObjectOutputStream(b);
+		o.writeObject(obj);
+		return b.toByteArray();
+	}
+
+	private static Object deserialize(byte[] bytes) throws IOException,
+			ClassNotFoundException {
+		ByteArrayInputStream b = new ByteArrayInputStream(bytes);
+		ObjectInputStream o = new ObjectInputStream(b);
+		return o.readObject();
+	}
+
+	// Save the Object in cacheDir
+	public void storeData(Context context, Object object, String fileName) {
+
 		try {
 
-			final ObjectInputStream in = new ObjectInputStream(
-					new FileInputStream(new File(new File(
-							context.getCacheDir(), "") + filePath)));
+			File file = new File(context.getCacheDir(), "");
+			String filePath = "/" + fileName + ".data";
+			FileOutputStream fileO = new FileOutputStream(file + filePath);
+			ObjectOutput out = new ObjectOutputStream(fileO);
 
-			final String jsonString = (String) in.readObject();
-			final JSONObject jsonObject = new JSONObject(jsonString);
+			out.writeObject(serialize(object));
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.getMessage();
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
+
+	}
+
+	// Load the object
+	public Object getData(Context context, String fileName) {
+		String filePath = "/" + fileName + ".data";
+		try {
+
+			File file = new File(context.getCacheDir(), "");
+			File path = new File(file + filePath);
+			FileInputStream fileI = new FileInputStream(path);
+			ObjectInputStream in = new ObjectInputStream(fileI);
+
+			byte[] seriallizedObject = (byte[]) in.readObject();
 			in.close();
-			return jsonObject;
+			return deserialize(seriallizedObject);
 
 		} catch (final IOException e) {
 			e.printStackTrace();
 		} catch (final ClassNotFoundException e) {
 			e.printStackTrace();
-		} catch (final JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return null;
-	}
-
-	// Save the JSONObject in cacheDir
-	public void storeJsonData(Context context, JSONObject jsonObject,
-			String name) {
-
-		try {
-
-			final File file = new File(context.getCacheDir(), "");
-			final String filePath = "/" + name + ".data";
-			final FileOutputStream fileO = new FileOutputStream(file + filePath);
-			final ObjectOutput out = new ObjectOutputStream(fileO);
-
-			// As JSON object is not serializable so it will be converted to
-			// string
-			final String jsonString = jsonObject.toString();
-			out.writeObject(jsonString);
-			out.close();
-		} catch (final FileNotFoundException e) {
-			e.getMessage();
-			e.printStackTrace();
-		} catch (final IOException e) {
-			e.getMessage();
-			e.printStackTrace();
-		}
-
 	}
 
 	public void deleteCache(Context context) {

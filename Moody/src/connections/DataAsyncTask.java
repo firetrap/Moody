@@ -1,108 +1,81 @@
 package connections;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import model.EnumWebServices;
+import restPackage.MoodleCallRestWebService;
+import restPackage.MoodleCourse;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleRestCourse;
+import restPackage.MoodleRestEnrol;
+import restPackage.MoodleRestException;
+import restPackage.MoodleRestUser;
+import restPackage.MoodleUser;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.StrictMode;
-import android.util.Log;
 
 //receives a String[] where params[0] it's an url, params[1] its an string required to parse, params[2] its an string to the required method above
-public class DataAsyncTask extends AsyncTask<String, Void, JSONObject> {
-
-	JSONObject jObj = null;
+public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
+	Object jObj = null;
 
 	@Override
-	protected JSONObject doInBackground(String... params) {
+	protected Object doInBackground(Object... params) {
 
 		try {
-			return loadFromNetwork(params[0], params[1]);
-		} catch (final IOException e) {
+			return loadFromNetwork((String) params[0], (String) params[1],
+					(EnumWebServices) params[2], (String) params[3]);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MoodleRestException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return jObj;
+		return null;
 
 	}
-	
-	private JSONObject loadFromNetwork(String urlString, String methodParams)
-			throws IOException {
 
-		InputStream inputStream = null;
-		String json = null;
+	private Object loadFromNetwork(String urlString, String token,
+			EnumWebServices webService, String webServiceParams)
+			throws UnsupportedEncodingException, MoodleRestException {
 
-		try {
-			inputStream = downloadUrl(urlString);
-			final BufferedReader reader = new BufferedReader(
-					new InputStreamReader(inputStream, "UTF-8"), 8);
-			final StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			json = sb.toString();
+		MoodleCallRestWebService.init(
+				urlString + "/webservice/rest/server.php", token);
+		webServiceParams = webServiceParams.trim();
 
-			try {
+		long userId;
+		long courseId;
+		switch (webService) {
+		case CORE_ENROL_GET_USERS_COURSES:
+			userId = Long.parseLong(webServiceParams);
+			MoodleCourse[] courses = MoodleRestEnrol.getUsersCourses(userId);
+			return courses;
 
-				// If json is an Array it returns an JSONArray inside JSONobject
-				if (json.startsWith("[")) {
-					jObj = new JSONObject();
-					jObj.put("array", new JSONArray(json));
-				}
+		case CORE_USER_GET_USERS_BY_ID:
+			userId = Long.parseLong(webServiceParams);
+			MoodleUser user = MoodleRestUser.getUserById(userId);
+			return user;
 
-				else {
-					jObj = new JSONObject(json);
-				}
+		case CORE_COURSE_GET_CONTENTS:
+			courseId = Long.parseLong(webServiceParams);
+			MoodleCourseContent[] courseContent = MoodleRestCourse
+					.getCourseContent(courseId, null);
+			courseContent[0].getName();
+			return courseContent;
 
-			} catch (final JSONException e) {
-				Log.e("JSON Parser", "Error parsing data " + e.toString());
-			}
-
-			// return JSON String
-			return jObj;
-
-		}
-
-		finally {
-			try {
-				if (inputStream != null) {
-					inputStream.close();
-				}
-			} catch (final Exception e) {
-			}
+		default:
+			return null;
 		}
 
 	}
-	
 
-	// Given a string representation of a URL, sets up a connection and gets
-	// an input stream.
-	private InputStream downloadUrl(String urlString) throws IOException {
-		final URL url = new URL(urlString);
-		final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setReadTimeout(10000 /* milliseconds */);
-		conn.setConnectTimeout(15000 /* milliseconds */);
-		conn.setRequestMethod("GET");
-		conn.setDoInput(true);
-		// Starts the query
-		conn.connect();
-		final InputStream stream = conn.getInputStream();
-		return stream;
-	}
-
-	
 	@Override
-	protected void onPostExecute(JSONObject json) {
+	protected void onPostExecute(Object obj) {
 
 	}
 

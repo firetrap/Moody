@@ -2,54 +2,51 @@ package managers;
 
 import java.util.concurrent.ExecutionException;
 
+import model.EnumWebServices;
 import model.MoodyConstants;
-import model.MoodyConstants.MoodySession;
-
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.res.Resources;
 import connections.DataAsyncTask;
 
-//ESTA CLASSE É DESNECESSARIA APENAS FOI CRIADA DEVIDO AO BUG DO MOODLE NO FUTURO O ELSE ABAIXO IRA SER MOVIDO PARA O TOPICS FRAGMENT
 public class Contents {
-
-	private JSONObject jsonObj;
 
 	// Session Manager Class
 	Session session;
 
-	// DEVIDO AO BUG DESCRITO ABAIXO ESTE getTopics ESTA A RECEBER MERDA A MAIS
-	// = RESOURCES.
-	public JSONObject getCourse(String courseId, Resources resources,
+	// Get data from server/cache and store
+	public Object getCourseContents(String courseId, Resources resources,
 			Context context) {
 
 		session = new Session(context);
 
-		final String url = session.getValues(
-				MoodyConstants.MoodySession.KEY_URL, null);
-		final String token = session.getValues(
-				MoodyConstants.MoodySession.KEY_TOKEN, null);
-
-		final String con = String.format(
-				MoodyConstants.MoodySession.KEY_PARAMS, url, token,
-				"core_course_get_contents&courseid", courseId
-						+ MoodySession.KEY_JSONFORMAT);
+		String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
+				null);
+		String token = session.getValues(MoodyConstants.MoodySession.KEY_TOKEN,
+				null);
 
 		try {
-			jsonObj = new DataAsyncTask().execute(con, "json").get();
+			Object getContent;
+			DataStore data = new DataStore();
+			String fileName = EnumWebServices.CORE_COURSE_GET_CONTENTS.name()
+					+ courseId;
 
-			// STORE COURSE JSON DATA CONTENT FOR FUTURE ACCESS
-			final DataStore data = new DataStore();
-			final String fileName = "coursesContent-" + courseId;
+			if (isInCache(context, fileName)) {
+				getContent = data.getData(context, fileName);
+				return getContent;
+			} else {
+				getContent = new DataAsyncTask().execute(url, token,
+						EnumWebServices.CORE_COURSE_GET_CONTENTS, courseId)
+						.get();
 
-			data.storeJsonData(context, jsonObj, fileName);
+				// STORE COURSE DATA FOR FUTURE ACCESS
+				data.storeData(context, getContent, fileName);
+				return getContent;
+			}
 
-			return jsonObj;
-		} catch (final InterruptedException e) {
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (final ExecutionException e) {
+		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -58,6 +55,8 @@ public class Contents {
 
 	}
 
-	
-
+	public boolean isInCache(Context context, String fileName) {
+		Object content = new DataStore().getData(context, fileName);
+		return content == null ? false : true;
+	}
 }

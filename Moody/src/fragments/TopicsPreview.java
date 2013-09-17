@@ -1,7 +1,7 @@
 package fragments;
 
-import managers.CopyOfContents;
-import managers.CopyOfDataStore;
+import managers.Contents;
+import managers.DataStore;
 import managers.Session;
 import model.EnumWebServices;
 import restPackage.MoodleCourseContent;
@@ -43,10 +43,10 @@ public class TopicsPreview extends Fragment {
 		// return null, so it will download from moodle site
 		String fileName = EnumWebServices.CORE_COURSE_GET_CONTENTS.name()
 				+ courseId;
-		Object = new CopyOfDataStore().getData(activityContext, fileName);
+		Object = new DataStore().getData(activityContext, fileName);
 		if (Object == null) {
 			// Get the topics from internet in json
-			Object = new CopyOfContents().getCourseContents(courseId,
+			Object = new Contents().getCourseContents(courseId,
 					getResources(), activityContext);
 
 		}
@@ -155,7 +155,7 @@ public class TopicsPreview extends Fragment {
 				// Where the textview id will be course id and the textview
 				// tag will be the topic id
 				topicModule.setId(Integer.parseInt(courseId));
-				topicModule.setTag(courseContent[j].getId());
+				topicModule.setTag(Long.toString(courseContent[j].getId()));
 				row.addView(topicsView);
 				insertPoint.addView(row);
 			}
