@@ -4,7 +4,7 @@
 package fragments;
 
 import managers.AlertDialogs;
-import model.MoodyConstants;
+import model.MoodyConstants.ActivityCode;
 import model.MoodyMessage;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
@@ -47,7 +47,7 @@ public class UserCloud extends DialogFragment {
 								"dropbox", Toast.LENGTH_SHORT).show();
 
 
-						processCloud(MoodyConstants.ActivityCode.DIALOG_FRAG_USER_CLOUD_DROPBOX);
+						processCloud(ActivityCode.DIALOG_FRAG_USER_CLOUD_DROPBOX);
 						
 					}
 				});
@@ -61,7 +61,7 @@ public class UserCloud extends DialogFragment {
 						Toast.makeText(getActivity().getBaseContext(), "drive",
 								Toast.LENGTH_SHORT).show();
 
-						processCloud(MoodyConstants.ActivityCode.DIALOG_FRAG_USER_CLOUD_DRIVE);
+						processCloud(ActivityCode.DIALOG_FRAG_USER_CLOUD_DRIVE);
 
 					}
 				});

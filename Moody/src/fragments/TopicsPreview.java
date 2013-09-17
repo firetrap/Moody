@@ -1,9 +1,7 @@
 package fragments;
 
 import managers.Contents;
-import managers.DataStore;
 import managers.Session;
-import model.EnumWebServices;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import android.app.Fragment;
@@ -39,17 +37,10 @@ public class TopicsPreview extends Fragment {
 		String courseId = getArguments().getString("courseId");
 		Context activityContext = getActivity().getApplicationContext();
 
-		// Always tries to get the JSON from cache if it doesn't exist it will
-		// return null, so it will download from moodle site
-		String fileName = EnumWebServices.CORE_COURSE_GET_CONTENTS.name()
-				+ courseId;
-		Object = new DataStore().getData(activityContext, fileName);
-		if (Object == null) {
-			// Get the topics from internet in json
-			Object = new Contents().getCourseContents(courseId,
-					getResources(), activityContext);
+	
+		Object = new Contents().getCourse(courseId, getResources(),
+				activityContext);
 
-		}
 		courseContent = (MoodleCourseContent[]) Object;
 
 		return createTopicsRows(courseContent, courseName, courseId);

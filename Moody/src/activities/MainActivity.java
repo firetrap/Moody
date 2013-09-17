@@ -14,8 +14,8 @@ import managers.AlertDialogs;
 import managers.DataStore;
 import managers.Session;
 import model.EnumWebServices;
-import model.MoodyConstants;
 import model.MoodyConstants.ActivityCode;
+import model.MoodyConstants.MoodySession;
 import model.MoodyMessage;
 import restPackage.MoodleCourse;
 import restPackage.MoodleUser;
@@ -366,12 +366,12 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	public void populateLeftListview() {
-		String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
+		String url = session.getValues(MoodySession.KEY_URL,
 				null);
-		String token = session.getValues(MoodyConstants.MoodySession.KEY_TOKEN,
+		String token = session.getValues(MoodySession.KEY_TOKEN,
 				null);
 
-		String id = session.getValues(MoodyConstants.MoodySession.KEY_ID, null);
+		String id = session.getValues(MoodySession.KEY_ID, null);
 
 		Object getContent;
 		try {
@@ -391,12 +391,12 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void populateUsername() {
 
 		TextView view = (TextView) findViewById(R.id.fullname_textview);
-		String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
+		String url = session.getValues(MoodySession.KEY_URL,
 				null);
-		String token = session.getValues(MoodyConstants.MoodySession.KEY_TOKEN,
+		String token = session.getValues(MoodySession.KEY_TOKEN,
 				null);
 
-		String id = session.getValues(MoodyConstants.MoodySession.KEY_ID, null);
+		String id = session.getValues(MoodySession.KEY_ID, null);
 
 		Object getContent = null;
 		try {
@@ -419,12 +419,12 @@ public class MainActivity extends Activity implements OnClickListener,
 		ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
 		if (session.getValues("PIC_PATH", null) == null) {
 
-			String url = session.getValues(MoodyConstants.MoodySession.KEY_URL,
+			String url = session.getValues(MoodySession.KEY_URL,
 					null);
 			String token = session.getValues(
-					MoodyConstants.MoodySession.KEY_TOKEN, null);
+					MoodySession.KEY_TOKEN, null);
 
-			String id = session.getValues(MoodyConstants.MoodySession.KEY_ID,
+			String id = session.getValues(MoodySession.KEY_ID,
 					null);
 
 			Object getContent;

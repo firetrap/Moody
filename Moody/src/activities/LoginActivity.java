@@ -20,12 +20,10 @@ import restPackage.MoodleRestException;
 import restPackage.MoodleRestWebService;
 import restPackage.MoodleRestWebServiceException;
 import restPackage.MoodleWebService;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;

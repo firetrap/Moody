@@ -27,6 +27,7 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 	protected Object doInBackground(Object... params) {
 
 		try {
+
 			return loadFromNetwork((String) params[0], (String) params[1],
 					(EnumWebServices) params[2], (String) params[3]);
 		} catch (UnsupportedEncodingException e) {
