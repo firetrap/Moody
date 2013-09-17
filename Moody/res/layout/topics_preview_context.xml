@@ -29,7 +29,7 @@
         android:drawablePadding="10dp"
         android:drawableRight="@drawable/right_arrow"
         android:maxLines="5"
-        android:onClick="onContentPreviewClick"
+        android:onClick="onTopicsPreviewClick"
         android:text="@string/content_preview" />
 
     <View

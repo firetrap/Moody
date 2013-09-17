@@ -38,7 +38,7 @@ public class TopicsPreview extends Fragment {
 		Context activityContext = getActivity().getApplicationContext();
 
 	
-		Object = new Contents().getCourse(courseId, getResources(),
+		Object = new Contents().getSingleCourse(courseId, getResources(),
 				activityContext);
 
 		courseContent = (MoodleCourseContent[]) Object;

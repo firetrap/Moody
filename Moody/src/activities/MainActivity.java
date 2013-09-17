@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import managers.AlertDialogs;
+import managers.Contents;
 import managers.DataStore;
 import managers.Session;
 import model.EnumWebServices;
@@ -67,24 +68,92 @@ public class MainActivity extends Activity implements OnClickListener,
 		myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 		populateUsername();
-		populateLeftListview();
+		populateUserCourses();
 		populateUserPicture();
 
 		// When its created it will get any course to populate the main
 		// fragment
 		Entry<String, String> course = organizedCourses.entrySet().iterator()
 				.next();
-		String courseName = course.getValue();
-		String courseId = course.getKey();
-		Bundle bundle = new Bundle();
-		bundle.putString("courseName", courseName);
-		bundle.putString("courseId", courseId);
-		initContentPreview(bundle);
+		int courseId = Integer.parseInt(course.getKey());
+		Button btnTag = (Button) findViewById(courseId);
+		btnTag.performClick();
 
 	}
 
-	private void coursesInit(MoodleCourse[] courses) {
+	public void populateUsername() {
 
+		TextView view = (TextView) findViewById(R.id.fullname_textview);
+		String url = session.getValues(MoodySession.KEY_URL, null);
+		String token = session.getValues(MoodySession.KEY_TOKEN, null);
+
+		String id = session.getValues(MoodySession.KEY_ID, null);
+
+		Object getContent = null;
+		try {
+			getContent = new DataAsyncTask().execute(url, token,
+					EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
+			MoodleUser user = (MoodleUser) getContent;
+			view.setText(user.getFullname());
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void populateUserPicture() {
+		ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
+		if (session.getValues("PIC_PATH", null) == null) {
+
+			String url = session.getValues(MoodySession.KEY_URL, null);
+			String token = session.getValues(MoodySession.KEY_TOKEN, null);
+
+			String id = session.getValues(MoodySession.KEY_ID, null);
+
+			Object getContent;
+			Drawable pic = null;
+			MoodleUser user = null;
+			try {
+				getContent = new DataAsyncTask().execute(url, token,
+						EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
+				user = (MoodleUser) getContent;
+
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			user.getProfileImageURL();
+			pic = DataAsyncTask
+					.createDrawableFromUrl(user.getProfileImageURL());
+			login_button.setBackgroundResource(R.drawable.bkgd_imagebutton);
+			login_button.setImageDrawable(pic);
+
+		} else {
+
+			login_button.setImageBitmap(BitmapResizer
+					.decodeSampledBitmapFromResource(
+							session.getValues("PIC_PATH", null),
+							R.id.login_image_button, 100, 100));
+
+		}
+	}
+
+	private void populateUserCourses() {
+
+		// Get all the courses from current user
+		MoodleCourse[] courses = (MoodleCourse[]) new Contents()
+				.getUserCourses(getResources(), getApplicationContext());
+
+		// Start populating the menus and views
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -128,40 +197,6 @@ public class MainActivity extends Activity implements OnClickListener,
 			}
 
 		}
-
-	}
-
-	/**
-	 * Moody Fatal Error Method it will display an alert dialog with the message
-	 * and it will clear app data and kill the app
-	 */
-	private void fatalError(String title, String msg) {
-		AlertDialogs.showMessageDialog(this, new MoodyMessage(title, msg),
-				new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						session.logoutUser();
-						// limpa cache ao fazer logout.
-						new DataStore().deleteCache(getApplicationContext());
-						finish();
-						android.os.Process.killProcess(android.os.Process
-								.myPid());
-					}
-
-				}, false);
-	}
-
-	public void initContentPreview(Bundle bundle) {
-
-		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager
-				.beginTransaction();
-
-		TopicsPreview fragment = new TopicsPreview();
-		fragment.setArguments(bundle);
-		fragmentTransaction.replace(R.id.mainFragment, fragment);
-		fragmentTransaction.commit();
 
 	}
 
@@ -264,7 +299,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		}
 	}
 
-	public void onContentPreviewClick(View v) {
+	public void onTopicsPreviewClick(View v) {
 		String courseId = Integer.toString(v.getId());
 		String courseName = organizedCourses.get(Integer.toString(v.getId()));
 		String topicId = (String) v.getTag();
@@ -294,7 +329,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	public void onCoursesClick(View v) {
 
-		// The view id is the same of the course id
+		// The view id is the same id of the courses
 
 		String courseName = organizedCourses.get(Integer.toString(v.getId()));
 		String courseId = Integer.toString(v.getId());
@@ -306,7 +341,12 @@ public class MainActivity extends Activity implements OnClickListener,
 		bundle.putString("courseName", courseName);
 		bundle.putString("courseId", courseId);
 
-		initContentPreview(bundle);
+		FragmentTransaction fragmentTransaction = getFragmentManager()
+				.beginTransaction();
+		TopicsPreview fragment = new TopicsPreview();
+		fragment.setArguments(bundle);
+		fragmentTransaction.replace(R.id.mainFragment, fragment);
+		fragmentTransaction.commit();
 		myDrawerLayout.closeDrawer(Gravity.LEFT);
 
 	}
@@ -322,6 +362,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	/**
+	 * The method it's responsible to retrieve the bitmap data/resize/compress
 	 * The first case of the switch it's not fully implemented as planned,
 	 * moodle doesn't support the users to update their own user details this
 	 * issue is described and reported here
@@ -365,98 +406,24 @@ public class MainActivity extends Activity implements OnClickListener,
 		return true;
 	}
 
-	public void populateLeftListview() {
-		String url = session.getValues(MoodySession.KEY_URL,
-				null);
-		String token = session.getValues(MoodySession.KEY_TOKEN,
-				null);
+	/**
+	 * Moody Fatal Error Method it will display an alert dialog with the message
+	 * and it will clear app data and kill the app
+	 */
+	private void fatalError(String title, String msg) {
+		AlertDialogs.showMessageDialog(this, new MoodyMessage(title, msg),
+				new DialogInterface.OnClickListener() {
 
-		String id = session.getValues(MoodySession.KEY_ID, null);
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						session.logoutUser();
+						// limpa cache ao fazer logout.
+						new DataStore().deleteCache(getApplicationContext());
+						finish();
+						android.os.Process.killProcess(android.os.Process
+								.myPid());
+					}
 
-		Object getContent;
-		try {
-			getContent = new DataAsyncTask().execute(url, token,
-					EnumWebServices.CORE_ENROL_GET_USERS_COURSES, id).get();
-			MoodleCourse[] courses = (MoodleCourse[]) getContent;
-			coursesInit(courses);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (ExecutionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+				}, false);
 	}
-
-	public void populateUsername() {
-
-		TextView view = (TextView) findViewById(R.id.fullname_textview);
-		String url = session.getValues(MoodySession.KEY_URL,
-				null);
-		String token = session.getValues(MoodySession.KEY_TOKEN,
-				null);
-
-		String id = session.getValues(MoodySession.KEY_ID, null);
-
-		Object getContent = null;
-		try {
-			getContent = new DataAsyncTask().execute(url, token,
-					EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
-			MoodleUser user = (MoodleUser) getContent;
-			view.setText(user.getFullname());
-
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	public void populateUserPicture() {
-		ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
-		if (session.getValues("PIC_PATH", null) == null) {
-
-			String url = session.getValues(MoodySession.KEY_URL,
-					null);
-			String token = session.getValues(
-					MoodySession.KEY_TOKEN, null);
-
-			String id = session.getValues(MoodySession.KEY_ID,
-					null);
-
-			Object getContent;
-			Drawable pic = null;
-			MoodleUser user = null;
-			try {
-				getContent = new DataAsyncTask().execute(url, token,
-						EnumWebServices.CORE_USER_GET_USERS_BY_ID, id).get();
-				user = (MoodleUser) getContent;
-
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			user.getProfileImageURL();
-			pic = DataAsyncTask.createDrawableFromUrl(user
-					.getProfileImageURL());
-			login_button.setBackgroundResource(R.drawable.bkgd_imagebutton);
-			login_button.setImageDrawable(pic);
-
-		} else {
-
-			login_button.setImageBitmap(BitmapResizer
-					.decodeSampledBitmapFromResource(
-							session.getValues("PIC_PATH", null),
-							R.id.login_image_button, 100, 100));
-
-		}
-	}
-
 }
