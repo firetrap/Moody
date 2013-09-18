@@ -157,15 +157,19 @@ public class Topics extends Fragment {
 							String indexURL = new ExternalFiles().getParseFile(
 									url, moduleContents[j].getFilename() + j);
 							url = indexURL;
-							// moduleFile.setText(Html.fromHtml(url));
+							moduleFile.setText(Html.fromHtml(url));
+							Linkify.addLinks(moduleFile, Linkify.ALL);
 							// moduleFile.setMovementMethod(LinkMovementMethod
 							// .getInstance());
+						} else {
+
+							moduleFile.setText(Html.fromHtml("<a href=" + url
+									+ ">" + moduleContents[j].getFilename()
+									+ "</a>"));
+
+							moduleFile.setMovementMethod(LinkMovementMethod
+									.getInstance());
 						}
-
-						moduleFile.setText(Html.fromHtml(url));
-//						moduleFile.setMovementMethod(LinkMovementMethod
-//								.getInstance());
-
 					}
 
 				}
