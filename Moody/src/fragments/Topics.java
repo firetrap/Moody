@@ -3,12 +3,16 @@ package fragments;
 import managers.DataStore;
 import managers.Session;
 import model.EnumWebServices;
+import model.MoodyConstants;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
+import restPackage.MoodleModuleContent;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +22,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.example.moody.R;
+
+import connections.ExternalFiles;
 
 public class Topics extends Fragment {
 
@@ -114,7 +120,6 @@ public class Topics extends Fragment {
 
 			for (int i = 0; i < modulesArray.length; i++) {
 				MoodleModule singleModule = modulesArray[i];
-
 				LinearLayout row = new LinearLayout(getActivity());
 				row.setLayoutParams(new LayoutParams(
 						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
@@ -134,7 +139,37 @@ public class Topics extends Fragment {
 					topicContent.setText(Html.fromHtml(moduleDescription));
 				}
 
-				
+				if (singleModule.getContent() != null) {
+					MoodleModuleContent[] moduleContents = singleModule
+							.getContent();
+
+					for (int j = 0; j < moduleContents.length; j++) {
+						TextView moduleFile = (TextView) topicsContent
+								.findViewById(R.id.topic_file);
+
+						String url = moduleContents[j].getFileURL()
+								+ "&token="
+								+ session.getValues(MoodyConstants.KEY_TOKEN,
+										null);
+
+						if (moduleContents[j].getFilename().equalsIgnoreCase(
+								"index.html")) {
+							String indexURL = new ExternalFiles().getParseFile(
+									url, moduleContents[j].getFilename() + j);
+							url = indexURL;
+							// moduleFile.setText(Html.fromHtml(url));
+							// moduleFile.setMovementMethod(LinkMovementMethod
+							// .getInstance());
+						}
+
+						moduleFile.setText(Html.fromHtml(url));
+//						moduleFile.setMovementMethod(LinkMovementMethod
+//								.getInstance());
+
+					}
+
+				}
+
 				row.addView(topicsContent);
 				insertPoint.addView(row);
 			}
@@ -142,5 +177,4 @@ public class Topics extends Fragment {
 		}
 
 	}
-
 }

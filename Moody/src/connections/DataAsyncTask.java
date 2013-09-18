@@ -10,9 +10,12 @@ import model.EnumWebServices;
 import restPackage.MoodleCallRestWebService;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
+import restPackage.MoodleFileParent;
 import restPackage.MoodleRestCourse;
 import restPackage.MoodleRestEnrol;
 import restPackage.MoodleRestException;
+import restPackage.MoodleRestFile;
+import restPackage.MoodleRestMessage;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleUser;
 import android.graphics.drawable.Drawable;
@@ -68,7 +71,8 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 					.getCourseContent(courseId, null);
 			courseContent[0].getName();
 			return courseContent;
-
+			
+		
 		default:
 			return null;
 		}

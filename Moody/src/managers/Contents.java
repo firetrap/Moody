@@ -166,6 +166,8 @@ public class Contents {
 		return null;
 	}
 
+	
+	
 	/**
 	 * @param context
 	 * @param fileName
@@ -175,4 +177,5 @@ public class Contents {
 		Object content = new DataStore().getData(context, fileName);
 		return !(content == null) ? true : false;
 	}
+
 }

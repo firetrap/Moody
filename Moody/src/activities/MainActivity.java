@@ -45,6 +45,7 @@ import bitmap.BitmapResizer;
 import com.example.moody.R;
 
 import connections.DataAsyncTask;
+import connections.ExternalFiles;
 
 public class MainActivity extends Activity implements OnClickListener,
 		InterfaceDialogFrag {
@@ -361,17 +362,15 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// // switch (item.getItemId()) {
-		// // case R.id.menu_settings:
-		// // Intent intent = new Intent(this, LoginActivity.class);
-		// // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		// // startActivity(intent);
-		// // break;
-		// //
-		// // default:
-		// // return super.onOptionsItemSelected(item);
-		// // }
-		//
+		switch (item.getItemId()) {
+		case R.id.menu_settings:
+		
+			break;
+
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+
 		return true;
 	}
 
