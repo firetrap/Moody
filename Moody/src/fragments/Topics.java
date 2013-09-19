@@ -1,6 +1,7 @@
 package fragments;
 
 import managers.DataStore;
+import managers.PlainText;
 import managers.Session;
 import model.EnumWebServices;
 import model.MoodyConstants;
@@ -158,7 +159,7 @@ public class Topics extends Fragment {
 									getActivity().getApplicationContext(), url,
 									moduleContents[j].getFilename() + j);
 							url = indexURL;
-
+							
 							if (url.contains("youtube")) {
 								moduleFile.setText(Html.fromHtml(url));
 								Linkify.addLinks(moduleFile, Linkify.ALL);
