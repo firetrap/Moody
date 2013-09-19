@@ -13,6 +13,8 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
 
+import android.text.Html;
+
 public class PlainText {
 	public static void main(String... args) throws IOException {
 		Validate.isTrue(args.length == 1, "usage: supply url to fetch");
@@ -57,7 +59,7 @@ public class PlainText {
 													// user-readable text in the
 													// DOM.
 			else if (name.equals("li"))
-				append("\n * ");
+				append("\n "+ Html.fromHtml(" &#8226"));
 		}
 
 		// hit when all of the node's children (if any) have been visited

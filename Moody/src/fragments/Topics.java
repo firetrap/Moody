@@ -164,9 +164,9 @@ public class Topics extends Fragment {
 								moduleFile.setText(Html.fromHtml(url));
 								Linkify.addLinks(moduleFile, Linkify.ALL);
 							} else {
-								moduleFile.setText(Html.fromHtml(url));
-								moduleFile.setMovementMethod(LinkMovementMethod
-										.getInstance());
+								
+								moduleFile.setText(url);
+								Linkify.addLinks(moduleFile, Linkify.ALL);
 							}
 
 						} else {

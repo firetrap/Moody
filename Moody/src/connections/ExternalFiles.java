@@ -10,6 +10,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import managers.PlainText;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -39,8 +41,11 @@ public class ExternalFiles {
 					src = src.split("\\?")[0].replace("v/", "watch?v=");
 					return src;
 				}
+			} else {
+
 			}
-			return doc.outerHtml();
+			String out = new PlainText().getPlainText(doc.body());
+			return out;
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
