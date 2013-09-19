@@ -1,7 +1,6 @@
 package fragments;
 
 import managers.DataStore;
-import managers.PlainText;
 import managers.Session;
 import model.EnumWebServices;
 import model.MoodyConstants;

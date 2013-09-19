@@ -59,7 +59,7 @@ public class PlainText {
 													// user-readable text in the
 													// DOM.
 			else if (name.equals("li"))
-				append("\n "+ Html.fromHtml(" &#8226"));
+				append("\n " + Html.fromHtml(" &#8226"));
 		}
 
 		// hit when all of the node's children (if any) have been visited
@@ -106,7 +106,8 @@ public class PlainText {
 		}
 
 		public String toString() {
-			return accum.toString();
+
+			return accum.toString().replaceAll("[<>]", "");
 		}
 	}
 }
