@@ -111,6 +111,12 @@ public class Topics extends Fragment {
 
 	}
 
+	/**
+	 * @param topic
+	 * @param inflater
+	 * @param insertPoint
+	 * @param topicId
+	 */
 	protected void createTopicsContent(MoodleCourseContent topic,
 			LayoutInflater inflater, LinearLayout insertPoint, Long topicId) {
 
@@ -118,75 +124,100 @@ public class Topics extends Fragment {
 
 		if (modulesArray != null) {
 
-			for (int i = 0; i < modulesArray.length; i++) {
-				MoodleModule singleModule = modulesArray[i];
-				LinearLayout row = new LinearLayout(getActivity());
-				row.setLayoutParams(new LayoutParams(
-						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-				View topicsContent = inflater.inflate(R.layout.topic, null);
-
-				String moduleName = singleModule.getName();
-				TextView topicLabel = (TextView) topicsContent
-						.findViewById(R.id.topic_label);
-				topicLabel.setText(moduleName);
-
-				TextView topicContent = (TextView) topicsContent
-						.findViewById(R.id.topic_content);
-				if (!singleModule.getDescription().isEmpty()) {
-					String moduleDescription = singleModule.getDescription();
-
-					topicContent.setText(Html.fromHtml(moduleDescription));
-				}
-
-				if (singleModule.getContent() != null) {
-					MoodleModuleContent[] moduleContents = singleModule
-							.getContent();
-
-					for (int j = 0; j < moduleContents.length; j++) {
-						TextView moduleFile = (TextView) topicsContent
-								.findViewById(R.id.topic_file);
-
-						String url = moduleContents[j].getFileURL()
-								+ "&token="
-								+ session.getValues(MoodyConstants.KEY_TOKEN,
-										null);
-
-						if (moduleContents[j].getFilename().equalsIgnoreCase(
-								"index.html")) {
-							String indexURL = new ExternalFiles().getParseFile(
-									getActivity().getApplicationContext(), url,
-									moduleContents[j].getFilename() + j);
-							url = indexURL;
-							
-							if (url.contains("youtube")) {
-								moduleFile.setText(Html.fromHtml(url));
-								Linkify.addLinks(moduleFile, Linkify.ALL);
-							} else {
-								
-								moduleFile.setText(url);
-								Linkify.addLinks(moduleFile, Linkify.ALL);
-							}
-
-						} else {
-
-							moduleFile.setText(Html.fromHtml("<a href=" + url
-									+ ">" + moduleContents[j].getFilename()
-									+ "</a>"));
-
-							moduleFile.setMovementMethod(LinkMovementMethod
-									.getInstance());
-
-						}
-					}
-
-				}
-
-				row.addView(topicsContent);
-				insertPoint.addView(row);
-			}
+			getModules(inflater, insertPoint, modulesArray);
 
 		}
 
+	}
+
+	/**
+	 * @param inflater
+	 * @param insertPoint
+	 * @param modulesArray
+	 */
+	private void getModules(LayoutInflater inflater, LinearLayout insertPoint,
+			MoodleModule[] modulesArray) {
+		for (int i = 0; i < modulesArray.length; i++) {
+			MoodleModule singleModule = modulesArray[i];
+			LinearLayout row = new LinearLayout(getActivity());
+			row.setLayoutParams(new LayoutParams(
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+			View topicsContent = inflater.inflate(R.layout.topic, null);
+
+			String moduleName = singleModule.getName();
+			TextView topicLabel = (TextView) topicsContent
+					.findViewById(R.id.topic_label);
+			topicLabel.setText(moduleName);
+
+			TextView topicContent = (TextView) topicsContent
+					.findViewById(R.id.topic_content);
+			if (!singleModule.getDescription().isEmpty()) {
+				topicContent.setVisibility(View.VISIBLE);
+				String moduleDescription = singleModule.getDescription();
+
+				topicContent.setText(Html.fromHtml(moduleDescription));
+			}
+
+			if (singleModule.getContent() != null) {
+				getModuleContents(singleModule, topicsContent);
+			}
+
+			row.addView(topicsContent);
+			insertPoint.addView(row);
+		}
+	}
+
+	/**
+	 * @param singleModule
+	 * @param topicsContent
+	 */
+	private void getModuleContents(MoodleModule singleModule, View topicsContent) {
+		MoodleModuleContent[] moduleContents = singleModule
+				.getContent();
+
+		for (int j = 0; j < moduleContents.length; j++) {
+
+			if (!moduleContents[j].getFileURL().isEmpty()) {
+				TextView moduleFile = (TextView) topicsContent
+						.findViewById(R.id.topic_file);
+				moduleFile.setVisibility(View.VISIBLE);
+				String url = moduleContents[j].getFileURL()
+						+ "&token="
+						+ session.getValues(
+								MoodyConstants.KEY_TOKEN, null);
+
+				if (moduleContents[j].getFilename()
+						.equalsIgnoreCase("index.html")) {
+					String indexURL = new ExternalFiles()
+							.getParseFile(getActivity()
+									.getApplicationContext(), url,
+									moduleContents[j].getFilename()
+											+ j);
+					url = indexURL;
+
+					if (url.contains("youtube")) {
+						moduleFile.setText(Html.fromHtml(url));
+						Linkify.addLinks(moduleFile, Linkify.ALL);
+					} else {
+
+						moduleFile.setText(url);
+						Linkify.addLinks(moduleFile, Linkify.ALL);
+					}
+
+				} else {
+
+					moduleFile.setText(Html.fromHtml("<a href="
+							+ url + ">"
+							+ moduleContents[j].getFilename()
+							+ "</a>"));
+
+					moduleFile.setMovementMethod(LinkMovementMethod
+							.getInstance());
+
+				}
+			}
+
+		}
 	}
 }
