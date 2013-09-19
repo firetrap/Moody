@@ -33,6 +33,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
+        android:linksClickable="true"
         android:text="@string/topics_contents" />
 
     <View

@@ -155,12 +155,19 @@ public class Topics extends Fragment {
 						if (moduleContents[j].getFilename().equalsIgnoreCase(
 								"index.html")) {
 							String indexURL = new ExternalFiles().getParseFile(
-									url, moduleContents[j].getFilename() + j);
+									getActivity().getApplicationContext(), url,
+									moduleContents[j].getFilename() + j);
 							url = indexURL;
-							moduleFile.setText(Html.fromHtml(url));
-							Linkify.addLinks(moduleFile, Linkify.ALL);
-							// moduleFile.setMovementMethod(LinkMovementMethod
-							// .getInstance());
+
+							if (url.contains("youtube")) {
+								moduleFile.setText(Html.fromHtml(url));
+								Linkify.addLinks(moduleFile, Linkify.ALL);
+							} else {
+								moduleFile.setText(Html.fromHtml(url));
+								moduleFile.setMovementMethod(LinkMovementMethod
+										.getInstance());
+							}
+
 						} else {
 
 							moduleFile.setText(Html.fromHtml("<a href=" + url
@@ -169,6 +176,7 @@ public class Topics extends Fragment {
 
 							moduleFile.setMovementMethod(LinkMovementMethod
 									.getInstance());
+
 						}
 					}
 
