@@ -78,5 +78,9 @@
     <string name="topics_contents">Your topics contents</string>
     <string name="topic_label">Your Topic Label</string>
     <string name="title_activity_teste">TesteActivity</string>
+    <string name="module_name">Module Name</string>
+    <string name="module_description">Module Description</string>
+    <string name="module_files">Modules Files</string>
+    <string name="title_activity_copy_of_topics_preview">CopyOfTopicsPreview</string>
 
 </resources>

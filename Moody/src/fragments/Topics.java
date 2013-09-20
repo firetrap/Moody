@@ -65,7 +65,7 @@ public class Topics extends Fragment {
 		insertPoint.setOrientation(LinearLayout.VERTICAL);
 
 		String topicName = singleTopic.getName();
-		View inflateHeader = createTopicsHeader(courseName, topicName, inflater);
+		View inflateHeader = onCreateHeader(courseName, topicName, inflater);
 
 		insertPoint.addView(inflateHeader);
 
@@ -74,7 +74,7 @@ public class Topics extends Fragment {
 		return insertPoint;
 	}
 
-	private View createTopicsHeader(String courseName, String topicName,
+	private View onCreateHeader(String courseName, String topicName,
 			LayoutInflater inflater) {
 
 		final View topicsHeaderView = inflater.inflate(
@@ -127,14 +127,17 @@ public class Topics extends Fragment {
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			View topicsContent = inflater.inflate(R.layout.topic, null);
 
-			String moduleName = singleModule.getName();
-			TextView topicLabel = (TextView) topicsContent
-					.findViewById(R.id.topic_label);
-			topicLabel.setText(moduleName);
-
+			TextView moduleName = (TextView) topicsContent
+					.findViewById(R.id.module_label);
 			TextView topicContent = (TextView) topicsContent
-					.findViewById(R.id.topic_content);
+					.findViewById(R.id.module_text_content);
 			if (!singleModule.getDescription().isEmpty()) {
+				
+				
+				
+				moduleName.setVisibility(View.VISIBLE);
+				moduleName.setText(singleModule.getName());
+
 				topicContent.setVisibility(View.VISIBLE);
 				String moduleDescription = singleModule.getDescription();
 
@@ -164,7 +167,7 @@ public class Topics extends Fragment {
 			if (!moduleContents[j].getFileURL().isEmpty()) {
 
 				TextView moduleFile = (TextView) topicsContent
-						.findViewById(R.id.topic_file);
+						.findViewById(R.id.module_files);
 				moduleFile.setVisibility(View.VISIBLE);
 				String url = moduleContents[j].getFileURL();
 

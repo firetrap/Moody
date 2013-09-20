@@ -5,37 +5,40 @@
     android:orientation="horizontal" >
 
     <TextView
-        android:id="@+id/topic_label"
+        android:id="@+id/module_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
-        android:text="@string/topic_label" />
+        android:background="@color/C_Moodle_Orange"
+        android:text="@string/module_name"
+        android:visibility="gone" />
 
     <TextView
-        android:id="@+id/topic_content"
+        android:id="@+id/module_text_content"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/topic_label"
+        android:layout_below="@+id/module_label"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:text="@string/topics_contents"
-        android:visibility="invisible" />
+        android:text="@string/module_description"
+        android:visibility="gone" />
 
     <TextView
-        android:id="@+id/topic_file"
+        android:id="@+id/module_files"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/topic_content"
+        android:layout_below="@id/module_text_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
+        android:background="@color/C_Medium_Green"
         android:clickable="true"
         android:linksClickable="true"
-        android:text="@string/topics_contents"
+        android:text="@string/module_files"
         android:visibility="gone" />
 
 <!--     <View -->
