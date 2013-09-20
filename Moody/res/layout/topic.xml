@@ -38,21 +38,21 @@
         android:text="@string/topics_contents"
         android:visibility="gone" />
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/C_White"
-        android:clickable="false" />
+<!--     <View -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="10dp" -->
+<!--         android:layout_alignParentLeft="true" -->
+<!--         android:layout_alignParentTop="true" -->
+<!--         android:background="@color/C_White" -->
+<!--         android:clickable="false" /> -->
 
-    <View
-        android:id="@+id/view1"
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/topic_file"
-        android:background="@drawable/border_inside"
-        android:clickable="false" />
+<!--     <View -->
+<!--         android:id="@+id/view1" -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="10dp" -->
+<!--         android:layout_alignParentLeft="true" -->
+<!--         android:layout_below="@id/topic_file" -->
+<!--         android:background="@drawable/border_inside" -->
+<!--         android:clickable="false" /> -->
 
 </RelativeLayout>

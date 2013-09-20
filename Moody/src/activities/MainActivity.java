@@ -45,7 +45,6 @@ import bitmap.BitmapResizer;
 import com.example.moody.R;
 
 import connections.DataAsyncTask;
-import connections.ExternalFiles;
 
 public class MainActivity extends Activity implements OnClickListener,
 		InterfaceDialogFrag {

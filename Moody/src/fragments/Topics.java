@@ -1,8 +1,7 @@
 package fragments;
 
-import managers.DataStore;
+import managers.Contents;
 import managers.Session;
-import model.EnumWebServices;
 import model.MoodyConstants;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
@@ -23,13 +22,14 @@ import android.widget.TextView;
 
 import com.example.moody.R;
 
-import connections.ExternalFiles;
-
 public class Topics extends Fragment {
 
 	Object course;
 	// Session Manager Class
 	Session session;
+	String courseId;
+	Long topicId;
+	String courseName;
 
 	public Topics() {
 	}
@@ -39,39 +39,22 @@ public class Topics extends Fragment {
 			Bundle savedInstanceState) {
 		session = new Session(getActivity().getApplicationContext());
 
-		String courseId = getArguments().getString("courseId");
-		Long topicId = Long.parseLong(getArguments().getString("topicId"));
-		String courseName = getArguments().getString("courseName");
-		Context activityContext = getActivity().getApplicationContext();
+		courseId = getArguments().getString("courseId");
+		topicId = Long.parseLong(getArguments().getString("topicId"));
+		courseName = getArguments().getString("courseName");
 
-		String fileName = EnumWebServices.CORE_COURSE_GET_CONTENTS.name()
-				+ courseId;
+		MoodleCourseContent[] courseTopics = new Contents()
+				.getCourseContent(courseId, getResources(), getActivity()
+						.getApplicationContext());
 
-		course = new DataStore().getData(activityContext, fileName);
-		MoodleCourseContent[] courseTopics = (MoodleCourseContent[]) course;
-		MoodleCourseContent topic = getTopic(topicId, courseTopics);
+		MoodleCourseContent singleTopic = new Contents().getTopic(topicId,
+				courseTopics);
 
-		return createTopics(topic, courseName, courseId, topicId);
+		return createTopics(singleTopic, courseName, courseId, topicId);
 	}
 
-	/**
-	 * @param topicId
-	 * @param courseContent
-	 * @return
-	 */
-	private MoodleCourseContent getTopic(Long topicId,
-			MoodleCourseContent[] courseContent) {
-		for (int j = 0; j < courseContent.length; j++) {
-			if (courseContent[j].getId() == topicId) {
-				return courseContent[j];
-			}
-
-		}
-		return null;
-	}
-
-	private View createTopics(MoodleCourseContent topic, String courseName,
-			String courseId, Long topicId) {
+	private View createTopics(MoodleCourseContent singleTopic,
+			String courseName, String courseId, Long topicId) {
 		LayoutInflater inflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -81,13 +64,12 @@ public class Topics extends Fragment {
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		insertPoint.setOrientation(LinearLayout.VERTICAL);
 
-		String topicName = topic.getName();
-
+		String topicName = singleTopic.getName();
 		View inflateHeader = createTopicsHeader(courseName, topicName, inflater);
 
 		insertPoint.addView(inflateHeader);
 
-		createTopicsContent(topic, inflater, insertPoint, topicId);
+		createTopicsContent(singleTopic, inflater, insertPoint);
 
 		return insertPoint;
 	}
@@ -112,21 +94,18 @@ public class Topics extends Fragment {
 	}
 
 	/**
-	 * @param topic
+	 * @param singleTopic
 	 * @param inflater
 	 * @param insertPoint
 	 * @param topicId
 	 */
-	protected void createTopicsContent(MoodleCourseContent topic,
-			LayoutInflater inflater, LinearLayout insertPoint, Long topicId) {
+	protected void createTopicsContent(MoodleCourseContent singleTopic,
+			LayoutInflater inflater, LinearLayout insertPoint) {
 
-		MoodleModule[] modulesArray = topic.getMoodleModules();
+		MoodleModule[] modulesArray = singleTopic.getMoodleModules();
 
-		if (modulesArray != null) {
-
+		if (modulesArray != null)
 			getModules(inflater, insertPoint, modulesArray);
-
-		}
 
 	}
 
@@ -137,8 +116,11 @@ public class Topics extends Fragment {
 	 */
 	private void getModules(LayoutInflater inflater, LinearLayout insertPoint,
 			MoodleModule[] modulesArray) {
+
 		for (int i = 0; i < modulesArray.length; i++) {
+
 			MoodleModule singleModule = modulesArray[i];
+
 			LinearLayout row = new LinearLayout(getActivity());
 			row.setLayoutParams(new LayoutParams(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
@@ -157,6 +139,8 @@ public class Topics extends Fragment {
 				String moduleDescription = singleModule.getDescription();
 
 				topicContent.setText(Html.fromHtml(moduleDescription));
+				topicContent
+						.setMovementMethod(LinkMovementMethod.getInstance());
 			}
 
 			if (singleModule.getContent() != null) {
@@ -173,49 +157,62 @@ public class Topics extends Fragment {
 	 * @param topicsContent
 	 */
 	private void getModuleContents(MoodleModule singleModule, View topicsContent) {
-		MoodleModuleContent[] moduleContents = singleModule
-				.getContent();
+		MoodleModuleContent[] moduleContents = singleModule.getContent();
 
 		for (int j = 0; j < moduleContents.length; j++) {
 
 			if (!moduleContents[j].getFileURL().isEmpty()) {
+
 				TextView moduleFile = (TextView) topicsContent
 						.findViewById(R.id.topic_file);
 				moduleFile.setVisibility(View.VISIBLE);
-				String url = moduleContents[j].getFileURL()
-						+ "&token="
-						+ session.getValues(
-								MoodyConstants.KEY_TOKEN, null);
+				String url = moduleContents[j].getFileURL();
 
-				if (moduleContents[j].getFilename()
-						.equalsIgnoreCase("index.html")) {
-					String indexURL = new ExternalFiles()
-							.getParseFile(getActivity()
-									.getApplicationContext(), url,
-									moduleContents[j].getFilename()
-											+ j);
-					url = indexURL;
+				if (moduleContents[j].getType().equals("file")) {
+					url += "&token="
+							+ session.getValues(MoodyConstants.KEY_TOKEN, null);
+					if (!(moduleContents[j].getFilename()
+							.equalsIgnoreCase("index.html"))) {
 
-					if (url.contains("youtube")) {
-						moduleFile.setText(Html.fromHtml(url));
-						Linkify.addLinks(moduleFile, Linkify.ALL);
+						moduleFile.setText(Html.fromHtml("<a href=" + url + ">"
+								+ moduleContents[j].getFilename() + "</a>"));
+
+						moduleFile.setMovementMethod(LinkMovementMethod
+								.getInstance());
+
 					} else {
 
-						moduleFile.setText(url);
-						Linkify.addLinks(moduleFile, Linkify.ALL);
+						// the index fileName is
+						// contentFileName+CourseId+TopicId+ContentId
+						String indexURL = new Contents().parseFile(
+								getActivity().getApplicationContext(), url,
+								moduleContents[j].getFilename() + courseId
+										+ topicId + j);
+
+						if (indexURL.contains("youtube")) {
+
+							moduleFile.setText(indexURL);
+
+						} else {
+							moduleFile.setText(Html.fromHtml(indexURL));
+
+						}
+						Linkify.addLinks(moduleFile, Linkify.WEB_URLS);
 					}
+				}
+				if (moduleContents[j].getType().equals("url")) {
+					String fileName = moduleContents[j].getFilename();
+					fileName = ((fileName == null) || fileName.isEmpty()) ? "External Content"
+							: moduleContents[j].getFilename();
 
-				} else {
-
-					moduleFile.setText(Html.fromHtml("<a href="
-							+ url + ">"
-							+ moduleContents[j].getFilename()
-							+ "</a>"));
+					moduleFile.setText(Html.fromHtml("<a href=" + url + ">"
+							+ fileName + "</a>"));
 
 					moduleFile.setMovementMethod(LinkMovementMethod
 							.getInstance());
 
 				}
+
 			}
 
 		}
