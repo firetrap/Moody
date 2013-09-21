@@ -1,52 +1,57 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/course_description_relative_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/fill_light_grey"
-    android:orientation="horizontal" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/topic_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/border_course_context"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:text="@string/topic_string" />
-
-    <TextView
-        android:id="@+id/content_preview_textView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/topic_label"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:drawablePadding="10dp"
-        android:drawableRight="@drawable/right_arrow"
-        android:maxLines="5"
+    <LinearLayout
+        android:id="@+id/topics_preview_layout"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/teste"
         android:onClick="onTopicsPreviewClick"
-        android:text="@string/content_preview" />
+        android:orientation="vertical"
+        android:paddingBottom="16dp" >
 
-    <View
-        android:id="@+id/view1"
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"
-        android:layout_alignBottom="@id/content_preview_textView"
-        android:layout_marginBottom="-10dp"
-        android:background="@drawable/border_inside"
-        android:clickable="false" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp" >
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/C_White"
-        android:clickable="false" />
+            <TextView
+                android:id="@+id/title"
+                style="@style/CardTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="title" />
+        </LinearLayout>
 
-</RelativeLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/stroke" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:padding="4dp" >
+
+            <TextView
+                android:id="@+id/description"
+                style="@style/CardText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec viverra metus et ligula accumsan auctor. Nullam luctus neque quis nibh porttitor sagittis. Nunc dignissim quam nec quam scelerisque faucibus. Maecenas elementum ante eget felis vestibulum quis pharetra dui condimentum. In a ligula lectus, aliquet interdum diam. Fusce luctus bibendum tellus, sed iaculis mi vehicula vitae. Fusce quis ipsum in est ultricies egestas a vel orci." />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

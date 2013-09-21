@@ -117,10 +117,10 @@ public class TopicsPreview extends Fragment {
 				row.setLayoutParams(new LayoutParams(
 						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-				View topicsView = inflater.inflate(
-						R.layout.topics_preview_context, null);
+				View topicsView = inflater.inflate(R.layout.topics_preview_context, null);
+
 				TextView topicName = (TextView) topicsView
-						.findViewById(R.id.topic_label);
+						.findViewById(R.id.title);
 				topicName.setText(courseContent[j].getName());
 
 				String moduleName = "";
@@ -142,13 +142,16 @@ public class TopicsPreview extends Fragment {
 
 				}
 				TextView topicModule = (TextView) topicsView
-						.findViewById(R.id.content_preview_textView);
+						.findViewById(R.id.description);
 				topicModule.setText(moduleName);
 
-				// Where the textview id will be course id and the textview
+				// Where the LinearLayout from TopicsPreview id will be course
+				// id and the LinearLayout
 				// tag will be the topic id
-				topicModule.setId(Integer.parseInt(courseId));
-				topicModule.setTag(Long.toString(courseContent[j].getId()));
+				LinearLayout layout = (LinearLayout) topicsView
+						.findViewById(R.id.topics_preview_layout);
+				layout.setId(Integer.parseInt(courseId));
+				layout.setTag(Long.toString(courseContent[j].getId()));
 				row.addView(topicsView);
 				insertPoint.addView(row);
 			}
