@@ -49,20 +49,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:layout_weight="1"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec viverra metus et ligula accumsan auctor. Nullam luctus neque quis nibh porttitor sagittis. Nunc dignissim quam nec quam scelerisque faucibus. Maecenas elementum ante eget felis vestibulum quis pharetra dui condimentum. In a ligula lectus, aliquet interdum diam. Fusce luctus bibendum tellus, sed iaculis mi vehicula vitae. Fusce quis ipsum in est ultricies egestas a vel orci."
-                android:textColor="@color/card_text" />
+                android:textColor="@color/card_grid_text" />
 
             <TextView
                 android:id="@+id/module_files"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:layout_weight="1"
                 android:clickable="true"
                 android:linksClickable="true"
                 android:text="@string/module_files"
-                android:textSize="@dimen/action_bar_switch_padding"
+                android:textColor="@color/card_grid_text"
                 android:visibility="visible" />
         </LinearLayout>
     </LinearLayout>
