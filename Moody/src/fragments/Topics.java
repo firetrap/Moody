@@ -145,7 +145,7 @@ public class Topics extends Fragment {
 							.getInstance());
 				} else {
 					topicContent.setVisibility(View.GONE);
-					 b++;
+					b++;
 
 				}
 				if (singleModule.getContent() != null) {
@@ -156,7 +156,7 @@ public class Topics extends Fragment {
 					b++;
 
 				}
-				
+
 				if (b < 2) {
 					row.addView(topicsContent);
 					insertPoint.addView(row);
@@ -184,8 +184,9 @@ public class Topics extends Fragment {
 				if (moduleContents[j].getType().equals("file")) {
 					url += "&token="
 							+ session.getValues(MoodyConstants.KEY_TOKEN, null);
-					if (!(moduleContents[j].getFilename()
-							.equalsIgnoreCase("index.html"))) {
+
+					if (!moduleContents[j].getFilename().equalsIgnoreCase(
+							"index.html")) {
 
 						moduleFile.setText(Html.fromHtml("<a href=" + url + ">"
 								+ moduleContents[j].getFilename() + "</a>"));
@@ -193,14 +194,16 @@ public class Topics extends Fragment {
 						moduleFile.setMovementMethod(LinkMovementMethod
 								.getInstance());
 
-					} else {
+					} else if (moduleContents[j].getFilename()
+							.equalsIgnoreCase("index.html")) {
 
-						// the index fileName is
-						// contentFileName+CourseId+TopicId+ContentId
+						// the fileName is
+						// contentFileName+CourseId+TopicId+ModuleId+content
+						// number
 						String indexURL = new Contents().parseFile(
 								getActivity().getApplicationContext(), url,
 								moduleContents[j].getFilename() + courseId
-										+ topicId + j);
+										+ topicId + singleModule.getId());
 
 						if (indexURL.contains("youtube")) {
 
