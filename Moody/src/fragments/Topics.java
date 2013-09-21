@@ -15,6 +15,7 @@ import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -119,40 +120,50 @@ public class Topics extends Fragment {
 
 		for (int i = 0; i < modulesArray.length; i++) {
 
-			MoodleModule singleModule = modulesArray[i];
-
-			LinearLayout row = new LinearLayout(getActivity());
-			row.setLayoutParams(new LayoutParams(
-					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			View topicsContent = inflater.inflate(R.layout.topic, null);
 
 			TextView moduleName = (TextView) topicsContent
 					.findViewById(R.id.module_label);
 			TextView topicContent = (TextView) topicsContent
 					.findViewById(R.id.module_text_content);
-			if (!singleModule.getDescription().isEmpty()) {
-				
-				
-				
-				moduleName.setVisibility(View.VISIBLE);
+
+			MoodleModule singleModule = modulesArray[i];
+
+			LinearLayout row = new LinearLayout(getActivity());
+			row.setLayoutParams(new LayoutParams(
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+
+			int b = 0;
+			if (!singleModule.getName().isEmpty()) {
 				moduleName.setText(singleModule.getName());
 
-				topicContent.setVisibility(View.VISIBLE);
-				String moduleDescription = singleModule.getDescription();
+				if (!singleModule.getDescription().isEmpty()) {
+					String moduleDescription = singleModule.getDescription();
+					topicContent.setText(Html.fromHtml(moduleDescription));
+					topicContent.setMovementMethod(LinkMovementMethod
+							.getInstance());
+				} else {
+					topicContent.setVisibility(View.GONE);
+					 b++;
 
-				topicContent.setText(Html.fromHtml(moduleDescription));
-				topicContent
-						.setMovementMethod(LinkMovementMethod.getInstance());
+				}
+				if (singleModule.getContent() != null) {
+					getModuleContents(singleModule, topicsContent);
+				} else {
+					topicsContent.findViewById(R.id.module_files)
+							.setVisibility(View.GONE);
+					b++;
+
+				}
+				
+				if (b < 2) {
+					row.addView(topicsContent);
+					insertPoint.addView(row);
+				}
 			}
-
-			if (singleModule.getContent() != null) {
-				getModuleContents(singleModule, topicsContent);
-			}
-
-			row.addView(topicsContent);
-			insertPoint.addView(row);
 		}
+
 	}
 
 	/**
@@ -162,13 +173,12 @@ public class Topics extends Fragment {
 	private void getModuleContents(MoodleModule singleModule, View topicsContent) {
 		MoodleModuleContent[] moduleContents = singleModule.getContent();
 
+		TextView moduleFile = (TextView) topicsContent
+				.findViewById(R.id.module_files);
 		for (int j = 0; j < moduleContents.length; j++) {
 
 			if (!moduleContents[j].getFileURL().isEmpty()) {
 
-				TextView moduleFile = (TextView) topicsContent
-						.findViewById(R.id.module_files);
-				moduleFile.setVisibility(View.VISIBLE);
 				String url = moduleContents[j].getFileURL();
 
 				if (moduleContents[j].getType().equals("file")) {

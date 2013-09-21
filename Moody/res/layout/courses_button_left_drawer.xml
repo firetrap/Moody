@@ -7,6 +7,7 @@
     android:background="@drawable/card_shape_w_shadow"
     android:drawableLeft="@drawable/books"
     android:gravity="left|center_vertical"
+    android:maxLines="1"
     android:onClick="onCoursesClick"
     android:paddingLeft="10dp"
     android:text="Lorem"
