@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Button xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/course_id"
+    style="@style/CardText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?@android:attr/selectableItemBackground"
+    android:background="@drawable/card_shape_w_shadow"
     android:drawableLeft="@drawable/books"
-    android:drawablePadding="10dp"
     android:gravity="left|center_vertical"
-    android:onClick="onCoursesClick" >
+    android:onClick="onCoursesClick"
+    android:paddingLeft="10dp"
+    android:text="Lorem"
+    android:textSize="@dimen/card_medium_text" >
 
 </Button>

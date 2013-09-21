@@ -155,9 +155,6 @@ public class MainActivity extends Activity implements OnClickListener,
 
 				organizedCourses.put(Integer.toString(id), name);
 
-				if (j != 0) {
-					btnTag.setBackgroundResource(R.drawable.border_inside);
-				}
 
 				row.addView(view);
 

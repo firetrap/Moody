@@ -3,23 +3,22 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="left"
-    android:layout_weight="1" >
+    android:layout_weight="1"
+    android:background="@color/C_Light_Grey" >
 
     <LinearLayout
         android:id="@+id/linear_layout_inside_left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:divider="@android:color/darker_gray"
-        android:orientation="vertical"
-        android:showDividers="beginning|middle|end" >
+        android:layout_marginRight="5dp"
+        android:orientation="vertical" >
 
         <RelativeLayout
             android:id="@+id/buttons_relative_layout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1.25"
-            android:background="@color/C_White"
+            android:background="@drawable/card_shape_w_shadow"
             android:orientation="horizontal" >
 
             <ImageButton
@@ -52,6 +51,7 @@
 
             <TextView
                 android:id="@+id/fullname_textview"
+                style="@style/CardTitleBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/login_image_button"
@@ -60,7 +60,8 @@
                 android:layout_toRightOf="@+id/login_image_button"
                 android:clickable="true"
                 android:onClick="onClick"
-                android:text="@string/fullName_textView" />
+                android:text="@string/fullName_textView"
+                android:textSize="@dimen/card_action_text" />
 
             <View
                 android:id="@+id/space1"
@@ -73,36 +74,37 @@
 
         <TextView
             android:id="@+id/courses_TextView"
+            style="@style/CardTitleBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_weight="1.25"
+            android:background="@drawable/card"
             android:linksClickable="false"
             android:paddingBottom="5dp"
             android:paddingTop="10dp"
-            android:text="@string/courses_left_drawer" />
+            android:text="@string/courses_left_drawer"
+            android:textSize="@dimen/card_medium_large_text" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_weight="1.25"
-            android:background="@android:color/darker_gray" />
+            android:background="@color/C_White" />
 
         <TextView
             android:id="@+id/navigation_textView"
+            style="@style/CardTitleBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_weight="1.25"
+            android:background="@drawable/card"
             android:linksClickable="false"
             android:paddingBottom="5dp"
             android:paddingTop="10dp"
-            android:text="@string/navigation_string" />
-
-        <View
-            android:id="@+id/view1"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_weight="1.25"
-            android:background="@android:color/darker_gray" />
+            android:text="@string/navigation_string"
+            android:textSize="@dimen/card_medium_large_text" />
 
         <Button
             android:id="@+id/latest_button"
@@ -110,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.25"
-            android:background="@drawable/border_inside"
+            android:background="@drawable/card_shape_w_shadow"
             android:drawableLeft="@drawable/latest"
             android:drawablePadding="10dp"
             android:gravity="left|center_vertical"
@@ -124,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.25"
-            android:background="@drawable/border_inside"
+            android:background="@drawable/card_shape_w_shadow"
             android:drawableLeft="@drawable/favorites"
             android:drawablePadding="10dp"
             android:gravity="left|center_vertical"
@@ -138,7 +140,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.25"
-            android:background="@drawable/border_inside"
+            android:background="@drawable/card_shape_w_shadow"
             android:drawableLeft="@drawable/cloud"
             android:drawablePadding="10dp"
             android:gravity="left|center_vertical"
@@ -152,8 +154,9 @@
             style="@style/CardText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1.25"
-            android:background="@drawable/border_inside"
+            android:background="@drawable/card_shape_w_shadow"
             android:drawableLeft="@drawable/wiki"
             android:drawablePadding="10dp"
             android:gravity="left|center_vertical"
