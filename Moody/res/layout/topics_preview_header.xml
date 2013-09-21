@@ -24,8 +24,8 @@
             android:paddingLeft="5dp"
             android:paddingTop="10dp"
             android:singleLine="true"
-            android:text="@string/course_path"
-            android:textColor="@color/card_title_text" />
+            android:text="@string/course_path" />
+        <!-- android:textColor="@color/card_title_text" -->
 
         <ImageButton
             android:id="@+id/add_favorites_button_"
