@@ -313,11 +313,23 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		FragmentTransaction fragmentTransaction = getFragmentManager()
 				.beginTransaction();
-		TopicsPreview fragment = new TopicsPreview();
+		CopyOfTopicsPreview fragment = new CopyOfTopicsPreview();
 		fragment.setArguments(bundle);
 		fragmentTransaction.replace(R.id.mainFragment, fragment);
 		fragmentTransaction.commit();
 		myDrawerLayout.closeDrawer(Gravity.LEFT);
+
+		// Bundle bundle = new Bundle();
+		// bundle.putString("courseName", courseName);
+		// bundle.putString("courseId", courseId);
+		//
+		// FragmentTransaction fragmentTransaction = getFragmentManager()
+		// .beginTransaction();
+		// TopicsPreview fragment = new TopicsPreview();
+		// fragment.setArguments(bundle);
+		// fragmentTransaction.replace(R.id.mainFragment, fragment);
+		// fragmentTransaction.commit();
+		// myDrawerLayout.closeDrawer(Gravity.LEFT);
 
 	}
 
