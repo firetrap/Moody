@@ -155,7 +155,6 @@ public class MainActivity extends Activity implements OnClickListener,
 
 				organizedCourses.put(Integer.toString(id), name);
 
-
 				row.addView(view);
 
 				inserPoint.addView(row, 3);
@@ -177,8 +176,19 @@ public class MainActivity extends Activity implements OnClickListener,
 			Integer.toString(v.getId());
 
 			Toast.makeText(getApplicationContext(),
-					"Curso-> " + courseName + " ID-> " + v.getId(),
-					Toast.LENGTH_SHORT).show();
+					courseName + " added to favorites", Toast.LENGTH_SHORT)
+					.show();
+
+			LayoutInflater inflater = (LayoutInflater) this
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+			View topicsContent = inflater.inflate(
+					R.layout.topics_preview_header, null);
+			ImageButton addFav = (ImageButton) topicsContent
+					.findViewById(R.id.add_favorites_button_);
+			addFav.setVisibility(View.GONE);
+		
+
 		}
 
 	}
