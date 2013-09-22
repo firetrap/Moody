@@ -37,9 +37,11 @@
             android:background="@color/C_Moodle_Orange" />
 
         <LinearLayout
+            android:id="@+id/description_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:orientation="vertical"
             android:padding="4dp" >
 
             <TextView

@@ -15,7 +15,6 @@ import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -205,14 +204,15 @@ public class Topics extends Fragment {
 								moduleContents[j].getFilename() + courseId
 										+ topicId + singleModule.getId());
 
-						if (indexURL.contains("youtube")) {
-
-							moduleFile.setText(indexURL);
-
-						} else {
-							moduleFile.setText(Html.fromHtml(indexURL));
-
-						}
+						// if (indexURL.contains("youtube")) {
+						//
+						// moduleFile.setText(indexURL);
+						//
+						// } else {
+						// moduleFile.setText(Html.fromHtml(indexURL));
+						//
+						// }
+						moduleFile.setText(indexURL);
 						Linkify.addLinks(moduleFile, Linkify.WEB_URLS);
 					}
 				}
