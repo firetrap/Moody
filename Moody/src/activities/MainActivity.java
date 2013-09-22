@@ -187,7 +187,8 @@ public class MainActivity extends Activity implements OnClickListener,
 			ImageButton addFav = (ImageButton) topicsContent
 					.findViewById(R.id.add_favorites_button_);
 			addFav.setVisibility(View.GONE);
-		
+
+			onCoursesClick(v);
 
 		}
 

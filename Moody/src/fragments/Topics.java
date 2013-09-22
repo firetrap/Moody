@@ -189,6 +189,8 @@ public class Topics extends Fragment {
 
 						moduleFile.setText(Html.fromHtml("<a href=" + url + ">"
 								+ moduleContents[j].getFilename() + "</a>"));
+						moduleFile.setCompoundDrawablesWithIntrinsicBounds(
+								getCorrectDrawable(url), 0, 0, 0);
 
 						moduleFile.setMovementMethod(LinkMovementMethod
 								.getInstance());
@@ -205,10 +207,12 @@ public class Topics extends Fragment {
 										+ topicId + singleModule.getId());
 
 						// if (indexURL.contains("youtube")) {
-						//
-						// moduleFile.setText(indexURL);
-						//
-						// } else {
+
+						moduleFile.setText(indexURL);
+						moduleFile.setCompoundDrawablesWithIntrinsicBounds(
+								getCorrectDrawable(indexURL), 0, 0, 0);
+						// }
+						// else {
 						// moduleFile.setText(Html.fromHtml(indexURL));
 						//
 						// }
@@ -232,5 +236,28 @@ public class Topics extends Fragment {
 			}
 
 		}
+	}
+
+	// Because android doesn't support string switch i've to do with if else
+	// statements
+	public int getCorrectDrawable(String url) {
+
+		if (url.contains(".youtube.")) {
+			return R.drawable.youtube;
+		} else if (url.contains(".pdf")) {
+			return R.drawable.pdf;
+		} else if (url.contains(".doc")) {
+			return R.drawable.docx;
+		} else if (url.contains(".ppt")) {
+			return R.drawable.ppt;
+		} else if (url.contains(".xls")) {
+			return R.drawable.xls;
+		} else if (url.contains(".zip") || url.contains(".rar")) {
+			return R.drawable.zip;
+		} else if (url.contains(".mp3")) {
+			return R.drawable.mp3;
+		}
+		return 0;
+
 	}
 }
