@@ -74,6 +74,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		// When its created it will get any course to populate the main
 		// fragment
+
 		Entry<String, String> course = organizedCourses.entrySet().iterator()
 				.next();
 		int courseId = Integer.parseInt(course.getKey());
@@ -307,11 +308,14 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		// The view id is the same id of the courses
 
+		Intent intent = new Intent(getApplicationContext(), Loading.class);
+		startActivity(intent);
+
 		String courseName = organizedCourses.get(Integer.toString(v.getId()));
 		String courseId = Integer.toString(v.getId());
-		Toast.makeText(getApplicationContext(),
-				"Curso-> " + courseName + " ID-> " + v.getId(),
-				Toast.LENGTH_SHORT).show();
+		// Toast.makeText(getApplicationContext(),
+		// "Curso-> " + courseName + " ID-> " + v.getId(),
+		// Toast.LENGTH_SHORT).show();
 
 		Bundle bundle = new Bundle();
 		bundle.putString("courseName", courseName);

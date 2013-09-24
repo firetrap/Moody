@@ -33,6 +33,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -63,14 +64,15 @@ public class LoginActivity extends Activity {
 	private TextView mLoginStatusMessageView;
 	private View mLoginStatusView;
 	private String mPassword;
-	private EditText mPasswordView;
+
 	private String mToken;
 	// Values for username and password at the time of the login attempt.
 	private String mUrl;
 	// UI references.
 	private EditText mUrlView;
-	private String mUser;
+	private EditText mPasswordView;
 	private EditText mUserView;
+	private String mUser;
 
 	// Session Manager Class
 	Session session;
@@ -207,49 +209,6 @@ public class LoginActivity extends Activity {
 			error += "\t - User\n";
 		}
 
-		// // Try to verify user&password with the services
-		// if (!cancel) {
-		// // Inicialize the full context to generate token &&
-		// mToken = mUrl + "/login/token.php?username=" + mUser + "&password="
-		// + mPassword + "&service=moody_service" + jsonFormat;
-		// try {
-		// getJson = new DataAsyncTask().execute(mToken, "json").get();
-		//
-		// if (getJson == null) {
-		// cancel = true;
-		// error +=
-		// "\t - Error in Authentication service- check your internet service or the website URL\n";
-		// mUrlView.setError(getString(R.string.error_invalid_url));
-		// focusView = mUrlView;
-		//
-		// } else {
-		// if (getJson.has("error")) {
-		// cancel = true;
-		// mUserView
-		// .setError(getString(R.string.error_invalid_username));
-		// mPasswordView
-		// .setError(getString(R.string.error_incorrect_password));
-		// focusView = mUserView;
-		// error += "\t - Error in Authentication service - "
-		// + (String) getJson.get("error") + "\n";
-		// }
-		// if (getJson.has("token")) {
-		// finalToken = (String) getJson.get("token");
-		// }
-		// }
-		//
-		// } catch (InterruptedException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// } catch (ExecutionException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// } catch (JSONException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
@@ -278,8 +237,8 @@ public class LoginActivity extends Activity {
 
 		JSONObject jObj = null;
 
-		String error = "Errors found: \n";
-		View focusView = null;
+		private String error = "Errors found: \n";
+		private EditText focusView = new EditText(getApplicationContext());
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -290,10 +249,10 @@ public class LoginActivity extends Activity {
 			try {
 				return loadFromNetwork(url);
 			} catch (IOException e) {
-				e.printStackTrace();
+
 				error += "\t - Error in Authentication service- check your internet service or the website URL\n";
-				mUrlView.setError(getString(R.string.error_invalid_url));
-				focusView = mUrlView;
+				// mUrlViewTemp.setError(getString(R.string.error_invalid_url));
+				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			}
 
@@ -319,19 +278,18 @@ public class LoginActivity extends Activity {
 
 				if (jObj == null) {
 					error += "\t - Error in Authentication service- check your internet service or the website URL\n";
-					mUrlView.setError(getString(R.string.error_invalid_url));
-					focusView = mUrlView;
+
+					focusView.setError(getString(R.string.error_invalid_url));
 					return false;
 
 				} else {
 					if (jObj.has("error")) {
-						mUserView
-								.setError(getString(R.string.error_invalid_username));
-						mPasswordView
-								.setError(getString(R.string.error_incorrect_password));
-						focusView = mUserView;
 						error += "\t - Error in Authentication service - "
 								+ (String) jObj.get("error") + "\n";
+
+						focusView
+								.setError(getString(R.string.error_incorrect_password_username));
+
 						return false;
 					}
 					// On getToken sucess it will get the user id
@@ -347,21 +305,17 @@ public class LoginActivity extends Activity {
 			} catch (JSONException e) {
 				e.printStackTrace();
 				error += "\t - Error in Authentication service- check your internet service or the website URL\n";
-				mUrlView.setError(getString(R.string.error_invalid_url));
-				focusView = mUrlView;
+				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			} catch (MoodleRestWebServiceException e) {
 				e.printStackTrace();
 				error += "\t - Error getting user information - contact your Moodle administrator\n";
-				mUrlView.setError(getString(R.string.error_invalid_url));
-				focusView = mUrlView;
+				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			} catch (MoodleRestException e) {
 				e.printStackTrace();
-				e.printStackTrace();
 				error += "\t - Error getting user information - contact your Moodle administrator\n";
-				mUrlView.setError(getString(R.string.error_invalid_url));
-				focusView = mUrlView;
+				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			}
 
@@ -403,8 +357,8 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 
 			if (success) {
-				// Session Manager and shared pref send to shared pref:
-				// user-name, user-token, User-id in database
+				// Send to shared preferences:
+				// user-name, user-token, User-id
 				session = new Session(getApplicationContext());
 				session.createLoginSession(mUser, finalToken, UserId, mUrl);
 
@@ -414,8 +368,21 @@ public class LoginActivity extends Activity {
 				startActivity(intent);
 				finish();
 			} else {
-				Log.d("MoodyDebug", "onPOstExecute-FAILED");
-				focusView.requestFocus();
+				if (focusView.getError().equals(
+						getString(R.string.error_invalid_url))) {
+					mUrlView.setError(getString(R.string.error_invalid_url));
+					mUrlView.requestFocus();
+				}
+				if (focusView.getError().equals(
+						getString(R.string.error_incorrect_password_username))) {
+					mPasswordView
+							.setError(getString(R.string.error_incorrect_password_username));
+					mPasswordView.requestFocus();
+					mUserView
+							.setError(getString(R.string.error_incorrect_password_username));
+					mUserView.requestFocus();
+				}
+
 				AlertDialogs.showMessageDialog(LoginActivity.this,
 						new MoodyMessage("Login Error", error), false);
 			}

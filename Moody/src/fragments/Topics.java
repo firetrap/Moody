@@ -216,7 +216,7 @@ public class Topics extends Fragment {
 						// moduleFile.setText(Html.fromHtml(indexURL));
 						//
 						// }
-						moduleFile.setText(indexURL);
+						
 						Linkify.addLinks(moduleFile, Linkify.WEB_URLS);
 					}
 				}

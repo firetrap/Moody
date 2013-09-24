@@ -25,7 +25,7 @@
     <string name="login_progress_signing_in">Signing in&#8230;</string>
     <string name="error_invalid_username">This username is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_incorrect_password_username">This username/password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="prompt_url">Moodle URL</string>
     <string name="error_invalid_url">This url is invalid.</string>
@@ -82,5 +82,7 @@
     <string name="module_description">Module Description</string>
     <string name="module_files">Modules Files</string>
     <string name="title_activity_copy_of_topics_preview">CopyOfTopicsPreview</string>
+    <string name="title_activity_loading">Loading</string>
+    <string name="loading_data">Loading</string>
 
 </resources>
