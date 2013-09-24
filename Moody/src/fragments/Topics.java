@@ -216,7 +216,7 @@ public class Topics extends Fragment {
 						// moduleFile.setText(Html.fromHtml(indexURL));
 						//
 						// }
-						
+
 						Linkify.addLinks(moduleFile, Linkify.WEB_URLS);
 					}
 				}
@@ -247,15 +247,15 @@ public class Topics extends Fragment {
 		} else if (url.contains(".pdf")) {
 			return R.drawable.pdf;
 		} else if (url.contains(".doc")) {
-			return R.drawable.docx;
+			return R.drawable.docs;
 		} else if (url.contains(".ppt")) {
 			return R.drawable.ppt;
 		} else if (url.contains(".xls")) {
 			return R.drawable.xls;
-		} else if (url.contains(".zip") || url.contains(".rar")) {
-			return R.drawable.zip;
-		} else if (url.contains(".mp3")) {
-			return R.drawable.mp3;
+			// } else if (url.contains(".zip") || url.contains(".rar")) {
+			// return R.drawable.zip;
+			// } else if (url.contains(".mp3")) {
+			// return R.drawable.mp3;
 		}
 		return 0;
 
