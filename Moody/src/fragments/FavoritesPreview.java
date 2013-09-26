@@ -67,8 +67,8 @@ public class FavoritesPreview extends Fragment {
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		insertPoint.setOrientation(LinearLayout.VERTICAL);
-		insertPoint.addView(inflater.inflate(
-				R.layout.favorites_course_preview_header, null));
+		// insertPoint.addView(inflater.inflate(
+		// R.layout.favorites_course_preview_header, null));
 
 		if (favorites.isEmpty()) {
 			insertPoint.addView(inflater.inflate(R.layout.empty, null));
@@ -91,8 +91,10 @@ public class FavoritesPreview extends Fragment {
 		MoodleCourse[] userCourses = new Contents().getUserCourses(
 				getResources(), getActivity().getApplicationContext());
 
-		for (Long course : favorites) {
-			final MoodleCourse courseInfo = getCourse(course, userCourses);
+		for (int i = 0; i < favorites.size(); i++) {
+
+			final MoodleCourse courseInfo = getCourse(favorites.get(i),
+					userCourses);
 
 			String courseId = Long.toString(courseInfo.getId());
 
@@ -107,40 +109,26 @@ public class FavoritesPreview extends Fragment {
 			row.setLayoutParams(new LayoutParams(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-			View view = inflater.inflate(R.layout.topics_preview_context, null);
-			
-			((TextView) view.findViewById(R.id.topics_preview_title))
+			View view = inflater.inflate(R.layout.favorites_preview_context,
+					null);
+
+			if (i > 0) {
+				((TextView) view.findViewById(R.id.favorites_header_title))
+						.setVisibility(View.GONE);
+			}
+			((TextView) view.findViewById(R.id.favorites_title))
 					.setText(courseInfo.getFullname());
 
-			TextView tv = (TextView) view
-					.findViewById(R.id.topics_preview_description);
+			TextView description = (TextView) view
+					.findViewById(R.id.favorites_description);
 
-			tv.setText(getModuleInfo(modules));
-			tv.setId(Integer.parseInt(courseInfo.getId().toString()));
+			description.setText((modules != null) ? getModuleInfo(modules)
+					: "No info");
 
-			tv.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					String courseId = Integer.toString(v.getId());
-					String courseName = courseInfo.getFullname();
+			LinearLayout favoritesCard = (LinearLayout) view.findViewById(R.id.favorites_layout);
+			favoritesCard.setId(Integer.parseInt(courseInfo.getId().toString()));
 
-					Bundle bundle = new Bundle();
-					bundle.putString("courseId", courseId);
-					bundle.putString("courseName", courseName);
-
-					FragmentManager fragmentManager = getFragmentManager();
-					FragmentTransaction fragmentTransaction = fragmentManager
-							.beginTransaction();
-
-					TopicsPreview insideTopicsFrag = new TopicsPreview();
-					insideTopicsFrag.setArguments(bundle);
-					fragmentTransaction.replace(R.id.mainFragment,
-							insideTopicsFrag);
-					fragmentTransaction.commit();
-
-				}
-			});
+			onFavoriteClick(courseInfo, favoritesCard);
 
 			row.addView(view);
 			insertPoint.addView(row);
@@ -148,6 +136,36 @@ public class FavoritesPreview extends Fragment {
 		}
 
 		return insertPoint;
+	}
+
+	/**
+	 * @param courseInfo
+	 * @param favoritesLayout
+	 */
+	private void onFavoriteClick(final MoodleCourse courseInfo, LinearLayout favoritesLayout) {
+		favoritesLayout.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String courseId = Integer.toString(v.getId());
+				String courseName = courseInfo.getFullname();
+
+				Bundle bundle = new Bundle();
+				bundle.putString("courseId", courseId);
+				bundle.putString("courseName", courseName);
+
+				FragmentManager fragmentManager = getFragmentManager();
+				FragmentTransaction fragmentTransaction = fragmentManager
+						.beginTransaction();
+
+				TopicsPreview insideTopicsFrag = new TopicsPreview();
+				insideTopicsFrag.setArguments(bundle);
+				fragmentTransaction
+						.replace(R.id.mainFragment, insideTopicsFrag);
+				fragmentTransaction.commit();
+
+			}
+		});
 	}
 
 	private MoodleCourse getCourse(Long id, MoodleCourse[] courses) {
@@ -163,6 +181,7 @@ public class FavoritesPreview extends Fragment {
 	private String getModuleInfo(MoodleModule[] modules) {
 		String tVContent = "";
 
+		// Esta a rebentar aqui
 		for (MoodleModule module : modules) {
 			if (module.getName() != null) {
 

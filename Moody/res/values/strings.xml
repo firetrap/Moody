@@ -97,5 +97,6 @@
     <string name="favorites_added_message">Added to Favorites!</string>
     <string name="favorites_add_confirm_message">Are You Sure You Want To Add %s to your favorites list?</string>
     <string name="favorites_broadcast_filter_name">activities.FavoritesActivity</string>
+    <string name="favorites_header">Favorites</string>
 
 </resources>

@@ -156,44 +156,9 @@ public class TopicsPreview extends Fragment {
 					moduleName += "-" + getNamePure + "\n";
 
 				}
-
-				final int z = j;
-				TextView topicModule = (TextView) topicsView
-						.findViewById(R.id.topics_preview_description);
-				topicModule.setOnClickListener(new View.OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						String courseId = Integer.toString(v.getId());
-						String courseName = courseContent[z].getName();
-						String topicId = (String) v.getTag();
-
-						topicId.trim();
-						Toast.makeText(
-								getActivity().getApplicationContext(),
-								" COURSE ID-> " + courseId + " TOPIC ID-> "
-										+ topicId + "COURSE NAME ->"
-										+ courseName, Toast.LENGTH_SHORT)
-								.show();
-
-						Bundle bundle = new Bundle();
-						bundle.putString("courseId", courseId);
-						bundle.putString("courseName", courseName);
-						bundle.putString("topicId", topicId);
-
-						FragmentManager fragmentManager = getActivity()
-								.getFragmentManager();
-						FragmentTransaction fragmentTransaction = fragmentManager
-								.beginTransaction();
-
-						Topics insideTopicsFrag = new Topics();
-						insideTopicsFrag.setArguments(bundle);
-						fragmentTransaction.replace(R.id.mainFragment,
-								insideTopicsFrag);
-						fragmentTransaction.commit();
-					}
-				});
+	
+				
+				onTopicsPreviewClick(courseContent, topicsView, j);
 
 				// Where the LinearLayout from TopicsPreview id will be course
 				// id and the LinearLayout
@@ -207,6 +172,52 @@ public class TopicsPreview extends Fragment {
 			}
 		}
 
+	}
+
+	/**
+	 * @param courseContent
+	 * @param topicsView
+	 * @param contentIdx
+	 */
+	private void onTopicsPreviewClick(
+			final MoodleCourseContent[] courseContent, View topicsView,
+			final int contentIdx) {
+		TextView topicModule = (TextView) topicsView
+				.findViewById(R.id.topics_preview_description);
+		topicModule.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String courseId = Integer.toString(v.getId());
+				String courseName = courseContent[contentIdx].getName();
+				String topicId = (String) v.getTag();
+
+				topicId.trim();
+				Toast.makeText(
+						getActivity().getApplicationContext(),
+						" COURSE ID-> " + courseId + " TOPIC ID-> "
+								+ topicId + "COURSE NAME ->"
+								+ courseName, Toast.LENGTH_SHORT)
+						.show();
+
+				Bundle bundle = new Bundle();
+				bundle.putString("courseId", courseId);
+				bundle.putString("courseName", courseName);
+				bundle.putString("topicId", topicId);
+
+				FragmentManager fragmentManager = getActivity()
+						.getFragmentManager();
+				FragmentTransaction fragmentTransaction = fragmentManager
+						.beginTransaction();
+
+				Topics insideTopicsFrag = new Topics();
+				insideTopicsFrag.setArguments(bundle);
+				fragmentTransaction.replace(R.id.mainFragment,
+						insideTopicsFrag);
+				fragmentTransaction.commit();
+			}
+		});
 	}
 
 }
