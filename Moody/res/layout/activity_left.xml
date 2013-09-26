@@ -130,6 +130,7 @@
             android:drawableLeft="@drawable/favorites"
             android:drawablePadding="10dp"
             android:gravity="left|center_vertical"
+            android:onClick="onClick"
             android:paddingLeft="10dp"
             android:text="@string/favorites"
             android:textSize="@dimen/card_medium_text" />

@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import model.EnumWebServices;
@@ -27,6 +29,9 @@ import restPackage.MoodleUser;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.Html;
+
+import com.example.moody.R;
+
 import connections.DataAsyncTask;
 
 /**
@@ -44,6 +49,7 @@ public class Contents {
 	DataStore data = new DataStore();
 	Object getContent;
 
+	// MOODLE DATA
 	/**
 	 * @param resources
 	 * @param context
@@ -181,6 +187,7 @@ public class Contents {
 		return null;
 	}
 
+	// MOODLE SPECIFIC INDEX.HTML CONTENT
 	/**
 	 * @param context
 	 * @param fileUrl
@@ -249,6 +256,93 @@ public class Contents {
 		return !(content == null) ? true : false;
 	}
 
+	// FAVORITES
+
+	public HashMap<String, MoodleCourseContent[]> getFavoriteCourses(
+			ArrayList<Long> idsList, Context context, Resources resources) {
+		session = new Session(context);
+		String userId = session.getValues(MoodyConstants.KEY_ID, null);
+		String url = session.getValues(MoodyConstants.KEY_URL, null);
+		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
+		String fileName = resources
+				.getString(R.string.favoritesPcontents_file_name) + userId;
+		Long[] ids = idsList.toArray(new Long[0]);
+		HashMap<String, MoodleCourseContent[]> hash = new HashMap<String, MoodleCourseContent[]>();
+
+		if (isInCache(context, fileName)) {
+
+			@SuppressWarnings("unchecked")
+			HashMap<String, MoodleCourseContent[]> favorites = (HashMap<String, MoodleCourseContent[]>) data
+					.getData(context, fileName);
+
+			if ((favorites != null) && !favoritesChanged(ids, favorites))
+				return favorites;
+		}
+
+		MoodleCourse[] courses = (MoodleCourse[]) getUserCourses(resources,
+				context);
+
+		for (MoodleCourse course : courses) {
+			String courseId = Long.toString(course.getId());
+			MoodleCourseContent[] contents = (MoodleCourseContent[]) getCourseContent(
+					courseId, resources, context);
+
+			hash.put(courseId, contents);
+		}
+
+		data.storeData(context, hash, fileName);
+
+		return hash;
+	}
+
+	private boolean favoritesChanged(Long[] ids,
+			HashMap<String, MoodleCourseContent[]> coursesList) {
+		/* checks if every id exists in the cached courses */
+		for (long i : ids) {
+			if (coursesList.get(Long.toString(i)) == null)
+				return true;
+		}
+
+		return false;
+	}
+
+	public void insertFavorite(long id, Context context, Resources resource) {
+		actionFavorite(id, context, resource);
+	}
+
+	public void removeFavorite(long id, Context context, Resources resource) {
+		actionFavorite(id, context, resource);
+	}
+
+	public void actionFavorite(long id, Context context, Resources resource) {
+		String userId = new Session(context).getValues(MoodyConstants.KEY_ID,
+				null);
+		String fileName = resource.getString(R.string.favorites_file_name)
+				+ userId;
+		ArrayList<Long> idList = getFavorites(context, resource);
+
+		if (isFavorite(id, context, resource))
+			idList.remove(id);
+		else
+			idList.add(id);
+
+		new DataStore().storeData(context, idList, fileName);
+	}
+
+	public ArrayList<Long> getFavorites(Context context, Resources resource) {
+		String userId = new Session(context).getValues(MoodyConstants.KEY_ID,
+				null);
+		String fileName = resource.getString(R.string.favorites_file_name)
+				+ userId;
+
+		return (isInCache(context, fileName)) ? (ArrayList<Long>) data.getData(
+				context, fileName) : new ArrayList<Long>();
+	}
+
+	public boolean isFavorite(long id, Context context, Resources resource) {
+		return getFavorites(context, resource).contains(id);
+	}
+
 	/**
 	 * HTML to plain-text. This example program demonstrates the use of jsoup to
 	 * convert HTML input to lightly-formatted plain-text. That is divergent
@@ -308,7 +402,6 @@ public class Contents {
 					append("\n\n");
 				else if (name.equals("a"))
 					append(String.format(" <%s>", node.absUrl("href")));
-				
 
 			}
 
@@ -351,8 +444,8 @@ public class Contents {
 
 			public String toString() {
 
-				 return accum.toString().replaceAll("[<>]", "");
-				
+				return accum.toString().replaceAll("[<>]", "");
+
 			}
 		}
 	}

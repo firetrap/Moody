@@ -5,6 +5,8 @@ import managers.Session;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
@@ -15,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.moody.R;
 
@@ -79,17 +82,28 @@ public class TopicsPreview extends Fragment {
 			LayoutInflater inflater) {
 		View topicsHeaderView = inflater.inflate(
 				R.layout.topics_preview_header, null);
+		int id = Integer.parseInt(courseId);
 
 		TextView courseName = (TextView) topicsHeaderView
 				.findViewById(R.id.course_path_textView);
 
-		courseName.setText(Html.fromHtml("Courses > " + "<font color=#68d5fe>"
+		courseName.setText(Html.fromHtml("Courses ><font color=#68d5fe>"
 				+ CourseName + "</font>"));
 
-		ImageButton addFavorites = (ImageButton) topicsHeaderView
-				.findViewById(R.id.add_favorites_button_);
-		addFavorites.setId(Integer.parseInt(courseId));
-		addFavorites.setTag("add_favorites_button_" + courseId);
+		// If the course is already cached as favorite, hides the button,
+		// otherwise configs it's ID
+		if (!new Contents().isFavorite(id, getActivity().getBaseContext(),
+				getActivity().getResources())) {
+			ImageButton addFavorites = (ImageButton) topicsHeaderView
+					.findViewById(R.id.add_favorites_button_);
+
+			addFavorites.setId(id);
+			addFavorites.setTag("add_favorites_button_" + courseId);
+		} else
+			((ImageButton) topicsHeaderView
+					.findViewById(R.id.add_favorites_button_))
+					.setVisibility(View.GONE);
+
 		return topicsHeaderView;
 	}
 
@@ -105,7 +119,7 @@ public class TopicsPreview extends Fragment {
 	protected void createTopicsContent(LayoutInflater inflater,
 			LinearLayout insertPoint, String courseId) {
 
-		MoodleCourseContent[] courseContent = new Contents()
+		final MoodleCourseContent[] courseContent = new Contents()
 				.getCourseContent(courseId, getResources(), getActivity()
 						.getApplicationContext());
 
@@ -117,10 +131,11 @@ public class TopicsPreview extends Fragment {
 				row.setLayoutParams(new LayoutParams(
 						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-				View topicsView = inflater.inflate(R.layout.topics_preview_context, null);
+				View topicsView = inflater.inflate(
+						R.layout.topics_preview_context, null);
 
 				TextView topicName = (TextView) topicsView
-						.findViewById(R.id.title);
+						.findViewById(R.id.topics_preview_title);
 				topicName.setText(courseContent[j].getName());
 
 				String moduleName = "";
@@ -141,9 +156,44 @@ public class TopicsPreview extends Fragment {
 					moduleName += "-" + getNamePure + "\n";
 
 				}
+
+				final int z = j;
 				TextView topicModule = (TextView) topicsView
-						.findViewById(R.id.description);
-				topicModule.setText(moduleName);
+						.findViewById(R.id.topics_preview_description);
+				topicModule.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						String courseId = Integer.toString(v.getId());
+						String courseName = courseContent[z].getName();
+						String topicId = (String) v.getTag();
+
+						topicId.trim();
+						Toast.makeText(
+								getActivity().getApplicationContext(),
+								" COURSE ID-> " + courseId + " TOPIC ID-> "
+										+ topicId + "COURSE NAME ->"
+										+ courseName, Toast.LENGTH_SHORT)
+								.show();
+
+						Bundle bundle = new Bundle();
+						bundle.putString("courseId", courseId);
+						bundle.putString("courseName", courseName);
+						bundle.putString("topicId", topicId);
+
+						FragmentManager fragmentManager = getActivity()
+								.getFragmentManager();
+						FragmentTransaction fragmentTransaction = fragmentManager
+								.beginTransaction();
+
+						Topics insideTopicsFrag = new Topics();
+						insideTopicsFrag.setArguments(bundle);
+						fragmentTransaction.replace(R.id.mainFragment,
+								insideTopicsFrag);
+						fragmentTransaction.commit();
+					}
+				});
 
 				// Where the LinearLayout from TopicsPreview id will be course
 				// id and the LinearLayout

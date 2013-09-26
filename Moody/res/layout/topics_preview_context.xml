@@ -23,7 +23,7 @@
             android:paddingRight="8dp" >
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/topics_preview_title"
                 style="@style/CardTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
             android:padding="4dp" >
 
             <TextView
-                android:id="@+id/description"
+                android:id="@+id/topics_preview_description"
                 style="@style/CardText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

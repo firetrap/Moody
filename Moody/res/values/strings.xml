@@ -14,6 +14,7 @@
     <string name="moody_ok">OK</string>
     <string name="moody_yes">Yes</string>
     <string name="moody_no">No</string>
+    <string name="empty_screen_text">Empty</string>
 
     <!-- Strings related to login -->
     <string name="title_activity_login">Sign in</string>
@@ -84,5 +85,17 @@
     <string name="title_activity_copy_of_topics_preview">CopyOfTopicsPreview</string>
     <string name="title_activity_loading">Loading</string>
     <string name="loading_data">Loading</string>
+
+    <!-- Strings related to Favorites -->
+    <string name="favorites_content_empty">Empty</string>
+    <string name="favorites_body_empty">You dont have any favorite courses difined&#8230; Yet!</string>
+    <string name="favorites_title">Your Favorite Courses</string>
+    <string name="title_activity_favorites">FavoritesActivity</string>
+    <string name="favorites_file_name">favorite_ids</string>
+    <string name="favoritesPcontents_file_name">favorite_coures</string>
+    <string name="favorites_add_message">Add to Favorites?</string>
+    <string name="favorites_added_message">Added to Favorites!</string>
+    <string name="favorites_add_confirm_message">Are You Sure You Want To Add %s to your favorites list?</string>
+    <string name="favorites_broadcast_filter_name">activities.FavoritesActivity</string>
 
 </resources>

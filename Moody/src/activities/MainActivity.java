@@ -1,6 +1,6 @@
 package activities;
 
-import fragments.Topics;
+import fragments.FavoritesPreview;
 import fragments.TopicsPreview;
 import fragments.UserCloud;
 import fragments.UserPicture;
@@ -18,7 +18,6 @@ import model.MoodyMessage;
 import restPackage.MoodleCourse;
 import restPackage.MoodleUser;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -167,31 +166,58 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	public void onAddFavoritesClick(View v) {
-
 		// The add to favorites button id its the same of the course so we can
 		// send the button id to future development
+		final int id = v.getId();
+		final View view = v;
 
-		if (organizedCourses.get(Integer.toString(v.getId())) != null) {
-			String courseName = organizedCourses
-					.get(Integer.toString(v.getId()));
-			Integer.toString(v.getId());
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
 
-			Toast.makeText(getApplicationContext(),
-					courseName + " added to favorites", Toast.LENGTH_SHORT)
-					.show();
+				switch (which) {
 
-			LayoutInflater inflater = (LayoutInflater) this
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				case DialogInterface.BUTTON_POSITIVE:
+					new Contents().insertFavorite(id, getApplicationContext(),
+							getResources());
 
-			View topicsContent = inflater.inflate(
-					R.layout.topics_preview_header, null);
-			ImageButton addFav = (ImageButton) topicsContent
-					.findViewById(R.id.add_favorites_button_);
-			addFav.setVisibility(View.GONE);
+					dialog.dismiss();
 
-			onCoursesClick(v);
+					Toast.makeText(
+							getApplicationContext(),
+							getResources().getString(
+									R.string.favorites_added_message),
+							Toast.LENGTH_SHORT).show();
 
-		}
+					onCoursesClick(view);
+					break;
+
+				case DialogInterface.BUTTON_NEGATIVE:
+					dialog.dismiss();
+
+					break;
+				}
+			}
+		};
+
+		AlertDialogs.showMessageDialog(
+				this,
+				new MoodyMessage(getResources().getString(
+						R.string.favorites_add_message), String.format(
+						getResources().getString(
+								R.string.favorites_add_confirm_message),
+						organizedCourses.get(Integer.toString(v.getId())))),
+				dialogClickListener, dialogClickListener, false);
+
+		// if (organizedCourses.get(Integer.toString(v.getId())) != null) {
+		// String courseName = organizedCourses
+		// .get(Integer.toString(v.getId()));
+		// Integer.toString(v.getId());
+		//
+		// Toast.makeText(getApplicationContext(),
+		// "Curso-> " + courseName + " ID-> " + v.getId(),
+		// Toast.LENGTH_SHORT).show();
+		// }
 
 	}
 
@@ -199,10 +225,13 @@ public class MainActivity extends Activity implements OnClickListener,
 	@Override
 	public void onClick(View v) {
 
+		FragmentManager fm;
+		Intent intent;
+
 		switch (v.getId()) {
 		case R.id.login_image_button:
 
-			FragmentManager fm = getFragmentManager();
+			fm = getFragmentManager();
 			UserPicture userDetailsDialog = new UserPicture();
 			userDetailsDialog.setRetainInstance(true);
 			userDetailsDialog.show(fm, "fragment_name");
@@ -235,87 +264,66 @@ public class MainActivity extends Activity implements OnClickListener,
 				}
 			};
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("Logout");
-			builder.setMessage("Are you sure?")
-					.setPositiveButton("Yes", dialogClickListener)
-					.setNegativeButton("No", dialogClickListener).show();
+			AlertDialogs.showMessageDialog(this, new MoodyMessage("Logout",
+					"Are you sure?"), dialogClickListener, dialogClickListener,
+					false);
 
 			break;
 
 		case R.id.fullname_textview:
-			Intent intent = new Intent(getApplicationContext(),
+			intent = new Intent(getApplicationContext(),
 					UserDetailsActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			myDrawerLayout.closeDrawer(Gravity.LEFT);
+
 			startActivity(intent);
+
+			myDrawerLayout.closeDrawer(Gravity.LEFT);
+			break;
+
+		case R.id.latest_button:
+			break;
+
+		case R.id.favorites_button:
+
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			FavoritesPreview fragment = new FavoritesPreview();
+			ft.replace(R.id.mainFragment, fragment);
+			ft.commit();
+
+			myDrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
 
 		case R.id.cloud_button:
-			Toast.makeText(getApplicationContext(), "CLOUD", Toast.LENGTH_SHORT)
-					.show();
 
-			FragmentManager frag = getFragmentManager();
+			fm = getFragmentManager();
 			UserCloud userCloudDialog = new UserCloud();
 			userCloudDialog.setRetainInstance(true);
-			userCloudDialog.show(frag, "fragment_name");
-
-			// Intent intents = getPackageManager().getLaunchIntentForPackage(
-			// "com.dropbox.android");
-			// intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			// startActivity(intents);
+			userCloudDialog.show(fm, "fragment_name");
 
 			break;
 
-		default:
-			// myDrawerLayout.closeDrawer(Gravity.LEFT);
+		case R.id.wiki_button:
+			break;
 
-			// Toast.makeText(getApplicationContext(),
-			// "ENTROU NO PRIMEIRO :" + v.getId(), Toast.LENGTH_SHORT)
-			// .show();
-			// throw new RuntimeException("Unknown button ID");
+		default:
+			break;
 		}
 	}
 
-	public void onTopicsPreviewClick(View v) {
-		String courseId = Integer.toString(v.getId());
-		String courseName = organizedCourses.get(Integer.toString(v.getId()));
-		String topicId = (String) v.getTag();
-
-		Toast.makeText(
-				getApplicationContext(),
-				" COURSE ID-> " + courseId + " TOPIC ID-> " + topicId
-						+ "COURSE NAME ->" + courseName, Toast.LENGTH_SHORT)
-				.show();
-
-		Bundle bundle = new Bundle();
-		bundle.putString("courseId", courseId);
-		bundle.putString("courseName", courseName);
-		bundle.putString("topicId", topicId);
-
-		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager
-				.beginTransaction();
-
-		Topics insideTopicsFrag = new Topics();
-		insideTopicsFrag.setArguments(bundle);
-		fragmentTransaction.replace(R.id.mainFragment, insideTopicsFrag);
-		fragmentTransaction.commit();
-
-	}
 
 	public void onCoursesClick(View v) {
 
-		// The view id is the same id of the courses
+		// LOADING
+		// Intent intent = new Intent(getApplicationContext(), Loading.class);
+		// startActivity(intent);
 
-		Intent intent = new Intent(getApplicationContext(), Loading.class);
-		startActivity(intent);
+		// The view id is the same id of the courses
 
 		String courseName = organizedCourses.get(Integer.toString(v.getId()));
 		String courseId = Integer.toString(v.getId());
-		// Toast.makeText(getApplicationContext(),
-		// "Curso-> " + courseName + " ID-> " + v.getId(),
-		// Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(),
+				"Curso-> " + courseName + " ID-> " + v.getId(),
+				Toast.LENGTH_SHORT).show();
 
 		Bundle bundle = new Bundle();
 		bundle.putString("courseName", courseName);
