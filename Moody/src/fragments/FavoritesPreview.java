@@ -108,7 +108,7 @@ public class FavoritesPreview extends Fragment {
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			View view = inflater.inflate(R.layout.topics_preview_context, null);
-
+			
 			((TextView) view.findViewById(R.id.topics_preview_title))
 					.setText(courseInfo.getFullname());
 
