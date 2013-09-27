@@ -21,6 +21,8 @@ public final class MoodyConstants {
 
 	// User name (make variable public to access from outside)
 	public static final String KEY_NAME = "name";
+	
+	public static final String KEY_FULL_NAME = "fullName";
 
 	public static final String KEY_PARAMS = "%s/webservice/rest/server.php?wstoken=%s&wsfunction=%s=%s";
 

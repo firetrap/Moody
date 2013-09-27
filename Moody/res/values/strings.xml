@@ -14,7 +14,6 @@
     <string name="moody_ok">OK</string>
     <string name="moody_yes">Yes</string>
     <string name="moody_no">No</string>
-    <string name="empty_screen_text">Empty</string>
 
     <!-- Strings related to login -->
     <string name="title_activity_login">Sign in</string>
@@ -87,6 +86,7 @@
     <string name="loading_data">Loading</string>
 
     <!-- Strings related to Favorites -->
+    <string name="empty_screen_text">You dont have any favorites&#8230;</string>
     <string name="favorites_content_empty">Empty</string>
     <string name="favorites_body_empty">You dont have any favorite courses difined&#8230; Yet!</string>
     <string name="favorites_title">Your Favorite Courses</string>

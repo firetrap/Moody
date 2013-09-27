@@ -67,7 +67,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		session = new Session(getApplicationContext());
 		myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-		populateUsername();
+		populateFullName();
 		populateUserCourses();
 		populateUserPicture();
 
@@ -82,13 +82,10 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	}
 
-	public void populateUsername() {
+	public void populateFullName() {
 
 		TextView view = (TextView) findViewById(R.id.fullname_textview);
-
-		MoodleUser user = new Contents().getUser(getResources(),
-				getApplicationContext());
-		view.setText(user.getFullname());
+		view.setText(session.getValues(MoodyConstants.KEY_FULL_NAME, null));
 
 	}
 
@@ -309,7 +306,6 @@ public class MainActivity extends Activity implements OnClickListener,
 			break;
 		}
 	}
-
 
 	public void onCoursesClick(View v) {
 

@@ -285,6 +285,7 @@ public class Contents {
 																// text
 
 			// hit when the node is first seen
+			@Override
 			public void head(Node node, int depth) {
 				String name = node.nodeName();
 				if (node instanceof TextNode)
@@ -297,6 +298,7 @@ public class Contents {
 			}
 
 			// hit when all of the node's children (if any) have been visited
+			@Override
 			public void tail(Node node, int depth) {
 				String name = node.nodeName();
 				if (name.equals("br"))
@@ -345,6 +347,7 @@ public class Contents {
 				}
 			}
 
+			@Override
 			public String toString() {
 
 				return accum.toString().replaceAll("[<>]", "");
@@ -385,12 +388,12 @@ public class Contents {
 				return favorites;
 		}
 
-		MoodleCourse[] courses = (MoodleCourse[]) getUserCourses(resources,
+		MoodleCourse[] courses = getUserCourses(resources,
 				context);
 
 		for (MoodleCourse course : courses) {
 			String courseId = Long.toString(course.getId());
-			MoodleCourseContent[] contents = (MoodleCourseContent[]) getCourseContent(
+			MoodleCourseContent[] contents = getCourseContent(
 					courseId, resources, context);
 
 			hash.put(courseId, contents);

@@ -156,9 +156,6 @@ public class TopicsPreview extends Fragment {
 					moduleName += "-" + getNamePure + "\n";
 
 				}
-	
-				
-				onTopicsPreviewClick(courseContent, topicsView, j);
 
 				// Where the LinearLayout from TopicsPreview id will be course
 				// id and the LinearLayout
@@ -167,6 +164,7 @@ public class TopicsPreview extends Fragment {
 						.findViewById(R.id.topics_preview_layout);
 				layout.setId(Integer.parseInt(courseId));
 				layout.setTag(Long.toString(courseContent[j].getId()));
+				onTopicsPreviewClick(courseContent, layout, j);
 				row.addView(topicsView);
 				insertPoint.addView(row);
 			}
@@ -180,11 +178,10 @@ public class TopicsPreview extends Fragment {
 	 * @param contentIdx
 	 */
 	private void onTopicsPreviewClick(
-			final MoodleCourseContent[] courseContent, View topicsView,
+			final MoodleCourseContent[] courseContent, View layout,
 			final int contentIdx) {
-		TextView topicModule = (TextView) topicsView
-				.findViewById(R.id.topics_preview_description);
-		topicModule.setOnClickListener(new View.OnClickListener() {
+
+		layout.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -196,10 +193,9 @@ public class TopicsPreview extends Fragment {
 				topicId.trim();
 				Toast.makeText(
 						getActivity().getApplicationContext(),
-						" COURSE ID-> " + courseId + " TOPIC ID-> "
-								+ topicId + "COURSE NAME ->"
-								+ courseName, Toast.LENGTH_SHORT)
-						.show();
+						" COURSE ID-> " + courseId + " TOPIC ID-> " + topicId
+								+ "COURSE NAME ->" + courseName,
+						Toast.LENGTH_SHORT).show();
 
 				Bundle bundle = new Bundle();
 				bundle.putString("courseId", courseId);
@@ -213,8 +209,8 @@ public class TopicsPreview extends Fragment {
 
 				Topics insideTopicsFrag = new Topics();
 				insideTopicsFrag.setArguments(bundle);
-				fragmentTransaction.replace(R.id.mainFragment,
-						insideTopicsFrag);
+				fragmentTransaction
+						.replace(R.id.mainFragment, insideTopicsFrag);
 				fragmentTransaction.commit();
 			}
 		});

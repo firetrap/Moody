@@ -43,8 +43,7 @@ public class Session {
 	// Constructor
 	public Session(Context context) {
 		this._context = context;
-		pref = _context.getSharedPreferences(
-				MoodyConstants.PREF_NAME,
+		pref = _context.getSharedPreferences(MoodyConstants.PREF_NAME,
 				MoodyConstants.PRIVATE_MODE);
 		editor = pref.edit();
 	}
@@ -80,17 +79,22 @@ public class Session {
 	}
 
 	/**
-	 * Create login session
-	 * 
+	 * @param name
+	 * @param fullName
+	 * @param token
+	 * @param id
 	 * @param mUrl
-	 * */
-	public void createLoginSession(String name, String token, String id,
-			String mUrl) {
+	 */
+	public void createLoginSession(String name, String fullName, String token,
+			String id, String mUrl) {
 		// Storing login value as TRUE
 		editor.putBoolean(MoodyConstants.IS_LOGIN, true);
 
 		// Storing name in preferences
 		editor.putString(MoodyConstants.KEY_NAME, name);
+
+		// Storing full name in preferences
+		editor.putString(MoodyConstants.KEY_FULL_NAME, fullName);
 
 		// Storing email in preferences
 		editor.putString(MoodyConstants.KEY_TOKEN, token);
@@ -106,14 +110,19 @@ public class Session {
 	}
 
 	/**
+	 * 
 	 * Get stored session data
-	 * */
+	 * 
+	 * @return HashMap<String, String>
+	 */
 	public HashMap<String, String> getUserDetails() {
 		final HashMap<String, String> user = new HashMap<String, String>();
 		// user name
 		user.put(MoodyConstants.KEY_NAME,
 				pref.getString(MoodyConstants.KEY_NAME, null));
 
+		user.put(MoodyConstants.KEY_NAME,
+				pref.getString(MoodyConstants.KEY_FULL_NAME, null));
 		// user token
 		user.put(MoodyConstants.KEY_TOKEN,
 				pref.getString(MoodyConstants.KEY_TOKEN, null));
@@ -130,9 +139,14 @@ public class Session {
 		return user;
 	}
 
-	public String getValues(String name, String oppp) {
+	/**
+	 * @param name
+	 * @param options
+	 * @return String
+	 */
+	public String getValues(String name, String options) {
 
-		return pref.getString(name, oppp);
+		return pref.getString(name, options);
 
 	}
 

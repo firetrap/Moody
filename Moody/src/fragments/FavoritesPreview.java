@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import managers.Contents;
 import managers.Session;
+import model.MoodyConstants;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
@@ -15,6 +16,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,7 +117,15 @@ public class FavoritesPreview extends Fragment {
 			if (i > 0) {
 				((TextView) view.findViewById(R.id.favorites_header_title))
 						.setVisibility(View.GONE);
+			} else {
+				((TextView) view.findViewById(R.id.favorites_header_title))
+						.setText(Html.fromHtml(session.getValues(
+								MoodyConstants.KEY_FULL_NAME, null)
+								+ " > <font color=#BE245A>"
+								+ getResources().getString(
+										R.string.favorites_header) + "</font>"));
 			}
+
 			((TextView) view.findViewById(R.id.favorites_title))
 					.setText(courseInfo.getFullname());
 
@@ -125,8 +135,10 @@ public class FavoritesPreview extends Fragment {
 			description.setText((modules != null) ? getModuleInfo(modules)
 					: "No info");
 
-			LinearLayout favoritesCard = (LinearLayout) view.findViewById(R.id.favorites_layout);
-			favoritesCard.setId(Integer.parseInt(courseInfo.getId().toString()));
+			LinearLayout favoritesCard = (LinearLayout) view
+					.findViewById(R.id.favorites_layout);
+			favoritesCard
+					.setId(Integer.parseInt(courseInfo.getId().toString()));
 
 			onFavoriteClick(courseInfo, favoritesCard);
 
@@ -142,7 +154,8 @@ public class FavoritesPreview extends Fragment {
 	 * @param courseInfo
 	 * @param favoritesLayout
 	 */
-	private void onFavoriteClick(final MoodleCourse courseInfo, LinearLayout favoritesLayout) {
+	private void onFavoriteClick(final MoodleCourse courseInfo,
+			LinearLayout favoritesLayout) {
 		favoritesLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

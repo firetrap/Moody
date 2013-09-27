@@ -29,11 +29,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -78,8 +76,6 @@ public class LoginActivity extends Activity {
 	Session session;
 
 	private String url = "";
-
-	private String UserId = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -240,6 +236,9 @@ public class LoginActivity extends Activity {
 		private String error = "Errors found: \n";
 		private EditText focusView = new EditText(getApplicationContext());
 
+		private String userId = "";
+		private String fullName = "";
+
 		@Override
 		protected Boolean doInBackground(Void... params) {
 
@@ -299,7 +298,8 @@ public class LoginActivity extends Activity {
 								+ "/webservice/rest/server.php", finalToken);
 						MoodleWebService getSiteInfo = MoodleRestWebService
 								.getSiteInfo();
-						UserId = Long.toString(getSiteInfo.getUserId());
+						userId = Long.toString(getSiteInfo.getUserId());
+						fullName = getSiteInfo.getFullName();
 					}
 				}
 			} catch (JSONException e) {
@@ -358,9 +358,10 @@ public class LoginActivity extends Activity {
 
 			if (success) {
 				// Send to shared preferences:
-				// user-name, user-token, User-id
+				// user-name, user-token, user-id, full name
 				session = new Session(getApplicationContext());
-				session.createLoginSession(mUser, finalToken, UserId, mUrl);
+				session.createLoginSession(mUser, fullName, finalToken, userId,
+						mUrl);
 
 				Intent intent = new Intent(getApplicationContext(),
 						MainActivity.class);
