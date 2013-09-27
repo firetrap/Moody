@@ -27,6 +27,10 @@ import android.widget.Button;
 
 import com.example.moody.R;
 
+/**
+ * @author firetrap
+ *
+ */
 public class UserPicture extends DialogFragment {
 
 	// FOR GALLERY

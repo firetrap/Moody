@@ -9,6 +9,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+/**
+ * @author firetrap
+ *
+ */
 public class Session {
 	// Context
 	Context _context;
@@ -18,27 +22,6 @@ public class Session {
 
 	// Shared Preferences
 	SharedPreferences pref;
-
-	// // Shared pref mode
-	// int PRIVATE_MODE = 0;
-	//
-	// // Sharedpref file name
-	// private static final String PREF_NAME = "MoodyPreferences";
-	//
-	// // All Shared Preferences Keys
-	// private static final String IS_LOGIN = "IsLoggedIn";
-	//
-	// // User name (make variable public to access from outside)
-	// public static final String KEY_NAME = "name";
-	//
-	// // Email address (make variable public to access from outside)
-	// public static final String KEY_TOKEN = "token";
-	//
-	// // User ID
-	// public static final String KEY_ID = "id";
-	//
-	// // Moodle URL
-	// public static final String KEY_URL = "url";
 
 	// Constructor
 	public Session(Context context) {

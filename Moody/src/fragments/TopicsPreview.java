@@ -21,8 +21,11 @@ import android.widget.Toast;
 
 import com.example.moody.R;
 
-public class TopicsPreview extends Fragment {
-
+/**
+ * @author firetrap
+ *
+ */
+public class TopicsPreview extends Fragment { 
 	// Session Manager Class
 	Session session;
 

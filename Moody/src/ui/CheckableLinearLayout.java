@@ -5,6 +5,10 @@ import android.view.View;
 import android.widget.Checkable;
 import android.widget.LinearLayout;
 
+/**
+ * @author firetrap
+ *
+ */
 public class CheckableLinearLayout extends LinearLayout implements Checkable {
 
 	/**

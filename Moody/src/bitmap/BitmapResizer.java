@@ -3,6 +3,10 @@ package bitmap;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+/**
+ * @author firetrap
+ *
+ */
 public class BitmapResizer {
 
 	public static int calculateInSampleSize(BitmapFactory.Options options,

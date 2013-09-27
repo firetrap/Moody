@@ -45,6 +45,10 @@ import com.example.moody.R;
 
 import connections.DataAsyncTask;
 
+/**
+ * @author firetrap
+ *
+ */
 public class MainActivity extends Activity implements OnClickListener,
 		InterfaceDialogFrag {
 

@@ -10,6 +10,10 @@ import android.view.View;
 
 import com.example.moody.R;
 
+/**
+ * @author firetrap
+ *
+ */
 public class Loading extends Activity {
 
 	private View mLoadingStatusView;

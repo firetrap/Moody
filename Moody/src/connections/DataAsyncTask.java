@@ -19,7 +19,10 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 
-//receives a String[] where params[0] it's an url, params[1] its an string required to parse, params[2] its an string to the required method above
+/**
+ * @author firetrap
+ *
+ */
 public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 	Object jObj = null;
 

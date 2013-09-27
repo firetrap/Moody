@@ -22,6 +22,10 @@ import android.widget.TextView;
 
 import com.example.moody.R;
 
+/**
+ * @author firetrap
+ *
+ */
 public class Topics extends Fragment {
 
 	Object course;

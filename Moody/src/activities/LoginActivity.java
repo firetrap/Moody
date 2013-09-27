@@ -40,8 +40,12 @@ import android.widget.Toast;
 import com.example.moody.R;
 
 /**
+ * 
  * Activity which displays a login screen to the user, offering registration as
  * well.
+ * 
+ * @author firetrap
+ * 
  */
 public class LoginActivity extends Activity {
 

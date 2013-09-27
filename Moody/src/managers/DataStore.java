@@ -13,6 +13,10 @@ import java.io.ObjectOutputStream;
 
 import android.content.Context;
 
+/**
+ * @author firetrap
+ *
+ */
 public class DataStore {
 
 	private static byte[] serialize(Object obj) throws IOException {
