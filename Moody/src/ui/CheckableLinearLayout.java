@@ -1,4 +1,5 @@
 package ui;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -7,7 +8,7 @@ import android.widget.LinearLayout;
 
 /**
  * @author firetrap
- *
+ * 
  */
 public class CheckableLinearLayout extends LinearLayout implements Checkable {
 
@@ -77,4 +78,9 @@ public class CheckableLinearLayout extends LinearLayout implements Checkable {
 		mOnCheckedChangeListener = listener;
 	}
 
+	@Override
+	public boolean performClick() {
+		toggle();
+		return super.performClick();
+	}
 }
