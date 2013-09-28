@@ -79,8 +79,28 @@ public class CheckableLinearLayout extends LinearLayout implements Checkable {
 	}
 
 	@Override
+	public boolean performLongClick() {
+		if (!isChecked()) {
+			toggle();
+			return super.performLongClick();
+		}
+		if (isChecked()) {
+			toggle();
+			return false;
+		} else {
+
+			toggle();
+			return super.performLongClick();
+		}
+	}
+
+	@Override
 	public boolean performClick() {
-		toggle();
-		return super.performClick();
+
+		if (isChecked()) {
+			toggle();
+			return false;
+		} else
+			return super.performClick();
 	}
 }

@@ -140,7 +140,7 @@ public class FavoritesPreview extends Fragment {
 			favoritesCard
 					.setId(Integer.parseInt(courseInfo.getId().toString()));
 
-//			onFavoriteClick(courseInfo, favoritesCard);
+			onFavoriteClick(courseInfo, favoritesCard);
 
 			row.addView(view);
 			insertPoint.addView(row);
