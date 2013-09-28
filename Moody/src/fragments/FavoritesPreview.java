@@ -11,18 +11,23 @@ import model.MoodyConstants;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
+import ui.CheckableLinearLayout;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.moody.R;
 
@@ -35,6 +40,12 @@ public class FavoritesPreview extends Fragment {
 	// Session Manager Class
 	Session session;
 
+	LayoutInflater myInflater;
+
+	ActionMode.Callback mCallback;
+	ActionMode mMode;
+	ArrayList<Long> selectedIds;
+
 	/**
 	 * 
 	 */
@@ -46,7 +57,52 @@ public class FavoritesPreview extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
+		selectedIds = new ArrayList<Long>();
 		session = new Session(getActivity().getApplicationContext());
+
+		mCallback = new ActionMode.Callback() {
+
+			// This is called when the action mode is created. This is called by
+			// startActionMode()
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+
+				getActivity().getMenuInflater().inflate(R.menu.favorites, menu);
+				// Inflater.in(R.menu.favorites, menu);
+				return true;
+			}
+
+			@Override
+			public void onDestroyActionMode(ActionMode mode) {
+				// mode.finish();
+			}
+
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			/** This is called when an item in the context menu is selected */
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				switch (item.getItemId()) {
+				case R.id.action_delete:
+					Toast.makeText(getActivity().getApplicationContext(),
+							"Delete Action ", Toast.LENGTH_LONG).show();
+
+					new Contents().removeFavorite(selectedIds, getActivity()
+							.getApplicationContext(), getResources());
+
+					mode.finish(); // Automatically exists the action mode, when
+									// the
+									// user selects this action
+					break;
+
+				}
+				return false;
+			}
+		};
 
 		return createContent(new Contents().getFavorites(getActivity()
 				.getApplicationContext(), getResources()));
@@ -135,7 +191,7 @@ public class FavoritesPreview extends Fragment {
 			description.setText((modules != null) ? getModuleInfo(modules)
 					: "No info");
 
-			LinearLayout favoritesCard = (LinearLayout) view
+			CheckableLinearLayout favoritesCard = (CheckableLinearLayout) view
 					.findViewById(R.id.favorites_layout);
 			favoritesCard
 					.setId(Integer.parseInt(courseInfo.getId().toString()));
@@ -155,7 +211,7 @@ public class FavoritesPreview extends Fragment {
 	 * @param favoritesLayout
 	 */
 	private void onFavoriteClick(final MoodleCourse courseInfo,
-			LinearLayout favoritesLayout) {
+			final CheckableLinearLayout favoritesLayout) {
 		favoritesLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -179,6 +235,30 @@ public class FavoritesPreview extends Fragment {
 
 			}
 		});
+
+		favoritesLayout.setOnLongClickListener(new View.OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+
+				if (mMode == null)
+					mMode = getActivity().startActionMode(mCallback);
+
+				Integer id = favoritesLayout.getId();
+
+				if (favoritesLayout.isChecked())
+					selectedIds.add(id.longValue());
+				else
+					selectedIds.remove(id.longValue());
+
+				Toast.makeText(getActivity().getApplicationContext(),
+						"ESTE" + "ID ->" + id, Toast.LENGTH_SHORT).show();
+
+				return true;
+
+			}
+		});
+
 	}
 
 	private MoodleCourse getCourse(Long id, MoodleCourse[] courses) {
@@ -216,4 +296,5 @@ public class FavoritesPreview extends Fragment {
 
 		return tVContent;
 	}
+
 }

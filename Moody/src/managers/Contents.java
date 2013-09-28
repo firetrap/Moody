@@ -388,13 +388,12 @@ public class Contents {
 				return favorites;
 		}
 
-		MoodleCourse[] courses = getUserCourses(resources,
-				context);
+		MoodleCourse[] courses = getUserCourses(resources, context);
 
 		for (MoodleCourse course : courses) {
 			String courseId = Long.toString(course.getId());
-			MoodleCourseContent[] contents = getCourseContent(
-					courseId, resources, context);
+			MoodleCourseContent[] contents = getCourseContent(courseId,
+					resources, context);
 
 			hash.put(courseId, contents);
 		}
@@ -416,24 +415,33 @@ public class Contents {
 	}
 
 	public void insertFavorite(long id, Context context, Resources resource) {
-		actionFavorite(id, context, resource);
+		ArrayList<Long> ids = new ArrayList<Long>();
+		ids.add(id);
+
+		actionFavorite(ids, context, resource);
 	}
 
-	public void removeFavorite(long id, Context context, Resources resource) {
-		actionFavorite(id, context, resource);
+	public void removeFavorite(ArrayList<Long> ids, Context context,
+			Resources resource) {
+		actionFavorite(ids, context, resource);
 	}
 
-	public void actionFavorite(long id, Context context, Resources resource) {
+	public void actionFavorite(ArrayList<Long> ids, Context context,
+			Resources resource) {
 		String userId = new Session(context).getValues(MoodyConstants.KEY_ID,
 				null);
 		String fileName = resource.getString(R.string.favorites_file_name)
 				+ userId;
 		ArrayList<Long> idList = getFavorites(context, resource);
 
-		if (isFavorite(id, context, resource))
-			idList.remove(id);
-		else
-			idList.add(id);
+		for (Long id : ids) {
+
+			if (isFavorite(id, context, resource))
+				idList.remove(id);
+			else
+				idList.add(id);
+
+		}
 
 		new DataStore().storeData(context, idList, fileName);
 	}
