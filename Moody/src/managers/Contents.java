@@ -367,52 +367,6 @@ public class Contents {
 	}
 
 	// FAVORITES
-	public HashMap<String, MoodleCourseContent[]> getFavoriteCourses(
-			ArrayList<Long> idsList, Context context, Resources resources) {
-		session = new Session(context);
-		String userId = session.getValues(MoodyConstants.KEY_ID, null);
-		String url = session.getValues(MoodyConstants.KEY_URL, null);
-		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
-		String fileName = resources
-				.getString(R.string.favoritesPcontents_file_name) + userId;
-		Long[] ids = idsList.toArray(new Long[0]);
-		HashMap<String, MoodleCourseContent[]> hash = new HashMap<String, MoodleCourseContent[]>();
-
-		if (isInCache(context, fileName)) {
-
-			@SuppressWarnings("unchecked")
-			HashMap<String, MoodleCourseContent[]> favorites = (HashMap<String, MoodleCourseContent[]>) data
-					.getData(context, fileName);
-
-			if ((favorites != null) && !favoritesChanged(ids, favorites))
-				return favorites;
-		}
-
-		MoodleCourse[] courses = getUserCourses(resources, context);
-
-		for (MoodleCourse course : courses) {
-			String courseId = Long.toString(course.getId());
-			MoodleCourseContent[] contents = getCourseContent(courseId,
-					resources, context);
-
-			hash.put(courseId, contents);
-		}
-
-		data.storeData(context, hash, fileName);
-
-		return hash;
-	}
-
-	private boolean favoritesChanged(Long[] ids,
-			HashMap<String, MoodleCourseContent[]> coursesList) {
-		/* checks if every id exists in the cached courses */
-		for (long i : ids) {
-			if (coursesList.get(Long.toString(i)) == null)
-				return true;
-		}
-
-		return false;
-	}
 
 	public void insertFavorite(long id, Context context, Resources resource) {
 		ArrayList<Long> ids = new ArrayList<Long>();

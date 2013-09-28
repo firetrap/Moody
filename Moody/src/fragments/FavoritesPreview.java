@@ -17,8 +17,10 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.test.PerformanceTestCase;
 import android.text.Html;
 import android.view.ActionMode;
+import android.view.ActionMode.Callback;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,7 +62,17 @@ public class FavoritesPreview extends Fragment {
 		selectedIds = new ArrayList<Long>();
 		session = new Session(getActivity().getApplicationContext());
 
-		mCallback = new ActionMode.Callback() {
+		mCallback = onActionModeCallback();
+
+		return createContent(new Contents().getFavorites(getActivity()
+				.getApplicationContext(), getResources()));
+	}
+
+	/**
+	 * @return Callback
+	 */
+	private Callback onActionModeCallback() {
+		return new ActionMode.Callback() {
 
 			// This is called when the action mode is created. This is called by
 			// startActionMode()
@@ -68,13 +80,16 @@ public class FavoritesPreview extends Fragment {
 			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 
 				getActivity().getMenuInflater().inflate(R.menu.favorites, menu);
-				// Inflater.in(R.menu.favorites, menu);
 				return true;
 			}
 
 			@Override
 			public void onDestroyActionMode(ActionMode mode) {
-				// mode.finish();
+				FragmentTransaction fr = getFragmentManager()
+						.beginTransaction();
+				FavoritesPreview fragment = new FavoritesPreview();
+				fr.replace(R.id.mainFragment, fragment);
+				fr.commit();
 			}
 
 			@Override
@@ -88,24 +103,20 @@ public class FavoritesPreview extends Fragment {
 			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 				switch (item.getItemId()) {
 				case R.id.action_delete:
-					Toast.makeText(getActivity().getApplicationContext(),
-							"Delete Action ", Toast.LENGTH_LONG).show();
 
 					new Contents().removeFavorite(selectedIds, getActivity()
 							.getApplicationContext(), getResources());
 
-					mode.finish(); // Automatically exists the action mode, when
-									// the
-									// user selects this action
+					// Automatically exists the action mode, when the user
+					// selects this action
+
+					mode.finish();
 					break;
 
 				}
 				return false;
 			}
 		};
-
-		return createContent(new Contents().getFavorites(getActivity()
-				.getApplicationContext(), getResources()));
 	}
 
 	/**
@@ -196,7 +207,7 @@ public class FavoritesPreview extends Fragment {
 			favoritesCard
 					.setId(Integer.parseInt(courseInfo.getId().toString()));
 
-			onFavoriteClick(courseInfo, favoritesCard);
+			setOnFavorite(courseInfo, favoritesCard);
 
 			row.addView(view);
 			insertPoint.addView(row);
@@ -210,28 +221,34 @@ public class FavoritesPreview extends Fragment {
 	 * @param courseInfo
 	 * @param favoritesLayout
 	 */
-	private void onFavoriteClick(final MoodleCourse courseInfo,
+	private void setOnFavorite(final MoodleCourse courseInfo,
 			final CheckableLinearLayout favoritesLayout) {
 		favoritesLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				String courseId = Integer.toString(v.getId());
-				String courseName = courseInfo.getFullname();
 
-				Bundle bundle = new Bundle();
-				bundle.putString("courseId", courseId);
-				bundle.putString("courseName", courseName);
+				if (mMode == null) {
+					// TODO Auto-generated method stub
+					String courseId = Integer.toString(v.getId());
+					String courseName = courseInfo.getFullname();
 
-				FragmentManager fragmentManager = getFragmentManager();
-				FragmentTransaction fragmentTransaction = fragmentManager
-						.beginTransaction();
+					Bundle bundle = new Bundle();
+					bundle.putString("courseId", courseId);
+					bundle.putString("courseName", courseName);
 
-				TopicsPreview insideTopicsFrag = new TopicsPreview();
-				insideTopicsFrag.setArguments(bundle);
-				fragmentTransaction
-						.replace(R.id.mainFragment, insideTopicsFrag);
-				fragmentTransaction.commit();
+					FragmentManager fragmentManager = getFragmentManager();
+					FragmentTransaction fragmentTransaction = fragmentManager
+							.beginTransaction();
+
+					TopicsPreview insideTopicsFrag = new TopicsPreview();
+					insideTopicsFrag.setArguments(bundle);
+					fragmentTransaction.replace(R.id.mainFragment,
+							insideTopicsFrag);
+					fragmentTransaction.commit();
+				} else {
+					favoritesLayout.performLongClick();
+
+				}
 
 			}
 		});
@@ -274,7 +291,6 @@ public class FavoritesPreview extends Fragment {
 	private String getModuleInfo(MoodleModule[] modules) {
 		String tVContent = "";
 
-		// Esta a rebentar aqui
 		for (MoodleModule module : modules) {
 			if (module.getName() != null) {
 

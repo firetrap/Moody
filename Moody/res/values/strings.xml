@@ -92,7 +92,6 @@
     <string name="favorites_title">Your Favorite Courses</string>
     <string name="title_activity_favorites">FavoritesActivity</string>
     <string name="favorites_file_name">favorite_ids</string>
-    <string name="favoritesPcontents_file_name">favorite_coures</string>
     <string name="favorites_add_message">Favorites</string>
     <string name="favorites_added_message">Added to Favorites</string>
     <string name="favorites_add_confirm_message">Do you want to add %s to favorites?</string>

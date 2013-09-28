@@ -210,16 +210,6 @@ public class MainActivity extends Activity implements OnClickListener,
 						organizedCourses.get(Integer.toString(v.getId())))),
 				dialogClickListener, dialogClickListener, false);
 
-		// if (organizedCourses.get(Integer.toString(v.getId())) != null) {
-		// String courseName = organizedCourses
-		// .get(Integer.toString(v.getId()));
-		// Integer.toString(v.getId());
-		//
-		// Toast.makeText(getApplicationContext(),
-		// "Curso-> " + courseName + " ID-> " + v.getId(),
-		// Toast.LENGTH_SHORT).show();
-		// }
-
 	}
 
 	// Method to decide what to do from what button was pressed
