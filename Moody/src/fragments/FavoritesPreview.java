@@ -17,7 +17,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
-import android.test.PerformanceTestCase;
 import android.text.Html;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;

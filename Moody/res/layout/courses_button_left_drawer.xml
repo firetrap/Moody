@@ -4,7 +4,7 @@
     style="@style/CardText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/card_shape_w_shadow_white"
+    android:background="@drawable/card_w_shadow"
     android:drawableLeft="@drawable/books"
     android:gravity="left|center_vertical"
     android:maxLines="1"

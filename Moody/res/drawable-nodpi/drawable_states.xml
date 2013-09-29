@@ -3,7 +3,7 @@
     <!-- <item android:drawable="@drawable/add_schedule_button_checked_pressed" android:state_checked="true" android:state_pressed="true"/> -->
     <!-- <item android:drawable="@drawable/add_schedule_button_checked_focused" android:state_checked="true" android:state_focused="true"/> -->
 
-    <item android:drawable="@drawable/selected_card_shape_w_shadow_white" android:state_checked="true"/>
+    <item android:drawable="@drawable/checked_background" android:state_checked="true"/>
 
     <!-- <item android:drawable="@drawable/add_schedule_button_unchecked_pressed" -->
     <!-- android:state_pressed="true" /> -->

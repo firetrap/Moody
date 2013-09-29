@@ -26,7 +26,7 @@
             android:src="@drawable/spinner_inner" />
 
         <ProgressBar
-            android:id="@+id/progress"
+            android:id="@+id/progress_loading"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

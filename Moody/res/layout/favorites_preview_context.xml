@@ -36,7 +36,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
             android:layout_marginTop="4dp"
-            android:background="@drawable/selector_card_shape_w_shadow_white"
+            android:background="@drawable/card_selector_w_shadow"
             android:clickable="true"
             android:longClickable="true"
             android:orientation="vertical"

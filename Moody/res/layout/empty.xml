@@ -11,7 +11,7 @@
         android:layout_marginBottom="150dp"
         android:layout_marginTop="150dp"
         android:drawablePadding="10dp"
-        android:drawableTop="@drawable/no_favorites1"
+        android:drawableTop="@drawable/no_favorites"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:linksClickable="false"

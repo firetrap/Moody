@@ -13,17 +13,34 @@
         android:orientation="vertical"
         android:visibility="gone" >
 
-        <!-- <ProgressBar -->
-        <!-- style="?android:attr/progressBarStyleLarge" -->
-        <!-- android:layout_width="wrap_content" -->
-        <!-- android:layout_height="wrap_content" -->
-        <!-- android:layout_marginBottom="8dp" /> -->
+        <RelativeLayout
+            android:id="@+id/relative_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
 
-        <ProgressBar
-            style="@style/Spinner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:indeterminateDrawable="@drawable/loading" />
+            <ImageView
+                android:id="@+id/image_test"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:adjustViewBounds="true"
+                android:cropToPadding="true"
+                android:maxHeight="50dp"
+                android:maxWidth="50dp"
+                android:padding="160dp"
+                android:src="@drawable/spinner_inner" />
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:indeterminateDrawable="@drawable/loading"
+                android:padding="125dp"
+                android:visibility="visible" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/login_status_message"
