@@ -99,4 +99,7 @@
     <string name="favorites_header">Favorites</string>
     <string name="favorites_delete">Delete</string>
 
+    <!-- Strings Related to Moody Service -->
+    <string name="moody_service">Moody Data Service</string>
+
 </resources>

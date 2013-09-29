@@ -86,6 +86,15 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	}
 
+	@Override
+	public void onBackPressed() {
+		if (getFragmentManager().getBackStackEntryCount() == 1) {
+			finish();
+		} else {
+			super.onBackPressed();
+		}
+	}
+
 	public void populateFullName() {
 
 		TextView view = (TextView) findViewById(R.id.fullname_textview);
@@ -276,7 +285,8 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		case R.id.favorites_button:
 
-			FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+			FragmentTransaction fragmentTransaction = getFragmentManager()
+					.beginTransaction();
 			FavoritesPreview fragment = new FavoritesPreview();
 			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.replace(R.id.mainFragment, fragment);

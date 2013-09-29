@@ -3,7 +3,7 @@
     package="com.example.moody"
     android:installLocation="auto"
     android:versionCode="0"
-    android:versionName="0.6.35 alpha" >
+    android:versionName="0.6.7 alpha" >
 
     <uses-sdk
         android:maxSdkVersion="18"
@@ -20,6 +20,12 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <service
+            android:name="MoodyService"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/moody_service" >
+        </service>
+
         <activity
             android:name="activities.MainActivity"
             android:label="@string/app_name" >
