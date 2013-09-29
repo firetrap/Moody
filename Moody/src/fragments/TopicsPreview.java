@@ -23,9 +23,9 @@ import com.example.moody.R;
 
 /**
  * @author firetrap
- *
+ * 
  */
-public class TopicsPreview extends Fragment { 
+public class TopicsPreview extends Fragment {
 	// Session Manager Class
 	Session session;
 
@@ -193,7 +193,6 @@ public class TopicsPreview extends Fragment {
 				String courseName = courseContent[contentIdx].getName();
 				String topicId = (String) v.getTag();
 
-				topicId.trim();
 				Toast.makeText(
 						getActivity().getApplicationContext(),
 						" COURSE ID-> " + courseId + " TOPIC ID-> " + topicId
@@ -212,11 +211,11 @@ public class TopicsPreview extends Fragment {
 
 				Topics insideTopicsFrag = new Topics();
 				insideTopicsFrag.setArguments(bundle);
+				fragmentTransaction.addToBackStack(null);
 				fragmentTransaction
 						.replace(R.id.mainFragment, insideTopicsFrag);
 				fragmentTransaction.commit();
 			}
 		});
 	}
-
 }

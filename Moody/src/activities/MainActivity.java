@@ -47,7 +47,7 @@ import connections.DataAsyncTask;
 
 /**
  * @author firetrap
- *
+ * 
  */
 public class MainActivity extends Activity implements OnClickListener,
 		InterfaceDialogFrag {
@@ -276,10 +276,11 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		case R.id.favorites_button:
 
-			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 			FavoritesPreview fragment = new FavoritesPreview();
-			ft.replace(R.id.mainFragment, fragment);
-			ft.commit();
+			fragmentTransaction.addToBackStack(null);
+			fragmentTransaction.replace(R.id.mainFragment, fragment);
+			fragmentTransaction.commit();
 
 			myDrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
@@ -322,7 +323,9 @@ public class MainActivity extends Activity implements OnClickListener,
 		FragmentTransaction fragmentTransaction = getFragmentManager()
 				.beginTransaction();
 		TopicsPreview fragment = new TopicsPreview();
+
 		fragment.setArguments(bundle);
+		fragmentTransaction.addToBackStack(null);
 		fragmentTransaction.replace(R.id.mainFragment, fragment);
 		fragmentTransaction.commit();
 		myDrawerLayout.closeDrawer(Gravity.LEFT);

@@ -87,6 +87,7 @@ public class FavoritesPreview extends Fragment {
 				FragmentTransaction fr = getFragmentManager()
 						.beginTransaction();
 				FavoritesPreview fragment = new FavoritesPreview();
+				fr.addToBackStack(null);
 				fr.replace(R.id.mainFragment, fragment);
 				fr.commit();
 			}
