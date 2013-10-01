@@ -7,7 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import model.EnumWebServices;
@@ -49,6 +48,25 @@ public class Contents {
 	DataStore data = new DataStore();
 	Object getContent;
 
+	public void getAll(Resources resources, Context context) {
+		try {
+			setUser(resources, context);
+			setUserCourses(resources, context);
+			for (int i = 0; i < getUserCourses(resources, context).length; i++) {
+				String id = Long.toString(getUserCourses(resources, context)[i]
+						.getId());
+				setCourseContent(id, resources, context);
+			}
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	// MOODLE DATA
 	/**
 	 * @param resources
@@ -87,6 +105,22 @@ public class Contents {
 
 	}
 
+	private void setUser(Resources resources, Context context)
+			throws InterruptedException, ExecutionException {
+		session = new Session(context);
+		String url = session.getValues(MoodyConstants.KEY_URL, null);
+		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
+		String userId = session.getValues(MoodyConstants.KEY_ID, null);
+
+		String fileName = EnumWebServices.CORE_USER_GET_USERS_BY_ID.name()
+				+ userId;
+
+		getContent = new DataAsyncTask().execute(url, token,
+				EnumWebServices.CORE_USER_GET_USERS_BY_ID, userId).get();
+		data.storeData(context, getContent, fileName);
+
+	}
+
 	/**
 	 * @param resources
 	 * @param context
@@ -122,6 +156,22 @@ public class Contents {
 		}
 
 		return null;
+
+	}
+
+	private void setUserCourses(Resources resources, Context context)
+			throws InterruptedException, ExecutionException {
+		session = new Session(context);
+		String url = session.getValues(MoodyConstants.KEY_URL, null);
+		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
+		String userId = session.getValues(MoodyConstants.KEY_ID, null);
+
+		String fileName = EnumWebServices.CORE_ENROL_GET_USERS_COURSES.name()
+				+ userId;
+
+		getContent = new DataAsyncTask().execute(url, token,
+				EnumWebServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
+		data.storeData(context, getContent, fileName);
 
 	}
 
@@ -166,6 +216,22 @@ public class Contents {
 		}
 
 		return null;
+
+	}
+
+	private void setCourseContent(String courseId, Resources resources,
+			Context context) throws InterruptedException, ExecutionException {
+
+		session = new Session(context);
+		String url = session.getValues(MoodyConstants.KEY_URL, null);
+		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
+
+		String fileName = EnumWebServices.CORE_COURSE_GET_CONTENTS.name()
+				+ courseId;
+
+		getContent = new DataAsyncTask().execute(url, token,
+				EnumWebServices.CORE_COURSE_GET_CONTENTS, courseId).get();
+		data.storeData(context, getContent, fileName);
 
 	}
 
@@ -400,6 +466,7 @@ public class Contents {
 		new DataStore().storeData(context, idList, fileName);
 	}
 
+	@SuppressWarnings("unchecked")
 	public ArrayList<Long> getFavorites(Context context, Resources resource) {
 		String userId = new Session(context).getValues(MoodyConstants.KEY_ID,
 				null);

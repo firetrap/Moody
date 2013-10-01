@@ -20,12 +20,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <service
-            android:name="MoodyService"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/moody_service" >
-        </service>
-
         <activity
             android:name="activities.MainActivity"
             android:label="@string/app_name" >
@@ -54,12 +48,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="activities.CopyOfLoginActivity"
-            android:label="@string/app_name"
-            android:noHistory="true"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
-        </activity>
-        <activity
             android:name="com.example.moody.LeftActivity"
             android:label="@string/title_activity_left" >
         </activity>
@@ -72,19 +60,18 @@
             android:label="@string/title_activity_user_details" >
         </activity>
         <activity
-            android:name="activities.MainActivity1"
-            android:label="@string/title_activity_main_activity1" >
-        </activity>
-        <activity
-            android:name="com.example.moody.TesteActivity"
-            android:label="@string/title_activity_teste" >
-        </activity>
-        <activity
             android:name="fragments.TopicsPreview"
             android:label="@string/title_activity_copy_of_topics_preview" >
         </activity>
         <activity android:name="activities.Loading" >
         </activity>
+
+        <service
+            android:name="service.MoodyService"
+            android:enabled="true"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/moody_service" >
+        </service>
     </application>
 
 </manifest>

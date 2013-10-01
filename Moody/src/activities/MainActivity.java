@@ -17,6 +17,7 @@ import model.MoodyConstants;
 import model.MoodyMessage;
 import restPackage.MoodleCourse;
 import restPackage.MoodleUser;
+import service.MoodyService;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -381,11 +382,22 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	}
 
+	public int count = 0;
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
 
+			// if (count > 0) {
+			// count--;
+			// Intent stop = new Intent("MoodyService");
+			// MainActivity.this.stopService(stop);
+			// } else { // Start the Service
+			count++;
+			Intent intent = new Intent(this, MoodyService.class);
+			this.startService(intent);
+			// }
 			break;
 
 		default:
