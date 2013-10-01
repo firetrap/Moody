@@ -160,8 +160,11 @@ public class FragTopicsPreview extends Fragment {
 					moduleName += "-" + getNamePure + "\n";
 
 				}
-
-				// Where the LinearLayout from FragTopicsPreview id will be course
+				TextView topicModule = (TextView) topicsView
+						.findViewById(R.id.topics_preview_description);
+				topicModule.setText(moduleName);
+				// Where the LinearLayout from FragTopicsPreview id will be
+				// course
 				// id and the LinearLayout
 				// tag will be the topic id
 				LinearLayout layout = (LinearLayout) topicsView
