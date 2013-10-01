@@ -9,8 +9,8 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import model.EnumWebServices;
-import model.MoodyConstants;
+import model.ModWebServices;
+import model.ModConstants;
 
 import org.jsoup.Jsoup;
 import org.jsoup.helper.StringUtil;
@@ -41,11 +41,11 @@ import connections.DataAsyncTask;
  *         server and store in cache
  * 
  */
-public class Contents {
+public class ManContents {
 
-	// Session Manager Class
-	Session session;
-	DataStore data = new DataStore();
+	// ManSession Manager Class
+	ManSession session;
+	ManDataStore data = new ManDataStore();
 	Object getContent;
 
 	public void getAll(Resources resources, Context context) {
@@ -74,20 +74,20 @@ public class Contents {
 	 * @return MoodleUser
 	 */
 	public MoodleUser getUser(Resources resources, Context context) {
-		session = new Session(context);
-		String url = session.getValues(MoodyConstants.KEY_URL, null);
-		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
-		String userId = session.getValues(MoodyConstants.KEY_ID, null);
+		session = new ManSession(context);
+		String url = session.getValues(ModConstants.KEY_URL, null);
+		String token = session.getValues(ModConstants.KEY_TOKEN, null);
+		String userId = session.getValues(ModConstants.KEY_ID, null);
 		try {
 
-			String fileName = EnumWebServices.CORE_USER_GET_USERS_BY_ID.name()
+			String fileName = ModWebServices.CORE_USER_GET_USERS_BY_ID.name()
 					+ userId;
 
 			if (isInCache(context, fileName)) {
 				return (MoodleUser) data.getData(context, fileName);
 			} else {
 				getContent = new DataAsyncTask().execute(url, token,
-						EnumWebServices.CORE_USER_GET_USERS_BY_ID, userId)
+						ModWebServices.CORE_USER_GET_USERS_BY_ID, userId)
 						.get();
 				data.storeData(context, getContent, fileName);
 				return (MoodleUser) getContent;
@@ -105,18 +105,27 @@ public class Contents {
 
 	}
 
+	/**
+	 * 
+	 * Create and store in cache for future access a file with the user info
+	 * 
+	 * @param resources
+	 * @param context
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
 	private void setUser(Resources resources, Context context)
 			throws InterruptedException, ExecutionException {
-		session = new Session(context);
-		String url = session.getValues(MoodyConstants.KEY_URL, null);
-		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
-		String userId = session.getValues(MoodyConstants.KEY_ID, null);
+		session = new ManSession(context);
+		String url = session.getValues(ModConstants.KEY_URL, null);
+		String token = session.getValues(ModConstants.KEY_TOKEN, null);
+		String userId = session.getValues(ModConstants.KEY_ID, null);
 
-		String fileName = EnumWebServices.CORE_USER_GET_USERS_BY_ID.name()
+		String fileName = ModWebServices.CORE_USER_GET_USERS_BY_ID.name()
 				+ userId;
 
 		getContent = new DataAsyncTask().execute(url, token,
-				EnumWebServices.CORE_USER_GET_USERS_BY_ID, userId).get();
+				ModWebServices.CORE_USER_GET_USERS_BY_ID, userId).get();
 		data.storeData(context, getContent, fileName);
 
 	}
@@ -127,21 +136,21 @@ public class Contents {
 	 * @return MoodleCourse[]
 	 */
 	public MoodleCourse[] getUserCourses(Resources resources, Context context) {
-		session = new Session(context);
-		String url = session.getValues(MoodyConstants.KEY_URL, null);
-		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
-		String userId = session.getValues(MoodyConstants.KEY_ID, null);
+		session = new ManSession(context);
+		String url = session.getValues(ModConstants.KEY_URL, null);
+		String token = session.getValues(ModConstants.KEY_TOKEN, null);
+		String userId = session.getValues(ModConstants.KEY_ID, null);
 
 		try {
 
-			String fileName = EnumWebServices.CORE_ENROL_GET_USERS_COURSES
+			String fileName = ModWebServices.CORE_ENROL_GET_USERS_COURSES
 					.name() + userId;
 
 			if (isInCache(context, fileName)) {
 				return (MoodleCourse[]) data.getData(context, fileName);
 			} else {
 				getContent = new DataAsyncTask().execute(url, token,
-						EnumWebServices.CORE_ENROL_GET_USERS_COURSES, userId)
+						ModWebServices.CORE_ENROL_GET_USERS_COURSES, userId)
 						.get();
 				data.storeData(context, getContent, fileName);
 				return (MoodleCourse[]) getContent;
@@ -159,18 +168,27 @@ public class Contents {
 
 	}
 
+	/**
+	 * 
+	 * Create and store in cache for future access a file with the user courses
+	 * 
+	 * @param resources
+	 * @param context
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
 	private void setUserCourses(Resources resources, Context context)
 			throws InterruptedException, ExecutionException {
-		session = new Session(context);
-		String url = session.getValues(MoodyConstants.KEY_URL, null);
-		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
-		String userId = session.getValues(MoodyConstants.KEY_ID, null);
+		session = new ManSession(context);
+		String url = session.getValues(ModConstants.KEY_URL, null);
+		String token = session.getValues(ModConstants.KEY_TOKEN, null);
+		String userId = session.getValues(ModConstants.KEY_ID, null);
 
-		String fileName = EnumWebServices.CORE_ENROL_GET_USERS_COURSES.name()
+		String fileName = ModWebServices.CORE_ENROL_GET_USERS_COURSES.name()
 				+ userId;
 
 		getContent = new DataAsyncTask().execute(url, token,
-				EnumWebServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
+				ModWebServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
 		data.storeData(context, getContent, fileName);
 
 	}
@@ -187,13 +205,13 @@ public class Contents {
 	public MoodleCourseContent[] getCourseContent(String courseId,
 			Resources resources, Context context) {
 
-		session = new Session(context);
-		String url = session.getValues(MoodyConstants.KEY_URL, null);
-		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
+		session = new ManSession(context);
+		String url = session.getValues(ModConstants.KEY_URL, null);
+		String token = session.getValues(ModConstants.KEY_TOKEN, null);
 
 		try {
 
-			String fileName = EnumWebServices.CORE_COURSE_GET_CONTENTS.name()
+			String fileName = ModWebServices.CORE_COURSE_GET_CONTENTS.name()
 					+ courseId;
 
 			if (isInCache(context, fileName)) {
@@ -201,7 +219,7 @@ public class Contents {
 				return (MoodleCourseContent[]) data.getData(context, fileName);
 			} else {
 				getContent = new DataAsyncTask().execute(url, token,
-						EnumWebServices.CORE_COURSE_GET_CONTENTS, courseId)
+						ModWebServices.CORE_COURSE_GET_CONTENTS, courseId)
 						.get();
 				data.storeData(context, getContent, fileName);
 				return (MoodleCourseContent[]) getContent;
@@ -219,18 +237,29 @@ public class Contents {
 
 	}
 
+	/**
+	 * 
+	 * Create and store in cache for future access a file with the course
+	 * contents
+	 * 
+	 * @param courseId
+	 * @param resources
+	 * @param context
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
 	private void setCourseContent(String courseId, Resources resources,
 			Context context) throws InterruptedException, ExecutionException {
 
-		session = new Session(context);
-		String url = session.getValues(MoodyConstants.KEY_URL, null);
-		String token = session.getValues(MoodyConstants.KEY_TOKEN, null);
+		session = new ManSession(context);
+		String url = session.getValues(ModConstants.KEY_URL, null);
+		String token = session.getValues(ModConstants.KEY_TOKEN, null);
 
-		String fileName = EnumWebServices.CORE_COURSE_GET_CONTENTS.name()
+		String fileName = ModWebServices.CORE_COURSE_GET_CONTENTS.name()
 				+ courseId;
 
 		getContent = new DataAsyncTask().execute(url, token,
-				EnumWebServices.CORE_COURSE_GET_CONTENTS, courseId).get();
+				ModWebServices.CORE_COURSE_GET_CONTENTS, courseId).get();
 		data.storeData(context, getContent, fileName);
 
 	}
@@ -268,7 +297,7 @@ public class Contents {
 			getFile(context, fileUrl, fileName);
 		}
 
-		doc = Jsoup.parse((String) new DataStore().getData(context, fileName),
+		doc = Jsoup.parse((String) new ManDataStore().getData(context, fileName),
 				"UTF-8");
 		if (!(doc.outerHtml().contains("src"))) {
 
@@ -303,7 +332,7 @@ public class Contents {
 				outPut += inputLine;
 			}
 			Object toStore = outPut;
-			new DataStore().storeData(context, toStore, fileName);
+			new ManDataStore().storeData(context, toStore, fileName);
 			br.close();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -428,57 +457,8 @@ public class Contents {
 	 * @return boolean
 	 */
 	public boolean isInCache(Context context, String fileName) {
-		Object content = new DataStore().getData(context, fileName);
+		Object content = new ManDataStore().getData(context, fileName);
 		return !(content == null) ? true : false;
-	}
-
-	// FAVORITES
-
-	public void insertFavorite(long id, Context context, Resources resource) {
-		ArrayList<Long> ids = new ArrayList<Long>();
-		ids.add(id);
-
-		actionFavorite(ids, context, resource);
-	}
-
-	public void removeFavorite(ArrayList<Long> ids, Context context,
-			Resources resource) {
-		actionFavorite(ids, context, resource);
-	}
-
-	public void actionFavorite(ArrayList<Long> ids, Context context,
-			Resources resource) {
-		String userId = new Session(context).getValues(MoodyConstants.KEY_ID,
-				null);
-		String fileName = resource.getString(R.string.favorites_file_name)
-				+ userId;
-		ArrayList<Long> idList = getFavorites(context, resource);
-
-		for (Long id : ids) {
-
-			if (isFavorite(id, context, resource))
-				idList.remove(id);
-			else
-				idList.add(id);
-
-		}
-
-		new DataStore().storeData(context, idList, fileName);
-	}
-
-	@SuppressWarnings("unchecked")
-	public ArrayList<Long> getFavorites(Context context, Resources resource) {
-		String userId = new Session(context).getValues(MoodyConstants.KEY_ID,
-				null);
-		String fileName = resource.getString(R.string.favorites_file_name)
-				+ userId;
-
-		return (isInCache(context, fileName)) ? (ArrayList<Long>) data.getData(
-				context, fileName) : new ArrayList<Long>();
-	}
-
-	public boolean isFavorite(long id, Context context, Resources resource) {
-		return getFavorites(context, resource).contains(id);
 	}
 
 }

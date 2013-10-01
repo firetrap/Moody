@@ -2,12 +2,12 @@ package model;
 
 /**
  * 
- * MoodyMessage - Classe abstrata, mãe das mensagens do Moody.
+ * ModMessage - Classe abstrata, mãe das mensagens do Moody.
  * 
  * @author MoodyProject Team
  * 
  */
-public class MoodyMessage {
+public class ModMessage {
 
 	/**
 	 * 
@@ -26,7 +26,7 @@ public class MoodyMessage {
 	 *            - Conteúdo da mensagem.
 	 * 
 	 **/
-	public MoodyMessage(String corpo) {
+	public ModMessage(String corpo) {
 
 		initiateAttributes("Moody Moodle App", corpo);
 
@@ -42,7 +42,7 @@ public class MoodyMessage {
 	 *            - Conteúdo da mensagem.
 	 * 
 	 **/
-	public MoodyMessage(String assunto, String corpo) {
+	public ModMessage(String assunto, String corpo) {
 
 		initiateAttributes(assunto, corpo);
 

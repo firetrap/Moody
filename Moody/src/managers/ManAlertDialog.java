@@ -3,7 +3,7 @@
  */
 package managers;
 
-import model.MoodyMessage;
+import model.ModMessage;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -19,7 +19,7 @@ import com.example.moody.R;
  * @author Sérgio Andaluz Ramos
  * 
  */
-public final class AlertDialogs {
+public final class ManAlertDialog {
 
 	/**
 	 * 
@@ -58,7 +58,7 @@ public final class AlertDialogs {
 	 * 
 	 **/
 	public static void showMessageDialog(Activity context,
-			MoodyMessage mensagem, Boolean status) {
+			ModMessage mensagem, Boolean status) {
 
 		showMessageDialog(context, mensagem,
 				new DialogInterface.OnClickListener() {
@@ -74,7 +74,7 @@ public final class AlertDialogs {
 	}
 
 	public static void showMessageDialog(Activity context,
-			MoodyMessage mensagem, DialogInterface.OnClickListener onClick,
+			ModMessage mensagem, DialogInterface.OnClickListener onClick,
 			Boolean status) {
 
 		initBuilder(context, mensagem, status);
@@ -87,7 +87,7 @@ public final class AlertDialogs {
 	}
 
 	public static void showMessageDialog(Activity context,
-			MoodyMessage mensagem, DialogInterface.OnClickListener frtOnClick,
+			ModMessage mensagem, DialogInterface.OnClickListener frtOnClick,
 			DialogInterface.OnClickListener sndOnClick, Boolean status) {
 
 		initBuilder(context, mensagem, status);
@@ -102,7 +102,7 @@ public final class AlertDialogs {
 
 	}
 
-	private static void initBuilder(Activity context, MoodyMessage mensagem,
+	private static void initBuilder(Activity context, ModMessage mensagem,
 			Boolean status) {
 
 		builder = new AlertDialog.Builder(context);
@@ -126,7 +126,7 @@ public final class AlertDialogs {
 	 * Construtor privado - Assegura que classe não é instanciavel.
 	 * 
 	 **/
-	private AlertDialogs() {
+	private ManAlertDialog() {
 		throw new AssertionError();
 	}
 

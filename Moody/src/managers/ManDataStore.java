@@ -17,7 +17,7 @@ import android.content.Context;
  * @author firetrap
  *
  */
-public class DataStore {
+public class ManDataStore {
 
 	private static byte[] serialize(Object obj) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();

@@ -10,8 +10,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="managers.Contents.PlainText.FormattingVisitor" project="Moody" 
-    file="/Moody/src/managers/Contents.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="2" language="java" name="managers.ManContents.PlainText.FormattingVisitor" project="Moody" 
+    file="/Moody/src/managers/ManContents.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="207" width="125" x="420" y="492"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -19,7 +19,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="managers.Contents" project="Moody" file="/Moody/src/managers/Contents.java" 
+  <class id="3" language="java" name="managers.ManContents" project="Moody" file="/Moody/src/managers/ManContents.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="351" width="360" x="420" y="-38"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
@@ -28,8 +28,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="managers.Contents.PlainText" project="Moody" 
-    file="/Moody/src/managers/Contents.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="4" language="java" name="managers.ManContents.PlainText" project="Moody" 
+    file="/Moody/src/managers/ManContents.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="99" width="159" x="420" y="353"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -37,8 +37,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="managers.DataStore" project="Moody" file="/Moody/src/managers/DataStore.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+  <class id="5" language="java" name="managers.managers.ManDataStoreect="Moody" 
+    file="/Moody/src/managers/ManDataStore.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="171" width="206" x="34" y="282"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import model.EnumWebServices;
+import model.ModWebServices;
 import restPackage.MoodleCallRestWebService;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
@@ -32,7 +32,7 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 		try {
 
 			return loadFromNetwork((String) params[0], (String) params[1],
-					(EnumWebServices) params[2], (String) params[3]);
+					(ModWebServices) params[2], (String) params[3]);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -45,7 +45,7 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 	}
 
 	private Object loadFromNetwork(String urlString, String token,
-			EnumWebServices webService, String webServiceParams)
+			ModWebServices webService, String webServiceParams)
 			throws UnsupportedEncodingException, MoodleRestException {
 
 		MoodleCallRestWebService.init(

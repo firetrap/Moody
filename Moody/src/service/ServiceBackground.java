@@ -3,7 +3,7 @@
  */
 package service;
 
-import managers.Contents;
+import managers.ManContents;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -13,9 +13,9 @@ import android.widget.Toast;
  * @author firetrap
  * 
  */
-public class MoodyService extends Service {
+public class ServiceBackground extends Service {
 
-	public MoodyService() {
+	public ServiceBackground() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -47,9 +47,9 @@ public class MoodyService extends Service {
 		Thread backgroundThread = new Thread(new BackgroundThread());
 		backgroundThread.start();
 
-		// We want this service to continue running until it is explicitly
-		// stopped, so return sticky.
-		return START_STICKY;
+		// We want this service will continue running until all work it's done,
+		// so return START_NOT_STICKY.
+		return START_NOT_STICKY;
 	}
 
 	@Override
@@ -59,26 +59,20 @@ public class MoodyService extends Service {
 		// Stop the Background thread
 		isRunning = false;
 
-		// Announcement about stopping
-		Toast.makeText(this, "Stopping the Demo Service", Toast.LENGTH_SHORT)
-				.show();
 	}
 
 	private class BackgroundThread implements Runnable {
-		int counter = 0;
 
 		public void run() {
 			try {
-				counter = 0;
+
 				while (isRunning) {
-					System.out.println("" + counter++);
-					new Contents().getAll(getResources(),
+					new ManContents().getAll(getResources(),
 							getApplicationContext());
 
 					Thread.sleep(5000);
 				}
 
-				System.out.println("Background Thread is finished.........");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

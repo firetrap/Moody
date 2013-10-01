@@ -1,14 +1,14 @@
 package fragments;
 
-import interfaces.InterfaceDialogFrag;
+import interfaces.InterDialogFrag;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import managers.AlertDialogs;
-import model.MoodyConstants;
-import model.MoodyMessage;
+import managers.ManAlertDialog;
+import model.ModConstants;
+import model.ModMessage;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -31,7 +31,7 @@ import com.example.moody.R;
  * @author firetrap
  *
  */
-public class UserPicture extends DialogFragment {
+public class FragUserPicture extends DialogFragment {
 
 	// FOR GALLERY
 	private static final int PICTURE_GALLERY = 1;
@@ -81,9 +81,9 @@ public class UserPicture extends DialogFragment {
 				// MEDIA GALLERY
 				selectedImagePath = getPath(selectedImageUri);
 
-				final InterfaceDialogFrag activity = (InterfaceDialogFrag) getActivity();
+				final InterDialogFrag activity = (InterDialogFrag) getActivity();
 				activity.onFinishEditDialog(selectedImagePath,
-						MoodyConstants.DIALOG_FRAG_USER_PIC);
+						ModConstants.DIALOG_FRAG_USER_PIC);
 				this.dismiss();
 			}
 
@@ -99,9 +99,9 @@ public class UserPicture extends DialogFragment {
 				options.inSampleSize = 10;
 				cameraImagePath = destination.getAbsolutePath();
 
-				final InterfaceDialogFrag activity = (InterfaceDialogFrag) getActivity();
+				final InterDialogFrag activity = (InterDialogFrag) getActivity();
 				activity.onFinishEditDialog(cameraImagePath,
-						MoodyConstants.DIALOG_FRAG_USER_PIC);
+						ModConstants.DIALOG_FRAG_USER_PIC);
 				this.dismiss();
 
 			}
@@ -134,7 +134,7 @@ public class UserPicture extends DialogFragment {
 			destination = new File(folder, name + ".jpg");
 		} else {
 			dismiss();
-			AlertDialogs.showMessageDialog(getActivity(), new MoodyMessage(
+			ManAlertDialog.showMessageDialog(getActivity(), new ModMessage(
 					"Login Error",
 					"Sdcard needed to store picture but not available"), false);
 		}

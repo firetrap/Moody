@@ -7,10 +7,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import managers.AlertDialogs;
-import managers.Session;
-import model.MoodyConstants;
-import model.MoodyMessage;
+import managers.ManAlertDialog;
+import managers.ManSession;
+import model.ModConstants;
+import model.ModMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +20,7 @@ import restPackage.MoodleRestException;
 import restPackage.MoodleRestWebService;
 import restPackage.MoodleRestWebServiceException;
 import restPackage.MoodleWebService;
+import service.ServiceBackground;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -28,6 +29,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -56,7 +58,7 @@ public class LoginActivity extends Activity {
 
 	private String finalToken = "";
 	private JSONObject getJson;
-	private String jsonFormat = MoodyConstants.KEY_JSONFORMAT;
+	private String jsonFormat = ModConstants.KEY_JSONFORMAT;
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -76,15 +78,15 @@ public class LoginActivity extends Activity {
 	private EditText mUserView;
 	private String mUser;
 
-	// Session Manager Class
-	Session session;
+	// ManSession Manager Class
+	ManSession session;
 
 	private String url = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		session = new Session(getApplicationContext());
+		session = new ManSession(getApplicationContext());
 		Toast.makeText(getApplicationContext(),
 				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
 				.show();
@@ -214,7 +216,7 @@ public class LoginActivity extends Activity {
 			// form field with an error.
 
 			focusView.requestFocus();
-			AlertDialogs.showMessageDialog(this, new MoodyMessage(
+			ManAlertDialog.showMessageDialog(this, new ModMessage(
 					"Login Error", error), false);
 
 		} else {
@@ -363,10 +365,14 @@ public class LoginActivity extends Activity {
 			if (success) {
 				// Send to shared preferences:
 				// user-name, user-token, user-id, full name
-				session = new Session(getApplicationContext());
+				session = new ManSession(getApplicationContext());
 				session.createLoginSession(mUser, fullName, finalToken, userId,
 						mUrl);
-
+				getApplicationContext()
+						.startService(
+								new Intent(getApplicationContext(),
+										ServiceBackground.class));
+				SystemClock.sleep(3000);
 				Intent intent = new Intent(getApplicationContext(),
 						MainActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -388,8 +394,8 @@ public class LoginActivity extends Activity {
 					mUserView.requestFocus();
 				}
 
-				AlertDialogs.showMessageDialog(LoginActivity.this,
-						new MoodyMessage("Login Error", error), false);
+				ManAlertDialog.showMessageDialog(LoginActivity.this,
+						new ModMessage("Login Error", error), false);
 			}
 		}
 	}

@@ -3,9 +3,9 @@
  */
 package fragments;
 
-import managers.AlertDialogs;
-import model.MoodyConstants;
-import model.MoodyMessage;
+import managers.ManAlertDialog;
+import model.ModConstants;
+import model.ModMessage;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,7 +25,7 @@ import com.example.moody.R;
  * @author MoodyProject Team
  * 
  */
-public class UserCloud extends DialogFragment {
+public class FragUserCloud extends DialogFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,7 +46,7 @@ public class UserCloud extends DialogFragment {
 						Toast.makeText(getActivity().getBaseContext(),
 								"dropbox", Toast.LENGTH_SHORT).show();
 
-						processCloud(MoodyConstants.DIALOG_FRAG_USER_CLOUD_DROPBOX);
+						processCloud(ModConstants.DIALOG_FRAG_USER_CLOUD_DROPBOX);
 
 					}
 				});
@@ -60,7 +60,7 @@ public class UserCloud extends DialogFragment {
 						Toast.makeText(getActivity().getBaseContext(), "drive",
 								Toast.LENGTH_SHORT).show();
 
-						processCloud(MoodyConstants.DIALOG_FRAG_USER_CLOUD_DRIVE);
+						processCloud(ModConstants.DIALOG_FRAG_USER_CLOUD_DRIVE);
 
 					}
 				});
@@ -110,7 +110,7 @@ public class UserCloud extends DialogFragment {
 
 			};
 
-			AlertDialogs.showMessageDialog(getActivity(), new MoodyMessage(
+			ManAlertDialog.showMessageDialog(getActivity(), new ModMessage(
 					"Get It Now!",
 					"You dont have this Cloud Service Installed. Go online?"),
 					dialogClickListener, dialogClickListener, false);

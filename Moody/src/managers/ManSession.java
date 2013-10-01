@@ -2,7 +2,7 @@ package managers;
 
 import java.util.HashMap;
 
-import model.MoodyConstants;
+import model.ModConstants;
 import activities.LoginActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import android.content.SharedPreferences.Editor;
  * @author firetrap
  *
  */
-public class Session {
+public class ManSession {
 	// Context
 	Context _context;
 
@@ -24,10 +24,10 @@ public class Session {
 	SharedPreferences pref;
 
 	// Constructor
-	public Session(Context context) {
+	public ManSession(Context context) {
 		this._context = context;
-		pref = _context.getSharedPreferences(MoodyConstants.PREF_NAME,
-				MoodyConstants.PRIVATE_MODE);
+		pref = _context.getSharedPreferences(ModConstants.PREF_NAME,
+				ModConstants.PRIVATE_MODE);
 		editor = pref.edit();
 	}
 
@@ -71,22 +71,22 @@ public class Session {
 	public void createLoginSession(String name, String fullName, String token,
 			String id, String mUrl) {
 		// Storing login value as TRUE
-		editor.putBoolean(MoodyConstants.IS_LOGIN, true);
+		editor.putBoolean(ModConstants.IS_LOGIN, true);
 
 		// Storing name in preferences
-		editor.putString(MoodyConstants.KEY_NAME, name);
+		editor.putString(ModConstants.KEY_NAME, name);
 
 		// Storing full name in preferences
-		editor.putString(MoodyConstants.KEY_FULL_NAME, fullName);
+		editor.putString(ModConstants.KEY_FULL_NAME, fullName);
 
 		// Storing email in preferences
-		editor.putString(MoodyConstants.KEY_TOKEN, token);
+		editor.putString(ModConstants.KEY_TOKEN, token);
 
 		// Storing user id in preferences
-		editor.putString(MoodyConstants.KEY_ID, id);
+		editor.putString(ModConstants.KEY_ID, id);
 
 		// Storing url in preferences
-		editor.putString(MoodyConstants.KEY_URL, mUrl);
+		editor.putString(ModConstants.KEY_URL, mUrl);
 
 		// commit changes
 		editor.commit();
@@ -101,22 +101,22 @@ public class Session {
 	public HashMap<String, String> getUserDetails() {
 		final HashMap<String, String> user = new HashMap<String, String>();
 		// user name
-		user.put(MoodyConstants.KEY_NAME,
-				pref.getString(MoodyConstants.KEY_NAME, null));
+		user.put(ModConstants.KEY_NAME,
+				pref.getString(ModConstants.KEY_NAME, null));
 
-		user.put(MoodyConstants.KEY_NAME,
-				pref.getString(MoodyConstants.KEY_FULL_NAME, null));
+		user.put(ModConstants.KEY_NAME,
+				pref.getString(ModConstants.KEY_FULL_NAME, null));
 		// user token
-		user.put(MoodyConstants.KEY_TOKEN,
-				pref.getString(MoodyConstants.KEY_TOKEN, null));
+		user.put(ModConstants.KEY_TOKEN,
+				pref.getString(ModConstants.KEY_TOKEN, null));
 
 		// user token
-		user.put(MoodyConstants.KEY_ID,
-				pref.getString(MoodyConstants.KEY_ID, null));
+		user.put(ModConstants.KEY_ID,
+				pref.getString(ModConstants.KEY_ID, null));
 
 		// user url
-		user.put(MoodyConstants.KEY_URL,
-				pref.getString(MoodyConstants.KEY_URL, null));
+		user.put(ModConstants.KEY_URL,
+				pref.getString(ModConstants.KEY_URL, null));
 
 		// return user
 		return user;
@@ -138,7 +138,7 @@ public class Session {
 	 * **/
 	// Get Login State
 	public boolean isLoggedIn() {
-		return pref.getBoolean(MoodyConstants.IS_LOGIN, false);
+		return pref.getBoolean(ModConstants.IS_LOGIN, false);
 	}
 
 	/**

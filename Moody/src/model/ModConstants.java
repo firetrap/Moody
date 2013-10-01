@@ -2,12 +2,12 @@ package model;
 
 /**
  * 
- * MoodyConstants - Classe que contém todos os valores constants da aplicação.
+ * ModConstants - Classe que contém todos os valores constants da aplicação.
  * 
  * @author Sérgio Andaluz Ramos
  * 
  */
-public final class MoodyConstants {
+public final class ModConstants {
 
 	// All Shared Preferences Keys
 	public static final String IS_LOGIN = "IsLoggedIn";
@@ -56,7 +56,7 @@ public final class MoodyConstants {
 	 * - Construtor privado - Assegura que classe não é instanciavel.
 	 * 
 	 **/
-	private MoodyConstants() {
+	private ModConstants() {
 	}
 
 }

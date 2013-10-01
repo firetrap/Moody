@@ -1,8 +1,8 @@
 package fragments;
 
-import managers.Contents;
-import managers.Session;
-import model.MoodyConstants;
+import managers.ManContents;
+import managers.ManSession;
+import model.ModConstants;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;
@@ -26,32 +26,32 @@ import com.example.moody.R;
  * @author firetrap
  *
  */
-public class Topics extends Fragment {
+public class FragTopics extends Fragment {
 
 	Object course;
-	// Session Manager Class
-	Session session;
+	// ManSession Manager Class
+	ManSession session;
 	String courseId;
 	Long topicId;
 	String courseName;
 
-	public Topics() {
+	public FragTopics() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		session = new Session(getActivity().getApplicationContext());
+		session = new ManSession(getActivity().getApplicationContext());
 
 		courseId = getArguments().getString("courseId");
 		topicId = Long.parseLong(getArguments().getString("topicId"));
 		courseName = getArguments().getString("courseName");
 
-		MoodleCourseContent[] courseTopics = new Contents()
+		MoodleCourseContent[] courseTopics = new ManContents()
 				.getCourseContent(courseId, getResources(), getActivity()
 						.getApplicationContext());
 
-		MoodleCourseContent singleTopic = new Contents().getTopic(topicId,
+		MoodleCourseContent singleTopic = new ManContents().getTopic(topicId,
 				courseTopics);
 
 		return createTopics(singleTopic, courseName, courseId, topicId);
@@ -186,7 +186,7 @@ public class Topics extends Fragment {
 
 				if (moduleContents[j].getType().equals("file")) {
 					url += "&token="
-							+ session.getValues(MoodyConstants.KEY_TOKEN, null);
+							+ session.getValues(ModConstants.KEY_TOKEN, null);
 
 					if (!moduleContents[j].getFilename().equalsIgnoreCase(
 							"index.html")) {
@@ -205,7 +205,7 @@ public class Topics extends Fragment {
 						// the fileName is
 						// contentFileName+CourseId+TopicId+ModuleId+content
 						// number
-						String indexURL = new Contents().parseFile(
+						String indexURL = new ManContents().parseFile(
 								getActivity().getApplicationContext(), url,
 								moduleContents[j].getFilename() + courseId
 										+ topicId + singleModule.getId());

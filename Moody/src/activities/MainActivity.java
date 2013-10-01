@@ -1,23 +1,24 @@
 package activities;
 
-import fragments.FavoritesPreview;
-import fragments.TopicsPreview;
-import fragments.UserCloud;
-import fragments.UserPicture;
-import interfaces.InterfaceDialogFrag;
+import fragments.FragFavoritesPreview;
+import fragments.FragTopicsPreview;
+import fragments.FragUserCloud;
+import fragments.FragUserPicture;
+import interfaces.InterDialogFrag;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import managers.AlertDialogs;
-import managers.Contents;
-import managers.DataStore;
-import managers.Session;
-import model.MoodyConstants;
-import model.MoodyMessage;
+import managers.ManAlertDialog;
+import managers.ManContents;
+import managers.ManDataStore;
+import managers.ManFavorites;
+import managers.ManSession;
+import model.ModConstants;
+import model.ModMessage;
 import restPackage.MoodleCourse;
 import restPackage.MoodleUser;
-import service.MoodyService;
+import service.ServiceBackground;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -51,14 +52,14 @@ import connections.DataAsyncTask;
  * 
  */
 public class MainActivity extends Activity implements OnClickListener,
-		InterfaceDialogFrag {
+		InterDialogFrag {
 
 	private DrawerLayout myDrawerLayout;
 
 	private HashMap<String, String> organizedCourses = new HashMap<String, String>();
 
-	// Session Manager Class
-	Session session;
+	// ManSession Manager Class
+	ManSession session;
 
 	public long startTime;
 	public long endTime;
@@ -69,7 +70,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// shared pref
-		session = new Session(getApplicationContext());
+		session = new ManSession(getApplicationContext());
 		myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 		populateFullName();
@@ -99,7 +100,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void populateFullName() {
 
 		TextView view = (TextView) findViewById(R.id.fullname_textview);
-		view.setText(session.getValues(MoodyConstants.KEY_FULL_NAME, null));
+		view.setText(session.getValues(ModConstants.KEY_FULL_NAME, null));
 
 	}
 
@@ -108,7 +109,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		if (session.getValues("PIC_PATH", null) == null) {
 
 			Drawable pic = null;
-			MoodleUser user = new Contents().getUser(getResources(),
+			MoodleUser user = new ManContents().getUser(getResources(),
 					getApplicationContext());
 
 			user.getProfileImageURL();
@@ -130,7 +131,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	private void populateUserCourses() {
 
 		// Get all the courses from current user
-		MoodleCourse[] courses = new Contents().getUserCourses(getResources(),
+		MoodleCourse[] courses = new ManContents().getUserCourses(getResources(),
 				getApplicationContext());
 
 		// Start populating the menus and views
@@ -189,7 +190,7 @@ public class MainActivity extends Activity implements OnClickListener,
 				switch (which) {
 
 				case DialogInterface.BUTTON_POSITIVE:
-					new Contents().insertFavorite(id, getApplicationContext(),
+					new ManFavorites().insertFavorite(id, getApplicationContext(),
 							getResources());
 
 					dialog.dismiss();
@@ -211,9 +212,9 @@ public class MainActivity extends Activity implements OnClickListener,
 			}
 		};
 
-		AlertDialogs.showMessageDialog(
+		ManAlertDialog.showMessageDialog(
 				this,
-				new MoodyMessage(getResources().getString(
+				new ModMessage(getResources().getString(
 						R.string.favorites_add_message), String.format(
 						getResources().getString(
 								R.string.favorites_add_confirm_message),
@@ -233,7 +234,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		case R.id.login_image_button:
 
 			fm = getFragmentManager();
-			UserPicture userDetailsDialog = new UserPicture();
+			FragUserPicture userDetailsDialog = new FragUserPicture();
 			userDetailsDialog.setRetainInstance(true);
 			userDetailsDialog.show(fm, "fragment_name");
 
@@ -247,7 +248,7 @@ public class MainActivity extends Activity implements OnClickListener,
 						session.logoutUser();
 
 						// limpa cache ao fazer logout.
-						new DataStore().deleteCache(getApplicationContext());
+						new ManDataStore().deleteCache(getApplicationContext());
 
 						Intent intent = new Intent(getApplicationContext(),
 								LoginActivity.class);
@@ -265,7 +266,7 @@ public class MainActivity extends Activity implements OnClickListener,
 				}
 			};
 
-			AlertDialogs.showMessageDialog(this, new MoodyMessage("Logout",
+			ManAlertDialog.showMessageDialog(this, new ModMessage("Logout",
 					"Are you sure?"), dialogClickListener, dialogClickListener,
 					false);
 
@@ -288,7 +289,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 			FragmentTransaction fragmentTransaction = getFragmentManager()
 					.beginTransaction();
-			FavoritesPreview fragment = new FavoritesPreview();
+			FragFavoritesPreview fragment = new FragFavoritesPreview();
 			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.replace(R.id.mainFragment, fragment);
 			fragmentTransaction.commit();
@@ -299,7 +300,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		case R.id.cloud_button:
 
 			fm = getFragmentManager();
-			UserCloud userCloudDialog = new UserCloud();
+			FragUserCloud userCloudDialog = new FragUserCloud();
 			userCloudDialog.setRetainInstance(true);
 			userCloudDialog.show(fm, "fragment_name");
 
@@ -333,7 +334,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		FragmentTransaction fragmentTransaction = getFragmentManager()
 				.beginTransaction();
-		TopicsPreview fragment = new TopicsPreview();
+		FragTopicsPreview fragment = new FragTopicsPreview();
 
 		fragment.setArguments(bundle);
 		fragmentTransaction.addToBackStack(null);
@@ -367,7 +368,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	@Override
 	public void onFinishEditDialog(String inputText, int code) {
 		switch (code) {
-		case MoodyConstants.DIALOG_FRAG_USER_PIC:
+		case ModConstants.DIALOG_FRAG_USER_PIC:
 			session.addPref(inputText);
 			ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
 
@@ -391,12 +392,12 @@ public class MainActivity extends Activity implements OnClickListener,
 
 			// if (count > 0) {
 			// count--;
-			// Intent stop = new Intent("MoodyService");
+			// Intent stop = new Intent("ServiceBackground");
 			// MainActivity.this.stopService(stop);
 			// } else { // Start the Service
 			count++;
-			Intent intent = new Intent(this, MoodyService.class);
-			this.startService(intent);
+
+			this.startService(new Intent(this, ServiceBackground.class));
 			// }
 			break;
 
@@ -412,14 +413,14 @@ public class MainActivity extends Activity implements OnClickListener,
 	 * and it will clear app data and kill the app
 	 */
 	private void fatalError(String title, String msg) {
-		AlertDialogs.showMessageDialog(this, new MoodyMessage(title, msg),
+		ManAlertDialog.showMessageDialog(this, new ModMessage(title, msg),
 				new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						session.logoutUser();
 						// limpa cache ao fazer logout.
-						new DataStore().deleteCache(getApplicationContext());
+						new ManDataStore().deleteCache(getApplicationContext());
 						finish();
 						android.os.Process.killProcess(android.os.Process
 								.myPid());

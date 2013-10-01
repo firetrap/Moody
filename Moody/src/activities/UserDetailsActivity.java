@@ -1,8 +1,8 @@
 package activities;
 
-import managers.AlertDialogs;
-import managers.Contents;
-import model.MoodyMessage;
+import managers.ManAlertDialog;
+import managers.ManContents;
+import model.ModMessage;
 import restPackage.MoodleUser;
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -28,13 +28,13 @@ public class UserDetailsActivity extends Activity
 		 * ((EditText)findViewById
 		 * (R.id.editText_email)).addTextChangedListener(this);
 		 **/
-		MoodleUser user = new Contents().getUser(getResources(),
+		MoodleUser user = new ManContents().getUser(getResources(),
 				getApplicationContext());
 
 		if (user != null) {
 			initDetails(user);
 		} else {
-			AlertDialogs.showMessageDialog(this, new MoodyMessage(
+			ManAlertDialog.showMessageDialog(this, new ModMessage(
 					"Moody Error", "An Error Ocurred Retrieving Data"),
 					new DialogInterface.OnClickListener() {
 

@@ -3,7 +3,7 @@
     package="com.example.moody"
     android:installLocation="auto"
     android:versionCode="0"
-    android:versionName="0.6.7 alpha" >
+    android:versionName="0.6.7.2 alpha" >
 
     <uses-sdk
         android:maxSdkVersion="18"
@@ -60,14 +60,14 @@
             android:label="@string/title_activity_user_details" >
         </activity>
         <activity
-            android:name="fragments.TopicsPreview"
+            android:name="fragments.FragTopicsPreview"
             android:label="@string/title_activity_copy_of_topics_preview" >
         </activity>
         <activity android:name="activities.Loading" >
         </activity>
 
         <service
-            android:name="service.MoodyService"
+            android:name="service.ServiceBackground"
             android:enabled="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/moody_service" >

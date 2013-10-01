@@ -7,7 +7,7 @@ package model;
  * @author MoodyProject Team
  *
  */
-public enum EnumWebServices {
+public enum ModWebServices {
 	
 	CORE_COURSE_CREATE_CATEGORIES,
 	CORE_COURSE_CREATE_COURSES,

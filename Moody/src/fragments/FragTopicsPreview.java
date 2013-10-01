@@ -1,7 +1,8 @@
 package fragments;
 
-import managers.Contents;
-import managers.Session;
+import managers.ManContents;
+import managers.ManFavorites;
+import managers.ManSession;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import android.app.Fragment;
@@ -25,18 +26,18 @@ import com.example.moody.R;
  * @author firetrap
  * 
  */
-public class TopicsPreview extends Fragment {
-	// Session Manager Class
-	Session session;
+public class FragTopicsPreview extends Fragment {
+	// ManSession Manager Class
+	ManSession session;
 
-	public TopicsPreview() {
+	public FragTopicsPreview() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		session = new Session(getActivity().getApplicationContext());
+		session = new ManSession(getActivity().getApplicationContext());
 		String courseName = getArguments().getString("courseName");
 		String courseId = getArguments().getString("courseId");
 
@@ -95,7 +96,7 @@ public class TopicsPreview extends Fragment {
 
 		// If the course is already cached as favorite, hides the button,
 		// otherwise configs it's ID
-		if (!new Contents().isFavorite(id, getActivity().getBaseContext(),
+		if (!new ManFavorites().isFavorite(id, getActivity().getBaseContext(),
 				getActivity().getResources())) {
 			ImageButton addFavorites = (ImageButton) topicsHeaderView
 					.findViewById(R.id.add_favorites_button_);
@@ -122,7 +123,7 @@ public class TopicsPreview extends Fragment {
 	protected void createTopicsContent(LayoutInflater inflater,
 			LinearLayout insertPoint, String courseId) {
 
-		final MoodleCourseContent[] courseContent = new Contents()
+		final MoodleCourseContent[] courseContent = new ManContents()
 				.getCourseContent(courseId, getResources(), getActivity()
 						.getApplicationContext());
 
@@ -160,7 +161,7 @@ public class TopicsPreview extends Fragment {
 
 				}
 
-				// Where the LinearLayout from TopicsPreview id will be course
+				// Where the LinearLayout from FragTopicsPreview id will be course
 				// id and the LinearLayout
 				// tag will be the topic id
 				LinearLayout layout = (LinearLayout) topicsView
@@ -209,7 +210,7 @@ public class TopicsPreview extends Fragment {
 				FragmentTransaction fragmentTransaction = fragmentManager
 						.beginTransaction();
 
-				Topics insideTopicsFrag = new Topics();
+				FragTopics insideTopicsFrag = new FragTopics();
 				insideTopicsFrag.setArguments(bundle);
 				fragmentTransaction.addToBackStack(null);
 				fragmentTransaction

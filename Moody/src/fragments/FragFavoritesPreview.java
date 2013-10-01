@@ -5,9 +5,10 @@ package fragments;
 
 import java.util.ArrayList;
 
-import managers.Contents;
-import managers.Session;
-import model.MoodyConstants;
+import managers.ManContents;
+import managers.ManFavorites;
+import managers.ManSession;
+import model.ModConstants;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
@@ -36,10 +37,10 @@ import com.example.moody.R;
  * @author SérgioFilipe
  * 
  */
-public class FavoritesPreview extends Fragment {
+public class FragFavoritesPreview extends Fragment {
 
-	// Session Manager Class
-	Session session;
+	// ManSession Manager Class
+	ManSession session;
 
 	LayoutInflater myInflater;
 
@@ -50,7 +51,7 @@ public class FavoritesPreview extends Fragment {
 	/**
 	 * 
 	 */
-	public FavoritesPreview() {
+	public FragFavoritesPreview() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -59,11 +60,11 @@ public class FavoritesPreview extends Fragment {
 			Bundle savedInstanceState) {
 
 		selectedIds = new ArrayList<Long>();
-		session = new Session(getActivity().getApplicationContext());
+		session = new ManSession(getActivity().getApplicationContext());
 
 		mCallback = onActionModeCallback();
 
-		return createContent(new Contents().getFavorites(getActivity()
+		return createContent(new ManFavorites().getFavorites(getActivity()
 				.getApplicationContext(), getResources()));
 	}
 
@@ -86,7 +87,7 @@ public class FavoritesPreview extends Fragment {
 			public void onDestroyActionMode(ActionMode mode) {
 				FragmentTransaction fr = getFragmentManager()
 						.beginTransaction();
-				FavoritesPreview fragment = new FavoritesPreview();
+				FragFavoritesPreview fragment = new FragFavoritesPreview();
 				fr.addToBackStack(null);
 				fr.replace(R.id.mainFragment, fragment);
 				fr.commit();
@@ -104,7 +105,7 @@ public class FavoritesPreview extends Fragment {
 				switch (item.getItemId()) {
 				case R.id.action_delete:
 
-					new Contents().removeFavorite(selectedIds, getActivity()
+					new ManFavorites().removeFavorite(selectedIds, getActivity()
 							.getApplicationContext(), getResources());
 
 					// Automatically exists the action mode, when the user
@@ -157,7 +158,7 @@ public class FavoritesPreview extends Fragment {
 	 */
 	protected LinearLayout createContentRows(LinearLayout insertPoint,
 			ArrayList<Long> favorites, LayoutInflater inflater) {
-		MoodleCourse[] userCourses = new Contents().getUserCourses(
+		MoodleCourse[] userCourses = new ManContents().getUserCourses(
 				getResources(), getActivity().getApplicationContext());
 
 		for (int i = 0; i < favorites.size(); i++) {
@@ -167,7 +168,7 @@ public class FavoritesPreview extends Fragment {
 
 			String courseId = Long.toString(courseInfo.getId());
 
-			MoodleCourseContent[] contents = new Contents().getCourseContent(
+			MoodleCourseContent[] contents = new ManContents().getCourseContent(
 					courseId, getResources(), getActivity()
 							.getApplicationContext());
 
@@ -187,7 +188,7 @@ public class FavoritesPreview extends Fragment {
 			} else {
 				((TextView) view.findViewById(R.id.favorites_header_title))
 						.setText(Html.fromHtml(session.getValues(
-								MoodyConstants.KEY_FULL_NAME, null)
+								ModConstants.KEY_FULL_NAME, null)
 								+ " > <font color=#BE245A>"
 								+ getResources().getString(
 										R.string.favorites_header) + "</font>"));
@@ -240,7 +241,7 @@ public class FavoritesPreview extends Fragment {
 					FragmentTransaction fragmentTransaction = fragmentManager
 							.beginTransaction();
 
-					TopicsPreview insideTopicsFrag = new TopicsPreview();
+					FragTopicsPreview insideTopicsFrag = new FragTopicsPreview();
 					insideTopicsFrag.setArguments(bundle);
 					fragmentTransaction.replace(R.id.mainFragment,
 							insideTopicsFrag);
