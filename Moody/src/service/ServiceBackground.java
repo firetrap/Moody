@@ -14,6 +14,7 @@ import android.widget.Toast;
  * 
  */
 public class ServiceBackground extends Service {
+	Alarm alarm = new Alarm();
 
 	public ServiceBackground() {
 		// TODO Auto-generated constructor stub
@@ -37,10 +38,11 @@ public class ServiceBackground extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
+		// Starts the alarm
+		alarm.SetAlarm(getApplicationContext());
 
 		// Announcement about starting
-		Toast.makeText(this, "Starting the Service", Toast.LENGTH_SHORT)
-				.show();
+		Toast.makeText(this, "Starting the Service", Toast.LENGTH_SHORT).show();
 
 		// Start a Background thread
 		isRunning = true;
