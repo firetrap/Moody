@@ -39,7 +39,7 @@ public class ServiceBackground extends Service {
 		super.onStartCommand(intent, flags, startId);
 
 		// Announcement about starting
-		Toast.makeText(this, "Starting the Demo Service", Toast.LENGTH_SHORT)
+		Toast.makeText(this, "Starting the Service", Toast.LENGTH_SHORT)
 				.show();
 
 		// Start a Background thread

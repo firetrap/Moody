@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.moody.R;
 
@@ -269,8 +268,7 @@ public class FragFavoritesPreview extends Fragment {
 				else
 					selectedIds.remove(id.longValue());
 
-				Toast.makeText(getActivity().getApplicationContext(),
-						"ESTE" + "ID ->" + id, Toast.LENGTH_SHORT).show();
+				
 
 				return true;
 

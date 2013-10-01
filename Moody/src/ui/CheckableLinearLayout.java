@@ -9,7 +9,6 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.widget.Checkable;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 /**
  * @author firetrap
@@ -68,7 +67,7 @@ public class CheckableLinearLayout extends LinearLayout implements Checkable {
 
 	@Override
 	public boolean performClick() {
-		Toast.makeText(getContext(), "click", Toast.LENGTH_SHORT).show();
+//		Toast.makeText(getContext(), "click", Toast.LENGTH_SHORT).show();
 		if (isChecked()) {
 			toggle();
 			return false;
@@ -80,7 +79,7 @@ public class CheckableLinearLayout extends LinearLayout implements Checkable {
 	@Override
 	public boolean performLongClick() {
 		toggle();
-		Toast.makeText(getContext(), "long click", Toast.LENGTH_SHORT).show();
+//		Toast.makeText(getContext(), "long click", Toast.LENGTH_SHORT).show();
 		return super.performLongClick();
 	}
 

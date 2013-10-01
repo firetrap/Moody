@@ -131,8 +131,8 @@ public class MainActivity extends Activity implements OnClickListener,
 	private void populateUserCourses() {
 
 		// Get all the courses from current user
-		MoodleCourse[] courses = new ManContents().getUserCourses(getResources(),
-				getApplicationContext());
+		MoodleCourse[] courses = new ManContents().getUserCourses(
+				getResources(), getApplicationContext());
 
 		// Start populating the menus and views
 		LayoutInflater inflater = (LayoutInflater) this
@@ -190,8 +190,8 @@ public class MainActivity extends Activity implements OnClickListener,
 				switch (which) {
 
 				case DialogInterface.BUTTON_POSITIVE:
-					new ManFavorites().insertFavorite(id, getApplicationContext(),
-							getResources());
+					new ManFavorites().insertFavorite(id,
+							getApplicationContext(), getResources());
 
 					dialog.dismiss();
 
@@ -317,7 +317,8 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void onCoursesClick(View v) {
 
 		// LOADING
-		// Intent intent = new Intent(getApplicationContext(), LoadingActivity.class);
+		// Intent intent = new Intent(getApplicationContext(),
+		// LoadingActivity.class);
 		// startActivity(intent);
 
 		// The view id is the same id of the courses
@@ -389,16 +390,13 @@ public class MainActivity extends Activity implements OnClickListener,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
+			// TODO
+			break;
 
-			// if (count > 0) {
-			// count--;
-			// Intent stop = new Intent("ServiceBackground");
-			// MainActivity.this.stopService(stop);
-			// } else { // Start the Service
-			count++;
+		case R.id.action_refresh:
 
 			this.startService(new Intent(this, ServiceBackground.class));
-			// }
+
 			break;
 
 		default:
