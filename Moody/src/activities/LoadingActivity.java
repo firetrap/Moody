@@ -14,7 +14,7 @@ import com.example.moody.R;
  * @author firetrap
  *
  */
-public class Loading extends Activity {
+public class LoadingActivity extends Activity {
 
 	private View mLoadingStatusView;
 

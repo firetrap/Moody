@@ -9,7 +9,6 @@ import java.net.URL;
 
 import managers.ManAlertDialog;
 import managers.ManSession;
-import model.ModConstants;
 import model.ModMessage;
 
 import org.json.JSONException;
@@ -57,8 +56,7 @@ public class LoginActivity extends Activity {
 	public static String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
 
 	private String finalToken = "";
-	private JSONObject getJson;
-	private String jsonFormat = ModConstants.KEY_JSONFORMAT;
+
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -69,7 +67,6 @@ public class LoginActivity extends Activity {
 	private View mLoginStatusView;
 	private String mPassword;
 
-	private String mToken;
 	// Values for username and password at the time of the login attempt.
 	private String mUrl;
 	// UI references.
@@ -80,8 +77,6 @@ public class LoginActivity extends Activity {
 
 	// ManSession Manager Class
 	ManSession session;
-
-	private String url = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +160,7 @@ public class LoginActivity extends Activity {
 		mPassword = mPasswordView.getText().toString().trim();
 
 		boolean cancel = false;
-		String error = "Errors found: \n";
+		String error = "Errors found: \n\n";
 		View focusView = null;
 
 		// Check for url.
@@ -173,13 +168,13 @@ public class LoginActivity extends Activity {
 			mUrlView.setError(getString(R.string.error_field_required));
 			focusView = mUrlView;
 			cancel = true;
-			error += "\t - URL\n";
+			error += "URL\n";
 
 		} else if (mUrl.length() < 20) {
 			mUrlView.setError(getString(R.string.error_invalid_url));
 			focusView = mUrlView;
 			cancel = true;
-			error += "\t - URL\n";
+			error += "URL\n";
 		}
 
 		// Check if URL contains the required http protocol.
@@ -194,13 +189,13 @@ public class LoginActivity extends Activity {
 			mPasswordView.setError(getString(R.string.error_field_required));
 			focusView = mPasswordView;
 			cancel = true;
-			error += "\t - Password\n";
+			error += "Password\n";
 
 		} else if (mPassword.length() <= 4) {
 			mPasswordView.setError(getString(R.string.error_invalid_password));
 			focusView = mPasswordView;
 			cancel = true;
-			error += "\t - Password\n";
+			error += "Password\n";
 		}
 
 		// Check for a valid user.
@@ -208,7 +203,7 @@ public class LoginActivity extends Activity {
 			mUserView.setError(getString(R.string.error_field_required));
 			focusView = mUserView;
 			cancel = true;
-			error += "\t - User\n";
+			error += "User\n";
 		}
 
 		if (cancel) {
@@ -217,7 +212,8 @@ public class LoginActivity extends Activity {
 
 			focusView.requestFocus();
 			ManAlertDialog.showMessageDialog(this, new ModMessage(
-					"Login Error", error), false);
+					getResources().getString(R.string.login_error), error),
+					false);
 
 		} else {
 			// Show a progress spinner, and kick off a background task to
@@ -239,7 +235,8 @@ public class LoginActivity extends Activity {
 
 		JSONObject jObj = null;
 
-		private String error = "Errors found: \n";
+		private String error = getResources().getString(R.string.errors_found)
+				+ "\n\n";
 		private EditText focusView = new EditText(getApplicationContext());
 
 		private String userId = "";
@@ -249,14 +246,15 @@ public class LoginActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 
 			String url = mUrl + "/login/token.php?username=" + mUser
-					+ "&password=" + mPassword + "&service=moody_service";
+					+ "&password=" + mPassword + "&service="
+					+ getResources().getString(R.string.moodle_service_name);
 
 			try {
 				return loadFromNetwork(url);
 			} catch (IOException e) {
 
-				error += "\t - Error in Authentication service- check your internet service or the website URL\n";
-				// mUrlViewTemp.setError(getString(R.string.error_invalid_url));
+				error += getResources().getString(R.string.error_internet_url)
+						+ "\n";
 				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			}
@@ -282,15 +280,16 @@ public class LoginActivity extends Activity {
 				jObj = new JSONObject(json);
 
 				if (jObj == null) {
-					error += "\t - Error in Authentication service- check your internet service or the website URL\n";
-
+					error += getResources().getString(
+									R.string.error_internet_url) + "\n";
 					focusView.setError(getString(R.string.error_invalid_url));
 					return false;
 
 				} else {
 					if (jObj.has("error")) {
-						error += "\t - Error in Authentication service - "
-								+ (String) jObj.get("error") + "\n";
+						error += getResources().getString(
+										R.string.error_authentication_service)
+								+ " - " + (String) jObj.get("error") + "\n";
 
 						focusView
 								.setError(getString(R.string.error_incorrect_password_username));
@@ -310,17 +309,18 @@ public class LoginActivity extends Activity {
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
-				error += "\t - Error in Authentication service- check your internet service or the website URL\n";
+				error += getResources().getString(R.string.error_internet_url)
+						+ "\n";
 				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			} catch (MoodleRestWebServiceException e) {
 				e.printStackTrace();
-				error += "\t - Error getting user information - contact your Moodle administrator\n";
+				error += getResources().getString(R.string.error_get_user_info)+"\n";
 				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			} catch (MoodleRestException e) {
 				e.printStackTrace();
-				error += "\t - Error getting user information - contact your Moodle administrator\n";
+				error += getResources().getString(R.string.error_get_user_info)+"\n";
 				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			}
@@ -368,10 +368,9 @@ public class LoginActivity extends Activity {
 				session = new ManSession(getApplicationContext());
 				session.createLoginSession(mUser, fullName, finalToken, userId,
 						mUrl);
-				getApplicationContext()
-						.startService(
-								new Intent(getApplicationContext(),
-										ServiceBackground.class));
+				getApplicationContext().startService(
+						new Intent(getApplicationContext(),
+								ServiceBackground.class));
 				SystemClock.sleep(3000);
 				Intent intent = new Intent(getApplicationContext(),
 						MainActivity.class);

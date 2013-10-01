@@ -63,7 +63,7 @@
             android:name="fragments.FragTopicsPreview"
             android:label="@string/title_activity_copy_of_topics_preview" >
         </activity>
-        <activity android:name="activities.Loading" >
+        <activity android:name="activities.LoadingActivity" >
         </activity>
 
         <service

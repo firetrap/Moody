@@ -317,7 +317,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void onCoursesClick(View v) {
 
 		// LOADING
-		// Intent intent = new Intent(getApplicationContext(), Loading.class);
+		// Intent intent = new Intent(getApplicationContext(), LoadingActivity.class);
 		// startActivity(intent);
 
 		// The view id is the same id of the courses

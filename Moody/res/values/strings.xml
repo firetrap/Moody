@@ -99,7 +99,15 @@
     <string name="favorites_header">Favorites</string>
     <string name="favorites_delete">Delete</string>
 
-    <!-- Strings Related to Moody Service -->
+    <!-- Strings Related to moodle Service -->
     <string name="moody_service">Moody Data Service</string>
+    <string name="moodle_service_name">moody_service</string>
+
+    <!-- Strings Related to Error Messages -->
+    <string name="login_error">Login Error</string>
+    <string name="errors_found">Errors found:</string>
+    <string name="error_internet_url">Error in Authentication service - check your internet service or the website URL</string>
+    <string name="error_authentication_service">Error in Authentication service</string>
+    <string name="error_get_user_info">Error getting user information - contact your Moodle administrator</string>
 
 </resources>
