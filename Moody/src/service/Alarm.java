@@ -19,8 +19,11 @@ public class Alarm extends BroadcastReceiver {
 				PowerManager.PARTIAL_WAKE_LOCK, "");
 		wl.acquire();
 
-		// Put here YOUR code.
-		Toast.makeText(context, "Alarm !!!!!!!!!!", Toast.LENGTH_LONG).show();
+
+		context.startService(new Intent(context, ServiceBackground.class));
+		
+		Toast.makeText(context, "O alarme inicio o serviço", Toast.LENGTH_LONG)
+				.show();
 		wl.release();
 	}
 
@@ -30,8 +33,8 @@ public class Alarm extends BroadcastReceiver {
 		Intent i = new Intent(context, Alarm.class);
 		PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
 		am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
-				1000 * 60 * 2, pi); // Millisec * Second * Minute in this case
-										// 10minutes firetrap
+				1000 * 60 * 1, pi); // Millisec * Second * Minute in this case
+									// 10minutes firetrap
 	}
 
 	public void CancelAlarm(Context context) {

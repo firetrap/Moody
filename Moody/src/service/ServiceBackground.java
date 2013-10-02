@@ -39,7 +39,7 @@ public class ServiceBackground extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		// Starts the alarm
-		alarm.SetAlarm(getApplicationContext());
+		// alarm.SetAlarm(getApplicationContext());
 
 		// Announcement about starting
 		Toast.makeText(this, "Starting the Service", Toast.LENGTH_SHORT).show();
@@ -67,14 +67,13 @@ public class ServiceBackground extends Service {
 
 		public void run() {
 			try {
-
 				while (isRunning) {
 					new ManContents().getAll(getResources(),
 							getApplicationContext());
-
-					Thread.sleep(5000);
+					isRunning = false;
+					// Thread.sleep(5000);
 				}
-
+				stopSelf();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
