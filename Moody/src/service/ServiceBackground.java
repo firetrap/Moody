@@ -40,7 +40,7 @@ public class ServiceBackground extends Service {
 		alarm.setAlarm(getApplicationContext());
 
 		// Announcement about starting
-		Log.d("service", "Service Started");
+		Log.d("MoodyService", "Service Started");
 
 		// Start a Background thread
 		isRunning = true;
@@ -64,7 +64,7 @@ public class ServiceBackground extends Service {
 		public void run() {
 			try {
 				while (isRunning) {
-					Log.d("service", "entrou na thread");
+					Log.d("MoodyService", "entrou na thread");
 					new ManContents().getAll(getResources(),
 							getApplicationContext());
 					isRunning = false;

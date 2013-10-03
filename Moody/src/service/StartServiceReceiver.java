@@ -9,7 +9,7 @@ public class StartServiceReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d("service", "O alarme iniciou o serviço");
+		Log.d("MoodyService", "O alarme iniciou o serviço");
 
 		Intent service = new Intent(context, ServiceBackground.class);
 		context.startService(service);
