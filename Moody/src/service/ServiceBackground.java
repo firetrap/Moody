@@ -1,6 +1,3 @@
-/**
- * 
- */
 package service;
 
 import managers.ManContents;
@@ -43,15 +40,13 @@ public class ServiceBackground extends Service {
 		alarm.setAlarm(getApplicationContext());
 
 		// Announcement about starting
-		Log.d("service", "Iniciou o serviço");
+		Log.d("service", "Service Started");
 
 		// Start a Background thread
 		isRunning = true;
 		Thread backgroundThread = new Thread(new BackgroundThread());
 		backgroundThread.start();
 
-		// We want this service will continue running until all work it's done,
-		// so return START_NOT_STICKY.
 		return START_NOT_STICKY;
 	}
 

@@ -110,4 +110,6 @@
     <string name="error_authentication_service">Error in Authentication service</string>
     <string name="error_get_user_info">Error getting user information - contact your Moodle administrator</string>
 
+
+
 </resources>

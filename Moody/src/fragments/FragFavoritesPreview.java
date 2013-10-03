@@ -104,8 +104,9 @@ public class FragFavoritesPreview extends Fragment {
 				switch (item.getItemId()) {
 				case R.id.action_delete:
 
-					new ManFavorites().removeFavorite(selectedIds, getActivity()
-							.getApplicationContext(), getResources());
+					new ManFavorites().removeFavorite(selectedIds,
+							getActivity().getApplicationContext(),
+							getResources());
 
 					// Automatically exists the action mode, when the user
 					// selects this action
@@ -167,8 +168,8 @@ public class FragFavoritesPreview extends Fragment {
 
 			String courseId = Long.toString(courseInfo.getId());
 
-			MoodleCourseContent[] contents = new ManContents().getCourseContent(
-					courseId, getResources(), getActivity()
+			MoodleCourseContent[] contents = new ManContents()
+					.getCourseContent(courseId, getResources(), getActivity()
 							.getApplicationContext());
 
 			MoodleModule[] modules = contents[0].getMoodleModules();
@@ -267,8 +268,6 @@ public class FragFavoritesPreview extends Fragment {
 					selectedIds.add(id.longValue());
 				else
 					selectedIds.remove(id.longValue());
-
-				
 
 				return true;
 

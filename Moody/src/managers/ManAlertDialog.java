@@ -57,8 +57,8 @@ public final class ManAlertDialog {
 	 *            error, null -> sem Icon)
 	 * 
 	 **/
-	public static void showMessageDialog(Activity context,
-			ModMessage mensagem, Boolean status) {
+	public static void showMessageDialog(Activity context, ModMessage mensagem,
+			Boolean status) {
 
 		showMessageDialog(context, mensagem,
 				new DialogInterface.OnClickListener() {
@@ -73,9 +73,8 @@ public final class ManAlertDialog {
 				}, status);
 	}
 
-	public static void showMessageDialog(Activity context,
-			ModMessage mensagem, DialogInterface.OnClickListener onClick,
-			Boolean status) {
+	public static void showMessageDialog(Activity context, ModMessage mensagem,
+			DialogInterface.OnClickListener onClick, Boolean status) {
 
 		initBuilder(context, mensagem, status);
 
@@ -86,8 +85,8 @@ public final class ManAlertDialog {
 
 	}
 
-	public static void showMessageDialog(Activity context,
-			ModMessage mensagem, DialogInterface.OnClickListener frtOnClick,
+	public static void showMessageDialog(Activity context, ModMessage mensagem,
+			DialogInterface.OnClickListener frtOnClick,
 			DialogInterface.OnClickListener sndOnClick, Boolean status) {
 
 		initBuilder(context, mensagem, status);

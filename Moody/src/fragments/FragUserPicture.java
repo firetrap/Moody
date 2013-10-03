@@ -29,7 +29,7 @@ import com.android.moody.R;
 
 /**
  * @author firetrap
- *
+ * 
  */
 public class FragUserPicture extends DialogFragment {
 

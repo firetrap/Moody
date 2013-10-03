@@ -15,5 +15,4 @@ public class StartServiceReceiver extends BroadcastReceiver {
 		context.startService(service);
 	}
 
-
 }

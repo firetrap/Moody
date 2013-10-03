@@ -5,24 +5,23 @@ import android.graphics.BitmapFactory;
 
 /**
  * @author firetrap
- *
+ * 
  */
 public class BitmapResizer {
 
 	public static int calculateInSampleSize(BitmapFactory.Options options,
 			int reqWidth, int reqHeight) {
 		// Raw height and width of image
-		 int height = options.outHeight;
-		 int width = options.outWidth;
+		int height = options.outHeight;
+		int width = options.outWidth;
 		int inSampleSize = 1;
 
 		if (height > reqHeight || width > reqWidth) {
 
 			// Calculate ratios of height and width to requested height and
 			// width
-			 int heightRatio = Math.round((float) height
-					/ (float) reqHeight);
-			 int widthRatio = Math.round((float) width / (float) reqWidth);
+			int heightRatio = Math.round((float) height / (float) reqHeight);
+			int widthRatio = Math.round((float) width / (float) reqWidth);
 
 			// Choose the smallest ratio as inSampleSize value, this will
 			// guarantee
@@ -38,7 +37,7 @@ public class BitmapResizer {
 			int resId, int reqWidth, int reqHeight) {
 
 		// First decode with inJustDecodeBounds=true to check dimensions
-		 BitmapFactory.Options options = new BitmapFactory.Options();
+		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(inputText, options);
 		// BitmapFactory.decodeResource(res, resId, options);

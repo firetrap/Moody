@@ -11,7 +11,7 @@ import android.content.SharedPreferences.Editor;
 
 /**
  * @author firetrap
- *
+ * 
  */
 public class ManSession {
 	// Context
@@ -111,8 +111,7 @@ public class ManSession {
 				pref.getString(ModConstants.KEY_TOKEN, null));
 
 		// user token
-		user.put(ModConstants.KEY_ID,
-				pref.getString(ModConstants.KEY_ID, null));
+		user.put(ModConstants.KEY_ID, pref.getString(ModConstants.KEY_ID, null));
 
 		// user url
 		user.put(ModConstants.KEY_URL,

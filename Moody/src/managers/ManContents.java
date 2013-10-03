@@ -83,8 +83,7 @@ public class ManContents {
 				return (MoodleUser) data.getData(context, fileName);
 			} else {
 				getContent = new DataAsyncTask().execute(url, token,
-						ModWebServices.CORE_USER_GET_USERS_BY_ID, userId)
-						.get();
+						ModWebServices.CORE_USER_GET_USERS_BY_ID, userId).get();
 				data.storeData(context, getContent, fileName);
 				return (MoodleUser) getContent;
 			}
@@ -293,8 +292,9 @@ public class ManContents {
 			getFile(context, fileUrl, fileName);
 		}
 
-		doc = Jsoup.parse((String) new ManDataStore().getData(context, fileName),
-				"UTF-8");
+		doc = Jsoup
+				.parse((String) new ManDataStore().getData(context, fileName),
+						"UTF-8");
 		if (!(doc.outerHtml().contains("src"))) {
 
 		} else {

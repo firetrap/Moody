@@ -281,14 +281,15 @@ public class LoginActivity extends Activity {
 
 				if (jObj == null) {
 					error += getResources().getString(
-									R.string.error_internet_url) + "\n";
+							R.string.error_internet_url)
+							+ "\n";
 					focusView.setError(getString(R.string.error_invalid_url));
 					return false;
 
 				} else {
 					if (jObj.has("error")) {
 						error += getResources().getString(
-										R.string.error_authentication_service)
+								R.string.error_authentication_service)
 								+ " - " + (String) jObj.get("error") + "\n";
 
 						focusView
@@ -315,12 +316,14 @@ public class LoginActivity extends Activity {
 				return false;
 			} catch (MoodleRestWebServiceException e) {
 				e.printStackTrace();
-				error += getResources().getString(R.string.error_get_user_info)+"\n";
+				error += getResources().getString(R.string.error_get_user_info)
+						+ "\n";
 				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			} catch (MoodleRestException e) {
 				e.printStackTrace();
-				error += getResources().getString(R.string.error_get_user_info)+"\n";
+				error += getResources().getString(R.string.error_get_user_info)
+						+ "\n";
 				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			}

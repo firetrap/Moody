@@ -12,7 +12,7 @@ import com.android.moody.R;
 
 /**
  * @author firetrap
- *
+ * 
  */
 public class LoadingActivity extends Activity {
 

@@ -21,7 +21,7 @@ import android.os.StrictMode;
 
 /**
  * @author firetrap
- *
+ * 
  */
 public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 	Object jObj = null;
@@ -71,8 +71,7 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 					.getCourseContent(courseId, null);
 			courseContent[0].getName();
 			return courseContent;
-			
-		
+
 		default:
 			return null;
 		}

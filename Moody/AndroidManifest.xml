@@ -19,8 +19,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- This necessary to the service check if are new data on phone boot -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -74,8 +72,10 @@
         </activity>
         <activity android:name="activities.LoadingActivity" >
         </activity>
-
-        <!-- Moody Services -->
+        <activity
+            android:name="activities.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
 
         <service
             android:name="service.ServiceBackground"
@@ -84,7 +84,9 @@
             android:label="@string/moody_service" >
         </service>
 
-        <receiver android:name="service.Alarm" >
+        <receiver
+            android:name="service.Alarm"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

@@ -388,9 +388,14 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
-			// TODO
+
+			startActivity(new Intent(getApplicationContext(),
+					SettingsActivity.class));
+
+			myDrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
 
 		case R.id.action_refresh:

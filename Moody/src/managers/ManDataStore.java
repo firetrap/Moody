@@ -15,7 +15,7 @@ import android.content.Context;
 
 /**
  * @author firetrap
- *
+ * 
  */
 public class ManDataStore {
 
