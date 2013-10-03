@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class MyStartServiceReceiver extends BroadcastReceiver {
+public class StartServiceReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -14,4 +14,6 @@ public class MyStartServiceReceiver extends BroadcastReceiver {
 		Intent service = new Intent(context, ServiceBackground.class);
 		context.startService(service);
 	}
+
+
 }

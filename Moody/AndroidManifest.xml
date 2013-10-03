@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.moody"
+    package="com.android.moody"
     android:installLocation="internalOnly"
     android:versionCode="0"
     android:versionName="0.6.7.2 alpha" >
@@ -77,12 +77,12 @@
             android:label="@string/moody_service" >
         </service>
 
-        <receiver android:name="service.MyScheduleReceiver" >
+        <receiver android:name="service.Alarm" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="service.MyStartServiceReceiver" >
+        <receiver android:name="service.StartServiceReceiver" >
             <intent-filter>
                 <action android:name="moody_get_data" />
             </intent-filter>

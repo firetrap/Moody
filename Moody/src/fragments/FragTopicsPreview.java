@@ -20,7 +20,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.moody.R;
+import com.android.moody.R;
 
 /**
  * @author firetrap

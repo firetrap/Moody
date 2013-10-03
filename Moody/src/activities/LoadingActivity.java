@@ -8,7 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.moody.R;
+import com.android.moody.R;
 
 /**
  * @author firetrap

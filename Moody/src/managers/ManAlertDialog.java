@@ -8,7 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
-import com.example.moody.R;
+import com.android.moody.R;
 
 /**
  * 

@@ -6,11 +6,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import model.ModWebServices;
 import model.ModConstants;
+import model.ModWebServices;
 
 import org.jsoup.Jsoup;
 import org.jsoup.helper.StringUtil;
@@ -28,9 +27,6 @@ import restPackage.MoodleUser;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.Html;
-
-import com.example.moody.R;
-
 import connections.DataAsyncTask;
 
 /**

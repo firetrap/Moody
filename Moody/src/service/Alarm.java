@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 
-public class MyScheduleReceiver {
+public class Alarm {
 
 	// // Restart service every x seconds,mins,hours
 	// // Millisec * Second * Minute *hour
@@ -16,7 +16,7 @@ public class MyScheduleReceiver {
 	// public void onReceive(Context context, Intent intent) {
 	// AlarmManager service = (AlarmManager) context
 	// .getSystemService(Context.ALARM_SERVICE);
-	// Intent i = new Intent(context, MyStartServiceReceiver.class);
+	// Intent i = new Intent(context, StartServiceReceiver.class);
 	// PendingIntent pending = PendingIntent.getBroadcast(context, 0, i,
 	// PendingIntent.FLAG_CANCEL_CURRENT);
 	// Calendar cal = Calendar.getInstance();
@@ -51,7 +51,7 @@ public class MyScheduleReceiver {
 	}
 
 	public void CancelAlarm(Context context) {
-		Intent intent = new Intent(context, MyScheduleReceiver.class);
+		Intent intent = new Intent(context, Alarm.class);
 		PendingIntent sender = PendingIntent
 				.getBroadcast(context, 0, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) context

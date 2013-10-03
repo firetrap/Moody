@@ -6,7 +6,7 @@ import model.ModConstants;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.example.moody.R;
+import com.android.moody.R;
 
 public class ManFavorites {
 

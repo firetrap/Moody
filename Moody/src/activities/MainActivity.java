@@ -43,7 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
 
-import com.example.moody.R;
+import com.android.moody.R;
 
 import connections.DataAsyncTask;
 

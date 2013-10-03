@@ -14,7 +14,7 @@ import android.util.Log;
  * 
  */
 public class ServiceBackground extends Service {
-	MyScheduleReceiver alarm = new MyScheduleReceiver();
+	Alarm alarm = new Alarm();
 
 	public ServiceBackground() {
 		// TODO Auto-generated constructor stub

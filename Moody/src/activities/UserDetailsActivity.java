@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.moody.R;
+import com.android.moody.R;
 
 public class UserDetailsActivity extends Activity
 // implements TextWatcher
