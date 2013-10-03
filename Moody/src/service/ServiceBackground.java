@@ -7,14 +7,14 @@ import managers.ManContents;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.widget.Toast;
+import android.util.Log;
 
 /**
  * @author firetrap
  * 
  */
 public class ServiceBackground extends Service {
-	Alarm alarm = new Alarm();
+	MyScheduleReceiver alarm = new MyScheduleReceiver();
 
 	public ServiceBackground() {
 		// TODO Auto-generated constructor stub
@@ -33,16 +33,17 @@ public class ServiceBackground extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		// android.os.Debug.waitForDebugger();
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		// Starts the alarm
-		// alarm.SetAlarm(getApplicationContext());
+		alarm.setAlarm(getApplicationContext());
 
 		// Announcement about starting
-		Toast.makeText(this, "Starting the Service", Toast.LENGTH_SHORT).show();
+		Log.d("service", "Iniciou o serviço");
 
 		// Start a Background thread
 		isRunning = true;
@@ -68,10 +69,10 @@ public class ServiceBackground extends Service {
 		public void run() {
 			try {
 				while (isRunning) {
+					Log.d("service", "entrou na thread");
 					new ManContents().getAll(getResources(),
 							getApplicationContext());
 					isRunning = false;
-					// Thread.sleep(5000);
 				}
 				stopSelf();
 			} catch (Exception e) {

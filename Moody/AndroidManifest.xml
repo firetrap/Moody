@@ -77,14 +77,14 @@
             android:label="@string/moody_service" >
         </service>
 
-        <receiver
-            android:name="service.Alarm"
-            android:process=":remote" >
-        </receiver>
-        <receiver android:name="service.AutoStart" >
+        <receiver android:name="service.MyScheduleReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" >
-                </action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="service.MyStartServiceReceiver" >
+            <intent-filter>
+                <action android:name="moody_get_data" />
             </intent-filter>
         </receiver>
     </application>
