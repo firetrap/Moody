@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import model.ModWebServices;
 import restPackage.MoodleCallRestWebService;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
@@ -14,6 +13,7 @@ import restPackage.MoodleRestCourse;
 import restPackage.MoodleRestEnrol;
 import restPackage.MoodleRestException;
 import restPackage.MoodleRestUser;
+import restPackage.MoodleServices;
 import restPackage.MoodleUser;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -32,7 +32,7 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 		try {
 
 			return loadFromNetwork((String) params[0], (String) params[1],
-					(ModWebServices) params[2], (String) params[3]);
+					(MoodleServices) params[2], params[3]);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -45,33 +45,38 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 	}
 
 	private Object loadFromNetwork(String urlString, String token,
-			ModWebServices webService, String webServiceParams)
+			MoodleServices webService, Object webServiceParams)
 			throws UnsupportedEncodingException, MoodleRestException {
 
 		MoodleCallRestWebService.init(
 				urlString + "/webservice/rest/server.php", token);
-		webServiceParams = webServiceParams.trim();
 
 		long userId;
 		long courseId;
 		switch (webService) {
 		case CORE_ENROL_GET_USERS_COURSES:
-			userId = Long.parseLong(webServiceParams);
+			userId = Long.parseLong((String) webServiceParams);
 			MoodleCourse[] courses = MoodleRestEnrol.getUsersCourses(userId);
 			return courses;
 
 		case CORE_USER_GET_USERS_BY_ID:
-			userId = Long.parseLong(webServiceParams);
+			userId = Long.parseLong((String) webServiceParams);
 			MoodleUser user = MoodleRestUser.getUserById(userId);
 			return user;
 
 		case CORE_COURSE_GET_CONTENTS:
-			courseId = Long.parseLong(webServiceParams);
+			courseId = Long.parseLong((String) webServiceParams);
 			MoodleCourseContent[] courseContent = MoodleRestCourse
 					.getCourseContent(courseId, null);
-			courseContent[0].getName();
 			return courseContent;
-
+		case CORE_MESSAGE_CREATE_CONTACTS:
+			return null;
+		case CORE_MESSAGE_DELETE_CONTACTS:
+			return null;
+		case CORE_MESSAGE_BLOCK_CONTACTS:
+			return null;
+		case CORE_MESSAGE_UNBLOCK_CONTACTS:
+			return null;
 		default:
 			return null;
 		}

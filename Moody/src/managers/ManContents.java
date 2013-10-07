@@ -9,7 +9,6 @@ import java.net.URLConnection;
 import java.util.concurrent.ExecutionException;
 
 import model.ModConstants;
-import model.ModWebServices;
 
 import org.jsoup.Jsoup;
 import org.jsoup.helper.StringUtil;
@@ -23,6 +22,7 @@ import org.jsoup.select.NodeVisitor;
 
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
+import restPackage.MoodleServices;
 import restPackage.MoodleUser;
 import android.content.Context;
 import android.content.res.Resources;
@@ -76,14 +76,14 @@ public class ManContents {
 		String userId = session.getValues(ModConstants.KEY_ID, null);
 		try {
 
-			String fileName = ModWebServices.CORE_USER_GET_USERS_BY_ID.name()
+			String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name()
 					+ userId;
 
 			if (isInCache(context, fileName)) {
 				return (MoodleUser) data.getData(context, fileName);
 			} else {
 				getContent = new DataAsyncTask().execute(url, token,
-						ModWebServices.CORE_USER_GET_USERS_BY_ID, userId).get();
+						MoodleServices.CORE_USER_GET_USERS_BY_ID, userId).get();
 				data.storeData(context, getContent, fileName);
 				return (MoodleUser) getContent;
 			}
@@ -116,11 +116,11 @@ public class ManContents {
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
 		String userId = session.getValues(ModConstants.KEY_ID, null);
 
-		String fileName = ModWebServices.CORE_USER_GET_USERS_BY_ID.name()
+		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name()
 				+ userId;
 
 		getContent = new DataAsyncTask().execute(url, token,
-				ModWebServices.CORE_USER_GET_USERS_BY_ID, userId).get();
+				MoodleServices.CORE_USER_GET_USERS_BY_ID, userId).get();
 		data.storeData(context, getContent, fileName);
 
 	}
@@ -138,14 +138,14 @@ public class ManContents {
 
 		try {
 
-			String fileName = ModWebServices.CORE_ENROL_GET_USERS_COURSES
+			String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES
 					.name() + userId;
 
 			if (isInCache(context, fileName)) {
 				return (MoodleCourse[]) data.getData(context, fileName);
 			} else {
 				getContent = new DataAsyncTask().execute(url, token,
-						ModWebServices.CORE_ENROL_GET_USERS_COURSES, userId)
+						MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId)
 						.get();
 				data.storeData(context, getContent, fileName);
 				return (MoodleCourse[]) getContent;
@@ -179,11 +179,11 @@ public class ManContents {
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
 		String userId = session.getValues(ModConstants.KEY_ID, null);
 
-		String fileName = ModWebServices.CORE_ENROL_GET_USERS_COURSES.name()
+		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name()
 				+ userId;
 
 		getContent = new DataAsyncTask().execute(url, token,
-				ModWebServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
+				MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
 		data.storeData(context, getContent, fileName);
 
 	}
@@ -206,7 +206,7 @@ public class ManContents {
 
 		try {
 
-			String fileName = ModWebServices.CORE_COURSE_GET_CONTENTS.name()
+			String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name()
 					+ courseId;
 
 			if (isInCache(context, fileName)) {
@@ -214,7 +214,7 @@ public class ManContents {
 				return (MoodleCourseContent[]) data.getData(context, fileName);
 			} else {
 				getContent = new DataAsyncTask().execute(url, token,
-						ModWebServices.CORE_COURSE_GET_CONTENTS, courseId)
+						MoodleServices.CORE_COURSE_GET_CONTENTS, courseId)
 						.get();
 				data.storeData(context, getContent, fileName);
 				return (MoodleCourseContent[]) getContent;
@@ -250,11 +250,11 @@ public class ManContents {
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
 
-		String fileName = ModWebServices.CORE_COURSE_GET_CONTENTS.name()
+		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name()
 				+ courseId;
 
 		getContent = new DataAsyncTask().execute(url, token,
-				ModWebServices.CORE_COURSE_GET_CONTENTS, courseId).get();
+				MoodleServices.CORE_COURSE_GET_CONTENTS, courseId).get();
 		data.storeData(context, getContent, fileName);
 
 	}
