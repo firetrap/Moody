@@ -85,7 +85,7 @@
         </service>
 
         <receiver
-            android:name="service.Alarm"
+            android:name="service.ServiceAlarm"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

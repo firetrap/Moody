@@ -10,7 +10,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class Alarm extends BroadcastReceiver {
+public class ServiceAlarm extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -43,7 +43,7 @@ public class Alarm extends BroadcastReceiver {
 	}
 
 	public void CancelAlarm(Context context) {
-		Intent intent = new Intent(context, Alarm.class);
+		Intent intent = new Intent(context, ServiceAlarm.class);
 		PendingIntent sender = PendingIntent
 				.getBroadcast(context, 0, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) context

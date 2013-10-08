@@ -23,11 +23,9 @@
     <string name="pref_title_sync_frequency">Sync frequency</string>
 
     <string-array name="pref_sync_frequency_titles">
-
-        <!-- <item>1 minute</item> -->
-        <!-- <item>2 minute</item> -->
-        <!-- <item>4 minute</item> -->
-
+        <item>1 minute</item>
+        <item>2 minute</item>
+        <item>4 minute</item>
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
@@ -38,11 +36,9 @@
         <item>Never</item>
     </string-array>
     <string-array name="pref_sync_frequency_values">
-
-        <!-- <item>60000</item> -->
-        <!-- <item>120000</item> -->
-        <!-- <item>240000</item> -->
-
+        <item>60000</item>
+        <item>120000</item>
+        <item>240000</item>
         <item>900000</item>
         <item>1800000</item>
         <item>63600000</item>
