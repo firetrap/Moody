@@ -24,18 +24,10 @@ import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
-import activities.MainActivity;
-import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import service.ServiceNotifications;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.text.Html;
-
-import com.android.moody.R;
-
 import connections.DataAsyncTask;
 
 /**
@@ -52,6 +44,7 @@ public class ManContents {
 	ManSession session;
 	ManDataStore data = new ManDataStore();
 	Object getContent;
+	ServiceNotifications notifications;
 
 	public void getAll(Resources resources, Context context) {
 		try {
@@ -471,45 +464,19 @@ public class ManContents {
 	private void hasNewContent(Resources resources, Context context,
 			Object newContent, String fileName) {
 
+		notifications = new ServiceNotifications(context);
+
 		MoodleCourseContent[] oldObj = (MoodleCourseContent[]) data.getData(
 				context, fileName);
 		MoodleCourseContent[] newObj = (MoodleCourseContent[]) newContent;
 
 		if (oldObj != null && newObj != null) {
 			if (oldObj.length == newObj.length) {
-				sendNotification(context);
+				notifications.sendNotification();
 			}
 
 			// return Arrays.equals(oldObj, newObj) ? false : true;
 		}
-
-	}
-
-	@SuppressLint("NewApi")
-	public void sendNotification(Context context) {
-		// Prepare intent which is triggered if the
-		// notification is selected
-		Intent intent1 = new Intent(context, MainActivity.class);
-		PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent1,
-				0);
-
-		// Build notification
-		// Actions are just fake
-		Notification noti = new Notification.Builder(context)
-				.setContentTitle("New mail from " + "test@gmail.com")
-				.setContentText("Subject")
-				.setSmallIcon(R.drawable.notification_icon)
-				.setContentIntent(pIntent)
-				.addAction(R.drawable.notification_icon, "Call", pIntent)
-				.addAction(R.drawable.notification_icon, "More", pIntent)
-				.addAction(R.drawable.notification_icon, "And more", pIntent)
-				.build();
-		NotificationManager notificationManager = (NotificationManager) context
-				.getSystemService(context.NOTIFICATION_SERVICE);
-		// Hide the notification after its selected
-		noti.flags |= Notification.FLAG_AUTO_CANCEL;
-
-		notificationManager.notify(0, noti);
 
 	}
 

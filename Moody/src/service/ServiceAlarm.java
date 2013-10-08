@@ -31,6 +31,8 @@ public class ServiceAlarm extends BroadcastReceiver {
 		// long interval = 1000 * 60 * 2;
 		long interval = Long.parseLong(sharedPrefs.getString("sync_frequency",
 				"63600000"));
+		
+		
 		long triggerTime = SystemClock.elapsedRealtime() + interval;
 		Log.d("MoodyService", Long.toString(interval / 60000) + " minutes");
 
