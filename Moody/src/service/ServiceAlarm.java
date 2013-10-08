@@ -10,6 +10,11 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+/**
+ * 
+ * @author MoodyProject Team
+ *
+ */
 public class ServiceAlarm extends BroadcastReceiver {
 
 	@Override

@@ -4,7 +4,7 @@ package model;
  * 
  * ModConstants - Classe que contém todos os valores constants da aplicação.
  * 
- * @author Sérgio Andaluz Ramos
+ * @author MoodyProject Team
  * 
  */
 public final class ModConstants {

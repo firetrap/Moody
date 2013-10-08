@@ -12,6 +12,12 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
+/**
+ * 
+ * @author MoodyProject Team
+ *
+ */
+
 public class ServiceNotifications {
 	Context context;
 

@@ -22,7 +22,7 @@ import android.os.AsyncTask;
 import android.os.StrictMode;
 
 /**
- * @author firetrap
+ * @author MoodyProject Team
  * 
  */
 public class DataAsyncTask extends AsyncTask<Object, Void, Object> {

@@ -8,6 +8,11 @@ import android.content.res.Resources;
 
 import com.android.moody.R;
 
+/**
+ * 
+ * @author MoodyProject Team
+ *
+ */
 public class ManFavorites {
 
 	// ManSession Manager Class

@@ -16,7 +16,7 @@ import com.android.moody.R;
  * não esteja instalado pergunta se quer ir sacar e vai para o menu de decisão
  * de abertura. - Classe que será responsável por
  * 
- * @author Sérgio Andaluz Ramos
+ * @author MoodyProject Team
  * 
  */
 public final class ManAlertDialog {

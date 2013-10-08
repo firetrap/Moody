@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.android.moody.R;
 
 /**
- * @author firetrap
+ * @author MoodyProject Team
  * 
  */
 public class FragTopicsPreview extends Fragment {

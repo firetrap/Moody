@@ -14,6 +14,11 @@ import android.widget.TextView;
 
 import com.android.moody.R;
 
+/**
+ * 
+ * @author MoodyProject Team
+ *
+ */
 public class UserDetailsActivity extends Activity
 // implements TextWatcher
 {

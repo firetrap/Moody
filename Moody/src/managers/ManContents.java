@@ -33,7 +33,7 @@ import android.text.Html;
 import connections.DataAsyncTask;
 
 /**
- * @author firetrap
+ * @author MoodyProject Team
  * 
  *         This class return the requested data, the procedure is always tries
  *         to get data from cache if it doesn't exist it will download from

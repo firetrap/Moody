@@ -50,7 +50,7 @@ import com.android.moody.R;
 import connections.DataAsyncTask;
 
 /**
- * @author firetrap
+ * @author MoodyProject Team
  * 
  */
 public class MainActivity extends Activity implements OnClickListener,

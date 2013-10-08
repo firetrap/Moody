@@ -45,7 +45,7 @@ import com.android.moody.R;
  * Activity which displays a login screen to the user, offering registration as
  * well.
  * 
- * @author firetrap
+ * @author MoodyProject Team
  * 
  */
 public class LoginActivity extends Activity {

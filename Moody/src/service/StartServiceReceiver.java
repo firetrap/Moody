@@ -5,6 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+/**
+ * 
+ * @author MoodyProject Team
+ *
+ */
 public class StartServiceReceiver extends BroadcastReceiver {
 
 	@Override

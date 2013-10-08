@@ -14,7 +14,7 @@ import java.io.ObjectOutputStream;
 import android.content.Context;
 
 /**
- * @author firetrap
+ * @author MoodyProject Team
  * 
  */
 public class ManDataStore {

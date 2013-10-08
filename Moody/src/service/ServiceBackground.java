@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 /**
- * @author firetrap
+ * @author MoodyProject Team
  * 
  */
 public class ServiceBackground extends Service {

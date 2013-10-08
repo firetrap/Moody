@@ -33,7 +33,7 @@ import android.widget.TextView;
 import com.android.moody.R;
 
 /**
- * @author SérgioFilipe
+ * @author MoodyProject Team
  * 
  */
 public class FragFavoritesPreview extends Fragment {

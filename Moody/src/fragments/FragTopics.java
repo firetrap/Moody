@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.android.moody.R;
 
 /**
- * @author firetrap
+ * @author MoodyProject Team
  * 
  */
 public class FragTopics extends Fragment {

@@ -31,6 +31,8 @@ import com.android.moody.R;
  * Android Design: Settings</a> for design guidelines and the <a
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
+ * 
+ * @author MoodyProject Team
  */
 public class SettingsActivity extends PreferenceActivity {
 	/**
