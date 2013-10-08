@@ -31,7 +31,7 @@ public class ServiceNotifications {
 				.setSound(
 						Uri.parse(sharedPrefs.getString(
 								"notifications_new_message_ringtone", "NULL")))
-				.setAutoCancel(true);
+								.setAutoCancel(true);
 
 		Intent notificationIntent = new Intent(context, MainActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,

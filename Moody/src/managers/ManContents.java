@@ -351,7 +351,7 @@ public class ManContents {
 	 * you'll want to embrace and extend.
 	 * 
 	 * @author Jonathan Hedley
-	 * @author firetrap re-build and corrected to work with android
+	 * @author firetrap - re-build,corrected and extended to work with android
 	 */
 	private static class PlainText {
 
