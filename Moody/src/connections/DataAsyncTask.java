@@ -12,6 +12,8 @@ import restPackage.MoodleCourseContent;
 import restPackage.MoodleRestCourse;
 import restPackage.MoodleRestEnrol;
 import restPackage.MoodleRestException;
+import restPackage.MoodleRestMessage;
+import restPackage.MoodleRestMessageException;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
@@ -70,17 +72,51 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 					.getCourseContent(courseId, null);
 			return courseContent;
 		case CORE_MESSAGE_CREATE_CONTACTS:
-			return null;
+			MoodleRestMessage.createContacts(parseIds(webServiceParams));
+			return true;
+
 		case CORE_MESSAGE_DELETE_CONTACTS:
-			return null;
+			MoodleRestMessage.deleteContacts(parseIds(webServiceParams));
+			return true;
+
 		case CORE_MESSAGE_BLOCK_CONTACTS:
-			return null;
+			MoodleRestMessage.blockContacts(parseIds(webServiceParams));
+			return true;
+
 		case CORE_MESSAGE_UNBLOCK_CONTACTS:
-			return null;
+			MoodleRestMessage.unblockContacts(parseIds(webServiceParams));
+			return true;
+
+		case CORE_MESSAGE_GET_CONTACTS:
+			return MoodleRestMessage.getContacts();
 		default:
 			return null;
 		}
 
+	}
+
+	/**
+	 * <p>
+	 * Method that parses a suposed id list object
+	 * </p>
+	 * 
+	 * @param Object
+	 *            ids - The object to be parsed to Long[].
+	 * @return resultList - The ids List
+	 */
+	public Long[] parseIds(Object ids) {
+
+		Long[] resultList = null;
+
+		try {
+			resultList = (Long[]) ids;
+		} catch (Exception e) {
+			resultList = new Long[1];
+
+			resultList[0] = (Long) ids;
+		}
+
+		return resultList;
 	}
 
 	@Override

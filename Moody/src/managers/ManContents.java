@@ -20,8 +20,10 @@ import org.jsoup.select.Elements;
 import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
 
+import restPackage.MoodleContact;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
+import restPackage.MoodleRestAction;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
 import service.ServiceNotifications;
@@ -261,6 +263,205 @@ public class ManContents {
 		hasNewContent(resources, context, getContent, fileName);
 		data.storeData(context, getContent, fileName);
 
+	}
+
+	/**
+	 * <p>
+	 * Method that gets the contacts of the user
+	 * </p>
+	 * 
+	 * @param resources
+	 * @param context
+	 * 
+	 * @return all of the contacts of the user.
+	 * @return MoodleContact[]
+	 */
+	public MoodleContact[] getContacts(Resources resources, Context context) {
+
+		session = new ManSession(context);
+		String url = session.getValues(ModConstants.KEY_URL, null);
+		String token = session.getValues(ModConstants.KEY_TOKEN, null);
+
+		try {
+
+			String fileName = MoodleServices.CORE_MESSAGE_GET_CONTACTS.name();
+
+			if (isInCache(context, fileName))
+				return (MoodleContact[]) data.getData(context, fileName);
+			else {
+				getContent = new DataAsyncTask().execute(url, token,
+						MoodleServices.CORE_MESSAGE_GET_CONTACTS, null).get();
+				data.storeData(context, getContent, fileName);
+				return (MoodleContact[]) getContent;
+			}
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
+	 * <p>
+	 * Method to that perform actions on the contact provided an id
+	 * </p>
+	 * 
+	 * @param resources
+	 * @param context
+	 * @param id
+	 * 
+	 */
+	private void actionContact(Resources resources, Context context, Long id,
+			MoodleRestAction action) {
+		Long[] a = { id };
+
+		actionContacts(resources, context, a, action);
+	}
+
+	/**
+	 * <p>
+	 * Method to that perform actions on the contact provided an a list of ids
+	 * </p>
+	 * 
+	 * @param resources
+	 * @param context
+	 * @param ids
+	 * 
+	 */
+	private void actionContacts(Resources resources, Context context,
+			Long[] ids, MoodleRestAction action) {
+		session = new ManSession(context);
+		String url = session.getValues(ModConstants.KEY_URL, null);
+		String token = session.getValues(ModConstants.KEY_TOKEN, null);
+
+		try {
+
+			new DataAsyncTask().execute(url, token, action, ids).get();
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * <p>
+	 * Method that deletes the contact provided its id
+	 * </p>
+	 * 
+	 * @param resources
+	 * @param context
+	 * @param id
+	 * 
+	 */
+	public void deleteContact(Resources resources, Context context, Long id) {
+		actionContact(resources, context, id, MoodleRestAction.DELETE);
+	}
+
+	/**
+	 * <p>
+	 * Method that deletes the contacts provided a list of ids
+	 * </p>
+	 * 
+	 * @param resources
+	 * @param context
+	 * @param ids
+	 * 
+	 */
+	public void deleteContacts(Resources resources, Context context, Long[] ids) {
+		actionContacts(resources, context, ids, MoodleRestAction.DELETE);
+	}
+
+	/**
+	 * <p>
+	 * Method that creates the contact provided its id
+	 * </p>
+	 * 
+	 * @param resources
+	 * @param context
+	 * @param id
+	 * 
+	 */
+	public void createContact(Resources resources, Context context, Long id) {
+		actionContact(resources, context, id, MoodleRestAction.CREATE);
+	}
+
+	/**
+	 * <p>
+	 * Method that creates the contacts provided a list of ids
+	 * </p>
+	 * 
+	 * @param resources
+	 * @param context
+	 * @param ids
+	 * 
+	 */
+	public void createContacts(Resources resources, Context context, Long[] ids) {
+		actionContacts(resources, context, ids, MoodleRestAction.CREATE);
+	}
+
+	/**
+	 * <p>
+	 * Method that blocks the contact provided its id
+	 * </p>
+	 * 
+	 * @param resources
+	 * @param context
+	 * @param id
+	 * 
+	 */
+	public void blockContact(Resources resources, Context context, Long id) {
+		actionContact(resources, context, id, MoodleRestAction.BLOCK);
+	}
+
+	/**
+	 * <p>
+	 * Method that blocks the contacts provided a list of ids
+	 * </p>
+	 * 
+	 * @param resources
+	 * @param context
+	 * @param ids
+	 * 
+	 */
+	public void blockContacts(Resources resources, Context context, Long[] ids) {
+		actionContacts(resources, context, ids, MoodleRestAction.BLOCK);
+	}
+
+	/**
+	 * <p>
+	 * Method that ublocks the contact provided its id
+	 * </p>
+	 * 
+	 * @param resources
+	 * @param context
+	 * @param id
+	 * 
+	 */
+	public void unblockContact(Resources resources, Context context, Long id) {
+		actionContact(resources, context, id, MoodleRestAction.UNBLOCK);
+	}
+
+	/**
+	 * <p>
+	 * Method that unblocks the contact provided its id
+	 * </p>
+	 * 
+	 * @param resources
+	 * @param context
+	 * @param ids
+	 * 
+	 */
+	public void unblockContacts(Resources resources, Context context, Long[] ids) {
+		actionContacts(resources, context, ids, MoodleRestAction.UNBLOCK);
 	}
 
 	/**
