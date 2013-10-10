@@ -4,7 +4,7 @@ package model;
  * 
  * ModMessage - Classe abstrata, mãe das mensagens do Moody.
  * 
- * @author MoodyProject Team
+ * @author SérgioFilipe
  * 
  */
 public class ModMessage {

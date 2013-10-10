@@ -15,8 +15,7 @@ import android.widget.TextView;
 import com.android.moody.R;
 
 /**
- * 
- * @author MoodyProject Team
+ * @author SérgioFilipe
  *
  */
 public class UserDetailsActivity extends Activity
@@ -33,8 +32,7 @@ public class UserDetailsActivity extends Activity
 		 * ((EditText)findViewById
 		 * (R.id.editText_email)).addTextChangedListener(this);
 		 **/
-		MoodleUser user = new ManContents().getUser(getResources(),
-				getApplicationContext());
+		MoodleUser user = new ManContents().getUser(getApplicationContext());
 
 		if (user != null) {
 			initDetails(user);

@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 /**
- * @author MoodyProject Team
+ * @author firetrap
  * 
  */
 public class BitmapResizer {

@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.android.moody.R;
 
 /**
- * @author MoodyProject Team
+ * @author SérgioFilipe
  * 
  */
 public class FragUserCloud extends DialogFragment {

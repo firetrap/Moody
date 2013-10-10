@@ -45,7 +45,7 @@ import com.android.moody.R;
  * Activity which displays a login screen to the user, offering registration as
  * well.
  * 
- * @author MoodyProject Team
+ * @author firetrap
  * 
  */
 public class LoginActivity extends Activity {
@@ -374,9 +374,11 @@ public class LoginActivity extends Activity {
 				getApplicationContext().startService(
 						new Intent(getApplicationContext(),
 								ServiceBackground.class));
+				
+				
 				SystemClock.sleep(3000);
 				Intent intent = new Intent(getApplicationContext(),
-						MainActivity.class);
+						MainActivity.class);				
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 				finish();

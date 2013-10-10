@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 /**
- * @author MoodyProject Team
+ * @author firetrap
  * 
  */
 public class ManSession {

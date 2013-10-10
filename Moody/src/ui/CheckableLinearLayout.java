@@ -11,7 +11,7 @@ import android.widget.Checkable;
 import android.widget.LinearLayout;
 
 /**
- * @author MoodyProject Team
+ * @author firetrap
  * 
  */
 public class CheckableLinearLayout extends LinearLayout implements Checkable {

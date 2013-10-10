@@ -1,7 +1,7 @@
 package interfaces;
 
 /**
- * @author MoodyProject Team
+ * @author firetrap
  * 
  */
 public interface InterDialogFrag {

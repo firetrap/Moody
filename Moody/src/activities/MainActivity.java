@@ -25,10 +25,8 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -50,7 +48,7 @@ import com.android.moody.R;
 import connections.DataAsyncTask;
 
 /**
- * @author MoodyProject Team
+ * @author firetrap
  * 
  */
 public class MainActivity extends Activity implements OnClickListener,
@@ -70,6 +68,8 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void onCreate(Bundle savedInstanceState) {
 		startTime = System.currentTimeMillis();
 		super.onCreate(savedInstanceState);
+//		startService(new Intent(getApplicationContext(),
+//				ServiceBackground.class));
 		setContentView(R.layout.activity_main);
 		// shared pref
 		session = new ManSession(getApplicationContext());
@@ -111,8 +111,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		if (session.getValues("PIC_PATH", null) == null) {
 
 			Drawable pic = null;
-			MoodleUser user = new ManContents().getUser(getResources(),
-					getApplicationContext());
+			MoodleUser user = new ManContents().getUser(getApplicationContext());
 
 			user.getProfileImageURL();
 			pic = DataAsyncTask
@@ -133,7 +132,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	private void populateUserCourses() {
 
 		// Get all the courses from current user
-		MoodleCourse[] courses = new ManContents().getUserCourses(
+		MoodleCourse[] courses = new ManContents().getCourses(
 				getResources(), getApplicationContext());
 
 		// Start populating the menus and views
@@ -447,4 +446,6 @@ public class MainActivity extends Activity implements OnClickListener,
 		return timestamp;
 	}
 
+
+	
 }

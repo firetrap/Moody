@@ -1,12 +1,9 @@
-/**
- * 
- */
 package fragments;
 
 import android.app.Fragment;
 
 /**
- * @author MoodyProject Team
+ * @author SérgioFilipe
  *
  */
 public class FragUserContacts extends Fragment {

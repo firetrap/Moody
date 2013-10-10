@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 /**
- * @author MoodyProject Team
+ * @author firetrap
  * 
  */
 public class ServiceBackground extends Service {
@@ -65,7 +65,7 @@ public class ServiceBackground extends Service {
 			try {
 				while (isRunning) {
 					Log.d("MoodyService", "entrou na thread");
-					new ManContents().getAll(getResources(),
+					new ManContents().refresh(getResources(),
 							getApplicationContext());
 					isRunning = false;
 				}
@@ -75,4 +75,6 @@ public class ServiceBackground extends Service {
 			}
 		}
 	}
+
+
 }

@@ -11,8 +11,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
- * 
- * @author MoodyProject Team
+ * @author firetrap
  *
  */
 public class ServiceAlarm extends BroadcastReceiver {

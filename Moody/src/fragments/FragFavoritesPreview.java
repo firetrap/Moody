@@ -33,7 +33,7 @@ import android.widget.TextView;
 import com.android.moody.R;
 
 /**
- * @author MoodyProject Team
+ * @author SérgioFilipe
  * 
  */
 public class FragFavoritesPreview extends Fragment {
@@ -158,7 +158,7 @@ public class FragFavoritesPreview extends Fragment {
 	 */
 	protected LinearLayout createContentRows(LinearLayout insertPoint,
 			ArrayList<Long> favorites, LayoutInflater inflater) {
-		MoodleCourse[] userCourses = new ManContents().getUserCourses(
+		MoodleCourse[] userCourses = new ManContents().getCourses(
 				getResources(), getActivity().getApplicationContext());
 
 		for (int i = 0; i < favorites.size(); i++) {
@@ -169,7 +169,7 @@ public class FragFavoritesPreview extends Fragment {
 			String courseId = Long.toString(courseInfo.getId());
 
 			MoodleCourseContent[] contents = new ManContents()
-					.getCourseContent(courseId, getResources(), getActivity()
+					.getContent(courseId, getActivity()
 							.getApplicationContext());
 
 			MoodleModule[] modules = contents[0].getMoodleModules();

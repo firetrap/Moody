@@ -33,7 +33,7 @@ import android.text.Html;
 import connections.DataAsyncTask;
 
 /**
- * @author MoodyProject Team
+ * @author firetrap
  * 
  *         This class return the requested data, the procedure is always tries
  *         to get data from cache if it doesn't exist it will download from
@@ -41,23 +41,32 @@ import connections.DataAsyncTask;
  * 
  */
 public class ManContents {
-
 	// ManSession Manager Class
 	ManSession session;
 	ManDataStore data = new ManDataStore();
 	Object getContent;
-	ServiceNotifications notifications;
+	ServiceNotifications notifications = new ServiceNotifications();
 
-	public void getAll(Resources resources, Context context) {
+	public void refresh(Resources resources, Context context) {
+		setUser(context);
+		setCourses(context);
+		for (int i = 0; i < getCourses(resources, context).length; i++) {
+			String id = Long
+					.toString(getCourses(resources, context)[i].getId());
+			setContent(id, context);
+		}
+	}
+
+	private void setUser(Context context) {
+		session = new ManSession(context);
+		String url = session.getValues(ModConstants.KEY_URL, null);
+		String token = session.getValues(ModConstants.KEY_TOKEN, null);
+		String userId = session.getValues(ModConstants.KEY_ID, null);
+		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name()
+				+ userId;
 		try {
-			setUser(resources, context);
-			setUserCourses(resources, context);
-			for (int i = 0; i < getUserCourses(resources, context).length; i++) {
-				String id = Long.toString(getUserCourses(resources, context)[i]
-						.getId());
-				setCourseContent(id, resources, context);
-			}
-
+			getContent = new DataAsyncTask().execute(url, token,
+					MoodleServices.CORE_USER_GET_USERS_BY_ID, userId).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,165 +74,34 @@ public class ManContents {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	// MOODLE DATA
-	/**
-	 * @param resources
-	 * @param context
-	 * @return MoodleUser
-	 */
-	public MoodleUser getUser(Resources resources, Context context) {
-		session = new ManSession(context);
-		String url = session.getValues(ModConstants.KEY_URL, null);
-		String token = session.getValues(ModConstants.KEY_TOKEN, null);
-		String userId = session.getValues(ModConstants.KEY_ID, null);
-		try {
-
-			String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name()
-					+ userId;
-
-			if (isInCache(context, fileName)) {
-				return (MoodleUser) data.getData(context, fileName);
-			} else {
-				getContent = new DataAsyncTask().execute(url, token,
-						MoodleServices.CORE_USER_GET_USERS_BY_ID, userId).get();
-				data.storeData(context, getContent, fileName);
-				return (MoodleUser) getContent;
-			}
-
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
+		data.storeData(context, getContent, fileName);
 
 	}
 
-	/**
-	 * 
-	 * Create and store in cache for future access a file with the user info
-	 * 
-	 * @param resources
-	 * @param context
-	 * @throws InterruptedException
-	 * @throws ExecutionException
-	 */
-	private void setUser(Resources resources, Context context)
-			throws InterruptedException, ExecutionException {
+	public MoodleUser getUser(Context context) {
 		session = new ManSession(context);
-		String url = session.getValues(ModConstants.KEY_URL, null);
-		String token = session.getValues(ModConstants.KEY_TOKEN, null);
 		String userId = session.getValues(ModConstants.KEY_ID, null);
-
 		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name()
 				+ userId;
 
-		getContent = new DataAsyncTask().execute(url, token,
-				MoodleServices.CORE_USER_GET_USERS_BY_ID, userId).get();
-		data.storeData(context, getContent, fileName);
-
-	}
-
-	/**
-	 * @param resources
-	 * @param context
-	 * @return MoodleCourse[]
-	 */
-	public MoodleCourse[] getUserCourses(Resources resources, Context context) {
-		session = new ManSession(context);
-		String url = session.getValues(ModConstants.KEY_URL, null);
-		String token = session.getValues(ModConstants.KEY_TOKEN, null);
-		String userId = session.getValues(ModConstants.KEY_ID, null);
-
-		try {
-
-			String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES
-					.name() + userId;
-
-			if (isInCache(context, fileName)) {
-				return (MoodleCourse[]) data.getData(context, fileName);
-			} else {
-				getContent = new DataAsyncTask().execute(url, token,
-						MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId)
-						.get();
-				data.storeData(context, getContent, fileName);
-				return (MoodleCourse[]) getContent;
-			}
-
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (!isInCache(context, fileName)) {
+			setUser(context);
 		}
 
-		return null;
-
+		return (MoodleUser) data.getData(context, fileName);
 	}
 
-	/**
-	 * 
-	 * Create and store in cache for future access a file with the user courses
-	 * 
-	 * @param resources
-	 * @param context
-	 * @throws InterruptedException
-	 * @throws ExecutionException
-	 */
-	private void setUserCourses(Resources resources, Context context)
-			throws InterruptedException, ExecutionException {
+	private void setCourses(Context context) {
 		session = new ManSession(context);
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
 		String userId = session.getValues(ModConstants.KEY_ID, null);
-
 		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name()
 				+ userId;
 
-		getContent = new DataAsyncTask().execute(url, token,
-				MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
-		data.storeData(context, getContent, fileName);
-
-	}
-
-	/**
-	 * @param courseId
-	 * @param resources
-	 * @param context
-	 * 
-	 * @return All course contents, in another words returns an array with all
-	 *         topics
-	 * @return MoodleCourseContent[]
-	 */
-	public MoodleCourseContent[] getCourseContent(String courseId,
-			Resources resources, Context context) {
-
-		session = new ManSession(context);
-		String url = session.getValues(ModConstants.KEY_URL, null);
-		String token = session.getValues(ModConstants.KEY_TOKEN, null);
-
 		try {
-
-			String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name()
-					+ courseId;
-
-			if (isInCache(context, fileName)) {
-
-				return (MoodleCourseContent[]) data.getData(context, fileName);
-			} else {
-				getContent = new DataAsyncTask().execute(url, token,
-						MoodleServices.CORE_COURSE_GET_CONTENTS, courseId)
-						.get();
-				data.storeData(context, getContent, fileName);
-				return (MoodleCourseContent[]) getContent;
-			}
-
+			getContent = new DataAsyncTask().execute(url, token,
+					MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -231,25 +109,24 @@ public class ManContents {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return null;
+		data.storeData(context, getContent, fileName);
 
 	}
 
-	/**
-	 * 
-	 * Create and store in cache for future access a file with the course
-	 * contents
-	 * 
-	 * @param courseId
-	 * @param resources
-	 * @param context
-	 * @throws InterruptedException
-	 * @throws ExecutionException
-	 */
-	private void setCourseContent(String courseId, Resources resources,
-			Context context) throws InterruptedException, ExecutionException {
+	public MoodleCourse[] getCourses(Resources resources, Context context) {
+		session = new ManSession(context);
+		String userId = session.getValues(ModConstants.KEY_ID, null);
+		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name()
+				+ userId;
 
+		if (!isInCache(context, fileName)) {
+			setCourses(context);
+		}
+
+		return (MoodleCourse[]) data.getData(context, fileName);
+	}
+
+	private void setContent(String courseId, Context context) {
 		session = new ManSession(context);
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
@@ -257,18 +134,57 @@ public class ManContents {
 		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name()
 				+ courseId;
 
-		getContent = new DataAsyncTask().execute(url, token,
-				MoodleServices.CORE_COURSE_GET_CONTENTS, courseId).get();
+		try {
+			getContent = new DataAsyncTask().execute(url, token,
+					MoodleServices.CORE_COURSE_GET_CONTENTS, courseId).get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (isInCache(context, fileName)) {
+			notifications.hasNewContent(context, getContent, fileName);
+		}
 
-		hasNewContent(resources, context, getContent, fileName);
 		data.storeData(context, getContent, fileName);
+	}
 
+	public MoodleCourseContent[] getContent(String courseId, Context context) {
+		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name()
+				+ courseId;
+
+		if (!isInCache(context, fileName)) {
+			setContent(courseId, context);
+		}
+
+		return (MoodleCourseContent[]) data.getData(context, fileName);
 	}
 
 	/**
-	 * <p>
+	 * @param topicId
+	 * @param courseContent
+	 * 
+	 * @return a single topic from a course
+	 * @return MoodleCourseContent
+	 */
+	public MoodleCourseContent getTopic(Long topicId,
+			MoodleCourseContent[] courseContent) {
+		for (int j = 0; j < courseContent.length; j++) {
+			if (courseContent[j].getId() == topicId) {
+				return courseContent[j];
+			}
+
+		}
+		return null;
+	}
+
+	
+	/**
+	 * 
 	 * Method that gets the contacts of the user
-	 * </p>
+	 * 
 	 * 
 	 * @param resources
 	 * @param context
@@ -307,9 +223,9 @@ public class ManContents {
 	}
 
 	/**
-	 * <p>
+	 * 
 	 * Method to that perform actions on the contact provided an id
-	 * </p>
+	 * 
 	 * 
 	 * @param resources
 	 * @param context
@@ -324,9 +240,9 @@ public class ManContents {
 	}
 
 	/**
-	 * <p>
+	 * 
 	 * Method to that perform actions on the contact provided an a list of ids
-	 * </p>
+	 * 
 	 * 
 	 * @param resources
 	 * @param context
@@ -353,9 +269,9 @@ public class ManContents {
 	}
 
 	/**
-	 * <p>
+	 * 
 	 * Method that deletes the contact provided its id
-	 * </p>
+	 * 
 	 * 
 	 * @param resources
 	 * @param context
@@ -367,9 +283,9 @@ public class ManContents {
 	}
 
 	/**
-	 * <p>
+	 * 
 	 * Method that deletes the contacts provided a list of ids
-	 * </p>
+	 * 
 	 * 
 	 * @param resources
 	 * @param context
@@ -381,9 +297,9 @@ public class ManContents {
 	}
 
 	/**
-	 * <p>
+	 * 
 	 * Method that creates the contact provided its id
-	 * </p>
+	 * 
 	 * 
 	 * @param resources
 	 * @param context
@@ -395,9 +311,9 @@ public class ManContents {
 	}
 
 	/**
-	 * <p>
+	 * 
 	 * Method that creates the contacts provided a list of ids
-	 * </p>
+	 * 
 	 * 
 	 * @param resources
 	 * @param context
@@ -409,9 +325,9 @@ public class ManContents {
 	}
 
 	/**
-	 * <p>
+	 * 
 	 * Method that blocks the contact provided its id
-	 * </p>
+	 * 
 	 * 
 	 * @param resources
 	 * @param context
@@ -423,9 +339,9 @@ public class ManContents {
 	}
 
 	/**
-	 * <p>
+	 * 
 	 * Method that blocks the contacts provided a list of ids
-	 * </p>
+	 * 
 	 * 
 	 * @param resources
 	 * @param context
@@ -437,9 +353,9 @@ public class ManContents {
 	}
 
 	/**
-	 * <p>
+	 * 
 	 * Method that ublocks the contact provided its id
-	 * </p>
+	 * 
 	 * 
 	 * @param resources
 	 * @param context
@@ -451,9 +367,9 @@ public class ManContents {
 	}
 
 	/**
-	 * <p>
+	 * 
 	 * Method that unblocks the contact provided its id
-	 * </p>
+	 * 
 	 * 
 	 * @param resources
 	 * @param context
@@ -463,25 +379,7 @@ public class ManContents {
 	public void unblockContacts(Resources resources, Context context, Long[] ids) {
 		actionContacts(resources, context, ids, MoodleRestAction.UNBLOCK);
 	}
-
-	/**
-	 * @param topicId
-	 * @param courseContent
-	 * 
-	 * @return a single topic from a course
-	 * @return MoodleCourseContent
-	 */
-	public MoodleCourseContent getTopic(Long topicId,
-			MoodleCourseContent[] courseContent) {
-		for (int j = 0; j < courseContent.length; j++) {
-			if (courseContent[j].getId() == topicId) {
-				return courseContent[j];
-			}
-
-		}
-		return null;
-	}
-
+	
 	// MOODLE SPECIFIC INDEX.HTML GET CONTENT
 	/**
 	 * @param context
@@ -662,23 +560,5 @@ public class ManContents {
 		return !(content == null) ? true : false;
 	}
 
-	private void hasNewContent(Resources resources, Context context,
-			Object newContent, String fileName) {
-
-		notifications = new ServiceNotifications(context);
-
-		MoodleCourseContent[] oldObj = (MoodleCourseContent[]) data.getData(
-				context, fileName);
-		MoodleCourseContent[] newObj = (MoodleCourseContent[]) newContent;
-
-		if (oldObj != null && newObj != null) {
-			if (oldObj.length == newObj.length) {
-				notifications.sendNotification();
-			}
-
-			// return Arrays.equals(oldObj, newObj) ? false : true;
-		}
-
-	}
-
+	
 }

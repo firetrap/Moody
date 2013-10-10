@@ -28,7 +28,7 @@ import android.widget.Button;
 import com.android.moody.R;
 
 /**
- * @author MoodyProject Team
+ * @author firetrap
  * 
  */
 public class FragUserPicture extends DialogFragment {

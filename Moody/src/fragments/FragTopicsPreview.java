@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.android.moody.R;
 
 /**
- * @author MoodyProject Team
+ * @author firetrap
  * 
  */
 public class FragTopicsPreview extends Fragment {
@@ -124,7 +124,7 @@ public class FragTopicsPreview extends Fragment {
 			LinearLayout insertPoint, String courseId) {
 
 		final MoodleCourseContent[] courseContent = new ManContents()
-				.getCourseContent(courseId, getResources(), getActivity()
+				.getContent(courseId, getActivity()
 						.getApplicationContext());
 
 		for (int j = 0; j < courseContent.length; j++) {

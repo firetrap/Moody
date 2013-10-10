@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.android.moody.R;
 
 /**
- * @author MoodyProject Team
+ * @author firetrap
  * 
  */
 public class FragTopics extends Fragment {
@@ -48,7 +48,7 @@ public class FragTopics extends Fragment {
 		courseName = getArguments().getString("courseName");
 
 		MoodleCourseContent[] courseTopics = new ManContents()
-				.getCourseContent(courseId, getResources(), getActivity()
+				.getContent(courseId, getActivity()
 						.getApplicationContext());
 
 		MoodleCourseContent singleTopic = new ManContents().getTopic(topicId,

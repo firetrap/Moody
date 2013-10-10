@@ -6,8 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 /**
- * 
- * @author MoodyProject Team
+ * @author firetrap
  *
  */
 public class StartServiceReceiver extends BroadcastReceiver {

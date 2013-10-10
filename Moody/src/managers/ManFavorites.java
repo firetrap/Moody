@@ -9,8 +9,7 @@ import android.content.res.Resources;
 import com.android.moody.R;
 
 /**
- * 
- * @author MoodyProject Team
+ * @author SérgioFilipe
  *
  */
 public class ManFavorites {
