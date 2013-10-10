@@ -11,7 +11,7 @@ import android.view.View;
 import com.android.moody.R;
 
 /**
- * @author MoodyProject Team
+ * @author firetrap
  * 
  */
 public class LoadingActivity extends Activity {
