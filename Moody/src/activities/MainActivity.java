@@ -1,6 +1,7 @@
 package activities;
 
 import fragments.FragFavoritesPreview;
+import fragments.FragTopics;
 import fragments.FragTopicsPreview;
 import fragments.FragUserCloud;
 import fragments.FragUserPicture;
@@ -39,6 +40,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
@@ -68,8 +70,8 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void onCreate(Bundle savedInstanceState) {
 		startTime = System.currentTimeMillis();
 		super.onCreate(savedInstanceState);
-//		startService(new Intent(getApplicationContext(),
-//				ServiceBackground.class));
+		// startService(new Intent(getApplicationContext(),
+		// ServiceBackground.class));
 		setContentView(R.layout.activity_main);
 		// shared pref
 		session = new ManSession(getApplicationContext());
@@ -78,15 +80,50 @@ public class MainActivity extends Activity implements OnClickListener,
 		populateFullName();
 		populateUserCourses();
 		populateUserPicture();
+		receiveNotification();
 
-		// When its created it will get any course to populate the main
-		// fragment
+	}
 
-		Entry<String, String> course = organizedCourses.entrySet().iterator()
-				.next();
-		int courseId = Integer.parseInt(course.getKey());
-		Button btnTag = (Button) findViewById(courseId);
-		btnTag.performClick();
+	/**
+	 * 
+	 */
+	private void receiveNotification() {
+
+		if (getIntent().getFlags() == R.id.MOODY_NOTIFICATION_ACTION_TOPIC) {
+			int courseId2 = getIntent().getFlags();
+			Button btnTag2 = (Button) findViewById(courseId2);
+			btnTag2.performClick();
+		} else if (getIntent().getFlags() == R.id.MOODY_NOTIFICATION_ACTION_MODULE) {
+			String courseId = getIntent().getExtras().getString("courseId");
+			String courseName = getIntent().getExtras().getString("courseName");
+			String topicId = getIntent().getExtras().getString("topicId");
+
+			Bundle bundle = new Bundle();
+			bundle.putString("courseId", courseId);
+			bundle.putString("courseName", courseName);
+			bundle.putString("topicId", topicId);
+
+			FragmentManager fragmentManager = getFragmentManager();
+			FragmentTransaction fragmentTransaction = fragmentManager
+					.beginTransaction();
+
+			FragTopics insideTopicsFrag = new FragTopics();
+			insideTopicsFrag.setArguments(bundle);
+			fragmentTransaction.addToBackStack(null);
+			fragmentTransaction.replace(R.id.mainFragment, insideTopicsFrag);
+			fragmentTransaction.commit();
+		} else {
+			// When its created it will get any course to populate the main
+			// fragment
+
+			Entry<String, String> course = organizedCourses.entrySet()
+					.iterator().next();
+			int startUpCourseId = Integer.parseInt(course.getKey());
+			Button btnTag = (Button) findViewById(startUpCourseId);
+			btnTag.performClick();
+		}
+
+	
 
 	}
 
@@ -111,7 +148,8 @@ public class MainActivity extends Activity implements OnClickListener,
 		if (session.getValues("PIC_PATH", null) == null) {
 
 			Drawable pic = null;
-			MoodleUser user = new ManContents().getUser(getApplicationContext());
+			MoodleUser user = new ManContents()
+					.getUser(getApplicationContext());
 
 			user.getProfileImageURL();
 			pic = DataAsyncTask
@@ -132,8 +170,8 @@ public class MainActivity extends Activity implements OnClickListener,
 	private void populateUserCourses() {
 
 		// Get all the courses from current user
-		MoodleCourse[] courses = new ManContents().getCourses(
-				getResources(), getApplicationContext());
+		MoodleCourse[] courses = new ManContents()
+				.getCourses(getApplicationContext());
 
 		// Start populating the menus and views
 		LayoutInflater inflater = (LayoutInflater) this
@@ -446,6 +484,4 @@ public class MainActivity extends Activity implements OnClickListener,
 		return timestamp;
 	}
 
-
-	
 }

@@ -47,13 +47,13 @@ public class ManContents {
 	Object getContent;
 	ServiceNotifications notifications = new ServiceNotifications();
 
-	public void refresh(Resources resources, Context context) {
+	public void refresh(Context context) {
 		setUser(context);
 		setCourses(context);
-		for (int i = 0; i < getCourses(resources, context).length; i++) {
-			String id = Long
-					.toString(getCourses(resources, context)[i].getId());
-			setContent(id, context);
+		for (int i = 0; i < getCourses(context).length; i++) {
+			String courseId = Long.toString(getCourses(context)[i].getId());
+			String courseName = getCourses(context)[i].getFullname();
+			setContent(courseName, courseId, context);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class ManContents {
 
 	}
 
-	public MoodleCourse[] getCourses(Resources resources, Context context) {
+	public MoodleCourse[] getCourses(Context context) {
 		session = new ManSession(context);
 		String userId = session.getValues(ModConstants.KEY_ID, null);
 		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name()
@@ -126,7 +126,7 @@ public class ManContents {
 		return (MoodleCourse[]) data.getData(context, fileName);
 	}
 
-	private void setContent(String courseId, Context context) {
+	private void setContent(String courseName, String courseId, Context context) {
 		session = new ManSession(context);
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
@@ -144,8 +144,9 @@ public class ManContents {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (isInCache(context, fileName)) {
-			notifications.hasNewContent(context, getContent, fileName);
+		if (isInCache(context, fileName) && courseName != null) {
+			notifications.hasNewContent(context, getContent, fileName,
+					courseName, courseId);
 		}
 
 		data.storeData(context, getContent, fileName);
@@ -156,7 +157,7 @@ public class ManContents {
 				+ courseId;
 
 		if (!isInCache(context, fileName)) {
-			setContent(courseId, context);
+			setContent(null, courseId, context);
 		}
 
 		return (MoodleCourseContent[]) data.getData(context, fileName);
@@ -180,7 +181,6 @@ public class ManContents {
 		return null;
 	}
 
-	
 	/**
 	 * 
 	 * Method that gets the contacts of the user
@@ -379,7 +379,7 @@ public class ManContents {
 	public void unblockContacts(Resources resources, Context context, Long[] ids) {
 		actionContacts(resources, context, ids, MoodleRestAction.UNBLOCK);
 	}
-	
+
 	// MOODLE SPECIFIC INDEX.HTML GET CONTENT
 	/**
 	 * @param context
@@ -560,5 +560,4 @@ public class ManContents {
 		return !(content == null) ? true : false;
 	}
 
-	
 }

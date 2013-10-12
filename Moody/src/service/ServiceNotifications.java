@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
@@ -18,28 +19,47 @@ import com.android.moody.R;
 
 /**
  * @author firetrap
- *
+ * 
  */
 public class ServiceNotifications {
 
 	ManDataStore data = new ManDataStore();
 	boolean notify = false;
 
-	private void sendNotification(Context context) {
+
+	
+	
+	/**
+	 * @param context
+	 * @param contentText
+	 * @param courseName
+	 * @param courseId
+	 * @param topicId
+	 * @param actionModule
+	 */
+	private void sendNotification(Context context, String contentText,
+			String courseName, String courseId, String topicId, int actionModule) {
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(
 				context)
 				.setSmallIcon(R.drawable.notification_icon)
-				.setContentTitle("ServiceNotifications Example")
-				.setContentText("This is a test notification")
+				.setContentTitle("New contents")
+				.setContentText(contentText)
+				.setTicker("New contents in " + courseName)
+				.setContentInfo(courseName)
 				.setSound(
 						Uri.parse(sharedPrefs.getString(
 								"notifications_new_message_ringtone", "NULL")))
 				.setAutoCancel(true);
 
 		Intent notificationIntent = new Intent(context, MainActivity.class);
+		notificationIntent.setFlags(actionModule);
+		notificationIntent.putExtra("courseId", courseId);
+		notificationIntent.putExtra("courseName", courseName);
+		notificationIntent.putExtra("topicId", topicId);
+
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 				notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		builder.setContentIntent(contentIntent);
@@ -57,58 +77,56 @@ public class ServiceNotifications {
 		manager.cancel(0);
 	}
 
-	/**
-	 * @param resources
-	 * @param context
-	 * @param newCourse
-	 * @param fileName
-	 */
-	public void hasNewContent(Context context, Object newCourse, String fileName) {
+	public void hasNewContent(Context context, Object newCourse,
+			String fileName, String courseName, String courseId) {
 
 		MoodleCourseContent[] oldObj = (MoodleCourseContent[]) data.getData(
 				context, fileName);
 		MoodleCourseContent[] newObj = (MoodleCourseContent[]) newCourse;
 
 		if (oldObj != null && newObj != null) {
-			notify = checkTopics(notify, oldObj, newObj);
+			checkTopics(context, courseName, courseId, oldObj, newObj);
 		}
-		if (notify == true) {
-			sendNotification(context);
-			notify = false;
-		}
+
 	}
 
 	/**
-	 * @param notify
+	 * @param context
+	 * @param courseName
+	 * @param courseId
 	 * @param oldObj
 	 * @param newObj
-	 * @return
 	 */
-	private boolean checkTopics(boolean notify, MoodleCourseContent[] oldObj,
+	private void checkTopics(Context context, String courseName,
+			String courseId, MoodleCourseContent[] oldObj,
 			MoodleCourseContent[] newObj) {
 		if (oldObj.length == newObj.length) {
 			// TOPICS LOOP
 			for (int i = 0; i < newObj.length; i++) {
 				// CHECK IF THE TOPIC AREN'T NULL
 				if (newObj[i] != null && oldObj[i] != null) {
-					notify = checkModules(notify, oldObj, newObj, i);
+					checkModules(context, courseName, courseId,
+							Long.toString(newObj[i].getId()), oldObj, newObj, i);
 				}
 			}
 		} else {
 			// ELSE NEW TOPICS
-			notify = true;
+			sendNotification(context, "New topics in your course", courseName,
+					courseId, "", R.id.MOODY_NOTIFICATION_ACTION_TOPIC);
+
 		}
-		return notify;
 	}
 
 	/**
-	 * @param notify
+	 * @param context
+	 * @param courseName
+	 * @param courseId
 	 * @param oldObj
 	 * @param newObj
 	 * @param i
-	 * @return
 	 */
-	private boolean checkModules(boolean notify, MoodleCourseContent[] oldObj,
+	private void checkModules(Context context, String courseName,
+			String courseId, String topicId, MoodleCourseContent[] oldObj,
 			MoodleCourseContent[] newObj, int i) {
 		MoodleModule[] oldModule = oldObj[i].getMoodleModules();
 		MoodleModule[] newModule = newObj[i].getMoodleModules();
@@ -117,24 +135,36 @@ public class ServiceNotifications {
 			// MODULES LOOP
 			if (oldModule.length == newModule.length) {
 				for (int j = 0; j < newModule.length; j++) {
-					notify = checkContent(notify, oldModule, newModule, j);
+					checkContents(context, courseName, courseId, topicId,
+							oldModule, newModule, j);
 				}
 			} else {
-				// ELSE NEW MODULES
-				notify = true;
+				String contentName = "";
+				for (int j = 0; j < newModule.length; j++) {
+					if (j >= oldModule.length) {
+						contentName += newModule[j].getName() + "\n";
+					}
+				}
+
+				sendNotification(context, "New contents in your course",
+						courseName, courseId, topicId,
+						R.id.MOODY_NOTIFICATION_ACTION_MODULE);
+
 			}
 		}
-		return notify;
 	}
 
 	/**
-	 * @param notify
+	 * @param context
+	 * @param courseName
+	 * @param topicId
+	 * @param topicId
 	 * @param oldModule
 	 * @param newModule
 	 * @param j
-	 * @return
 	 */
-	private boolean checkContent(boolean notify, MoodleModule[] oldModule,
+	private void checkContents(Context context, String courseName,
+			String courseId, String topicId, MoodleModule[] oldModule,
 			MoodleModule[] newModule, int j) {
 		MoodleModuleContent[] oldContent = oldModule[j].getContent();
 		MoodleModuleContent[] newContent = newModule[j].getContent();
@@ -145,11 +175,18 @@ public class ServiceNotifications {
 			if (oldContent.length == newContent.length) {
 
 			} else {
-				// ELSE NEW CONTENTS
-				notify = true;
+				String contentName = "";
+				for (int k = 0; k < newContent.length; k++) {
+					if (k >= oldContent.length) {
+						contentName += newContent[k].getFilename() + "\n";
+					}
+
+				}
+				sendNotification(context, "New contents in your course",
+						courseName, courseId, topicId,
+						R.id.MOODY_NOTIFICATION_ACTION_MODULE);
 			}
 		}
-		return notify;
 	}
 
 }

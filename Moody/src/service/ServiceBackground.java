@@ -65,8 +65,7 @@ public class ServiceBackground extends Service {
 			try {
 				while (isRunning) {
 					Log.d("MoodyService", "entrou na thread");
-					new ManContents().refresh(getResources(),
-							getApplicationContext());
+					new ManContents().refresh(getApplicationContext());
 					isRunning = false;
 				}
 				stopSelf();
@@ -75,6 +74,5 @@ public class ServiceBackground extends Service {
 			}
 		}
 	}
-
 
 }
