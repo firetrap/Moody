@@ -45,7 +45,7 @@ public class ManContents {
 	ManSession session;
 	ManDataStore data = new ManDataStore();
 	Object getContent;
-	ServiceNotifications notifications = new ServiceNotifications();
+	ServiceNotifications notifications;
 
 	public void refresh(Context context) {
 		setUser(context);
@@ -145,8 +145,9 @@ public class ManContents {
 			e.printStackTrace();
 		}
 		if (isInCache(context, fileName) && courseName != null) {
-			notifications.hasNewContent(context, getContent, fileName,
-					courseName, courseId);
+			notifications = new ServiceNotifications(context, courseName,
+					courseId);
+			notifications.hasNewContent(getContent, fileName);
 		}
 
 		data.storeData(context, getContent, fileName);

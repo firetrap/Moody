@@ -24,11 +24,17 @@ import com.android.moody.R;
 public class ServiceNotifications {
 
 	ManDataStore data = new ManDataStore();
-	boolean notify = false;
+	Context context;
+	String courseName;
+	String courseId;
 
+	public ServiceNotifications(Context context, String courseName,
+			String courseId) {
+		this.context = context;
+		this.courseName = courseName;
+		this.courseId = courseId;
+	}
 
-	
-	
 	/**
 	 * @param context
 	 * @param contentText
@@ -37,8 +43,8 @@ public class ServiceNotifications {
 	 * @param topicId
 	 * @param actionModule
 	 */
-	private void sendNotification(Context context, String contentText,
-			String courseName, String courseId, String topicId, int actionModule) {
+	private void sendNotification(String contentText, String topicId,
+			int actionModule) {
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 
@@ -77,8 +83,7 @@ public class ServiceNotifications {
 		manager.cancel(0);
 	}
 
-	public void hasNewContent(Context context, Object newCourse,
-			String fileName, String courseName, String courseId) {
+	public void hasNewContent(Object newCourse, String fileName) {
 
 		MoodleCourseContent[] oldObj = (MoodleCourseContent[]) data.getData(
 				context, fileName);
@@ -105,14 +110,14 @@ public class ServiceNotifications {
 			for (int i = 0; i < newObj.length; i++) {
 				// CHECK IF THE TOPIC AREN'T NULL
 				if (newObj[i] != null && oldObj[i] != null) {
-					checkModules(context, courseName, courseId,
-							Long.toString(newObj[i].getId()), oldObj, newObj, i);
+					checkModules(Long.toString(newObj[i].getId()), oldObj,
+							newObj, i);
 				}
 			}
 		} else {
 			// ELSE NEW TOPICS
-			sendNotification(context, "New topics in your course", courseName,
-					courseId, "", R.id.MOODY_NOTIFICATION_ACTION_TOPIC);
+			sendNotification("New topics in your course", "",
+					R.id.MOODY_NOTIFICATION_ACTION_TOPIC);
 
 		}
 	}
@@ -125,8 +130,7 @@ public class ServiceNotifications {
 	 * @param newObj
 	 * @param i
 	 */
-	private void checkModules(Context context, String courseName,
-			String courseId, String topicId, MoodleCourseContent[] oldObj,
+	private void checkModules(String topicId, MoodleCourseContent[] oldObj,
 			MoodleCourseContent[] newObj, int i) {
 		MoodleModule[] oldModule = oldObj[i].getMoodleModules();
 		MoodleModule[] newModule = newObj[i].getMoodleModules();
@@ -135,8 +139,7 @@ public class ServiceNotifications {
 			// MODULES LOOP
 			if (oldModule.length == newModule.length) {
 				for (int j = 0; j < newModule.length; j++) {
-					checkContents(context, courseName, courseId, topicId,
-							oldModule, newModule, j);
+					checkContents(topicId, oldModule, newModule, j);
 				}
 			} else {
 				String contentName = "";
@@ -146,8 +149,7 @@ public class ServiceNotifications {
 					}
 				}
 
-				sendNotification(context, "New contents in your course",
-						courseName, courseId, topicId,
+				sendNotification("New contents in your course", topicId,
 						R.id.MOODY_NOTIFICATION_ACTION_MODULE);
 
 			}
@@ -163,8 +165,7 @@ public class ServiceNotifications {
 	 * @param newModule
 	 * @param j
 	 */
-	private void checkContents(Context context, String courseName,
-			String courseId, String topicId, MoodleModule[] oldModule,
+	private void checkContents(String topicId, MoodleModule[] oldModule,
 			MoodleModule[] newModule, int j) {
 		MoodleModuleContent[] oldContent = oldModule[j].getContent();
 		MoodleModuleContent[] newContent = newModule[j].getContent();
@@ -182,8 +183,7 @@ public class ServiceNotifications {
 					}
 
 				}
-				sendNotification(context, "New contents in your course",
-						courseName, courseId, topicId,
+				sendNotification("New contents in your course", topicId,
 						R.id.MOODY_NOTIFICATION_ACTION_MODULE);
 			}
 		}
