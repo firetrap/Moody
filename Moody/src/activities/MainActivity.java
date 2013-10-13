@@ -517,8 +517,9 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		case R.id.action_refresh:
 
-			this.startService(new Intent(this, ServiceBackground.class));
+			startService(new Intent(this, ServiceBackground.class));
 
+			startActivity(new Intent(this, MainActivity.class));
 			break;
 
 		default:

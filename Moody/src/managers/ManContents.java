@@ -54,6 +54,7 @@ public class ManContents {
 	}
 
 	public void refresh() {
+		setContacts();
 		setUser();
 		setCourses();
 		for (int i = 0; i < getCourses().length; i++) {
