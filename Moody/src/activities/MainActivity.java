@@ -41,7 +41,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 import bitmap.BitmapResizer;
 
 import com.android.moody.R;
@@ -231,11 +230,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 					dialog.dismiss();
 
-					Toast.makeText(
-							getApplicationContext(),
-							getResources().getString(
-									R.string.favorites_added_message),
-							Toast.LENGTH_SHORT).show();
+					
 
 					onCoursesClick(view);
 					break;
@@ -361,9 +356,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		String courseName = organizedCourses.get(Integer.toString(v.getId()));
 		String courseId = Integer.toString(v.getId());
-		Toast.makeText(getApplicationContext(),
-				"Curso-> " + courseName + " ID-> " + v.getId(),
-				Toast.LENGTH_SHORT).show();
+		
 
 		Bundle bundle = new Bundle();
 		bundle.putString("courseName", courseName);

@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.moody.R;
 
@@ -196,11 +195,7 @@ public class FragTopicsPreview extends Fragment {
 				String courseName = courseContent[contentIdx].getName();
 				String topicId = (String) v.getTag();
 
-				Toast.makeText(
-						getActivity().getApplicationContext(),
-						" COURSE ID-> " + courseId + " TOPIC ID-> " + topicId
-								+ "COURSE NAME ->" + courseName,
-						Toast.LENGTH_SHORT).show();
+		
 
 				Bundle bundle = new Bundle();
 				bundle.putString("courseId", courseId);

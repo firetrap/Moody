@@ -36,7 +36,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.moody.R;
 
@@ -82,9 +81,7 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		session = new ManSession(getApplicationContext());
-		Toast.makeText(getApplicationContext(),
-				"User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG)
-				.show();
+		
 
 		if (session.isLoggedIn()) {
 			final Intent intent = new Intent(getApplicationContext(),
@@ -374,11 +371,10 @@ public class LoginActivity extends Activity {
 				getApplicationContext().startService(
 						new Intent(getApplicationContext(),
 								ServiceBackground.class));
-				
-				
+
 				SystemClock.sleep(3000);
 				Intent intent = new Intent(getApplicationContext(),
-						MainActivity.class);				
+						MainActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 				finish();
