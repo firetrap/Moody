@@ -230,8 +230,6 @@ public class MainActivity extends Activity implements OnClickListener,
 
 					dialog.dismiss();
 
-					
-
 					onCoursesClick(view);
 					break;
 
@@ -279,7 +277,7 @@ public class MainActivity extends Activity implements OnClickListener,
 						session.logoutUser();
 
 						// limpa cache ao fazer logout.
-						new ManDataStore().deleteCache(getApplicationContext());
+						new ManDataStore(getApplicationContext()).deleteCache();
 
 						Intent intent = new Intent(getApplicationContext(),
 								LoginActivity.class);
@@ -356,7 +354,6 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		String courseName = organizedCourses.get(Integer.toString(v.getId()));
 		String courseId = Integer.toString(v.getId());
-		
 
 		Bundle bundle = new Bundle();
 		bundle.putString("courseName", courseName);
@@ -452,7 +449,7 @@ public class MainActivity extends Activity implements OnClickListener,
 					public void onClick(DialogInterface dialog, int which) {
 						session.logoutUser();
 						// limpa cache ao fazer logout.
-						new ManDataStore().deleteCache(getApplicationContext());
+						new ManDataStore(getApplicationContext()).deleteCache();
 						finish();
 						android.os.Process.killProcess(android.os.Process
 								.myPid());

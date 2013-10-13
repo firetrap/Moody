@@ -42,13 +42,15 @@ import connections.DataAsyncTask;
 public class ManContents {
 	// ManSession Manager Class
 	ManSession session;
-	ManDataStore data = new ManDataStore();
 	Object getContent;
 	ServiceNotifications notifications;
 	Context context;
+	ManDataStore data;
 
 	public ManContents(Context context) {
 		this.context = context;
+		this.data = new ManDataStore(context);
+
 	}
 
 	public void refresh() {
@@ -78,7 +80,7 @@ public class ManContents {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		data.storeData(context, getContent, fileName);
+		data.storeData(getContent, fileName);
 
 	}
 
@@ -92,7 +94,7 @@ public class ManContents {
 			setUser();
 		}
 
-		return (MoodleUser) data.getData(context, fileName);
+		return (MoodleUser) data.getData(fileName);
 	}
 
 	private void setCourses() {
@@ -113,7 +115,7 @@ public class ManContents {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		data.storeData(context, getContent, fileName);
+		data.storeData(getContent, fileName);
 
 	}
 
@@ -127,7 +129,7 @@ public class ManContents {
 			setCourses();
 		}
 
-		return (MoodleCourse[]) data.getData(context, fileName);
+		return (MoodleCourse[]) data.getData(fileName);
 	}
 
 	private void setContent(String courseName, String courseId) {
@@ -154,7 +156,7 @@ public class ManContents {
 			notifications.hasNewContent(getContent, fileName);
 		}
 
-		data.storeData(context, getContent, fileName);
+		data.storeData(getContent, fileName);
 	}
 
 	public MoodleCourseContent[] getContent(String courseId) {
@@ -165,7 +167,7 @@ public class ManContents {
 			setContent(null, courseId);
 		}
 
-		return (MoodleCourseContent[]) data.getData(context, fileName);
+		return (MoodleCourseContent[]) data.getData(fileName);
 	}
 
 	/**
@@ -208,11 +210,11 @@ public class ManContents {
 			String fileName = MoodleServices.CORE_MESSAGE_GET_CONTACTS.name();
 
 			if (isInCache(fileName))
-				return (MoodleContact[]) data.getData(context, fileName);
+				return (MoodleContact[]) data.getData(fileName);
 			else {
 				getContent = new DataAsyncTask().execute(url, token,
 						MoodleServices.CORE_MESSAGE_GET_CONTACTS, null).get();
-				data.storeData(context, getContent, fileName);
+				data.storeData(getContent, fileName);
 				return (MoodleContact[]) getContent;
 			}
 
@@ -398,9 +400,8 @@ public class ManContents {
 			getFile(fileUrl, fileName);
 		}
 
-		doc = Jsoup
-				.parse((String) new ManDataStore().getData(context, fileName),
-						"UTF-8");
+		doc = Jsoup.parse((String) new ManDataStore(context).getData(fileName),
+				"UTF-8");
 		if (!(doc.outerHtml().contains("src"))) {
 
 		} else {
@@ -434,7 +435,7 @@ public class ManContents {
 				outPut += inputLine;
 			}
 			Object toStore = outPut;
-			new ManDataStore().storeData(context, toStore, fileName);
+			new ManDataStore(context).storeData(toStore, fileName);
 			br.close();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -559,7 +560,7 @@ public class ManContents {
 	 * @return boolean
 	 */
 	public boolean isInCache(String fileName) {
-		Object content = new ManDataStore().getData(context, fileName);
+		Object content = new ManDataStore(context).getData(fileName);
 		return !(content == null) ? true : false;
 	}
 

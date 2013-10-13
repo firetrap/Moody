@@ -16,12 +16,13 @@ public class ManFavorites {
 
 	// ManSession Manager Class
 	ManSession session;
-	ManDataStore data = new ManDataStore();
 	Object getContent;
 	Context context;
+	ManDataStore data;
 
 	public ManFavorites(Context context) {
 		this.context = context;
+		this.data=new ManDataStore(context);
 	}
 
 	public void insertFavorite(long id) {
@@ -52,7 +53,7 @@ public class ManFavorites {
 
 		}
 
-		new ManDataStore().storeData(context, idList, fileName);
+		data.storeData(idList, fileName);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,8 +64,7 @@ public class ManFavorites {
 				R.string.favorites_file_name)
 				+ userId;
 
-		return (isInCache(fileName)) ? (ArrayList<Long>) data.getData(context,
-				fileName) : new ArrayList<Long>();
+		return (isInCache(fileName)) ? (ArrayList<Long>) data.getData(fileName) : new ArrayList<Long>();
 	}
 
 	public boolean isFavorite(long id) {
@@ -77,7 +77,7 @@ public class ManFavorites {
 	 * @return boolean
 	 */
 	public boolean isInCache(String fileName) {
-		Object content = new ManDataStore().getData(context, fileName);
+		Object content = data.getData(fileName);
 		return !(content == null) ? true : false;
 	}
 }

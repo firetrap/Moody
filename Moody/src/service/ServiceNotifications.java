@@ -22,7 +22,7 @@ import com.android.moody.R;
  */
 public class ServiceNotifications {
 
-	ManDataStore data = new ManDataStore();
+	ManDataStore data;
 	Context context;
 	String courseName;
 	String courseId;
@@ -32,6 +32,7 @@ public class ServiceNotifications {
 		this.context = context;
 		this.courseName = courseName;
 		this.courseId = courseId;
+		this.data = new ManDataStore(context);
 	}
 
 	/**
@@ -84,8 +85,8 @@ public class ServiceNotifications {
 
 	public void hasNewContent(Object newCourse, String fileName) {
 
-		MoodleCourseContent[] oldObj = (MoodleCourseContent[]) data.getData(
-				context, fileName);
+		MoodleCourseContent[] oldObj = (MoodleCourseContent[]) data
+				.getData(fileName);
 		MoodleCourseContent[] newObj = (MoodleCourseContent[]) newCourse;
 
 		if (oldObj != null && newObj != null) {

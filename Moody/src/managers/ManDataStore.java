@@ -18,6 +18,11 @@ import android.content.Context;
  * 
  */
 public class ManDataStore {
+	Context context;
+
+	public ManDataStore(Context context) {
+		this.context = context;
+	}
 
 	private static byte[] serialize(Object obj) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -34,7 +39,7 @@ public class ManDataStore {
 	}
 
 	// Save the Object in cacheDir
-	public void storeData(Context context, Object object, String fileName) {
+	public void storeData(Object object, String fileName) {
 
 		try {
 
@@ -56,7 +61,7 @@ public class ManDataStore {
 	}
 
 	// Load the object
-	public Object getData(Context context, String fileName) {
+	public Object getData(String fileName) {
 		String filePath = "/" + fileName + ".data";
 		try {
 
@@ -77,7 +82,7 @@ public class ManDataStore {
 		return null;
 	}
 
-	public void deleteCache(Context context) {
+	public void deleteCache() {
 		try {
 
 			if (context.getCacheDir().exists()) {
