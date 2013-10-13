@@ -13,7 +13,6 @@ import restPackage.MoodleRestCourse;
 import restPackage.MoodleRestEnrol;
 import restPackage.MoodleRestException;
 import restPackage.MoodleRestMessage;
-import restPackage.MoodleRestMessageException;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;

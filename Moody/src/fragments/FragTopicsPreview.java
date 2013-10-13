@@ -96,8 +96,8 @@ public class FragTopicsPreview extends Fragment {
 
 		// If the course is already cached as favorite, hides the button,
 		// otherwise configs it's ID
-		if (!new ManFavorites().isFavorite(id, getActivity().getBaseContext(),
-				getActivity().getResources())) {
+		if (!new ManFavorites(getActivity().getApplicationContext())
+				.isFavorite(id)) {
 			ImageButton addFavorites = (ImageButton) topicsHeaderView
 					.findViewById(R.id.add_favorites_button_);
 
@@ -123,9 +123,8 @@ public class FragTopicsPreview extends Fragment {
 	protected void createTopicsContent(LayoutInflater inflater,
 			LinearLayout insertPoint, String courseId) {
 
-		final MoodleCourseContent[] courseContent = new ManContents()
-				.getContent(courseId, getActivity()
-						.getApplicationContext());
+		final MoodleCourseContent[] courseContent = new ManContents(
+				getActivity().getApplicationContext()).getContent(courseId);
 
 		for (int j = 0; j < courseContent.length; j++) {
 

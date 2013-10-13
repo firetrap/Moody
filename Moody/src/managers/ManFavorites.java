@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import model.ModConstants;
 import android.content.Context;
-import android.content.res.Resources;
 
 import com.android.moody.R;
 
 /**
  * @author SérgioFilipe
- *
+ * @contributor firetrap
+ * 
  */
 public class ManFavorites {
 
@@ -18,30 +18,34 @@ public class ManFavorites {
 	ManSession session;
 	ManDataStore data = new ManDataStore();
 	Object getContent;
+	Context context;
 
-	public void insertFavorite(long id, Context context, Resources resource) {
+	public ManFavorites(Context context) {
+		this.context = context;
+	}
+
+	public void insertFavorite(long id) {
 		ArrayList<Long> ids = new ArrayList<Long>();
 		ids.add(id);
 
-		actionFavorite(ids, context, resource);
+		actionFavorite(ids);
 	}
 
-	public void removeFavorite(ArrayList<Long> ids, Context context,
-			Resources resource) {
-		actionFavorite(ids, context, resource);
+	public void removeFavorite(ArrayList<Long> ids) {
+		actionFavorite(ids);
 	}
 
-	public void actionFavorite(ArrayList<Long> ids, Context context,
-			Resources resource) {
+	public void actionFavorite(ArrayList<Long> ids) {
 		String userId = new ManSession(context).getValues(ModConstants.KEY_ID,
 				null);
-		String fileName = resource.getString(R.string.favorites_file_name)
+		String fileName = context.getResources().getString(
+				R.string.favorites_file_name)
 				+ userId;
-		ArrayList<Long> idList = getFavorites(context, resource);
+		ArrayList<Long> idList = getFavorites();
 
 		for (Long id : ids) {
 
-			if (isFavorite(id, context, resource))
+			if (isFavorite(id))
 				idList.remove(id);
 			else
 				idList.add(id);
@@ -52,18 +56,19 @@ public class ManFavorites {
 	}
 
 	@SuppressWarnings("unchecked")
-	public ArrayList<Long> getFavorites(Context context, Resources resource) {
+	public ArrayList<Long> getFavorites() {
 		String userId = new ManSession(context).getValues(ModConstants.KEY_ID,
 				null);
-		String fileName = resource.getString(R.string.favorites_file_name)
+		String fileName = context.getResources().getString(
+				R.string.favorites_file_name)
 				+ userId;
 
-		return (isInCache(context, fileName)) ? (ArrayList<Long>) data.getData(
-				context, fileName) : new ArrayList<Long>();
+		return (isInCache(fileName)) ? (ArrayList<Long>) data.getData(context,
+				fileName) : new ArrayList<Long>();
 	}
 
-	public boolean isFavorite(long id, Context context, Resources resource) {
-		return getFavorites(context, resource).contains(id);
+	public boolean isFavorite(long id) {
+		return getFavorites().contains(id);
 	}
 
 	/**
@@ -71,7 +76,7 @@ public class ManFavorites {
 	 * @param fileName
 	 * @return boolean
 	 */
-	public boolean isInCache(Context context, String fileName) {
+	public boolean isInCache(String fileName) {
 		Object content = new ManDataStore().getData(context, fileName);
 		return !(content == null) ? true : false;
 	}

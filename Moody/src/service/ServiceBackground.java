@@ -61,11 +61,12 @@ public class ServiceBackground extends Service {
 
 	private class BackgroundThread implements Runnable {
 
+		@Override
 		public void run() {
 			try {
 				while (isRunning) {
 					Log.d("MoodyService", "entrou na thread");
-					new ManContents().refresh(getApplicationContext());
+					new ManContents(getApplicationContext()).refresh();
 					isRunning = false;
 				}
 				stopSelf();

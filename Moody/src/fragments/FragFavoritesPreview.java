@@ -63,8 +63,8 @@ public class FragFavoritesPreview extends Fragment {
 
 		mCallback = onActionModeCallback();
 
-		return createContent(new ManFavorites().getFavorites(getActivity()
-				.getApplicationContext(), getResources()));
+		return createContent(new ManFavorites(getActivity()
+				.getApplicationContext()).getFavorites());
 	}
 
 	/**
@@ -104,9 +104,8 @@ public class FragFavoritesPreview extends Fragment {
 				switch (item.getItemId()) {
 				case R.id.action_delete:
 
-					new ManFavorites().removeFavorite(selectedIds,
-							getActivity().getApplicationContext(),
-							getResources());
+					new ManFavorites(getActivity().getApplicationContext())
+							.removeFavorite(selectedIds);
 
 					// Automatically exists the action mode, when the user
 					// selects this action
@@ -158,8 +157,8 @@ public class FragFavoritesPreview extends Fragment {
 	 */
 	protected LinearLayout createContentRows(LinearLayout insertPoint,
 			ArrayList<Long> favorites, LayoutInflater inflater) {
-		MoodleCourse[] userCourses = new ManContents().getCourses(getActivity()
-				.getApplicationContext());
+		MoodleCourse[] userCourses = new ManContents(getActivity()
+				.getApplicationContext()).getCourses();
 
 		for (int i = 0; i < favorites.size(); i++) {
 
@@ -168,8 +167,8 @@ public class FragFavoritesPreview extends Fragment {
 
 			String courseId = Long.toString(courseInfo.getId());
 
-			MoodleCourseContent[] contents = new ManContents().getContent(
-					courseId, getActivity().getApplicationContext());
+			MoodleCourseContent[] contents = new ManContents(getActivity()
+					.getApplicationContext()).getContent(courseId);
 
 			MoodleModule[] modules = contents[0].getMoodleModules();
 

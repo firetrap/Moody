@@ -16,7 +16,7 @@ import com.android.moody.R;
 
 /**
  * @author SérgioFilipe
- *
+ * 
  */
 public class UserDetailsActivity extends Activity
 // implements TextWatcher
@@ -32,7 +32,7 @@ public class UserDetailsActivity extends Activity
 		 * ((EditText)findViewById
 		 * (R.id.editText_email)).addTextChangedListener(this);
 		 **/
-		MoodleUser user = new ManContents().getUser(getApplicationContext());
+		MoodleUser user = new ManContents(getApplicationContext()).getUser();
 
 		if (user != null) {
 			initDetails(user);

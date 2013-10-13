@@ -40,7 +40,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
@@ -123,8 +122,6 @@ public class MainActivity extends Activity implements OnClickListener,
 			btnTag.performClick();
 		}
 
-	
-
 	}
 
 	@Override
@@ -148,8 +145,8 @@ public class MainActivity extends Activity implements OnClickListener,
 		if (session.getValues("PIC_PATH", null) == null) {
 
 			Drawable pic = null;
-			MoodleUser user = new ManContents()
-					.getUser(getApplicationContext());
+			MoodleUser user = new ManContents(getApplicationContext())
+					.getUser();
 
 			user.getProfileImageURL();
 			pic = DataAsyncTask
@@ -170,8 +167,8 @@ public class MainActivity extends Activity implements OnClickListener,
 	private void populateUserCourses() {
 
 		// Get all the courses from current user
-		MoodleCourse[] courses = new ManContents()
-				.getCourses(getApplicationContext());
+		MoodleCourse[] courses = new ManContents(getApplicationContext())
+				.getCourses();
 
 		// Start populating the menus and views
 		LayoutInflater inflater = (LayoutInflater) this
@@ -229,8 +226,8 @@ public class MainActivity extends Activity implements OnClickListener,
 				switch (which) {
 
 				case DialogInterface.BUTTON_POSITIVE:
-					new ManFavorites().insertFavorite(id,
-							getApplicationContext(), getResources());
+					new ManFavorites(getApplicationContext())
+							.insertFavorite(id);
 
 					dialog.dismiss();
 

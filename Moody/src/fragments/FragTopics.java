@@ -47,12 +47,11 @@ public class FragTopics extends Fragment {
 		topicId = Long.parseLong(getArguments().getString("topicId"));
 		courseName = getArguments().getString("courseName");
 
-		MoodleCourseContent[] courseTopics = new ManContents()
-				.getContent(courseId, getActivity()
-						.getApplicationContext());
+		MoodleCourseContent[] courseTopics = new ManContents(getActivity()
+				.getApplicationContext()).getContent(courseId);
 
-		MoodleCourseContent singleTopic = new ManContents().getTopic(topicId,
-				courseTopics);
+		MoodleCourseContent singleTopic = new ManContents(getActivity()
+				.getApplicationContext()).getTopic(topicId, courseTopics);
 
 		return createTopics(singleTopic, courseName, courseId, topicId);
 	}
@@ -205,8 +204,8 @@ public class FragTopics extends Fragment {
 						// the fileName is
 						// contentFileName+CourseId+TopicId+ModuleId+content
 						// number
-						String indexURL = new ManContents().parseFile(
-								getActivity().getApplicationContext(), url,
+						String indexURL = new ManContents(getActivity()
+								.getApplicationContext()).parseFile(url,
 								moduleContents[j].getFilename() + courseId
 										+ topicId + singleModule.getId());
 

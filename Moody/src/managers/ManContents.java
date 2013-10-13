@@ -28,7 +28,6 @@ import restPackage.MoodleServices;
 import restPackage.MoodleUser;
 import service.ServiceNotifications;
 import android.content.Context;
-import android.content.res.Resources;
 import android.text.Html;
 import connections.DataAsyncTask;
 
@@ -46,18 +45,23 @@ public class ManContents {
 	ManDataStore data = new ManDataStore();
 	Object getContent;
 	ServiceNotifications notifications;
+	Context context;
 
-	public void refresh(Context context) {
-		setUser(context);
-		setCourses(context);
-		for (int i = 0; i < getCourses(context).length; i++) {
-			String courseId = Long.toString(getCourses(context)[i].getId());
-			String courseName = getCourses(context)[i].getFullname();
-			setContent(courseName, courseId, context);
+	public ManContents(Context context) {
+		this.context = context;
+	}
+
+	public void refresh() {
+		setUser();
+		setCourses();
+		for (int i = 0; i < getCourses().length; i++) {
+			String courseId = Long.toString(getCourses()[i].getId());
+			String courseName = getCourses()[i].getFullname();
+			setContent(courseName, courseId);
 		}
 	}
 
-	private void setUser(Context context) {
+	private void setUser() {
 		session = new ManSession(context);
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
@@ -78,20 +82,20 @@ public class ManContents {
 
 	}
 
-	public MoodleUser getUser(Context context) {
+	public MoodleUser getUser() {
 		session = new ManSession(context);
 		String userId = session.getValues(ModConstants.KEY_ID, null);
 		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name()
 				+ userId;
 
-		if (!isInCache(context, fileName)) {
-			setUser(context);
+		if (!isInCache(fileName)) {
+			setUser();
 		}
 
 		return (MoodleUser) data.getData(context, fileName);
 	}
 
-	private void setCourses(Context context) {
+	private void setCourses() {
 		session = new ManSession(context);
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
@@ -113,20 +117,20 @@ public class ManContents {
 
 	}
 
-	public MoodleCourse[] getCourses(Context context) {
+	public MoodleCourse[] getCourses() {
 		session = new ManSession(context);
 		String userId = session.getValues(ModConstants.KEY_ID, null);
 		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name()
 				+ userId;
 
-		if (!isInCache(context, fileName)) {
-			setCourses(context);
+		if (!isInCache(fileName)) {
+			setCourses();
 		}
 
 		return (MoodleCourse[]) data.getData(context, fileName);
 	}
 
-	private void setContent(String courseName, String courseId, Context context) {
+	private void setContent(String courseName, String courseId) {
 		session = new ManSession(context);
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
@@ -144,7 +148,7 @@ public class ManContents {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (isInCache(context, fileName) && courseName != null) {
+		if (isInCache(fileName) && courseName != null) {
 			notifications = new ServiceNotifications(context, courseName,
 					courseId);
 			notifications.hasNewContent(getContent, fileName);
@@ -153,12 +157,12 @@ public class ManContents {
 		data.storeData(context, getContent, fileName);
 	}
 
-	public MoodleCourseContent[] getContent(String courseId, Context context) {
+	public MoodleCourseContent[] getContent(String courseId) {
 		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name()
 				+ courseId;
 
-		if (!isInCache(context, fileName)) {
-			setContent(null, courseId, context);
+		if (!isInCache(fileName)) {
+			setContent(null, courseId);
 		}
 
 		return (MoodleCourseContent[]) data.getData(context, fileName);
@@ -193,7 +197,7 @@ public class ManContents {
 	 * @return all of the contacts of the user.
 	 * @return MoodleContact[]
 	 */
-	public MoodleContact[] getContacts(Resources resources, Context context) {
+	public MoodleContact[] getContacts() {
 
 		session = new ManSession(context);
 		String url = session.getValues(ModConstants.KEY_URL, null);
@@ -203,7 +207,7 @@ public class ManContents {
 
 			String fileName = MoodleServices.CORE_MESSAGE_GET_CONTACTS.name();
 
-			if (isInCache(context, fileName))
+			if (isInCache(fileName))
 				return (MoodleContact[]) data.getData(context, fileName);
 			else {
 				getContent = new DataAsyncTask().execute(url, token,
@@ -233,11 +237,10 @@ public class ManContents {
 	 * @param id
 	 * 
 	 */
-	private void actionContact(Resources resources, Context context, Long id,
-			MoodleRestAction action) {
+	private void actionContact(Long id, MoodleRestAction action) {
 		Long[] a = { id };
 
-		actionContacts(resources, context, a, action);
+		actionContacts(a, action);
 	}
 
 	/**
@@ -250,8 +253,7 @@ public class ManContents {
 	 * @param ids
 	 * 
 	 */
-	private void actionContacts(Resources resources, Context context,
-			Long[] ids, MoodleRestAction action) {
+	private void actionContacts(Long[] ids, MoodleRestAction action) {
 		session = new ManSession(context);
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
@@ -279,8 +281,8 @@ public class ManContents {
 	 * @param id
 	 * 
 	 */
-	public void deleteContact(Resources resources, Context context, Long id) {
-		actionContact(resources, context, id, MoodleRestAction.DELETE);
+	public void deleteContact(Long id) {
+		actionContact(id, MoodleRestAction.DELETE);
 	}
 
 	/**
@@ -293,8 +295,8 @@ public class ManContents {
 	 * @param ids
 	 * 
 	 */
-	public void deleteContacts(Resources resources, Context context, Long[] ids) {
-		actionContacts(resources, context, ids, MoodleRestAction.DELETE);
+	public void deleteContacts(Long[] ids) {
+		actionContacts(ids, MoodleRestAction.DELETE);
 	}
 
 	/**
@@ -307,8 +309,8 @@ public class ManContents {
 	 * @param id
 	 * 
 	 */
-	public void createContact(Resources resources, Context context, Long id) {
-		actionContact(resources, context, id, MoodleRestAction.CREATE);
+	public void createContact(Long id) {
+		actionContact(id, MoodleRestAction.CREATE);
 	}
 
 	/**
@@ -321,8 +323,8 @@ public class ManContents {
 	 * @param ids
 	 * 
 	 */
-	public void createContacts(Resources resources, Context context, Long[] ids) {
-		actionContacts(resources, context, ids, MoodleRestAction.CREATE);
+	public void createContacts(Long[] ids) {
+		actionContacts(ids, MoodleRestAction.CREATE);
 	}
 
 	/**
@@ -335,8 +337,8 @@ public class ManContents {
 	 * @param id
 	 * 
 	 */
-	public void blockContact(Resources resources, Context context, Long id) {
-		actionContact(resources, context, id, MoodleRestAction.BLOCK);
+	public void blockContact(Long id) {
+		actionContact(id, MoodleRestAction.BLOCK);
 	}
 
 	/**
@@ -349,8 +351,8 @@ public class ManContents {
 	 * @param ids
 	 * 
 	 */
-	public void blockContacts(Resources resources, Context context, Long[] ids) {
-		actionContacts(resources, context, ids, MoodleRestAction.BLOCK);
+	public void blockContacts(Long[] ids) {
+		actionContacts(ids, MoodleRestAction.BLOCK);
 	}
 
 	/**
@@ -363,8 +365,8 @@ public class ManContents {
 	 * @param id
 	 * 
 	 */
-	public void unblockContact(Resources resources, Context context, Long id) {
-		actionContact(resources, context, id, MoodleRestAction.UNBLOCK);
+	public void unblockContact(Long id) {
+		actionContact(id, MoodleRestAction.UNBLOCK);
 	}
 
 	/**
@@ -377,8 +379,8 @@ public class ManContents {
 	 * @param ids
 	 * 
 	 */
-	public void unblockContacts(Resources resources, Context context, Long[] ids) {
-		actionContacts(resources, context, ids, MoodleRestAction.UNBLOCK);
+	public void unblockContacts(Long[] ids) {
+		actionContacts(ids, MoodleRestAction.UNBLOCK);
 	}
 
 	// MOODLE SPECIFIC INDEX.HTML GET CONTENT
@@ -388,12 +390,12 @@ public class ManContents {
 	 * @param fileName
 	 * @return String
 	 */
-	public String parseFile(Context context, String fileUrl, String fileName) {
+	public String parseFile(String fileUrl, String fileName) {
 		Document doc;
 		String src;
 
-		if (!isInCache(context, fileName)) {
-			getFile(context, fileUrl, fileName);
+		if (!isInCache(fileName)) {
+			getFile(fileUrl, fileName);
 		}
 
 		doc = Jsoup
@@ -418,7 +420,7 @@ public class ManContents {
 	 * @param fileUrl
 	 * @param fileName
 	 */
-	private void getFile(Context context, String fileUrl, String fileName) {
+	private void getFile(String fileUrl, String fileName) {
 		String inputLine;
 		String outPut = "";
 		try {
@@ -556,7 +558,7 @@ public class ManContents {
 	 * @param fileName
 	 * @return boolean
 	 */
-	public boolean isInCache(Context context, String fileName) {
+	public boolean isInCache(String fileName) {
 		Object content = new ManDataStore().getData(context, fileName);
 		return !(content == null) ? true : false;
 	}
