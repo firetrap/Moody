@@ -151,9 +151,14 @@ public class ManContents {
 			e.printStackTrace();
 		}
 		if (isInCache(fileName) && courseName != null) {
-			notifications = new ServiceNotifications(context, courseName,
-					courseId);
-			notifications.hasNewContent(getContent, fileName);
+			if (new ManFavorites(context).isFavorite(Long.parseLong(courseId))) {
+				notifications = new ServiceNotifications(context, courseName,
+						courseId);
+				notifications.hasNewContent(getContent, fileName);
+			} else {
+
+			}
+
 		}
 
 		data.storeData(getContent, fileName);

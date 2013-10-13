@@ -86,21 +86,12 @@ public class MainActivity extends Activity implements OnClickListener,
 	 * 
 	 */
 	private void receiveNotification() {
-
 		if (getIntent().getFlags() == R.id.MOODY_NOTIFICATION_ACTION_TOPIC) {
 			int courseId2 = getIntent().getFlags();
 			Button btnTag2 = (Button) findViewById(courseId2);
 			btnTag2.performClick();
 		} else if (getIntent().getFlags() == R.id.MOODY_NOTIFICATION_ACTION_MODULE) {
-			String courseId = getIntent().getExtras().getString("courseId");
-			String courseName = getIntent().getExtras().getString("courseName");
-			String topicId = getIntent().getExtras().getString("topicId");
-
-			Bundle bundle = new Bundle();
-			bundle.putString("courseId", courseId);
-			bundle.putString("courseName", courseName);
-			bundle.putString("topicId", topicId);
-
+			Bundle bundle = getIntent().getExtras();
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager
 					.beginTransaction();
@@ -120,7 +111,6 @@ public class MainActivity extends Activity implements OnClickListener,
 			Button btnTag = (Button) findViewById(startUpCourseId);
 			btnTag.performClick();
 		}
-
 	}
 
 	@Override
