@@ -4,17 +4,20 @@
     android:layout_width="240dp"
     android:layout_height="match_parent"
     android:layout_gravity="right"
-    android:background="#111"
+    android:background="@color/C_White"
     android:orientation="vertical" >
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/right_list_viewer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@drawable/card_w_shadow"
         android:choiceMode="singleChoice"
+        android:clickable="true"
         android:divider="@android:color/black"
-        android:dividerHeight="0dp" >
-    </ListView>
+        android:dividerHeight="2dp"
+        android:groupIndicator="@null"
+        android:longClickable="true" >
+    </ExpandableListView>
 
 </LinearLayout>

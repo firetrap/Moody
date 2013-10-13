@@ -7,6 +7,7 @@ import fragments.FragUserCloud;
 import fragments.FragUserPicture;
 import interfaces.InterDialogFrag;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -17,9 +18,12 @@ import managers.ManFavorites;
 import managers.ManSession;
 import model.ModConstants;
 import model.ModMessage;
+import restPackage.MoodleContact;
+import restPackage.MoodleContactState;
 import restPackage.MoodleCourse;
 import restPackage.MoodleUser;
 import service.ServiceBackground;
+import adapters.ContactExpandableAdapter;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -37,6 +41,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -75,11 +80,107 @@ public class MainActivity extends Activity implements OnClickListener,
 		session = new ManSession(getApplicationContext());
 		myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+		populateLeft();
+		populateRight();
+
+		receiveNotification();
+
+	}
+
+	private void populateRight() {
+		populateContacts();
+	}
+
+	private void populateContacts() {
+		ExpandableListView expandableList = (ExpandableListView) findViewById(R.id.right_list_viewer);
+		MoodleContact[] contacts = new ManContents(getApplicationContext())
+				.getContacts();
+
+		if ((contacts == null) || (contacts.length == 0))
+			expandableList.setVisibility(View.GONE);
+		else {
+			ContactExpandableAdapter adapter = new ContactExpandableAdapter(
+					getContactGroupParents(), getContactChildData());
+
+			adapter.setInflater(
+					(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+					this, R.layout.contacts_group, R.layout.contacts_row);
+
+			expandableList.setAdapter(adapter);
+		}
+	}
+
+	public ArrayList<String> getContactGroupParents() {
+		ArrayList<String> parentItems = new ArrayList<String>();
+
+		for (MoodleContactState state : MoodleContactState.values()) {
+			switch (state) {
+			case ONLINE:
+				parentItems.add("Online Contacts");
+				break;
+
+			case OFFLINE:
+				parentItems.add("Offline Contacts");
+				break;
+
+			case STRANGERS:
+
+				if (new ManContents(getApplicationContext())
+						.contactHasStrangers())
+					parentItems.add(0, "Stranger Contacts");
+
+				break;
+			}
+		}
+
+		return parentItems;
+	}
+
+	public ArrayList<Object> getContactChildData() {
+
+		ArrayList<MoodleContact> onlineList = new ArrayList<MoodleContact>();
+		ArrayList<MoodleContact> offlineList = new ArrayList<MoodleContact>();
+		ArrayList<MoodleContact> strangersList = new ArrayList<MoodleContact>();
+		ArrayList<Object> childItems = new ArrayList<Object>();
+
+		MoodleContact[] contacts = new ManContents(getApplicationContext())
+				.getContacts();
+
+		for (MoodleContact contact : contacts) {
+			switch (contact.getState()) {
+			case ONLINE:
+				onlineList.add(contact);
+				break;
+
+			case OFFLINE:
+				offlineList.add(contact);
+				break;
+
+			case STRANGERS:
+				if (new ManContents(getApplicationContext())
+						.contactHasStrangers())
+					strangersList.add(contact);
+
+				break;
+			}
+		}
+
+		if (new ManContents(getApplicationContext()).contactHasStrangers())
+			childItems.add(strangersList);
+
+		childItems.add(onlineList);
+		childItems.add(offlineList);
+
+		return childItems;
+	}
+
+	/**
+	 * 
+	 */
+	private void populateLeft() {
 		populateFullName();
 		populateUserCourses();
 		populateUserPicture();
-		receiveNotification();
-
 	}
 
 	/**

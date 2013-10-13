@@ -109,5 +109,6 @@
     <string name="error_internet_url">Error in Authentication service - check your internet service or the website URL</string>
     <string name="error_authentication_service">Error in Authentication service</string>
     <string name="error_get_user_info">Error getting user information - contact your Moodle administrator</string>
+    <string name="title_activity_frag_latest">FragLatest</string>
 
 </resources>

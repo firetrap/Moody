@@ -21,12 +21,12 @@ import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
 
 import restPackage.MoodleContact;
+import restPackage.MoodleContactState;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleRestAction;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
-import service.ServiceNotifications;
 import android.content.Context;
 import android.text.Html;
 import connections.DataAsyncTask;
@@ -43,7 +43,7 @@ public class ManContents {
 	// ManSession Manager Class
 	ManSession session;
 	Object getContent;
-	ServiceNotifications notifications;
+	checkContent chkContent;
 	Context context;
 	ManDataStore data;
 
@@ -152,9 +152,8 @@ public class ManContents {
 		}
 		if (isInCache(fileName) && courseName != null) {
 			if (new ManFavorites(context).isFavorite(Long.parseLong(courseId))) {
-				notifications = new ServiceNotifications(context, courseName,
-						courseId);
-				notifications.hasNewContent(getContent, fileName);
+				chkContent = new checkContent(context, courseName, courseId);
+				chkContent.hasNewContent(getContent, fileName);
 			} else {
 
 			}
@@ -205,24 +204,28 @@ public class ManContents {
 	 * @return MoodleContact[]
 	 */
 	public MoodleContact[] getContacts() {
+		session = new ManSession(context);
+		String userId = session.getValues(ModConstants.KEY_ID, null);
+		String fileName = MoodleServices.CORE_MESSAGE_GET_CONTACTS.name()
+				+ userId;
 
+		if (!isInCache(fileName))
+			setContacts();
+
+		return (MoodleContact[]) data.getData(fileName);
+	}
+
+	private void setContacts() {
 		session = new ManSession(context);
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
+		String userId = session.getValues(ModConstants.KEY_ID, null);
+		String fileName = MoodleServices.CORE_MESSAGE_GET_CONTACTS.name()
+				+ userId;
 
 		try {
-
-			String fileName = MoodleServices.CORE_MESSAGE_GET_CONTACTS.name();
-
-			if (isInCache(fileName))
-				return (MoodleContact[]) data.getData(fileName);
-			else {
-				getContent = new DataAsyncTask().execute(url, token,
-						MoodleServices.CORE_MESSAGE_GET_CONTACTS, null).get();
-				data.storeData(getContent, fileName);
-				return (MoodleContact[]) getContent;
-			}
-
+			getContent = new DataAsyncTask().execute(url, token,
+					MoodleServices.CORE_MESSAGE_GET_CONTACTS, null).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -231,7 +234,7 @@ public class ManContents {
 			e.printStackTrace();
 		}
 
-		return null;
+		data.storeData(getContent, fileName);
 	}
 
 	/**
@@ -248,6 +251,24 @@ public class ManContents {
 		Long[] a = { id };
 
 		actionContacts(a, action);
+	}
+
+	/**
+	 * + * + * Method that return true if the user has stranger contacts + * +
+	 */
+	public boolean contactHasStrangers() {
+		if (isInCache(MoodleServices.CORE_MESSAGE_GET_CONTACTS.name())) {
+			MoodleContact[] contacts = (MoodleContact[]) new ManDataStore(
+					context).getData(MoodleServices.CORE_MESSAGE_GET_CONTACTS
+					.name());
+
+			for (MoodleContact contact : contacts) {
+				if (contact.getState() == MoodleContactState.STRANGERS)
+					return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

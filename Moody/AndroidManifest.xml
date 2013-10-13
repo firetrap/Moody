@@ -98,6 +98,11 @@
                 <action android:name="moody_get_data" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name="fragments.FragLatest"
+            android:label="@string/title_activity_frag_latest" >
+        </activity>
     </application>
 
 </manifest>
