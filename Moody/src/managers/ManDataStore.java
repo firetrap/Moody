@@ -55,6 +55,7 @@ public class ManDataStore {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.getMessage();
+
 			e.printStackTrace();
 		}
 
@@ -101,4 +102,15 @@ public class ManDataStore {
 
 		}
 	}
+
+	/**
+	 * @param context
+	 * @param fileName
+	 * @return boolean
+	 */
+	public boolean isInCache(String fileName) {
+		Object content = getData(fileName);
+		return !(content == null) ? true : false;
+	}
+
 }

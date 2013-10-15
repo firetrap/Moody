@@ -179,4 +179,7 @@
     <dimen name="histogram_width">100.0dip</dimen>
     <dimen name="card_medium_large_text">20.0sp</dimen>
 
+    <!-- Latest cards per line -->
+    <integer name="latest_item_per_line">2</integer>
+
 </resources>

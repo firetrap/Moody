@@ -1,6 +1,7 @@
 package activities;
 
 import fragments.FragFavoritesPreview;
+import fragments.FragLatest;
 import fragments.FragTopics;
 import fragments.FragTopicsPreview;
 import fragments.FragUserCloud;
@@ -349,6 +350,8 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		FragmentManager fm;
 		Intent intent;
+		FragmentTransaction fragmentTransaction = getFragmentManager()
+				.beginTransaction();
 
 		switch (v.getId()) {
 		case R.id.login_image_button:
@@ -403,15 +406,21 @@ public class MainActivity extends Activity implements OnClickListener,
 			break;
 
 		case R.id.latest_button:
+
+			FragLatest fragmentLatest = new FragLatest();
+			fragmentTransaction.addToBackStack(null);
+			fragmentTransaction.replace(R.id.mainFragment, fragmentLatest);
+			fragmentTransaction.commit();
+
+			myDrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
 
 		case R.id.favorites_button:
 
-			FragmentTransaction fragmentTransaction = getFragmentManager()
-					.beginTransaction();
-			FragFavoritesPreview fragment = new FragFavoritesPreview();
+			
+			FragFavoritesPreview fragmentFavorites = new FragFavoritesPreview();
 			fragmentTransaction.addToBackStack(null);
-			fragmentTransaction.replace(R.id.mainFragment, fragment);
+			fragmentTransaction.replace(R.id.mainFragment, fragmentFavorites);
 			fragmentTransaction.commit();
 
 			myDrawerLayout.closeDrawer(Gravity.LEFT);

@@ -1,22 +1,23 @@
 package managers;
 
+import java.util.LinkedList;
+
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;
 import service.ServiceNotifications;
+import android.content.Context;
 
 import com.android.moody.R;
 
-import android.content.Context;
-
-public class checkContent {
+public class ManContentUpdate {
 	ManDataStore data;
 	Context context;
 	String courseName;
 	String courseId;
 	ServiceNotifications notification;
 
-	public checkContent(Context context, String courseName, String courseId) {
+	public ManContentUpdate(Context context, String courseName, String courseId) {
 		this.context = context;
 		this.courseName = courseName;
 		this.courseId = courseId;
@@ -26,7 +27,6 @@ public class checkContent {
 	}
 
 	public void hasNewContent(Object newCourse, String fileName) {
-
 		MoodleCourseContent[] oldObj = (MoodleCourseContent[]) data
 				.getData(fileName);
 		MoodleCourseContent[] newObj = (MoodleCourseContent[]) newCourse;
@@ -58,8 +58,10 @@ public class checkContent {
 			}
 		} else {
 			// ELSE NEW TOPICS
-			notification.sendNotification("New topics in your course", "",
-					R.id.MOODY_NOTIFICATION_ACTION_TOPIC);
+			if (new ManFavorites(context).isFavorite(Long.parseLong(courseId))) {
+				notification.sendNotification("New topics in your course", "",
+						R.id.MOODY_NOTIFICATION_ACTION_TOPIC);
+			}
 
 		}
 	}
@@ -90,9 +92,13 @@ public class checkContent {
 						contentName += newModule[j].getName() + "\n";
 					}
 				}
-
-				notification.sendNotification("New contents in your course", topicId,
-						R.id.MOODY_NOTIFICATION_ACTION_MODULE);
+				if (new ManFavorites(context).isFavorite(Long
+						.parseLong(courseId))) {
+					notification.sendNotification(
+							"New contents in your course", topicId,
+							R.id.MOODY_NOTIFICATION_ACTION_MODULE);
+				}
+				setLatest(topicId);
 
 			}
 		}
@@ -125,9 +131,31 @@ public class checkContent {
 					}
 
 				}
-				notification.sendNotification("New contents in your course", topicId,
-						R.id.MOODY_NOTIFICATION_ACTION_MODULE);
+				if (new ManFavorites(context).isFavorite(Long
+						.parseLong(courseId))) {
+					notification.sendNotification(
+							"New contents in your course", topicId,
+							R.id.MOODY_NOTIFICATION_ACTION_MODULE);
+				}
+				setLatest(topicId);
 			}
+		}
+	}
+
+	/**
+	 * @param topicId
+	 */
+	private void setLatest(String topicId) {
+		// Store the latest contents
+		LinkedList<ManLatest> latestList;
+		if (!data.isInCache("Latest")) {
+			latestList = new LinkedList<ManLatest>();
+			latestList.add(new ManLatest(courseId, courseName, topicId));
+			new ManDataStore(context).storeData(latestList, "Latest");
+		} else {
+			latestList = (LinkedList<ManLatest>) data.getData("Latest");
+			latestList.add(new ManLatest(courseId, courseName, topicId));
+			new ManDataStore(context).storeData(latestList, "Latest");
 		}
 	}
 

@@ -43,7 +43,7 @@ public class ManContents {
 	// ManSession Manager Class
 	ManSession session;
 	Object getContent;
-	checkContent chkContent;
+
 	Context context;
 	ManDataStore data;
 
@@ -91,7 +91,7 @@ public class ManContents {
 		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name()
 				+ userId;
 
-		if (!isInCache(fileName)) {
+		if (!data.isInCache(fileName)) {
 			setUser();
 		}
 
@@ -126,13 +126,17 @@ public class ManContents {
 		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name()
 				+ userId;
 
-		if (!isInCache(fileName)) {
+		if (!data.isInCache(fileName)) {
 			setCourses();
 		}
 
 		return (MoodleCourse[]) data.getData(fileName);
 	}
 
+	/**
+	 * @param courseName
+	 * @param courseId
+	 */
 	private void setContent(String courseName, String courseId) {
 		session = new ManSession(context);
 		String url = session.getValues(ModConstants.KEY_URL, null);
@@ -151,24 +155,25 @@ public class ManContents {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (isInCache(fileName) && courseName != null) {
-			if (new ManFavorites(context).isFavorite(Long.parseLong(courseId))) {
-				chkContent = new checkContent(context, courseName, courseId);
-				chkContent.hasNewContent(getContent, fileName);
-			} else {
 
-			}
-
+		// If true send the object to check if has new contents
+		if (data.isInCache(fileName) && courseName != null) {
+			new ManContentUpdate(context, courseName, courseId).hasNewContent(
+					getContent, fileName);
 		}
 
 		data.storeData(getContent, fileName);
 	}
 
+	/**
+	 * @param courseId
+	 * @return MoodleCourseContent[]
+	 */
 	public MoodleCourseContent[] getContent(String courseId) {
 		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name()
 				+ courseId;
 
-		if (!isInCache(fileName)) {
+		if (!data.isInCache(fileName)) {
 			setContent(null, courseId);
 		}
 
@@ -179,7 +184,6 @@ public class ManContents {
 	 * @param topicId
 	 * @param courseContent
 	 * 
-	 * @return a single topic from a course
 	 * @return MoodleCourseContent
 	 */
 	public MoodleCourseContent getTopic(Long topicId,
@@ -210,7 +214,7 @@ public class ManContents {
 		String fileName = MoodleServices.CORE_MESSAGE_GET_CONTACTS.name()
 				+ userId;
 
-		if (!isInCache(fileName))
+		if (!data.isInCache(fileName))
 			setContacts();
 
 		return (MoodleContact[]) data.getData(fileName);
@@ -258,7 +262,7 @@ public class ManContents {
 	 * + * + * Method that return true if the user has stranger contacts + * +
 	 */
 	public boolean contactHasStrangers() {
-		if (isInCache(MoodleServices.CORE_MESSAGE_GET_CONTACTS.name())) {
+		if (data.isInCache(MoodleServices.CORE_MESSAGE_GET_CONTACTS.name())) {
 			MoodleContact[] contacts = (MoodleContact[]) new ManDataStore(
 					context).getData(MoodleServices.CORE_MESSAGE_GET_CONTACTS
 					.name());
@@ -423,7 +427,7 @@ public class ManContents {
 		Document doc;
 		String src;
 
-		if (!isInCache(fileName)) {
+		if (!data.isInCache(fileName)) {
 			getFile(fileUrl, fileName);
 		}
 
@@ -581,14 +585,14 @@ public class ManContents {
 		}
 	}
 
-	/**
-	 * @param context
-	 * @param fileName
-	 * @return boolean
-	 */
-	public boolean isInCache(String fileName) {
-		Object content = new ManDataStore(context).getData(fileName);
-		return !(content == null) ? true : false;
-	}
+	// /**
+	// * @param context
+	// * @param fileName
+	// * @return boolean
+	// */
+	// public boolean isInCache(String fileName) {
+	// Object content = new ManDataStore(context).getData(fileName);
+	// return !(content == null) ? true : false;
+	// }
 
 }
