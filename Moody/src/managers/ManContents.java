@@ -585,14 +585,6 @@ public class ManContents {
 		}
 	}
 
-	// /**
-	// * @param context
-	// * @param fileName
-	// * @return boolean
-	// */
-	// public boolean isInCache(String fileName) {
-	// Object content = new ManDataStore(context).getData(fileName);
-	// return !(content == null) ? true : false;
-	// }
+
 
 }

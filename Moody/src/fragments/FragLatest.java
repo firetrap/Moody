@@ -56,10 +56,14 @@ public class FragLatest extends Fragment {
 							android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 							android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 							1f));
+					
+					TextView courseTitle = (TextView) view
+							.findViewById(R.id.latest_preview_course_title);
+					courseTitle.setText(latest.getCourseName());
 
-					TextView title = (TextView) view
-							.findViewById(R.id.latest_preview_title);
-					title.setText(topic.getName());
+					TextView topicTitle = (TextView) view
+							.findViewById(R.id.latest_preview_topic_title);
+					topicTitle.setText(topic.getName());
 
 					String moduleName = "";
 					// Loop for the modules array
@@ -71,7 +75,7 @@ public class FragLatest extends Fragment {
 						for (int n = 0; n < getNameDirty.split("\\s+").length; n++) {
 							if (n == 5) {
 								break;
-							}
+			 				}
 
 							getNamePure += getNameDirty.split("\\s+")[n] + " ";
 						}
