@@ -119,7 +119,7 @@ public class FragUserPicture extends DialogFragment {
 		getDialog().getWindow().requestFeature(STYLE_NO_TITLE);
 		// getDialog().setTitle("User details");
 
-		final View view = inflater.inflate(R.layout.picture_dialog, container);
+		final View view = inflater.inflate(R.layout.dialog_user_picture, container);
 		final File folder = new File(Environment.getExternalStorageDirectory()
 				+ "/.moody");
 		final String name = "thumbnail";

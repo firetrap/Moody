@@ -47,23 +47,23 @@ public class ManContentUpdate {
 	private void checkTopics(Context context, String courseName,
 			String courseId, MoodleCourseContent[] oldObj,
 			MoodleCourseContent[] newObj) {
-		if (oldObj.length == newObj.length) {
-			// TOPICS LOOP
-			for (int i = 0; i < newObj.length; i++) {
-				// CHECK IF THE TOPIC AREN'T NULL
-				if (newObj[i] != null && oldObj[i] != null) {
-					checkModules(Long.toString(newObj[i].getId()), oldObj,
-							newObj, i);
-				}
+		// if (oldObj.length == newObj.length) {
+		// TOPICS LOOP
+		for (int i = 0; i < newObj.length; i++) {
+			// CHECK IF THE TOPIC AREN'T NULL
+			if (newObj[i] != null && oldObj[i] != null) {
+				checkModules(Long.toString(newObj[i].getId()), oldObj, newObj,
+						i);
 			}
-		} else {
-			// ELSE NEW TOPICS
-			if (new ManFavorites(context).isFavorite(Long.parseLong(courseId))) {
-				notification.sendNotification("New topics in your course", "",
-						R.id.MOODY_NOTIFICATION_ACTION_TOPIC);
-			}
-
 		}
+		// } else {
+		// // ELSE NEW TOPICS
+		// if (new ManFavorites(context).isFavorite(Long.parseLong(courseId))) {
+		// notification.sendNotification("New topics in your course", "",
+		// R.id.MOODY_NOTIFICATION_ACTION_TOPIC);
+		// }
+		//
+		// }
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class ManContentUpdate {
 							"New contents in your course", topicId,
 							R.id.MOODY_NOTIFICATION_ACTION_MODULE);
 				}
-				setLatest(topicId);
+				setLatest(topicId, contentName);
 
 			}
 		}
@@ -137,7 +137,7 @@ public class ManContentUpdate {
 							"New contents in your course", topicId,
 							R.id.MOODY_NOTIFICATION_ACTION_MODULE);
 				}
-				setLatest(topicId);
+				setLatest(topicId, contentName);
 			}
 		}
 	}
@@ -145,16 +145,19 @@ public class ManContentUpdate {
 	/**
 	 * @param topicId
 	 */
-	private void setLatest(String topicId) {
+	@SuppressWarnings("unchecked")
+	private void setLatest(String topicId, String newContent) {
 		// Store the latest contents
 		LinkedList<ManLatest> latestList;
 		if (!data.isInCache("Latest")) {
 			latestList = new LinkedList<ManLatest>();
-			latestList.add(new ManLatest(courseId, courseName, topicId));
+			latestList.add(new ManLatest(courseId, courseName, topicId,
+					newContent));
 			new ManDataStore(context).storeData(latestList, "Latest");
 		} else {
 			latestList = (LinkedList<ManLatest>) data.getData("Latest");
-			latestList.add(new ManLatest(courseId, courseName, topicId));
+			latestList.add(new ManLatest(courseId, courseName, topicId,
+					newContent));
 			new ManDataStore(context).storeData(latestList, "Latest");
 		}
 	}

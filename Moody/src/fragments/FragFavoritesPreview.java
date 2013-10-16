@@ -140,7 +140,7 @@ public class FragFavoritesPreview extends Fragment {
 		// R.layout.favorites_course_preview_header, null));
 
 		if (favorites.isEmpty()) {
-			insertPoint.addView(inflater.inflate(R.layout.empty, null));
+			insertPoint.addView(inflater.inflate(R.layout.frag_empty_favorites, null));
 			return insertPoint;
 		} else
 			return createContentRows(insertPoint, favorites, inflater);
@@ -177,7 +177,7 @@ public class FragFavoritesPreview extends Fragment {
 			row.setLayoutParams(new LayoutParams(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-			View view = inflater.inflate(R.layout.favorites_preview_context,
+			View view = inflater.inflate(R.layout.frag_favorites_preview_context,
 					null);
 
 			if (i > 0) {

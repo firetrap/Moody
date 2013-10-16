@@ -35,7 +35,7 @@ public class FragUserCloud extends DialogFragment {
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		getDialog().getWindow().requestFeature(STYLE_NO_TITLE);
 
-		final View view = inflater.inflate(R.layout.cloud_dialog, container);
+		final View view = inflater.inflate(R.layout.dialog_cloud_apps, container);
 
 		((Button) view.findViewById(R.id.cloud_dropbox_btn))
 				.setOnClickListener(new OnClickListener() {

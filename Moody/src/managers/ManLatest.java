@@ -11,11 +11,14 @@ public class ManLatest implements Serializable {
 	String courseId;
 	String courseName;
 	String topicId;
+	String newContent;
 
-	public ManLatest(String courseId, String courseName, String topicId) {
+	public ManLatest(String courseId, String courseName, String topicId,
+			String newContent) {
 		this.courseId = courseId;
 		this.courseName = courseName;
 		this.topicId = topicId;
+		this.newContent = newContent;
 	}
 
 	/**
@@ -37,5 +40,12 @@ public class ManLatest implements Serializable {
 	 */
 	public String getTopicId() {
 		return topicId;
+	}
+
+	/**
+	 * @return String newContent
+	 */
+	public String getNewContent() {
+		return newContent;
 	}
 }

@@ -6,9 +6,9 @@ import managers.ManContents;
 import managers.ManDataStore;
 import managers.ManLatest;
 import restPackage.MoodleCourseContent;
-import restPackage.MoodleModule;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,77 +26,60 @@ public class FragLatest extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		initResources();
-		// The outer Vertical LinearLayout
-		LinearLayout outerLayout = createVerticalLinearLayout();
-		outerLayout.addView(setLayoutTitle());
-		// Calculate the number of rows to build
-		int lines = setRows(latestList, cardsPerLine);
-		for (int i = 0; i < lines; i++) {
 
-			// The inner Horizontal Linear Layout
-			LinearLayout innerLayout = createHorizontalLinearLayout();
+		if (new ManDataStore(getActivity()).isInCache("Latest")) {
+			initResources();
+			// The outer Vertical LinearLayout
+			LinearLayout outerLayout = createVerticalLinearLayout();
+			outerLayout.addView(setLayoutTitle());
 
-			for (int j = 0; j < cardsPerLine; j++) {
-				if (!latestList.isEmpty()) {
-					ManLatest latest = latestList.getFirst();
-					latestList.removeFirst();
+			// Calculate the number of rows to build
+			int lines = setRows(latestList, cardsPerLine);
 
-					MoodleCourseContent[] course = new ManContents(
-							getActivity()).getContent(latest.getCourseId());
+			for (int i = 0; i < lines; i++) {
+				// The inner Horizontal Linear Layout
+				LinearLayout innerLayout = createHorizontalLinearLayout();
 
-					MoodleCourseContent topic = new ManContents(getActivity())
-							.getTopic(Long.parseLong(latest.getTopicId()),
-									course);
+				for (int j = 0; j < cardsPerLine; j++) {
+					if (!latestList.isEmpty()) {
+						ManLatest latest = latestList.getFirst();
+						latestList.removeFirst();
 
-					MoodleModule[] modules = topic.getMoodleModules();
+						MoodleCourseContent[] course = new ManContents(
+								getActivity()).getContent(latest.getCourseId());
+						MoodleCourseContent topic = new ManContents(
+								getActivity()).getTopic(
+								Long.parseLong(latest.getTopicId()), course);
 
-					View view = inflater.inflate(R.layout.frag_latest, null);
-					view.setLayoutParams(new LayoutParams(
-							android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-							android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-							1f));
-					
-					TextView courseTitle = (TextView) view
-							.findViewById(R.id.latest_preview_course_title);
-					courseTitle.setText(latest.getCourseName());
-
-					TextView topicTitle = (TextView) view
-							.findViewById(R.id.latest_preview_topic_title);
-					topicTitle.setText(topic.getName());
-
-					String moduleName = "";
-					// Loop for the modules array
-					for (int k = 0; k < topic.getMoodleModules().length; k++) {
-
-						String getNameDirty = modules[k].getName();
-						String getNamePure = "";
-
-						for (int n = 0; n < getNameDirty.split("\\s+").length; n++) {
-							if (n == 5) {
-								break;
-			 				}
-
-							getNamePure += getNameDirty.split("\\s+")[n] + " ";
-						}
-
-						moduleName += "-" + getNamePure + "\n";
-
+						View latestView = inflateLatestView(inflater);
+						setCourseTitle(latest, latestView);
+						setTopicTitle(topic, latestView);
+						setContentDescription(latest, latestView);
+						innerLayout.addView(latestView);
 					}
 
-					TextView description = (TextView) view
-							.findViewById(R.id.latest_preview_description);
-					description.setText(moduleName);
-					innerLayout.addView(view);
 				}
+				outerLayout.addView(innerLayout);
 
 			}
-			outerLayout.addView(innerLayout);
 
+			return outerLayout;
+		} else {
+			return inflater.inflate(R.layout.frag_empty_latest, null);
 		}
 
-		return outerLayout;
+	}
 
+	/**
+	 * @param inflater
+	 * @return
+	 */
+	private View inflateLatestView(LayoutInflater inflater) {
+		View view = inflater.inflate(R.layout.frag_latest, null);
+		view.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT, 1f));
+		return view;
 	}
 
 	/**
@@ -166,6 +149,36 @@ public class FragLatest extends Fragment {
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
 		innerLayout.setOrientation(LinearLayout.HORIZONTAL);
 		return innerLayout;
+	}
+
+	/**
+	 * @param latest
+	 * @param view
+	 */
+	private void setCourseTitle(ManLatest latest, View view) {
+		TextView courseTitle = (TextView) view
+				.findViewById(R.id.latest_preview_course_title);
+		courseTitle.setText(latest.getCourseName());
+	}
+
+	/**
+	 * @param topic
+	 * @param view
+	 */
+	private void setTopicTitle(MoodleCourseContent topic, View view) {
+		TextView topicTitle = (TextView) view
+				.findViewById(R.id.latest_preview_topic_title);
+		topicTitle.setText(topic.getName());
+	}
+
+	/**
+	 * @param latest
+	 * @param view
+	 */
+	private void setContentDescription(ManLatest latest, View view) {
+		TextView contentDescription = (TextView) view
+				.findViewById(R.id.latest_preview_description);
+		contentDescription.setText(latest.getNewContent());
 	}
 
 }
