@@ -7,6 +7,10 @@ import managers.ManDataStore;
 import managers.ManLatest;
 import restPackage.MoodleCourseContent;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -42,7 +46,7 @@ public class FragLatest extends Fragment {
 
 				for (int j = 0; j < cardsPerLine; j++) {
 					if (!latestList.isEmpty()) {
-						ManLatest latest = latestList.getFirst();
+						final ManLatest latest = latestList.getFirst();
 						latestList.removeFirst();
 
 						MoodleCourseContent[] course = new ManContents(
@@ -55,6 +59,7 @@ public class FragLatest extends Fragment {
 						setCourseTitle(latest, latestView);
 						setTopicTitle(topic, latestView);
 						setContentDescription(latest, latestView);
+						onClick(innerLayout, latest);
 						innerLayout.addView(latestView);
 					}
 
@@ -68,6 +73,37 @@ public class FragLatest extends Fragment {
 			return inflater.inflate(R.layout.frag_empty_latest, null);
 		}
 
+	}
+
+	/**
+	 * @param innerLayout
+	 * @param latest
+	 */
+	private void onClick(LinearLayout innerLayout, final ManLatest latest) {
+		innerLayout.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				Bundle bundle = new Bundle();
+				bundle.putString("courseId", latest.getCourseId());
+				bundle.putString("courseName", latest.getCourseName());
+				bundle.putString("topicId", latest.getTopicId());
+
+				FragmentManager fragmentManager = getActivity()
+						.getFragmentManager();
+				FragmentTransaction fragmentTransaction = fragmentManager
+						.beginTransaction();
+
+				FragTopics insideTopicsFrag = new FragTopics();
+				insideTopicsFrag.setArguments(bundle);
+				fragmentTransaction.addToBackStack(null);
+				fragmentTransaction
+						.replace(R.id.mainFragment, insideTopicsFrag);
+				fragmentTransaction.commit();
+			}
+		});
 	}
 
 	/**
@@ -148,6 +184,7 @@ public class FragLatest extends Fragment {
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
 		innerLayout.setOrientation(LinearLayout.HORIZONTAL);
+
 		return innerLayout;
 	}
 
