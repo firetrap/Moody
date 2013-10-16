@@ -1,6 +1,7 @@
 package service;
 
 import managers.ManContents;
+import managers.ManSession;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -30,22 +31,26 @@ public class ServiceBackground extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		// android.os.Debug.waitForDebugger();
+//		android.os.Debug.waitForDebugger();
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		super.onStartCommand(intent, flags, startId);
-		// Starts the alarm
-		alarm.setAlarm(getApplicationContext());
 
-		// Announcement about starting
-		Log.d("MoodyService", "Service Started");
+		if (new ManSession(getApplicationContext()).isLoggedIn()) {
 
-		// Start a Background thread
-		isRunning = true;
-		Thread backgroundThread = new Thread(new BackgroundThread());
-		backgroundThread.start();
+			super.onStartCommand(intent, flags, startId);
+			// Starts the alarm
+			alarm.setAlarm(getApplicationContext());
+
+			// Announcement about starting
+			Log.d("MoodyService", "Service Started");
+
+			// Start a Background thread
+			isRunning = true;
+			Thread backgroundThread = new Thread(new BackgroundThread());
+			backgroundThread.start();
+		}
 
 		return START_NOT_STICKY;
 	}
