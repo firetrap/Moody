@@ -29,6 +29,8 @@
     <string name="error_field_required">This field is required</string>
     <string name="prompt_url">Moodle URL</string>
     <string name="error_invalid_url">This url is invalid.</string>
+    <string name="moody_trademark"><a href="http://firetrap.github.io/Moody">Moody</a></string>
+    <string name="licences"><a href="http://source.android.com/source/licenses.html">Apache Software License, Version 2.0</a></string>
 
     <!-- Strings related to populate -->
     <string name="fullName_textView">User Name</string>

@@ -9,10 +9,7 @@ import restPackage.MoodleCourseContent;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +19,10 @@ import android.widget.TextView;
 
 import com.android.moody.R;
 
+/**
+ * @author firetrap
+ * 
+ */
 public class FragLatest extends Fragment {
 	LinkedList<ManLatest> latestList;
 	// Get from resource the number of cards per line
@@ -38,7 +39,7 @@ public class FragLatest extends Fragment {
 			outerLayout.addView(setLayoutTitle());
 
 			// Calculate the number of rows to build
-			int lines = setRows(latestList, cardsPerLine);
+			int lines = setHowManyRows(latestList, cardsPerLine);
 
 			for (int i = 0; i < lines; i++) {
 				// The inner Horizontal Linear Layout
@@ -152,7 +153,7 @@ public class FragLatest extends Fragment {
 	 * @param cardsPerLine
 	 * @return
 	 */
-	private int setRows(LinkedList<ManLatest> latest, int cardsPerLine) {
+	private int setHowManyRows(LinkedList<ManLatest> latest, int cardsPerLine) {
 		int colums;
 		if (latest.size() > cardsPerLine) {
 			Double count = Math.ceil(latest.size() / 2.0);

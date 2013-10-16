@@ -169,7 +169,7 @@ public class FragTopicsPreview extends Fragment {
 						.findViewById(R.id.topics_preview_layout);
 				layout.setId(Integer.parseInt(courseId));
 				layout.setTag(Long.toString(courseContent[j].getId()));
-				onTopicsPreviewClick(courseContent, layout, j);
+				onClick(courseContent, layout, j);
 				row.addView(topicsView);
 				insertPoint.addView(row);
 			}
@@ -182,7 +182,7 @@ public class FragTopicsPreview extends Fragment {
 	 * @param topicsView
 	 * @param contentIdx
 	 */
-	private void onTopicsPreviewClick(
+	private void onClick(
 			final MoodleCourseContent[] courseContent, View layout,
 			final int contentIdx) {
 

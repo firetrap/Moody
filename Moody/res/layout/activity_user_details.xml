@@ -455,11 +455,12 @@
                     android:autoLink="web"
                     android:clickable="false"
                     android:focusable="false"
+                    android:linksClickable="true"
                     android:focusableInTouchMode="false"
                     android:fontFamily="sans-serif-light"
                     android:gravity="right"
                     android:lines="1"
-                    android:linksClickable="true"
+                    
                     android:paddingBottom="5dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="5dp"

@@ -4,6 +4,12 @@
 
     <!-- Login progress -->
 
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/default_background" />
+
     <LinearLayout
         android:id="@+id/login_status"
         android:layout_width="wrap_content"
@@ -39,7 +45,6 @@
                 android:indeterminateDrawable="@drawable/loading"
                 android:padding="125dp"
                 android:visibility="visible" />
-
         </RelativeLayout>
 
         <TextView
@@ -57,7 +62,10 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="70dp"
+        android:background="#99ffffff" >
 
         <LinearLayout
             style="@style/LoginFormContainer"
@@ -99,10 +107,48 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginTop="16dp"
+                android:focusableInTouchMode="true"
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
                 android:text="@string/action_sign_in_register" />
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="25dp" >
+
+        <TextView
+            android:id="@+id/trademark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/moody_trademark"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - "
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/licence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/licences"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/multi_color_line" />
 
 </merge>

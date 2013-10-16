@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -74,6 +75,10 @@ public class LoginActivity extends Activity {
 	private EditText mUserView;
 	private String mUser;
 
+	// Licence and trademark
+	private TextView trademark;
+	private TextView licence;
+
 	// ManSession Manager Class
 	ManSession session;
 
@@ -81,7 +86,6 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		session = new ManSession(getApplicationContext());
-		
 
 		if (session.isLoggedIn()) {
 			final Intent intent = new Intent(getApplicationContext(),
@@ -93,8 +97,14 @@ public class LoginActivity extends Activity {
 		} else {
 
 			setContentView(R.layout.activity_login);
-
+			
 			// Set up the login form.
+			trademark= (TextView) findViewById(R.id.trademark);
+			trademark.setMovementMethod(LinkMovementMethod.getInstance());
+			
+			licence= (TextView) findViewById(R.id.licence);
+			licence.setMovementMethod(LinkMovementMethod.getInstance());
+			
 			mUrlView = (EditText) findViewById(R.id.prompt_url);
 			mUser = getIntent().getStringExtra(EXTRA_EMAIL);
 			mUserView = (EditText) findViewById(R.id.username);
