@@ -46,13 +46,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,8 +66,6 @@ import connections.DataAsyncTask;
  */
 public class MainActivity extends Activity implements OnClickListener,
 		InterDialogFrag {
-
-	private String searchQuery;
 
 	private DrawerLayout myDrawerLayout;
 
@@ -460,13 +456,6 @@ public class MainActivity extends Activity implements OnClickListener,
 		case R.id.wiki_button:
 			break;
 
-		// case R.id.web_search:
-		case 1:
-			intent = new Intent(Intent.ACTION_WEB_SEARCH);
-			intent.putExtra(SearchManager.QUERY, searchQuery);
-			startActivity(intent);
-			break;
-
 		default:
 			break;
 		}
@@ -597,52 +586,62 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onNewIntent(android.content.Intent)
+	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
-		ManSearch manSearch = new ManSearch(getApplicationContext());
 
 		// Get the intent, verify the action and get the query
-		// Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			String query = intent.getStringExtra(SearchManager.QUERY);
-			if (query != null) {
-				searchQuery = query;
-				// do the search
-				manSearch.doMySearch(query);
-				// return the arraylist with the topic which contains the query
-				ArrayList<ObjectSearch> results = manSearch.getResults();
-				LinearLayout searchResults = (LinearLayout) this
-						.findViewById(R.id.searchResults);
-				searchResults.setVisibility(View.VISIBLE);
-				searchResults.removeAllViews();
-				if (results == null) {
-					Toast.makeText(
-							getApplicationContext(),
-							"No results found for: " + "\"" + searchQuery
-									+ "\"", Toast.LENGTH_LONG).show();
-				} else {
-					for (int i = 0; i < results.size(); i++) {
-						if (i > 2) {
-							searchResults.addView(new CardTextView(
-									getApplicationContext(),
-									"View all search results", View.VISIBLE,
-									true, 0));
-							break;
-						}
+			search(intent);
+		}
+	}
 
-						searchResults
-								.addView(new CardTextView(
-										getApplicationContext(), results.get(i)
-												.getCourseName(), View.VISIBLE,
-										true, 0));
+	/**
+	 * @param intent
+	 * @param manSearch
+	 */
+	private void search(Intent intent) {
+		ManSearch manSearch = new ManSearch(this);
+		String query = intent.getStringExtra(SearchManager.QUERY);
+		if (query != null) {
+
+			// do the search
+			manSearch.doMySearch(query);
+			// return the arraylist with the topic which contains the query
+			ArrayList<ObjectSearch> results = manSearch.getResults();
+			LinearLayout searchResults = (LinearLayout) this
+					.findViewById(R.id.searchResults);
+			searchResults.setVisibility(View.VISIBLE);
+			searchResults.removeAllViews();
+			if (results == null) {
+				Toast.makeText(
+						this,
+						getString(R.string.no_results) + "\"" + query
+								+ "\"", Toast.LENGTH_LONG).show();
+			} else {
+				for (int i = 0; i < results.size(); i++) {
+					if (i > 2) {
+						searchResults.addView(new CardTextView(this, 1,
+								getString(R.string.all_results), View.VISIBLE,
+								true, 0, null, query));
+						break;
 					}
 
+					searchResults.addView(new CardTextView(this, 0, results
+							.get(i).getCourseName(), View.VISIBLE, true, 0,
+							results.get(i), query));
 				}
-				searchResults.addView(new CardTextView(getApplicationContext(),
-						"Search on Web", View.VISIBLE, true, 0));
-				searchResults.invalidate();
 
 			}
+			searchResults.addView(new CardTextView(this, 2,
+					getString(R.string.search_on_web), View.VISIBLE, true, 0,
+					null, query));
+			searchResults.invalidate();
+
 		}
 	}
 

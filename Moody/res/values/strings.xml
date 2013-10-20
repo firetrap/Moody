@@ -121,5 +121,8 @@
     <string name="search_hint">Search contents</string>
     <string name="title_activity_searchable">SearchableActivity</string>
     <string name="query_hint">Search contents</string>
+    <string name="search_on_web">Search on Web</string>
+    <string name="no_results">No results found for: </string>
+    <string name="all_results">View all search results</string>
 
 </resources>
