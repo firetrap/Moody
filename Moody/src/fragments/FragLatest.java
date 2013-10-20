@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import managers.ManContents;
 import managers.ManDataStore;
-import managers.ManLatest;
+import model.ObjectLatest;
 import restPackage.MoodleCourseContent;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -24,7 +24,7 @@ import com.android.moody.R;
  * 
  */
 public class FragLatest extends Fragment {
-	LinkedList<ManLatest> latestList;
+	LinkedList<ObjectLatest> latestList;
 	// Get from resource the number of cards per line
 	int cardsPerLine;
 
@@ -47,7 +47,7 @@ public class FragLatest extends Fragment {
 
 				for (int j = 0; j < cardsPerLine; j++) {
 					if (!latestList.isEmpty()) {
-						final ManLatest latest = latestList.getFirst();
+						final ObjectLatest latest = latestList.getFirst();
 						latestList.removeFirst();
 
 						MoodleCourseContent[] course = new ManContents(
@@ -80,7 +80,7 @@ public class FragLatest extends Fragment {
 	 * @param innerLayout
 	 * @param latest
 	 */
-	private void onClick(LinearLayout innerLayout, final ManLatest latest) {
+	private void onClick(LinearLayout innerLayout, final ObjectLatest latest) {
 		innerLayout.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -125,7 +125,7 @@ public class FragLatest extends Fragment {
 	 */
 	@SuppressWarnings("unchecked")
 	private void initResources() {
-		latestList = (LinkedList<ManLatest>) new ManDataStore(getActivity())
+		latestList = (LinkedList<ObjectLatest>) new ManDataStore(getActivity())
 				.getData("Latest");
 		// Get from resource the number of cards per line
 		cardsPerLine = getResources()
@@ -153,7 +153,7 @@ public class FragLatest extends Fragment {
 	 * @param cardsPerLine
 	 * @return
 	 */
-	private int setHowManyRows(LinkedList<ManLatest> latest, int cardsPerLine) {
+	private int setHowManyRows(LinkedList<ObjectLatest> latest, int cardsPerLine) {
 		int colums;
 		if (latest.size() > cardsPerLine) {
 			Double count = Math.ceil(latest.size() / 2.0);
@@ -193,7 +193,7 @@ public class FragLatest extends Fragment {
 	 * @param latest
 	 * @param view
 	 */
-	private void setCourseTitle(ManLatest latest, View view) {
+	private void setCourseTitle(ObjectLatest latest, View view) {
 		TextView courseTitle = (TextView) view
 				.findViewById(R.id.latest_preview_course_title);
 		courseTitle.setText(latest.getCourseName());
@@ -213,7 +213,7 @@ public class FragLatest extends Fragment {
 	 * @param latest
 	 * @param view
 	 */
-	private void setContentDescription(ManLatest latest, View view) {
+	private void setContentDescription(ObjectLatest latest, View view) {
 		TextView contentDescription = (TextView) view
 				.findViewById(R.id.latest_preview_description);
 		contentDescription.setText(latest.getNewContent());

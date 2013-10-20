@@ -1,24 +1,15 @@
-package managers;
+package model;
 
-import java.io.Serializable;
-
-public class ManLatest implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ObjectSearch {
 	String courseId;
 	String courseName;
 	String topicId;
-	String newContent;
 
-	public ManLatest(String courseId, String courseName, String topicId,
-			String newContent) {
+	public ObjectSearch(String courseId, String courseName, String topicId) {
 		this.courseId = courseId;
 		this.courseName = courseName;
 		this.topicId = topicId;
-		this.newContent = newContent;
+
 	}
 
 	/**
@@ -42,10 +33,4 @@ public class ManLatest implements Serializable {
 		return topicId;
 	}
 
-	/**
-	 * @return String newContent
-	 */
-	public String getNewContent() {
-		return newContent;
-	}
 }

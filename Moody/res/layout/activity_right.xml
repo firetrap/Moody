@@ -1,23 +1,65 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/right_drawer"
-    android:layout_width="240dp"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="right"
-    android:background="@color/C_White"
-    android:orientation="vertical" >
+    android:layout_weight="1"
+    android:background="@color/C_Light_Grey" >
 
-    <ExpandableListView
-        android:id="@+id/right_list_viewer"
+    <LinearLayout
+        android:id="@+id/right_linear_Layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_w_shadow"
-        android:choiceMode="singleChoice"
-        android:clickable="true"
-        android:divider="@android:color/black"
-        android:dividerHeight="2dp"
-        android:groupIndicator="@null"
-        android:longClickable="true" >
-    </ExpandableListView>
+        android:layout_marginLeft="5dp"
+        android:orientation="vertical" >
 
-</LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp" >
+
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/card"
+                android:iconifiedByDefault="false"
+                android:queryHint="@string/query_hint" >
+            </SearchView>
+
+            <LinearLayout
+                android:id="@+id/searchResults"
+                style="@style/CardText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/searchView"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/card_background"
+                android:divider="@drawable/grey_divider"
+                android:orientation="vertical"
+                android:showDividers="middle"
+                android:visibility="gone" >
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ExpandableListView
+            android:id="@+id/right_list_viewer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_w_shadow"
+            android:choiceMode="singleChoice"
+            android:clickable="true"
+            android:divider="@android:color/black"
+            android:dividerHeight="2dp"
+            android:groupIndicator="@null"
+            android:longClickable="true" >
+        </ExpandableListView>
+    </LinearLayout>
+
+</ScrollView>

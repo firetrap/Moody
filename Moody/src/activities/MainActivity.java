@@ -16,18 +16,23 @@ import managers.ManAlertDialog;
 import managers.ManContents;
 import managers.ManDataStore;
 import managers.ManFavorites;
+import managers.ManSearch;
 import managers.ManSession;
 import model.ModConstants;
 import model.ModMessage;
+import model.ObjectSearch;
 import restPackage.MoodleContact;
 import restPackage.MoodleContactState;
 import restPackage.MoodleCourse;
 import restPackage.MoodleUser;
 import service.ServiceBackground;
+import ui.CardTextView;
 import adapters.ContactExpandableAdapter;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,12 +46,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 import bitmap.BitmapResizer;
 
 import com.android.moody.R;
@@ -59,6 +68,8 @@ import connections.DataAsyncTask;
  */
 public class MainActivity extends Activity implements OnClickListener,
 		InterDialogFrag {
+
+	private String searchQuery;
 
 	private DrawerLayout myDrawerLayout;
 
@@ -85,7 +96,19 @@ public class MainActivity extends Activity implements OnClickListener,
 		populateRight();
 
 		receiveNotification();
+		setupSearchView();
 
+	}
+
+	/**
+	 * 
+	 */
+	private void setupSearchView() {
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		final SearchView searchView = (SearchView) findViewById(R.id.searchView);
+		SearchableInfo searchableInfo = searchManager
+				.getSearchableInfo(getComponentName());
+		searchView.setSearchableInfo(searchableInfo);
 	}
 
 	private void populateRight() {
@@ -417,7 +440,6 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		case R.id.favorites_button:
 
-			
 			FragFavoritesPreview fragmentFavorites = new FragFavoritesPreview();
 			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.replace(R.id.mainFragment, fragmentFavorites);
@@ -436,6 +458,13 @@ public class MainActivity extends Activity implements OnClickListener,
 			break;
 
 		case R.id.wiki_button:
+			break;
+
+		// case R.id.web_search:
+		case 1:
+			intent = new Intent(Intent.ACTION_WEB_SEARCH);
+			intent.putExtra(SearchManager.QUERY, searchQuery);
+			startActivity(intent);
 			break;
 
 		default:
@@ -565,6 +594,56 @@ public class MainActivity extends Activity implements OnClickListener,
 		Log.d("MoodyPerformance",
 				Long.toString(performanceMeasure(startTime, endTime)));
 		super.onResume();
+
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		ManSearch manSearch = new ManSearch(getApplicationContext());
+
+		// Get the intent, verify the action and get the query
+		// Intent intent = getIntent();
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			if (query != null) {
+				searchQuery = query;
+				// do the search
+				manSearch.doMySearch(query);
+				// return the arraylist with the topic which contains the query
+				ArrayList<ObjectSearch> results = manSearch.getResults();
+				LinearLayout searchResults = (LinearLayout) this
+						.findViewById(R.id.searchResults);
+				searchResults.setVisibility(View.VISIBLE);
+				searchResults.removeAllViews();
+				if (results == null) {
+					Toast.makeText(
+							getApplicationContext(),
+							"No results found for: " + "\"" + searchQuery
+									+ "\"", Toast.LENGTH_LONG).show();
+				} else {
+					for (int i = 0; i < results.size(); i++) {
+						if (i > 2) {
+							searchResults.addView(new CardTextView(
+									getApplicationContext(),
+									"View all search results", View.VISIBLE,
+									true, 0));
+							break;
+						}
+
+						searchResults
+								.addView(new CardTextView(
+										getApplicationContext(), results.get(i)
+												.getCourseName(), View.VISIBLE,
+										true, 0));
+					}
+
+				}
+				searchResults.addView(new CardTextView(getApplicationContext(),
+						"Search on Web", View.VISIBLE, true, 0));
+				searchResults.invalidate();
+
+			}
+		}
 	}
 
 	public long performanceMeasure(long startTime, long endTime) {

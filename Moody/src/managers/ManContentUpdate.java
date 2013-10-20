@@ -2,6 +2,8 @@ package managers;
 
 import java.util.LinkedList;
 
+import model.ObjectLatest;
+
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;
@@ -148,15 +150,15 @@ public class ManContentUpdate {
 	@SuppressWarnings("unchecked")
 	private void setLatest(String topicId, String newContent) {
 		// Store the latest contents
-		LinkedList<ManLatest> latestList;
+		LinkedList<ObjectLatest> latestList;
 		if (!data.isInCache("Latest")) {
-			latestList = new LinkedList<ManLatest>();
-			latestList.add(new ManLatest(courseId, courseName, topicId,
+			latestList = new LinkedList<ObjectLatest>();
+			latestList.add(new ObjectLatest(courseId, courseName, topicId,
 					newContent));
 			new ManDataStore(context).storeData(latestList, "Latest");
 		} else {
-			latestList = (LinkedList<ManLatest>) data.getData("Latest");
-			latestList.add(new ManLatest(courseId, courseName, topicId,
+			latestList = (LinkedList<ObjectLatest>) data.getData("Latest");
+			latestList.add(new ObjectLatest(courseId, courseName, topicId,
 					newContent));
 			new ManDataStore(context).storeData(latestList, "Latest");
 		}

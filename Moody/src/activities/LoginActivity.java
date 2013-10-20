@@ -90,7 +90,7 @@ public class LoginActivity extends Activity {
 		if (session.isLoggedIn()) {
 			final Intent intent = new Intent(getApplicationContext(),
 					MainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//			intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			startActivity(intent);
 			finish();
 

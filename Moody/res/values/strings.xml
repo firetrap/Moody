@@ -83,7 +83,7 @@
     <string name="module_name">Module Name</string>
     <string name="module_description">Module Description</string>
     <string name="module_files">Modules Files</string>
-    <string name="title_activity_copy_of_topics_preview">CopyOfTopicsPreview</string>
+    <string name="title_activity_topics_preview">TopicsPreview</string>
     <string name="title_activity_loading">Loading</string>
     <string name="loading_data">Loading</string>
 
@@ -115,5 +115,11 @@
     <!-- Strings Related to Latest -->
     <string name="title_activity_frag_latest">FragLatest</string>
     <string name="empty_latest_message">No new contents&#8230; Please return later</string>
+
+    <!-- Strings Related to Search -->
+    <string name="app_label">Moody</string>
+    <string name="search_hint">Search contents</string>
+    <string name="title_activity_searchable">SearchableActivity</string>
+    <string name="query_hint">Search contents</string>
 
 </resources>
