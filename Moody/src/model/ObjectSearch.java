@@ -4,11 +4,14 @@ public class ObjectSearch {
 	String courseId;
 	String courseName;
 	String topicId;
+	String topicName;
 
-	public ObjectSearch(String courseId, String courseName, String topicId) {
+	public ObjectSearch(String courseId, String courseName, String topicId,
+			String topicName) {
 		this.courseId = courseId;
 		this.courseName = courseName;
 		this.topicId = topicId;
+		this.topicName = topicName;
 
 	}
 
@@ -33,4 +36,10 @@ public class ObjectSearch {
 		return topicId;
 	}
 
+	/**
+	 * @return String topicName
+	 */
+	public String getTopicName() {
+		return topicName;
+	}
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Latest cards per line -->
+    <integer name="latest_item_per_line">2</integer>
+
+</resources>

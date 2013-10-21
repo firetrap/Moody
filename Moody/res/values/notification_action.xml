@@ -1,6 +1,0 @@
-<resources>
-
-    <item name="MOODY_NOTIFICATION_ACTION_TOPIC" type="id"/>
-    <item name="MOODY_NOTIFICATION_ACTION_MODULE" type="id"/>
-
-</resources>

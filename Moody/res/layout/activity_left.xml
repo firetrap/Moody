@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:layout_gravity="left"
     android:layout_weight="1"
-    android:background="@color/C_Light_Grey" >
+    android:background="@color/C_Light_Grey"
+    android:clickable="false" >
 
     <LinearLayout
         android:id="@+id/linear_layout_inside_left"
@@ -40,9 +41,9 @@
                 android:id="@+id/logout_image_button"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:layout_alignParentRight="true"
                 android:layout_marginLeft="140dp"
                 android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/login_image_button"
                 android:background="@drawable/border_shape"
                 android:contentDescription="@string/login_image"
                 android:onClick="onClick"
@@ -62,14 +63,6 @@
                 android:onClick="onClick"
                 android:text="@string/fullName_textView"
                 android:textSize="@dimen/card_action_text" />
-
-            <View
-                android:id="@+id/space1"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:layout_alignTop="@+id/logout_image_button"
-                android:layout_toRightOf="@+id/logout_image_button"
-                android:visibility="invisible" />
         </RelativeLayout>
 
         <TextView

@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:ellipsize="start"
             android:paddingBottom="10dp"
@@ -25,22 +26,20 @@
             android:paddingTop="10dp"
             android:singleLine="true"
             android:text="@string/course_path" />
+
         <!-- android:textColor="@color/card_title_text" -->
 
         <ImageButton
             android:id="@+id/add_favorites_button_"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_weight="1"
+            android:layout_marginRight="16dp"
             android:adjustViewBounds="false"
             android:background="@android:color/transparent"
             android:contentDescription="@string/add_favorite_description"
             android:cropToPadding="false"
             android:onClick="onAddFavoritesClick"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"
+            android:scaleType="center"
             android:src="@drawable/add_favorites" />
     </LinearLayout>
 

@@ -8,6 +8,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils.TruncateAt;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
@@ -20,30 +21,47 @@ import fragments.FragTopics;
 
 public class CardTextView extends TextView {
 
-	public CardTextView(final Activity activity, int id, String text,
-			int visibility, boolean clickAble, int color,
-			final ObjectSearch params, final String searchQuery) {
-		super(activity);
+	private Activity activity;
+	private int action;
+	private String courseName;
+	private String topicName;
+	private ObjectSearch params;
+	private String searchQuery;
 
-		setText(text);
-		setVisibility(visibility);
-		// setTextAppearance(context, R.style.CardLightText);
-		setClickable(clickAble);
-		if (color != 0)
-			setTextColor(color);
+	public CardTextView(Activity activity, int action, String courseName,
+			String topicName, ObjectSearch params, String searchQuery) {
+		super(activity);
+		this.activity = activity;
+		this.action = action;
+		this.courseName = courseName;
+		this.topicName = topicName;
+		this.params = params;
+		this.searchQuery = searchQuery;
+
+		setCompoundDrawablesWithIntrinsicBounds(null, null, activity
+				.getResources().getDrawable(R.drawable.ic_action_go_into), null);
+
+		setTextColor(activity.getResources().getColor(android.R.color.darker_gray));
 		setTextSize(18);
 		setPadding(10, 10, 10, 10);
-		// setBackgroundDrawable(getResources().getDrawable(
-		// R.drawable.card_background));
+		getEllipsize();
+		setEllipsize(TruncateAt.END);
+		setLines(1);
 		setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
+		customActions();
+
+	}
+
+	private void customActions() {
 		final DrawerLayout myDrawerLayout = (DrawerLayout) activity
 				.findViewById(R.id.drawer_layout);
-
-		switch (id) {
-		case 0:
+		switch (action) {
+		case R.id.MOODY_SEARCH_TOPIC_ACTION_MODULE:
+			// TOPICS
+			setText(courseName + " > " + topicName);
 			setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -72,7 +90,9 @@ public class CardTextView extends TextView {
 
 			break;
 
-		case 1:
+		case R.id.MOODY_SEARCH_ALL_RESULTS_ACTION_MODULE:
+			// View all results fragment
+			setText(activity.getString(R.string.all_results));
 			setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -97,7 +117,10 @@ public class CardTextView extends TextView {
 			});
 			break;
 
-		case 2:
+		case R.id.MOODY_SEARCH_WEB_SEARCH_ACTION_MODULE:
+			// Search on Web
+			setText(activity.getString(R.string.search_on_web));
+			setTextColor(activity.getResources().getColor(R.color.C_Blue_Light));
 			setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -111,6 +134,5 @@ public class CardTextView extends TextView {
 		default:
 			break;
 		}
-
 	}
 }

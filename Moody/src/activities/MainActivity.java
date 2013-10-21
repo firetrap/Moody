@@ -618,27 +618,27 @@ public class MainActivity extends Activity implements OnClickListener,
 			searchResults.setVisibility(View.VISIBLE);
 			searchResults.removeAllViews();
 			if (results == null) {
-				Toast.makeText(
-						this,
-						getString(R.string.no_results) + "\"" + query
-								+ "\"", Toast.LENGTH_LONG).show();
+				Toast.makeText(this,
+						getString(R.string.no_results) + "\"" + query + "\"",
+						Toast.LENGTH_LONG).show();
 			} else {
 				for (int i = 0; i < results.size(); i++) {
-					if (i > 2) {
-						searchResults.addView(new CardTextView(this, 1,
-								getString(R.string.all_results), View.VISIBLE,
-								true, 0, null, query));
+					if (i > 1) {
+						searchResults.addView(new CardTextView(this,
+								R.id.MOODY_SEARCH_ALL_RESULTS_ACTION_MODULE,
+								null, null, null, query));
 						break;
 					}
 
-					searchResults.addView(new CardTextView(this, 0, results
-							.get(i).getCourseName(), View.VISIBLE, true, 0,
-							results.get(i), query));
+					searchResults.addView(new CardTextView(this,
+							R.id.MOODY_SEARCH_TOPIC_ACTION_MODULE, results.get(
+									i).getCourseName(), results.get(i)
+									.getTopicName(), results.get(i), query));
 				}
 
 			}
-			searchResults.addView(new CardTextView(this, 2,
-					getString(R.string.search_on_web), View.VISIBLE, true, 0,
+			searchResults.addView(new CardTextView(this,
+					R.id.MOODY_SEARCH_WEB_SEARCH_ACTION_MODULE, null, null,
 					null, query));
 			searchResults.invalidate();
 

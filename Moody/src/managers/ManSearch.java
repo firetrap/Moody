@@ -16,6 +16,7 @@ public class ManSearch {
 	private String courseId;
 	private String courseName;
 	private String topicId;
+	private String topicName;
 
 	private ArrayList<ObjectSearch> result = new ArrayList<ObjectSearch>();
 
@@ -49,9 +50,11 @@ public class ManSearch {
 
 			for (int i = 0; i < courseContent.length; i++) {
 				topicId = Long.toString(courseContent[i].getId());
+				topicName = courseContent[i].getName();
 				if (courseContent[i].getName().contains(query)
 						|| courseContent[i].getSummary().contains(query)) {
-					search = new ObjectSearch(courseId, courseName, topicId);
+					search = new ObjectSearch(courseId, courseName, topicId,
+							topicName);
 					result.add(search);
 
 				}
@@ -72,7 +75,8 @@ public class ManSearch {
 			for (int i = 0; i < moodleModules.length; i++) {
 
 				if (moodleModules[i].getName().contains(query)) {
-					search = new ObjectSearch(courseId, courseName, topicId);
+					search = new ObjectSearch(courseId, courseName, topicId,
+							topicName);
 					result.add(search);
 
 				}
