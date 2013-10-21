@@ -3,7 +3,6 @@ package adapters;
 import java.util.ArrayList;
 
 import restPackage.MoodleContact;
-
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;

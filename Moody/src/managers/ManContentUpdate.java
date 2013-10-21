@@ -3,7 +3,6 @@ package managers;
 import java.util.LinkedList;
 
 import model.ObjectLatest;
-
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;

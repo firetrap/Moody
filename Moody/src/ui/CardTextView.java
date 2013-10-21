@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.android.moody.R;
 
+import fragments.FragSearch;
 import fragments.FragTopics;
 
 public class CardTextView extends TextView {
@@ -62,7 +63,10 @@ public class CardTextView extends TextView {
 					fragmentTransaction.replace(R.id.mainFragment,
 							insideTopicsFrag);
 					fragmentTransaction.commit();
-					myDrawerLayout.closeDrawer(Gravity.RIGHT);
+					if (myDrawerLayout != null) {
+						myDrawerLayout.closeDrawer(Gravity.RIGHT);
+
+					}
 				}
 			});
 
@@ -72,7 +76,23 @@ public class CardTextView extends TextView {
 			setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					Bundle bundle = new Bundle();
+					bundle.putString("query", searchQuery);
 
+					FragmentManager fragmentManager = activity
+							.getFragmentManager();
+					FragmentTransaction fragmentTransaction = fragmentManager
+							.beginTransaction();
+
+					FragSearch search = new FragSearch();
+					search.setArguments(bundle);
+					fragmentTransaction.addToBackStack(null);
+					fragmentTransaction.replace(R.id.mainFragment, search);
+					fragmentTransaction.commit();
+					if (myDrawerLayout != null) {
+						myDrawerLayout.closeDrawer(Gravity.RIGHT);
+
+					}
 				}
 			});
 			break;
