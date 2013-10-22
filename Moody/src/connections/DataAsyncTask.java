@@ -9,6 +9,7 @@ import java.net.URL;
 import restPackage.MoodleCallRestWebService;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
+import restPackage.MoodleMessage;
 import restPackage.MoodleRestCourse;
 import restPackage.MoodleRestEnrol;
 import restPackage.MoodleRestException;
@@ -88,6 +89,10 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 
 		case CORE_MESSAGE_GET_CONTACTS:
 			return MoodleRestMessage.getContacts();
+
+		case CORE_MESSAGE_SEND_INSTANT_MESSAGES:
+			return MoodleRestMessage
+					.sendInstantMessage((MoodleMessage) webServiceParams);
 		default:
 			return null;
 		}

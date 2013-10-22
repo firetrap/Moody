@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 import restPackage.MoodleContact;
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
@@ -14,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.moody.R;
+
+import fragments.FragUserContacts;
 
 /**
  * 
@@ -107,7 +112,6 @@ public class ContactExpandableAdapter extends BaseExpandableListAdapter {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public View getChildView(int groupPosition, final int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
@@ -126,13 +130,53 @@ public class ContactExpandableAdapter extends BaseExpandableListAdapter {
 
 			@Override
 			public void onClick(View view) {
-				Toast.makeText(
-						getInnerActivity(),
-						((MoodleContact) childs.get(childPosition))
-								.getContactProfile().getFullname(),
-						Toast.LENGTH_SHORT).show();
+				Long id = ((MoodleContact) childs.get(childPosition))
+						.getContactProfile().getId();
+
+				if (Long.valueOf(id) != Long.valueOf(-1)) {
+					Toast.makeText(
+							getInnerActivity(),
+							((MoodleContact) childs.get(childPosition))
+									.getContactProfile().getFullname(),
+							Toast.LENGTH_SHORT).show();
+				}
 			}
 
+		});
+
+		final ViewGroup container = parent;
+
+		convertView.setOnLongClickListener(new OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				Long id = ((MoodleContact) childs.get(childPosition))
+						.getContactProfile().getId();
+
+				if (Long.valueOf(id) != Long.valueOf(-1)) {
+					FragmentManager fm = getInnerActivity()
+							.getFragmentManager();
+					FragUserContacts userContactContextDialog = null;
+					Bundle bund = new Bundle();
+
+					bund.putLong("contact", ((MoodleContact) childs
+							.get(childPosition)).getContactProfile().getId());
+
+					// make debug easy
+					try {
+						userContactContextDialog = new FragUserContacts();
+					} catch (Exception ex) {
+
+					}
+
+					userContactContextDialog.setArguments(bund);
+					userContactContextDialog.setRetainInstance(true);
+					userContactContextDialog.show(fm, "fragment_name");
+				}
+
+				return false;
+			}
 		});
 
 		return convertView;

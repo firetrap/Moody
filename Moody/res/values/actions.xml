@@ -9,5 +9,6 @@
     <item name="MOODY_SEARCH_TOPIC_ACTION_MODULE" type="id"/>
     <item name="MOODY_SEARCH_ALL_RESULTS_ACTION_MODULE" type="id"/>
     <item name="MOODY_SEARCH_WEB_SEARCH_ACTION_MODULE" type="id"/>
+    <item name="MOODY_SEARCH_TITLE_ACTION_MODULE" type="id"/>
 
 </resources>

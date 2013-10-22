@@ -23,30 +23,28 @@ public class CardTextView extends TextView {
 
 	private Activity activity;
 	private int action;
-	private String courseName;
-	private String topicName;
+	private String setText;
 	private ObjectSearch params;
 	private String searchQuery;
 
-	public CardTextView(Activity activity, int action, String courseName,
-			String topicName, ObjectSearch params, String searchQuery) {
+	public CardTextView(Activity activity, int action, String setText,
+			ObjectSearch params, String searchQuery) {
 		super(activity);
 		this.activity = activity;
 		this.action = action;
-		this.courseName = courseName;
-		this.topicName = topicName;
+		this.setText = setText;
 		this.params = params;
 		this.searchQuery = searchQuery;
 
 		setCompoundDrawablesWithIntrinsicBounds(null, null, activity
 				.getResources().getDrawable(R.drawable.ic_action_go_into), null);
 
-		setTextColor(activity.getResources().getColor(android.R.color.darker_gray));
-		setTextSize(18);
-		setPadding(10, 10, 10, 10);
+		setTextColor(activity.getResources().getColor(
+				android.R.color.darker_gray));
+
+		setLines(1);
 		getEllipsize();
 		setEllipsize(TruncateAt.END);
-		setLines(1);
 		setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -59,15 +57,53 @@ public class CardTextView extends TextView {
 		final DrawerLayout myDrawerLayout = (DrawerLayout) activity
 				.findViewById(R.id.drawer_layout);
 		switch (action) {
-		case R.id.MOODY_SEARCH_TOPIC_ACTION_MODULE:
+
+		case R.id.MOODY_SEARCH_TITLE_ACTION_MODULE:
 			// TOPICS
-			setText(courseName + " > " + topicName);
+			setTextSize(18);
+			setPadding(10, 10, 10, 10);
+			setText(setText + activity.getString(R.string.break_line));
+			setLines(2);
 			setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Bundle bundle = new Bundle();
 					bundle.putString("courseId", params.getCourseId());
-					bundle.putString("courseName", params.getCourseName());
+					bundle.putString("setText", params.getCourseName());
+					bundle.putString("topicId", params.getTopicId());
+
+					FragmentManager fragmentManager = activity
+							.getFragmentManager();
+					FragmentTransaction fragmentTransaction = fragmentManager
+							.beginTransaction();
+
+					FragTopics insideTopicsFrag = new FragTopics();
+					insideTopicsFrag.setArguments(bundle);
+					fragmentTransaction.addToBackStack(null);
+					fragmentTransaction.replace(R.id.mainFragment,
+							insideTopicsFrag);
+					fragmentTransaction.commit();
+					if (myDrawerLayout != null) {
+						myDrawerLayout.closeDrawer(Gravity.RIGHT);
+
+					}
+				}
+			});
+
+			break;
+
+		case R.id.MOODY_SEARCH_TOPIC_ACTION_MODULE:
+			// TOPICS
+			setTextSize(18);
+			setPadding(10, 10, 10, 10);
+			setText(setText + activity.getString(R.string.break_line));
+			setLines(2);
+			setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Bundle bundle = new Bundle();
+					bundle.putString("courseId", params.getCourseId());
+					bundle.putString("setText", params.getCourseName());
 					bundle.putString("topicId", params.getTopicId());
 
 					FragmentManager fragmentManager = activity
@@ -92,6 +128,8 @@ public class CardTextView extends TextView {
 
 		case R.id.MOODY_SEARCH_ALL_RESULTS_ACTION_MODULE:
 			// View all results fragment
+			setTextSize(18);
+			setPadding(10, 10, 10, 10);
 			setText(activity.getString(R.string.all_results));
 			setOnClickListener(new OnClickListener() {
 				@Override
@@ -119,6 +157,8 @@ public class CardTextView extends TextView {
 
 		case R.id.MOODY_SEARCH_WEB_SEARCH_ACTION_MODULE:
 			// Search on Web
+			setTextSize(18);
+			setPadding(10, 10, 10, 10);
 			setText(activity.getString(R.string.search_on_web));
 			setTextColor(activity.getResources().getColor(R.color.C_Blue_Light));
 			setOnClickListener(new OnClickListener() {

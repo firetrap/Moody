@@ -18,6 +18,7 @@ import managers.ManDataStore;
 import managers.ManFavorites;
 import managers.ManSearch;
 import managers.ManSession;
+import managers.ManUserContacts;
 import model.ModConstants;
 import model.ModMessage;
 import model.ObjectSearch;
@@ -113,10 +114,10 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	private void populateContacts() {
 		ExpandableListView expandableList = (ExpandableListView) findViewById(R.id.right_list_viewer);
-		MoodleContact[] contacts = new ManContents(getApplicationContext())
+		MoodleContact[] contacts = new ManUserContacts(getApplicationContext())
 				.getContacts();
 
-		if ((contacts == null) || (contacts.length == 0))
+		if (contacts == null)
 			expandableList.setVisibility(View.GONE);
 		else {
 			ContactExpandableAdapter adapter = new ContactExpandableAdapter(
@@ -145,13 +146,15 @@ public class MainActivity extends Activity implements OnClickListener,
 
 			case STRANGERS:
 
-				if (new ManContents(getApplicationContext())
-						.contactHasStrangers())
+				if (new ManUserContacts(getApplicationContext()).hasStrangers())
 					parentItems.add(0, "Stranger Contacts");
 
 				break;
 			}
 		}
+
+		if (new ManUserContacts(getApplicationContext()).hasBlockedContacts())
+			parentItems.add("Blocked Contacts");
 
 		return parentItems;
 	}
@@ -163,7 +166,11 @@ public class MainActivity extends Activity implements OnClickListener,
 		ArrayList<MoodleContact> strangersList = new ArrayList<MoodleContact>();
 		ArrayList<Object> childItems = new ArrayList<Object>();
 
-		MoodleContact[] contacts = new ManContents(getApplicationContext())
+		MoodleContact emptyContact = new MoodleContact(new MoodleUser(
+				Long.parseLong(("-1"))));
+		emptyContact.getContactProfile().setFullname(
+				getResources().getString(R.string.contacts_no_contacts));
+		MoodleContact[] contacts = new ManUserContacts(getApplicationContext())
 				.getContacts();
 
 		for (MoodleContact contact : contacts) {
@@ -177,19 +184,28 @@ public class MainActivity extends Activity implements OnClickListener,
 				break;
 
 			case STRANGERS:
-				if (new ManContents(getApplicationContext())
-						.contactHasStrangers())
+				if (new ManUserContacts(getApplicationContext()).hasStrangers())
 					strangersList.add(contact);
 
 				break;
 			}
 		}
 
-		if (new ManContents(getApplicationContext()).contactHasStrangers())
+		if (new ManUserContacts(getApplicationContext()).hasStrangers())
 			childItems.add(strangersList);
+
+		if (onlineList.size() == 0)
+			onlineList.add(emptyContact);
+
+		if (offlineList.size() == 0)
+			offlineList.add(emptyContact);
 
 		childItems.add(onlineList);
 		childItems.add(offlineList);
+
+		if (new ManUserContacts(getApplicationContext()).hasBlockedContacts())
+			childItems.add(new ManUserContacts(getApplicationContext())
+					.getBlockedContacts());
 
 		return childItems;
 	}
@@ -528,8 +544,6 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	}
 
-	public int count = 0;
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -584,7 +598,6 @@ public class MainActivity extends Activity implements OnClickListener,
 				Long.toString(performanceMeasure(startTime, endTime)));
 		super.onResume();
 
-		
 	}
 
 	/*
@@ -627,20 +640,27 @@ public class MainActivity extends Activity implements OnClickListener,
 					if (i > 1) {
 						searchResults.addView(new CardTextView(this,
 								R.id.MOODY_SEARCH_ALL_RESULTS_ACTION_MODULE,
-								null, null, null, query));
+								null, null, query));
 						break;
 					}
+					LinearLayout ll = new LinearLayout(getApplicationContext());
+					ll.setOrientation(LinearLayout.VERTICAL);
 
-					searchResults.addView(new CardTextView(this,
+					ll.addView(new CardTextView(this,
 							R.id.MOODY_SEARCH_TOPIC_ACTION_MODULE, results.get(
-									i).getCourseName(), results.get(i)
-									.getTopicName(), results.get(i), query));
+									i).getCourseName(), results.get(i), query));
+
+					ll.addView(new CardTextView(this,
+							R.id.MOODY_SEARCH_TOPIC_ACTION_MODULE, results.get(
+									i).getTopicName(), results.get(i), query));
+
+					searchResults.addView(ll);
 				}
 
 			}
 			searchResults.addView(new CardTextView(this,
 					R.id.MOODY_SEARCH_WEB_SEARCH_ACTION_MODULE, null, null,
-					null, query));
+					query));
 			searchResults.invalidate();
 
 		}
