@@ -71,7 +71,7 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
-                android:background="@android:color/holo_blue_light" />
+                android:background="@color/C_Blue_Medium" />
 
             <!-- ###################### FIRST NAME ###################### -->
 

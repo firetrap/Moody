@@ -25,17 +25,21 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.android.moody.R;
@@ -58,7 +62,8 @@ public class LoginActivity extends Activity {
 	private String finalToken = "";
 
 	/**
-	 * Keep track of the login task to ensure we can cancel it if requested.
+	 * Keep track of the login initActivity to ensure we can cancel it if
+	 * requested.
 	 */
 	private UserLoginTask mAuthTask = null;
 
@@ -90,21 +95,20 @@ public class LoginActivity extends Activity {
 		if (session.isLoggedIn()) {
 			final Intent intent = new Intent(getApplicationContext(),
 					MainActivity.class);
-//			intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			startActivity(intent);
 			finish();
 
 		} else {
 
 			setContentView(R.layout.activity_login);
-			
+
 			// Set up the login form.
-			trademark= (TextView) findViewById(R.id.trademark);
+			trademark = (TextView) findViewById(R.id.trademark);
 			trademark.setMovementMethod(LinkMovementMethod.getInstance());
-			
-			licence= (TextView) findViewById(R.id.licence);
+
+			licence = (TextView) findViewById(R.id.licence);
 			licence.setMovementMethod(LinkMovementMethod.getInstance());
-			
+
 			mUrlView = (EditText) findViewById(R.id.prompt_url);
 			mUser = getIntent().getStringExtra(EXTRA_EMAIL);
 			mUserView = (EditText) findViewById(R.id.username);
@@ -135,6 +139,8 @@ public class LoginActivity extends Activity {
 							attemptLogin();
 						}
 					});
+
+			onSoftKeyboardState();
 
 		}
 	}
@@ -223,7 +229,8 @@ public class LoginActivity extends Activity {
 					false);
 
 		} else {
-			// Show a progress spinner, and kick off a background task to
+			// Show a progress spinner, and kick off a background initActivity
+			// to
 			// perform the user login attempt.
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
@@ -235,8 +242,8 @@ public class LoginActivity extends Activity {
 	}
 
 	/**
-	 * Represents an asynchronous login/registration task used to authenticate
-	 * the user.
+	 * Represents an asynchronous login/registration initActivity used to
+	 * authenticate the user.
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -378,16 +385,14 @@ public class LoginActivity extends Activity {
 				session = new ManSession(getApplicationContext());
 				session.createLoginSession(mUser, fullName, finalToken, userId,
 						mUrl);
+
+				showProgress(true);
 				getApplicationContext().startService(
 						new Intent(getApplicationContext(),
 								ServiceBackground.class));
+				Handler handler = new Handler();
+				handler.postDelayed(initActivity, 5000);
 
-				SystemClock.sleep(3000);
-				Intent intent = new Intent(getApplicationContext(),
-						MainActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-				finish();
 			} else {
 				if (focusView.getError().equals(
 						getString(R.string.error_invalid_url))) {
@@ -454,6 +459,69 @@ public class LoginActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		finish();
+	}
+
+	/**
+	 * 
+	 * This will wait until the main activity is loaded to start the intent
+	 * 
+	 */
+	private Runnable initActivity = new Runnable() {
+		public void run() {
+
+			Intent intent = new Intent(getApplicationContext(),
+					MainActivity.class);
+			// intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			startActivity(intent);
+			finish();
+		}
+	};
+
+	/**
+	 * 
+	 * Android OS doesn't support hiding view's on SoftKeyboard call, so we
+	 * have to implement our own method
+	 * 
+	 */
+	private void onSoftKeyboardState() {
+		final View activityRootView = findViewById(R.id.login_form);
+		activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(
+				new OnGlobalLayoutListener() {
+					@Override
+					public void onGlobalLayout() {
+						Rect r = new Rect();
+						// r will be populated with the coordinates of your
+						// view that area still visible.
+						activityRootView.getWindowVisibleDisplayFrame(r);
+
+						int heightDiff = activityRootView.getRootView()
+								.getHeight() - (r.bottom - r.top);
+						if (heightDiff > 100) {
+							// if more than 100 pixels,its probably a
+							// keyboard
+
+							findViewById(R.id.login_logo).setVisibility(
+									View.GONE);
+							findViewById(R.id.LoginFormContainer)
+									.setLayoutParams(
+											new LinearLayout.LayoutParams(
+													LayoutParams.MATCH_PARENT,
+													LayoutParams.WRAP_CONTENT));
+							activityRootView.invalidate();
+
+						} else {
+							findViewById(R.id.login_logo).setVisibility(
+									View.VISIBLE);
+							findViewById(R.id.LoginFormContainer)
+									.setLayoutParams(
+											new LinearLayout.LayoutParams(
+													LayoutParams.MATCH_PARENT,
+													0, 2f));
+							activityRootView.invalidate();
+
+						}
+					}
+				});
 	}
 
 }

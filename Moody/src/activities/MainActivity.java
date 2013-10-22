@@ -584,6 +584,7 @@ public class MainActivity extends Activity implements OnClickListener,
 				Long.toString(performanceMeasure(startTime, endTime)));
 		super.onResume();
 
+		
 	}
 
 	/*

@@ -125,4 +125,16 @@
     <string name="no_results">No results found for: </string>
     <string name="all_results">View all search results</string>
 
+    <!-- Strings Related to Contacts -->
+    <string name="contacts_create_contact">Add to Contacts</string>
+    <string name="contacts_delete_contact">Remove From Contacts</string>
+    <string name="contacts_delete">Remove</string>
+    <string name="contacts_block_contact">Block</string>
+    <string name="contacts_unblock_contact">Unblock</string>
+    <string name="contacts_send_message_contact">Send Message</string>
+    <string name="contacts_no_contacts">No Contacts</string>
+    <string name="message_title">New Message</string>
+    <string name="message_send">Send</string>
+    <string name="message_cancel">Cancel</string>
+
 </resources>

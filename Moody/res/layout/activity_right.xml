@@ -11,7 +11,7 @@
     <LinearLayout
         android:id="@+id/right_linear_Layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
         android:orientation="vertical" >
 
@@ -31,7 +31,6 @@
                 android:background="@drawable/card_no_padding"
                 android:iconifiedByDefault="false"
                 android:queryHint="@string/query_hint" >
-
             </SearchView>
 
             <LinearLayout
@@ -47,21 +46,21 @@
                 android:orientation="vertical"
                 android:showDividers="middle"
                 android:visibility="gone" >
-
             </LinearLayout>
         </RelativeLayout>
 
         <ExpandableListView
             android:id="@+id/right_list_viewer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/card_w_shadow"
+            android:layout_height="347dp"
             android:choiceMode="singleChoice"
             android:clickable="true"
-            android:divider="@android:color/black"
-            android:dividerHeight="2dp"
+            android:divider="@color/transparent"
+            android:footerDividersEnabled="false"
             android:groupIndicator="@null"
+            android:headerDividersEnabled="false"
             android:longClickable="true" >
+
         </ExpandableListView>
     </LinearLayout>
 
