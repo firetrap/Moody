@@ -36,19 +36,16 @@ public class CardTextView extends TextView {
 		this.params = params;
 		this.searchQuery = searchQuery;
 
-		setCompoundDrawablesWithIntrinsicBounds(null, null, activity
-				.getResources().getDrawable(R.drawable.ic_action_go_into), null);
-
 		setTextColor(activity.getResources().getColor(
 				android.R.color.darker_gray));
-
+		setTextSize(18);
 		setLines(1);
 		getEllipsize();
 		setEllipsize(TruncateAt.END);
 		setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-
+		setPadding(10, 5, 0, 5);
 		customActions();
 
 	}
@@ -60,10 +57,9 @@ public class CardTextView extends TextView {
 
 		case R.id.MOODY_SEARCH_TITLE_ACTION_MODULE:
 			// TOPICS
-			setTextSize(18);
-			setPadding(10, 10, 10, 10);
-			setText(setText + activity.getString(R.string.break_line));
-			setLines(2);
+
+			setText(setText);
+
 			setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -94,10 +90,10 @@ public class CardTextView extends TextView {
 
 		case R.id.MOODY_SEARCH_TOPIC_ACTION_MODULE:
 			// TOPICS
-			setTextSize(18);
-			setPadding(10, 10, 10, 10);
-			setText(setText + activity.getString(R.string.break_line));
-			setLines(2);
+			setTextSize(12);
+			setPadding(20, 0, 0, 0);
+			setText(setText);
+
 			setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -128,8 +124,6 @@ public class CardTextView extends TextView {
 
 		case R.id.MOODY_SEARCH_ALL_RESULTS_ACTION_MODULE:
 			// View all results fragment
-			setTextSize(18);
-			setPadding(10, 10, 10, 10);
 			setText(activity.getString(R.string.all_results));
 			setOnClickListener(new OnClickListener() {
 				@Override
@@ -157,8 +151,6 @@ public class CardTextView extends TextView {
 
 		case R.id.MOODY_SEARCH_WEB_SEARCH_ACTION_MODULE:
 			// Search on Web
-			setTextSize(18);
-			setPadding(10, 10, 10, 10);
 			setText(activity.getString(R.string.search_on_web));
 			setTextColor(activity.getResources().getColor(R.color.C_Blue_Light));
 			setOnClickListener(new OnClickListener() {

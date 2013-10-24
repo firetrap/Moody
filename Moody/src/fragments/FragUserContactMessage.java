@@ -13,8 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.android.moody.R;
 
@@ -32,23 +32,23 @@ public class FragUserContactMessage extends DialogFragment {
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 
-		getDialog().getWindow().setTitle(
-				getActivity().getBaseContext().getResources()
-						.getString(R.string.message_title));
+		getDialog().getWindow().setTitle(getArguments().getString("name"));
+
+		getDialog().getWindow().setBackgroundDrawableResource(R.drawable.card);
 
 		view = inflater.inflate(R.layout.frag_message, container);
 
-		((Button) view.findViewById(R.id.button_cancel))
-				.setOnClickListener(new OnClickListener() {
+//		((Button) view.findViewById(R.id.button_cancel))
+//				.setOnClickListener(new OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//						// TODO Auto-generated method stub
+//						dismiss();
+//					}
+//				});
 
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						dismiss();
-					}
-				});
-
-		((Button) view.findViewById(R.id.button_send))
+		((ImageButton) view.findViewById(R.id.button_send))
 				.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {

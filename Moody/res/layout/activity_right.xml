@@ -21,7 +21,8 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp" >
+            android:layout_marginTop="5dp"
+            android:layout_weight="1" >
 
             <SearchView
                 android:id="@+id/searchView"
@@ -49,19 +50,28 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <ExpandableListView
-            android:id="@+id/right_list_viewer"
+        <TextView
+            android:id="@+id/contacts_title"
+            style="@style/CardsLayoutTitle"
             android:layout_width="match_parent"
-            android:layout_height="347dp"
-            android:choiceMode="singleChoice"
-            android:clickable="true"
-            android:divider="@color/transparent"
-            android:footerDividersEnabled="false"
-            android:groupIndicator="@null"
-            android:headerDividersEnabled="false"
-            android:longClickable="true" >
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="20dp"
+            android:text="Contacts"
+            android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+            android:textSize="@dimen/card_medium_text" />
 
-        </ExpandableListView>
+        <LinearLayout
+            android:id="@+id/contacts_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/card"
+            android:orientation="vertical" >
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

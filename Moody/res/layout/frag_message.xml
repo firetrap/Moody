@@ -2,66 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_weight="1" >
 
     <EditText
         android:id="@+id/edittext_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
+        android:layout_marginTop="40dp"
         android:layout_weight="1"
+        android:ems="10"
         android:inputType="textMultiLine"
-        android:maxHeight="100dp" />
+        android:maxHeight="100dp"
+        android:minHeight="20dp" >
 
-    <LinearLayout
+        <requestFocus />
+    </EditText>
+
+    <ImageButton
+        android:id="@+id/button_send"
+        style="?android:attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="right" 
-        style="?android:attr/buttonBarStyle">
-
-        <Button
-            android:id="@+id/button_cancel"
-            android:layout_width="wrap_content"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_height="wrap_content"
-            android:text="@string/message_cancel" />
-
-        <Button
-            android:id="@+id/button_send"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/message_send" />
-    </LinearLayout>
+        android:layout_weight="5"
+        android:background="@drawable/ic_action_send_now" />
 
 </LinearLayout>
-
-
-<!-- <?xml version="1.0" encoding="utf-8"?> -->
-<!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" -->
-<!--     android:layout_width="match_parent" -->
-<!--     android:layout_height="wrap_content" -->
-<!--     android:gravity="top" > -->
-
-<!--     <EditText -->
-<!--         android:id="@+id/edittext_message" -->
-<!--         android:layout_width="0dip" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:layout_weight="1" -->
-<!--         android:ems="10" -->
-<!--         android:inputType="textMultiLine" -->
-<!--         android:maxHeight="100dp" > -->
-
-<!--         <requestFocus /> -->
-<!--     </EditText> -->
-
-<!--     <Button -->
-<!--         android:id="@+id/button_send" -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:layout_gravity="bottom" -->
-<!--         android:layout_marginLeft="10dp" -->
-<!--         android:background="@drawable/ic_action_send_now" /> -->
-
-<!-- </LinearLayout> -->

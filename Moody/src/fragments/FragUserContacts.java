@@ -183,13 +183,14 @@ public class FragUserContacts extends DialogFragment {
 
 					@Override
 					public void onClick(View v) {
-
+						dismiss();
 						FragmentManager fm = getActivity().getFragmentManager();
 						FragUserContactMessage userContactContextDialog = null;
 						Bundle bund = new Bundle();
 
 						bund.putLong("contact",
 								getArguments().getLong("contact"));
+						bund.putString("name", getArguments().getString("name"));
 						// make debug easy
 						try {
 							userContactContextDialog = new FragUserContactMessage();

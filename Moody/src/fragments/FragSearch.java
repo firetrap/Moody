@@ -28,11 +28,12 @@ public class FragSearch extends Fragment {
 		LinearLayout searchResults = (LinearLayout) view
 				.findViewById(R.id.full_results_layout);
 		for (int i = 0; i < results.size(); i++) {
+
 			LinearLayout ll = new LinearLayout(getActivity());
 			ll.setOrientation(LinearLayout.VERTICAL);
 
 			ll.addView(new CardTextView(getActivity(),
-					R.id.MOODY_SEARCH_TOPIC_ACTION_MODULE, results.get(i)
+					R.id.MOODY_SEARCH_TITLE_ACTION_MODULE, results.get(i)
 							.getCourseName(), results.get(i), query));
 
 			ll.addView(new CardTextView(getActivity(),

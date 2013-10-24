@@ -5,6 +5,8 @@ import fragments.FragLatest;
 import fragments.FragTopics;
 import fragments.FragTopicsPreview;
 import fragments.FragUserCloud;
+import fragments.FragUserContactMessage;
+import fragments.FragUserContacts;
 import fragments.FragUserPicture;
 import interfaces.InterDialogFrag;
 
@@ -23,12 +25,10 @@ import model.ModConstants;
 import model.ModMessage;
 import model.ObjectSearch;
 import restPackage.MoodleContact;
-import restPackage.MoodleContactState;
 import restPackage.MoodleCourse;
 import restPackage.MoodleUser;
 import service.ServiceBackground;
 import ui.CardTextView;
-import adapters.ContactExpandableAdapter;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -47,8 +47,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -91,10 +91,13 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		populateLeft();
 		populateRight();
-
 		receiveNotification();
-		setupSearchView();
 
+	}
+
+	private void populateRight() {
+		setupSearchView();
+		populateContacts();
 	}
 
 	/**
@@ -108,106 +111,88 @@ public class MainActivity extends Activity implements OnClickListener,
 		searchView.setSearchableInfo(searchableInfo);
 	}
 
-	private void populateRight() {
-		populateContacts();
-	}
-
 	private void populateContacts() {
-		ExpandableListView expandableList = (ExpandableListView) findViewById(R.id.right_list_viewer);
-		MoodleContact[] contacts = new ManUserContacts(getApplicationContext())
-				.getContacts();
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		if (contacts == null)
-			expandableList.setVisibility(View.GONE);
-		else {
-			ContactExpandableAdapter adapter = new ContactExpandableAdapter(
-					getContactGroupParents(), getContactChildData());
+		LinearLayout contactsLinearLayout = (LinearLayout) findViewById(R.id.contacts_linear_layout);
+		final MoodleContact[] contacts = new ManUserContacts(
+				getApplicationContext()).getContacts();
 
-			adapter.setInflater(
-					(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-					this, R.layout.contacts_group, R.layout.contacts_row);
+		for (int i = 0; i < contacts.length; i++) {
+			View view = inflater.inflate(R.layout.contact, null);
+			final MoodleUser singleContact = contacts[i].getContactProfile();
+			TextView contactTxtview = (TextView) view
+					.findViewById(R.id.contact_textView);
+			contactTxtview.setText(singleContact.getFullname());
+			// contact.getProfileImageURLSmall();
 
-			expandableList.setAdapter(adapter);
-		}
-	}
-
-	public ArrayList<String> getContactGroupParents() {
-		ArrayList<String> parentItems = new ArrayList<String>();
-
-		for (MoodleContactState state : MoodleContactState.values()) {
-			switch (state) {
+			switch (contacts[i].getState()) {
 			case ONLINE:
-				parentItems.add("Online Contacts");
+				contactTxtview.setCompoundDrawablesWithIntrinsicBounds(
+						getResources().getDrawable(R.drawable.contact_online),
+						null,
+						getResources().getDrawable(R.drawable.ic_action_email),
+						null);
 				break;
 
 			case OFFLINE:
-				parentItems.add("Offline Contacts");
+				contactTxtview.setCompoundDrawablesWithIntrinsicBounds(
+						getResources().getDrawable(R.drawable.contact_offline),
+						null,
+						getResources().getDrawable(R.drawable.ic_action_email),
+						null);
 				break;
 
 			case STRANGERS:
-
-				if (new ManUserContacts(getApplicationContext()).hasStrangers())
-					parentItems.add(0, "Stranger Contacts");
-
+				contactTxtview
+						.setCompoundDrawables(
+								getResources().getDrawable(
+										R.drawable.contact_stranger),
+								null,
+								getResources().getDrawable(
+										R.drawable.ic_action_email), null);
 				break;
 			}
+			contactTxtview.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					FragmentManager fm = getFragmentManager();
+					FragUserContactMessage userContactContextDialog = null;
+					Bundle bund = new Bundle();
+					bund.putLong("contact", singleContact.getId());
+					bund.putString("name", singleContact.getFullname());
+					userContactContextDialog = new FragUserContactMessage();
+					userContactContextDialog.setArguments(bund);
+					userContactContextDialog.setRetainInstance(true);
+					userContactContextDialog.show(fm, "fragment_name");
+				}
+			});
+
+			contactTxtview.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					// TODO Auto-generated method stub
+					Long id = singleContact.getId();
+					if (Long.valueOf(id) != Long.valueOf(-1)) {
+						FragmentManager fm = getFragmentManager();
+						FragUserContacts userContactContextDialog = null;
+						Bundle bund = new Bundle();
+						bund.putLong("contact", id);
+						bund.putString("name", singleContact.getFullname());
+						userContactContextDialog = new FragUserContacts();
+						userContactContextDialog.setArguments(bund);
+						userContactContextDialog.setRetainInstance(true);
+						userContactContextDialog.show(fm, "fragment_name");
+					}
+					return false;
+				}
+			});
+
+			// add the textView to the linearLayout
+			contactsLinearLayout.addView(contactTxtview);
 		}
 
-		if (new ManUserContacts(getApplicationContext()).hasBlockedContacts())
-			parentItems.add("Blocked Contacts");
-
-		return parentItems;
-	}
-
-	public ArrayList<Object> getContactChildData() {
-
-		ArrayList<MoodleContact> onlineList = new ArrayList<MoodleContact>();
-		ArrayList<MoodleContact> offlineList = new ArrayList<MoodleContact>();
-		ArrayList<MoodleContact> strangersList = new ArrayList<MoodleContact>();
-		ArrayList<Object> childItems = new ArrayList<Object>();
-
-		MoodleContact emptyContact = new MoodleContact(new MoodleUser(
-				Long.parseLong(("-1"))));
-		emptyContact.getContactProfile().setFullname(
-				getResources().getString(R.string.contacts_no_contacts));
-		MoodleContact[] contacts = new ManUserContacts(getApplicationContext())
-				.getContacts();
-
-		for (MoodleContact contact : contacts) {
-			switch (contact.getState()) {
-			case ONLINE:
-				onlineList.add(contact);
-				break;
-
-			case OFFLINE:
-				offlineList.add(contact);
-				break;
-
-			case STRANGERS:
-				if (new ManUserContacts(getApplicationContext()).hasStrangers())
-					strangersList.add(contact);
-
-				break;
-			}
-		}
-
-		if (new ManUserContacts(getApplicationContext()).hasStrangers())
-			childItems.add(strangersList);
-
-		if (onlineList.size() == 0)
-			onlineList.add(emptyContact);
-
-		if (offlineList.size() == 0)
-			offlineList.add(emptyContact);
-
-		childItems.add(onlineList);
-		childItems.add(offlineList);
-
-		if (new ManUserContacts(getApplicationContext()).hasBlockedContacts())
-			childItems.add(new ManUserContacts(getApplicationContext())
-					.getBlockedContacts());
-
-		return childItems;
 	}
 
 	/**
@@ -627,10 +612,12 @@ public class MainActivity extends Activity implements OnClickListener,
 			manSearch.doMySearch(query);
 			// return the arraylist with the topic which contains the query
 			ArrayList<ObjectSearch> results = manSearch.getResults();
+
 			LinearLayout searchResults = (LinearLayout) this
 					.findViewById(R.id.searchResults);
 			searchResults.setVisibility(View.VISIBLE);
 			searchResults.removeAllViews();
+
 			if (results == null) {
 				Toast.makeText(this,
 						getString(R.string.no_results) + "\"" + query + "\"",
@@ -647,7 +634,7 @@ public class MainActivity extends Activity implements OnClickListener,
 					ll.setOrientation(LinearLayout.VERTICAL);
 
 					ll.addView(new CardTextView(this,
-							R.id.MOODY_SEARCH_TOPIC_ACTION_MODULE, results.get(
+							R.id.MOODY_SEARCH_TITLE_ACTION_MODULE, results.get(
 									i).getCourseName(), results.get(i), query));
 
 					ll.addView(new CardTextView(this,
