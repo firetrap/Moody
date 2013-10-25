@@ -32,7 +32,7 @@ public class FragUserContacts extends DialogFragment {
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 
-		View view = inflater.inflate(R.layout.contacts_context_dialog,
+		View view = inflater.inflate(R.layout.dialog_contacts_context,
 				container);
 
 		contact = new ManUserContacts(getActivity().getBaseContext())

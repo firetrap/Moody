@@ -30,10 +30,9 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/border_shape"
                 android:contentDescription="@string/login_image"
                 android:onClick="onClick"
-                android:padding="2dp"
+                android:padding="0dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/no_logon" />
 

@@ -77,7 +77,7 @@
     <string name="title_activity_main_activity1">MainActivity1</string>
     <string name="cloud_dialog_dropbox">Dropbox</string>
     <string name="cloud_dialog_drive">Google Drive</string>
-    <string name="content_preview">Módulo 1: A Importância do e-learning. A metodolog...SUMÁRIO: Questões preliminares ao modo de funciona...OJECTOS DE APRENDIZAGEM: Algumas questões e respostas preliminares Ways the Internet Has Changed Our World: Music</string>
+    <string name="content_preview">Ipsolum lorus iplorum</string>
     <string name="topics_contents">Your topics contents</string>
     <string name="topic_label">Your Topic Label</string>
     <string name="title_activity_teste">TesteActivity</string>
@@ -134,8 +134,8 @@
     <string name="contacts_unblock_contact">Unblock</string>
     <string name="contacts_send_message_contact">Send Message</string>
     <string name="contacts_no_contacts">No Contacts</string>
-    <string name="message_title">New Message</string>
     <string name="message_send">Send</string>
-    <string name="message_cancel">Cancel</string>
+    <string name="message_hint">Type message</string>
+    
 
 </resources>

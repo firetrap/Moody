@@ -37,6 +37,7 @@ import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -95,14 +96,83 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	}
 
+	@Override
+	protected void onResume() {
+		endTime = System.currentTimeMillis();
+		Log.d("MoodyPerformance",
+				Long.toString(performanceMeasure(startTime, endTime)));
+		super.onResume();
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onNewIntent(android.content.Intent)
+	 */
+	@Override
+	protected void onNewIntent(Intent intent) {
+
+		// Get the intent, verify the action and get the query
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			search(intent);
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// // Inflate the menu; this adds items to the action bar if it is
+		// present.
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+
+		return true;
+
+	}
+
+	/*
+	 * (non-Javadoc) * This method it's responsible to retrieve the bitmap
+	 * data/resize/compress The first case of the switch it's not fully
+	 * implemented as planned, moodle doesn't support the users to update their
+	 * own user details this issue is described and reported here
+	 * https://tracker.moodle.org/browse/CONTRIB-4282 The next code it's ready
+	 * 
+	 * TO DO: implement the user update details in Moody when Moodle.org decide
+	 * to add the required web service function.
+	 * 
+	 * @see interfaces.InterDialogFrag#onFinishEditDialog(java.lang.String, int)
+	 */
+	@Override
+	public void onFinishEditDialog(String inputText, int code) {
+		switch (code) {
+		case ModConstants.DIALOG_FRAG_USER_PIC:
+			session.addPref(inputText);
+			ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
+
+			login_button.setImageBitmap(BitmapResizer
+					.decodeSampledBitmapFromResource(inputText,
+							R.id.login_image_button, 100, 100));
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (getFragmentManager().getBackStackEntryCount() == 1) {
+			finish();
+		} else {
+			super.onBackPressed();
+		}
+	}
+
 	private void populateRight() {
 		setupSearchView();
 		populateContacts();
 	}
 
-	/**
-	 * 
-	 */
 	private void setupSearchView() {
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		final SearchView searchView = (SearchView) findViewById(R.id.searchView);
@@ -116,97 +186,153 @@ public class MainActivity extends Activity implements OnClickListener,
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		LinearLayout contactsLinearLayout = (LinearLayout) findViewById(R.id.contacts_linear_layout);
+		LinearLayout strangersLinearLayout = (LinearLayout) findViewById(R.id.strangers_linear_layout);
 		final MoodleContact[] contacts = new ManUserContacts(
 				getApplicationContext()).getContacts();
+		if (contacts == null) {
+			contactsLinearLayout.setVisibility(View.GONE);
+			strangersLinearLayout.setVisibility(View.GONE);
+		} else {
+			for (int i = 0; i < contacts.length; i++) {
+				View view = inflater.inflate(R.layout.contact, null);
+				final MoodleUser singleContact = contacts[i]
+						.getContactProfile();
+				TextView contactTxtview = (TextView) view
+						.findViewById(R.id.contact_textView);
+				contactTxtview.setText(singleContact.getFullname());
 
-		for (int i = 0; i < contacts.length; i++) {
-			View view = inflater.inflate(R.layout.contact, null);
-			final MoodleUser singleContact = contacts[i].getContactProfile();
-			TextView contactTxtview = (TextView) view
-					.findViewById(R.id.contact_textView);
-			contactTxtview.setText(singleContact.getFullname());
-			// contact.getProfileImageURLSmall();
+				contactSetOnClickListener(singleContact, contactTxtview);
 
-			switch (contacts[i].getState()) {
-			case ONLINE:
-				contactTxtview.setCompoundDrawablesWithIntrinsicBounds(
-						getResources().getDrawable(R.drawable.contact_online),
-						null,
-						getResources().getDrawable(R.drawable.ic_action_email),
-						null);
-				break;
+				contactSetOnLongClickListener(singleContact, contactTxtview);
 
-			case OFFLINE:
-				contactTxtview.setCompoundDrawablesWithIntrinsicBounds(
-						getResources().getDrawable(R.drawable.contact_offline),
-						null,
-						getResources().getDrawable(R.drawable.ic_action_email),
-						null);
-				break;
+				switch (contacts[i].getState()) {
+				case ONLINE:
+					contactTxtview.setCompoundDrawablesWithIntrinsicBounds(
+							getResources().getDrawable(
+									R.drawable.contact_online),
+							null,
+							getResources().getDrawable(
+									R.drawable.ic_action_email), null);
 
-			case STRANGERS:
-				contactTxtview
-						.setCompoundDrawables(
-								getResources().getDrawable(
-										R.drawable.contact_stranger),
-								null,
-								getResources().getDrawable(
-										R.drawable.ic_action_email), null);
-				break;
+					// add the textView to the linearLayout
+					contactsLinearLayout.addView(contactTxtview);
+					break;
+
+				case OFFLINE:
+					contactTxtview.setCompoundDrawablesWithIntrinsicBounds(
+							getResources().getDrawable(
+									R.drawable.contact_offline),
+							null,
+							getResources().getDrawable(
+									R.drawable.ic_action_email), null);
+					// add the textView to the linearLayout
+					contactsLinearLayout.addView(contactTxtview);
+					break;
+
+				case STRANGERS:
+					contactTxtview.setCompoundDrawablesWithIntrinsicBounds(
+							getResources().getDrawable(
+									R.drawable.contact_stranger),
+							null,
+							getResources().getDrawable(
+									R.drawable.ic_action_email), null);
+					// add the textView to the linearLayout
+					strangersLinearLayout.addView(contactTxtview);
+					break;
+
+				}
+
 			}
-			contactTxtview.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					FragmentManager fm = getFragmentManager();
-					FragUserContactMessage userContactContextDialog = null;
-					Bundle bund = new Bundle();
-					bund.putLong("contact", singleContact.getId());
-					bund.putString("name", singleContact.getFullname());
-					userContactContextDialog = new FragUserContactMessage();
-					userContactContextDialog.setArguments(bund);
-					userContactContextDialog.setRetainInstance(true);
-					userContactContextDialog.show(fm, "fragment_name");
-				}
-			});
-
-			contactTxtview.setOnLongClickListener(new OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View v) {
-					// TODO Auto-generated method stub
-					Long id = singleContact.getId();
-					if (Long.valueOf(id) != Long.valueOf(-1)) {
-						FragmentManager fm = getFragmentManager();
-						FragUserContacts userContactContextDialog = null;
-						Bundle bund = new Bundle();
-						bund.putLong("contact", id);
-						bund.putString("name", singleContact.getFullname());
-						userContactContextDialog = new FragUserContacts();
-						userContactContextDialog.setArguments(bund);
-						userContactContextDialog.setRetainInstance(true);
-						userContactContextDialog.show(fm, "fragment_name");
-					}
-					return false;
-				}
-			});
-
-			// add the textView to the linearLayout
-			contactsLinearLayout.addView(contactTxtview);
 		}
+
+		ArrayList<MoodleContact> blockedContacts = new ManUserContacts(
+				getApplicationContext()).getBlockedContacts();
+		LinearLayout blockedLinearLayout = (LinearLayout) findViewById(R.id.blocked_linear_layout);
+		if (blockedContacts == null) {
+			blockedLinearLayout.setVisibility(View.GONE);
+
+		} else {
+			for (int j = 0; j < blockedContacts.size(); j++) {
+				View view = inflater.inflate(R.layout.contact, null);
+				final MoodleUser singleContact = blockedContacts.get(j)
+						.getContactProfile();
+				TextView contactTxtview = (TextView) view
+						.findViewById(R.id.contact_textView);
+				contactTxtview.setText(singleContact.getFullname());
+				contactTxtview.setPaintFlags(contactTxtview.getPaintFlags()
+						| Paint.STRIKE_THRU_TEXT_FLAG);
+				contactTxtview.setCompoundDrawablesWithIntrinsicBounds(
+						getResources().getDrawable(R.drawable.contact_blocked),
+						null,
+						getResources().getDrawable(R.drawable.ic_action_email),
+						null);
+				contactSetOnClickListener(singleContact, contactTxtview);
+				contactSetOnLongClickListener(singleContact, contactTxtview);
+				blockedLinearLayout.addView(contactTxtview);
+
+			}
+		}
+
+		if (contacts == null && blockedContacts == null)
+			findViewById(R.id.contacts_wrapper).setVisibility(View.GONE);
 
 	}
 
 	/**
-	 * 
+	 * @param singleContact
+	 * @param contactTxtview
 	 */
+	private void contactSetOnLongClickListener(final MoodleUser singleContact,
+			TextView contactTxtview) {
+		contactTxtview.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				Long id = singleContact.getId();
+				if (Long.valueOf(id) != Long.valueOf(-1)) {
+					FragmentManager fm = getFragmentManager();
+					FragUserContacts userContactContextDialog = null;
+					Bundle bund = new Bundle();
+					bund.putLong("contact", id);
+					bund.putString("name", singleContact.getFullname());
+					userContactContextDialog = new FragUserContacts();
+					userContactContextDialog.setArguments(bund);
+					userContactContextDialog.setRetainInstance(true);
+					userContactContextDialog.show(fm, "fragment_name");
+				}
+				return false;
+			}
+		});
+	}
+
+	/**
+	 * @param singleContact
+	 * @param contactTxtview
+	 */
+	private void contactSetOnClickListener(final MoodleUser singleContact,
+			TextView contactTxtview) {
+		contactTxtview.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FragmentManager fm = getFragmentManager();
+				FragUserContactMessage userContactContextDialog = null;
+				Bundle bund = new Bundle();
+				bund.putLong("contact", singleContact.getId());
+				bund.putString("name", singleContact.getFullname());
+				userContactContextDialog = new FragUserContactMessage();
+				userContactContextDialog.setArguments(bund);
+				userContactContextDialog.setRetainInstance(true);
+				userContactContextDialog.show(fm, "fragment_name");
+			}
+		});
+	}
+
 	private void populateLeft() {
 		populateFullName();
 		populateUserCourses();
 		populateUserPicture();
 	}
 
-	/**
-	 * 
-	 */
 	private void receiveNotification() {
 		if (getIntent().getFlags() == R.id.MOODY_NOTIFICATION_ACTION_TOPIC) {
 			int courseId2 = getIntent().getFlags();
@@ -232,15 +358,6 @@ public class MainActivity extends Activity implements OnClickListener,
 			int startUpCourseId = Integer.parseInt(course.getKey());
 			Button btnTag = (Button) findViewById(startUpCourseId);
 			btnTag.performClick();
-		}
-	}
-
-	@Override
-	public void onBackPressed() {
-		if (getFragmentManager().getBackStackEntryCount() == 1) {
-			finish();
-		} else {
-			super.onBackPressed();
 		}
 	}
 
@@ -491,45 +608,6 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// // Inflate the menu; this adds items to the action bar if it is
-		// present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-
-		return true;
-
-	}
-
-	/**
-	 * The method it's responsible to retrieve the bitmap data/resize/compress
-	 * The first case of the switch it's not fully implemented as planned,
-	 * moodle doesn't support the users to update their own user details this
-	 * issue is described and reported here
-	 * https://tracker.moodle.org/browse/CONTRIB-4282 The next code it's ready
-	 * 
-	 * TO DO: implement the user update details in Moody when Moodle.org decide
-	 * to add the required web service function.
-	 * 
-	 */
-	@Override
-	public void onFinishEditDialog(String inputText, int code) {
-		switch (code) {
-		case ModConstants.DIALOG_FRAG_USER_PIC:
-			session.addPref(inputText);
-			ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
-
-			login_button.setImageBitmap(BitmapResizer
-					.decodeSampledBitmapFromResource(inputText,
-							R.id.login_image_button, 100, 100));
-			break;
-
-		default:
-			break;
-		}
-
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
@@ -553,50 +631,6 @@ public class MainActivity extends Activity implements OnClickListener,
 		}
 
 		return true;
-	}
-
-	/**
-	 * Moody Fatal Error Method it will display an alert dialog with the message
-	 * and it will clear app data and kill the app
-	 */
-	private void fatalError(String title, String msg) {
-		ManAlertDialog.showMessageDialog(this, new ModMessage(title, msg),
-				new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						session.logoutUser();
-						// limpa cache ao fazer logout.
-						new ManDataStore(getApplicationContext()).deleteCache();
-						finish();
-						android.os.Process.killProcess(android.os.Process
-								.myPid());
-					}
-
-				}, false);
-	}
-
-	@Override
-	protected void onResume() {
-		endTime = System.currentTimeMillis();
-		Log.d("MoodyPerformance",
-				Long.toString(performanceMeasure(startTime, endTime)));
-		super.onResume();
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onNewIntent(android.content.Intent)
-	 */
-	@Override
-	protected void onNewIntent(Intent intent) {
-
-		// Get the intent, verify the action and get the query
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			search(intent);
-		}
 	}
 
 	/**
@@ -653,7 +687,32 @@ public class MainActivity extends Activity implements OnClickListener,
 		}
 	}
 
-	public long performanceMeasure(long startTime, long endTime) {
+	/**
+	 * 
+	 * * Moody Fatal Error Method it will display an alert dialog with the
+	 * message and it will clear app data and kill the app
+	 * 
+	 * @param title
+	 * @param msg
+	 */
+	private void fatalError(String title, String msg) {
+		ManAlertDialog.showMessageDialog(this, new ModMessage(title, msg),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						session.logoutUser();
+						// limpa cache ao fazer logout.
+						new ManDataStore(getApplicationContext()).deleteCache();
+						finish();
+						android.os.Process.killProcess(android.os.Process
+								.myPid());
+					}
+
+				}, false);
+	}
+
+	private long performanceMeasure(long startTime, long endTime) {
 		long timestamp = endTime - startTime;
 		return timestamp;
 	}

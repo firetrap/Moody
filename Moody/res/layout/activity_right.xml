@@ -11,7 +11,7 @@
     <LinearLayout
         android:id="@+id/right_linear_Layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:orientation="vertical" >
 
@@ -50,19 +50,8 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/contacts_title"
-            style="@style/CardsLayoutTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingLeft="20dp"
-            android:text="Contacts"
-            android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
-            android:textSize="@dimen/card_medium_text" />
-
         <LinearLayout
-            android:id="@+id/contacts_linear_layout"
+            android:id="@+id/contacts_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -71,6 +60,61 @@
             android:layout_weight="1"
             android:background="@drawable/card"
             android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/contacts_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/contacts_friends"
+                    style="@style/CardsLayoutTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="Contacts"
+                    android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+                    android:textSize="@dimen/card_medium_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/strangers_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/contacts_strangers"
+                    style="@style/CardsLayoutTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="Strangers"
+                    android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+                    android:textSize="@dimen/card_medium_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/blocked_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/contacts_blocked"
+                    style="@style/CardsLayoutTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="Blocked"
+                    android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+                    android:textSize="@dimen/card_medium_text" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
