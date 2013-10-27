@@ -41,6 +41,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -59,6 +60,9 @@ import android.widget.Toast;
 import bitmap.BitmapResizer;
 
 import com.android.moody.R;
+import com.espian.showcaseview.ShowcaseView;
+import com.espian.showcaseview.ShowcaseViews;
+import com.espian.showcaseview.ShowcaseViews.ItemViewProperties;
 
 import connections.DataAsyncTask;
 
@@ -93,6 +97,125 @@ public class MainActivity extends Activity implements OnClickListener,
 		populateLeft();
 		populateRight();
 		receiveNotification();
+
+		myDrawerLayout.setDrawerListener(new DrawerListener() {
+
+			ShowcaseView sv;
+
+			@Override
+			public void onDrawerStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onDrawerSlide(View arg0, float arg1) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onDrawerOpened(View arg0) {
+
+				switch (arg0.getId()) {
+				case R.id.left_drawer:
+					ShowcaseView.ConfigOptions configOptions0 = new ShowcaseView.ConfigOptions();
+
+					configOptions0.showcaseId = 1;
+					// configOptions0.shotType = ShowcaseView.TYPE_ONE_SHOT;
+
+					ShowcaseView.ConfigOptions configOptions1 = new ShowcaseView.ConfigOptions();
+					configOptions1.showcaseId = 2;
+					// configOptions1.shotType = ShowcaseView.TYPE_ONE_SHOT;
+
+					ShowcaseView.ConfigOptions configOptions2 = new ShowcaseView.ConfigOptions();
+					configOptions2.showcaseId = 3;
+					// configOptions2.shotType = ShowcaseView.TYPE_ONE_SHOT;
+
+					ShowcaseViews views = new ShowcaseViews(MainActivity.this,
+							R.layout.activity_main);
+
+					views.addView(new ItemViewProperties(
+							R.id.login_image_button, R.string.demo_user_title,
+							R.string.demo_user_message, 0f, new float[] { 350,
+									250, 350, 250 }, configOptions0));
+
+					views.addView(new ItemViewProperties(R.id.begin_of_courses,
+							R.string.demo_courses_title,
+							R.string.demo_courses_message, 0f, new float[] {
+									350, 600, 350, 600 }, configOptions1));
+
+					views.addView(new ItemViewProperties(R.id.favorites_button,
+							R.string.demo_navigation_title,
+							R.string.demo_navigation_message, 0f, new float[] {
+									350, 950, 350, 950 }, configOptions2));
+					views.show();
+							
+					break;
+
+				case R.id.right_drawer:
+					ShowcaseView.ConfigOptions configOptions3 = new ShowcaseView.ConfigOptions();
+
+					configOptions3.showcaseId = 4;
+					// configOptions0.shotType = ShowcaseView.TYPE_ONE_SHOT;
+
+					ShowcaseView.ConfigOptions configOptions4 = new ShowcaseView.ConfigOptions();
+					configOptions4.showcaseId = 5;
+					// configOptions1.shotType = ShowcaseView.TYPE_ONE_SHOT;
+
+			
+
+					ShowcaseViews views2 = new ShowcaseViews(MainActivity.this,
+							R.layout.activity_main);
+
+					views2.addView(new ItemViewProperties(
+							R.id.searchView, R.string.demo_search_title,
+							R.string.demo_search_message, 0.5f, new float[] { 380,
+									500, 380, 200 }, configOptions3));
+
+					views2.addView(new ItemViewProperties(R.id.searchView,
+							R.string.demo_contacts_title,
+							R.string.demo_contacts_message, 0f, new float[] {
+									350, 600, 350, 600 }, configOptions4));
+
+				
+					views2.show();
+							
+					break;
+
+				default:
+					break;
+				}
+
+			}
+
+			@Override
+			public void onDrawerClosed(View arg0) {
+				switch (arg0.getId()) {
+				case R.id.left_drawer:
+					ShowcaseView.ConfigOptions configOptions3 = new ShowcaseView.ConfigOptions();
+
+					configOptions3.showcaseId = 4;
+
+					ShowcaseViews views2 = new ShowcaseViews(MainActivity.this,
+							R.layout.activity_main);
+
+					views2.addView(new ItemViewProperties(
+							R.id.topics_preview_main_frame, R.string.demo_open_right_title,
+							R.string.demo_open_right_message, 0f, new float[] { 600, 300, 0, 300 }, configOptions3));
+					views2.show();
+					
+					break;
+
+				case R.id.right_drawer:
+					break;
+
+				default:
+					break;
+				}
+
+			}
+		});
 
 	}
 

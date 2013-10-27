@@ -63,7 +63,6 @@
                 android:text="@string/module_files"
                 android:textColor="@color/card_grid_text"
                 android:visibility="visible" />
-
         </LinearLayout>
     </LinearLayout>
 

@@ -41,6 +41,7 @@ public class FragTopics extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
 		session = new ManSession(getActivity().getApplicationContext());
 
 		courseId = getArguments().getString("courseId");
@@ -263,4 +264,13 @@ public class FragTopics extends Fragment {
 		return 0;
 
 	}
+
+	@Override
+	public void onResume() {
+
+		super.onResume();
+	}
+
+
+
 }

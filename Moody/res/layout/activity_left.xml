@@ -79,6 +79,7 @@
             android:textSize="@dimen/card_medium_large_text" />
 
         <View
+            android:id="@+id/begin_of_courses"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_weight="1.25"
