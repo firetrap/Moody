@@ -106,19 +106,19 @@ public class MainActivity extends Activity implements OnClickListener,
 	 * 
 	 */
 	private void initDemoOverlay() {
-		ShowcaseView.ConfigOptions configOptions5 = new ShowcaseView.ConfigOptions();
-		configOptions5.shotType = ShowcaseView.TYPE_ONE_SHOT;
-		configOptions5.hideOnClickOutside = false;
-		configOptions5.block = true;
-		configOptions5.showcaseId = 9;
-		ShowcaseViews views5 = new ShowcaseViews(MainActivity.this,
+		ShowcaseView.ConfigOptions configOptions1 = new ShowcaseView.ConfigOptions();
+		configOptions1.shotType = ShowcaseView.TYPE_ONE_SHOT;
+		configOptions1.hideOnClickOutside = false;
+		configOptions1.block = true;
+		configOptions1.showcaseId = R.id.DEMO_OPEN_LEFT;
+		ShowcaseViews views1 = new ShowcaseViews(MainActivity.this,
 				R.layout.activity_main);
 
-		views5.addView(new ItemViewProperties(R.id.scrollView_main_content,
+		views1.addView(new ItemViewProperties(R.id.scrollView_main_content,
 				R.string.demo_open_left_title, R.string.demo_open_left_message,
-				0f, new float[] { 0, 600, 300, 600 }, configOptions5));
+				0f, new float[] { 0, 600, 300, 600 }, configOptions1));
 
-		views5.show();
+		views1.show();
 	}
 
 	/**
@@ -140,71 +140,73 @@ public class MainActivity extends Activity implements OnClickListener,
 			public void onDrawerOpened(View arg0) {
 
 				switch (arg0.getId()) {
+
 				case R.id.left_drawer:
-					ShowcaseView.ConfigOptions configOptions0 = new ShowcaseView.ConfigOptions();
-					configOptions0.showcaseId = 1;
-					configOptions0.shotType = ShowcaseView.TYPE_ONE_SHOT;
-					configOptions0.hideOnClickOutside = false;
-					configOptions0.block = true;
-
-					ShowcaseView.ConfigOptions configOptions1 = new ShowcaseView.ConfigOptions();
-					configOptions1.showcaseId = 2;
-					configOptions1.shotType = ShowcaseView.TYPE_ONE_SHOT;
-					configOptions1.hideOnClickOutside = false;
-					configOptions1.block = true;
-
 					ShowcaseView.ConfigOptions configOptions2 = new ShowcaseView.ConfigOptions();
-					configOptions2.showcaseId = 3;
+					configOptions2.showcaseId = R.id.DEMO_USER_SECTION;
 					configOptions2.shotType = ShowcaseView.TYPE_ONE_SHOT;
 					configOptions2.hideOnClickOutside = false;
 					configOptions2.block = true;
 
-					ShowcaseViews views = new ShowcaseViews(MainActivity.this,
-							R.layout.activity_main);
-
-					views.addView(new ItemViewProperties(
-							R.id.login_image_button, R.string.demo_user_title,
-							R.string.demo_user_message, 0f, new float[] { 350,
-									250, 350, 250 }, configOptions0));
-
-					views.addView(new ItemViewProperties(R.id.begin_of_courses,
-							R.string.demo_courses_title,
-							R.string.demo_courses_message, 0f, new float[] {
-									350, 600, 350, 600 }, configOptions1));
-
-					views.addView(new ItemViewProperties(R.id.favorites_button,
-							R.string.demo_navigation_title,
-							R.string.demo_navigation_message, 0f, new float[] {
-									350, 950, 350, 950 }, configOptions2));
-					views.show();
-					break;
-
-				case R.id.right_drawer:
 					ShowcaseView.ConfigOptions configOptions3 = new ShowcaseView.ConfigOptions();
-					configOptions3.showcaseId =11;
+					configOptions3.showcaseId = R.id.DEMO_COURSES_SECTION;
 					configOptions3.shotType = ShowcaseView.TYPE_ONE_SHOT;
 					configOptions3.hideOnClickOutside = false;
 					configOptions3.block = true;
+
 					ShowcaseView.ConfigOptions configOptions4 = new ShowcaseView.ConfigOptions();
-					configOptions4.showcaseId = 10;
+					configOptions4.showcaseId = R.id.DEMO_NAVIGATION_SECTION;
 					configOptions4.shotType = ShowcaseView.TYPE_ONE_SHOT;
 					configOptions4.hideOnClickOutside = false;
 					configOptions4.block = true;
-				
-					ShowcaseViews views6 = new ShowcaseViews(MainActivity.this,
+
+					ShowcaseViews views2 = new ShowcaseViews(MainActivity.this,
 							R.layout.activity_main);
 
-					views6.addView(new ItemViewProperties(R.id.searchView,
+					views2.addView(new ItemViewProperties(
+							R.id.login_image_button, R.string.demo_user_title,
+							R.string.demo_user_message, 0f, new float[] { 350,
+									250, 350, 250 }, configOptions2));
+
+					views2.addView(new ItemViewProperties(
+							R.id.begin_of_courses, R.string.demo_courses_title,
+							R.string.demo_courses_message, 0f, new float[] {
+									350, 600, 350, 600 }, configOptions3));
+
+					views2.addView(new ItemViewProperties(
+							R.id.favorites_button,
+							R.string.demo_navigation_title,
+							R.string.demo_navigation_message, 0f, new float[] {
+									350, 950, 350, 950 }, configOptions4));
+					views2.show();
+					break;
+
+				case R.id.right_drawer:
+					ShowcaseView.ConfigOptions configOptions5 = new ShowcaseView.ConfigOptions();
+					configOptions5.showcaseId = R.id.DEMO_SEARCH_SECTION;
+					configOptions5.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions5.hideOnClickOutside = false;
+					configOptions5.block = true;
+					ShowcaseView.ConfigOptions configOptions6 = new ShowcaseView.ConfigOptions();
+					configOptions6.showcaseId = R.id.DEMO_CONTACTS_SECTION;
+					configOptions6.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions6.hideOnClickOutside = false;
+					configOptions6.block = true;
+
+					ShowcaseViews views3 = new ShowcaseViews(MainActivity.this,
+							R.layout.activity_main);
+
+					views3.addView(new ItemViewProperties(R.id.searchView,
 							R.string.demo_search_title,
 							R.string.demo_search_message, 0f, new float[] {
-									380, 500, 380, 200 }, configOptions3));
+									380, 500, 380, 200 }, configOptions5));
 
-					views6.addView(new ItemViewProperties(
+					views3.addView(new ItemViewProperties(
 							R.id.contacts_linear_layout,
 							R.string.demo_contacts_title,
 							R.string.demo_contacts_message, 0f, new float[] {
-									350, 500, 350, 500 }, configOptions4));
-					views6.show();
+									350, 500, 350, 500 }, configOptions6));
+					views3.show();
 					break;
 
 				}
@@ -215,37 +217,51 @@ public class MainActivity extends Activity implements OnClickListener,
 			public void onDrawerClosed(View arg0) {
 				switch (arg0.getId()) {
 				case R.id.left_drawer:
-					ShowcaseView.ConfigOptions configOptions3 = new ShowcaseView.ConfigOptions();
-					configOptions3.showcaseId = 4;
-					configOptions3.shotType = ShowcaseView.TYPE_ONE_SHOT;
-					configOptions3.hideOnClickOutside = false;
-					configOptions3.block = true;
-					ShowcaseViews views2 = new ShowcaseViews(MainActivity.this,
+					ShowcaseView.ConfigOptions configOptions7 = new ShowcaseView.ConfigOptions();
+					configOptions7.showcaseId = R.id.DEMO_OPEN_RIGHT;
+					configOptions7.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions7.hideOnClickOutside = false;
+					configOptions7.block = true;
+					ShowcaseViews views4 = new ShowcaseViews(MainActivity.this,
 							R.layout.activity_main);
 
-					views2.addView(new ItemViewProperties(
+					views4.addView(new ItemViewProperties(
 							R.id.scrollView_main_content,
 							R.string.demo_open_right_title,
 							R.string.demo_open_right_message, 0f, new float[] {
-									600, 500, 0, 500 }, configOptions3));
-					views2.show();
+									600, 500, 0, 500 }, configOptions7));
+					views4.show();
 
 					break;
 
 				case R.id.right_drawer:
-					ShowcaseView.ConfigOptions configOptions4 = new ShowcaseView.ConfigOptions();
-					configOptions4.showcaseId = 5;
-					configOptions4.shotType = ShowcaseView.TYPE_ONE_SHOT;
-					configOptions4.hideOnClickOutside = false;
-					configOptions4.block = true;
-					ShowcaseViews views3 = new ShowcaseViews(MainActivity.this,
+					ShowcaseView.ConfigOptions configOptions8 = new ShowcaseView.ConfigOptions();
+					configOptions8.showcaseId = R.id.DEMO_FAVORITES;
+					// configOptions8.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions8.hideOnClickOutside = false;
+					configOptions8.block = true;
+
+					ShowcaseView.ConfigOptions configOptions9 = new ShowcaseView.ConfigOptions();
+					configOptions9.showcaseId = R.id.DEMO_END;
+					// configOptions9.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions9.hideOnClickOutside = false;
+					configOptions9.block = true;
+
+					ShowcaseViews views5 = new ShowcaseViews(MainActivity.this,
 							R.layout.activity_main);
 
-					views3.addView(new ItemViewProperties(
+					views5.addView(new ItemViewProperties(
+							R.id.scrollView_main_content,
+							R.string.demo_add_favorite_title,
+							R.string.demo_add_favorite_message, 0f,
+							new float[] { 610, 190, 610, 190 }, configOptions8));
+
+					views5.addView(new ItemViewProperties(
 							R.id.scrollView_main_content,
 							R.string.demo_end_title, R.string.demo_end_message,
-							0f, configOptions4));
-					views3.show();
+							0f, configOptions9));
+
+					views5.show();
 
 					break;
 

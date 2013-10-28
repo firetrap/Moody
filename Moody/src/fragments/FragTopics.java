@@ -91,7 +91,7 @@ public class FragTopics extends Fragment {
 				+ "<font color=#68d5fe>" + topicName + "</font>"));
 
 		final ImageButton addFavorites = (ImageButton) topicsHeaderView
-				.findViewById(R.id.add_favorites_button_);
+				.findViewById(R.id.add_favorites_button);
 		addFavorites.setVisibility(View.GONE);
 		return topicsHeaderView;
 

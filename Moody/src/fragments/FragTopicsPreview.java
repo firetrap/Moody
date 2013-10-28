@@ -98,13 +98,13 @@ public class FragTopicsPreview extends Fragment {
 		if (!new ManFavorites(getActivity().getApplicationContext())
 				.isFavorite(id)) {
 			ImageButton addFavorites = (ImageButton) topicsHeaderView
-					.findViewById(R.id.add_favorites_button_);
+					.findViewById(R.id.add_favorites_button);
 
 			addFavorites.setId(id);
 			addFavorites.setTag("add_favorites_button_" + courseId);
 		} else
 			((ImageButton) topicsHeaderView
-					.findViewById(R.id.add_favorites_button_))
+					.findViewById(R.id.add_favorites_button))
 					.setVisibility(View.GONE);
 
 		return topicsHeaderView;
