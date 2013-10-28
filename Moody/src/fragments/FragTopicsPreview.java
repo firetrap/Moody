@@ -20,8 +20,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.android.moody.R;
-import com.espian.showcaseview.ShowcaseView;
-import com.nineoldandroids.animation.*;
 
 /**
  * @author firetrap
@@ -30,7 +28,6 @@ import com.nineoldandroids.animation.*;
 public class FragTopicsPreview extends Fragment {
 	// ManSession Manager Class
 	ManSession session;
-	ShowcaseView sv;
 
 	public FragTopicsPreview() {
 	}
@@ -220,16 +217,6 @@ public class FragTopicsPreview extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-		ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
-		co.hideOnClickOutside = false;
-		co.block = true;
-		co.shotType = ShowcaseView.TYPE_ONE_SHOT;
-		sv = ShowcaseView.insertShowcaseView(R.id.topics_preview_main_frame,
-				getActivity(), getString(R.string.demo_open_left_title),
-				getString(R.string.demo_open_left_message), co);
-		sv.animateGesture(0, 300, 300, 300);
-		sv.setShowcaseIndicatorScale(0f);
 
 	}
 

@@ -152,39 +152,19 @@
 	<!-- Strings Related to Demo Overlay -->
 	<string name="demo_open_left_title">Welcome! Let\'s get started</string>
 	<string name="demo_open_left_message">Here is the main view, where all begins.\nSwipe
-		from left to right to open the left menu.
-	</string>
+		from left to right to open the left menu.</string>
 	<string name="demo_user_title">User section</string>
-	<string name="demo_user_message">This is your user section, where you can your
-		change profile picture, see your user details or logout.
-	</string>
+	<string name="demo_user_message">This is your user section, where you can change your profile picture, see your user details or logout.</string>
 	<string name="demo_courses_title">Courses section</string>
-	<string name="demo_courses_message">In this section you can access all your courses,
-		you can click to enter in each one.
-	</string>
+	<string name="demo_courses_message">In this section you can access all your courses,you can click to enter in each one.</string>
 	<string name="demo_navigation_title">Navigation section</string>
-	<string name="demo_navigation_message">Here you can acess to the latest contents of all
-		your courses,manage your favorites, direct acess to cloud storage and
-		go to Moody wiki.
-	</string>
+	<string name="demo_navigation_message">Here you can acess to the latest contents of all	your courses,manage your favorites, direct acess to cloud storage and go to Moody wiki.</string>
 	<string name="demo_open_right_title">Right menu</string>
-	<string name="demo_open_right_message">Swipe from right to left to open the right menu.
-	</string>
-
-
+	<string name="demo_open_right_message">Swipe from right to left to open the right menu.</string>
 	<string name="demo_search_title">Search</string>
-	<string name="demo_search_message">Here you can search within your courses, if none of
-		the results are what you were looking for, you also have an option to search
-		on web.</string>
-		
+	<string name="demo_search_message">Here you can search within your courses, if none of the results are what you were looking for, you also have an option to search	on web.</string>
 	<string name="demo_contacts_title">Contacts</string>
-	<string name="demo_contacts_message">Your contacts are divided in three subsections:\n
-	     &#8226; Contacts \n 
-	      people in your contacts list\n
-	     &#8226; Strangers \n 
-	      people who are not in your contacts list\n
-	     &#8226; Blocked \n 
-	      people that cannot send you messages.
-	</string>
-
+	<string name="demo_contacts_message">Here are your contacts,strangers and blocked.\nKnow more im Moody wiki.</string>
+	<string name="demo_end_title">Don\'t bug me no more!</string>
+	<string name="demo_end_message">And this is the end, if you have further questions go to Moody wiki or contact the support.</string>
 </resources>

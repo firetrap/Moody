@@ -97,21 +97,43 @@ public class MainActivity extends Activity implements OnClickListener,
 		populateLeft();
 		populateRight();
 		receiveNotification();
+		initDemoOverlay();
+		drawerLayoutListener();
 
+	}
+
+	/**
+	 * 
+	 */
+	private void initDemoOverlay() {
+		ShowcaseView.ConfigOptions configOptions5 = new ShowcaseView.ConfigOptions();
+		configOptions5.shotType = ShowcaseView.TYPE_ONE_SHOT;
+		configOptions5.hideOnClickOutside = false;
+		configOptions5.block = true;
+		configOptions5.showcaseId = 9;
+		ShowcaseViews views5 = new ShowcaseViews(MainActivity.this,
+				R.layout.activity_main);
+
+		views5.addView(new ItemViewProperties(R.id.scrollView_main_content,
+				R.string.demo_open_left_title, R.string.demo_open_left_message,
+				0f, new float[] { 0, 600, 300, 600 }, configOptions5));
+
+		views5.show();
+	}
+
+	/**
+	 * 
+	 */
+	private void drawerLayoutListener() {
 		myDrawerLayout.setDrawerListener(new DrawerListener() {
-
-			ShowcaseView sv;
-
 			@Override
 			public void onDrawerStateChanged(int arg0) {
 				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void onDrawerSlide(View arg0, float arg1) {
 				// TODO Auto-generated method stub
-
 			}
 
 			@Override
@@ -120,17 +142,22 @@ public class MainActivity extends Activity implements OnClickListener,
 				switch (arg0.getId()) {
 				case R.id.left_drawer:
 					ShowcaseView.ConfigOptions configOptions0 = new ShowcaseView.ConfigOptions();
-
 					configOptions0.showcaseId = 1;
-					// configOptions0.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions0.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions0.hideOnClickOutside = false;
+					configOptions0.block = true;
 
 					ShowcaseView.ConfigOptions configOptions1 = new ShowcaseView.ConfigOptions();
 					configOptions1.showcaseId = 2;
-					// configOptions1.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions1.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions1.hideOnClickOutside = false;
+					configOptions1.block = true;
 
 					ShowcaseView.ConfigOptions configOptions2 = new ShowcaseView.ConfigOptions();
 					configOptions2.showcaseId = 3;
-					// configOptions2.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions2.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions2.hideOnClickOutside = false;
+					configOptions2.block = true;
 
 					ShowcaseViews views = new ShowcaseViews(MainActivity.this,
 							R.layout.activity_main);
@@ -150,41 +177,36 @@ public class MainActivity extends Activity implements OnClickListener,
 							R.string.demo_navigation_message, 0f, new float[] {
 									350, 950, 350, 950 }, configOptions2));
 					views.show();
-							
 					break;
 
 				case R.id.right_drawer:
 					ShowcaseView.ConfigOptions configOptions3 = new ShowcaseView.ConfigOptions();
-
-					configOptions3.showcaseId = 4;
-					// configOptions0.shotType = ShowcaseView.TYPE_ONE_SHOT;
-
+					configOptions3.showcaseId =11;
+					configOptions3.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions3.hideOnClickOutside = false;
+					configOptions3.block = true;
 					ShowcaseView.ConfigOptions configOptions4 = new ShowcaseView.ConfigOptions();
-					configOptions4.showcaseId = 5;
-					// configOptions1.shotType = ShowcaseView.TYPE_ONE_SHOT;
-
-			
-
-					ShowcaseViews views2 = new ShowcaseViews(MainActivity.this,
+					configOptions4.showcaseId = 10;
+					configOptions4.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions4.hideOnClickOutside = false;
+					configOptions4.block = true;
+				
+					ShowcaseViews views6 = new ShowcaseViews(MainActivity.this,
 							R.layout.activity_main);
 
-					views2.addView(new ItemViewProperties(
-							R.id.searchView, R.string.demo_search_title,
-							R.string.demo_search_message, 0.5f, new float[] { 380,
-									500, 380, 200 }, configOptions3));
+					views6.addView(new ItemViewProperties(R.id.searchView,
+							R.string.demo_search_title,
+							R.string.demo_search_message, 0f, new float[] {
+									380, 500, 380, 200 }, configOptions3));
 
-					views2.addView(new ItemViewProperties(R.id.searchView,
+					views6.addView(new ItemViewProperties(
+							R.id.contacts_linear_layout,
 							R.string.demo_contacts_title,
 							R.string.demo_contacts_message, 0f, new float[] {
-									350, 600, 350, 600 }, configOptions4));
-
-				
-					views2.show();
-							
+									350, 500, 350, 500 }, configOptions4));
+					views6.show();
 					break;
 
-				default:
-					break;
 				}
 
 			}
@@ -194,29 +216,43 @@ public class MainActivity extends Activity implements OnClickListener,
 				switch (arg0.getId()) {
 				case R.id.left_drawer:
 					ShowcaseView.ConfigOptions configOptions3 = new ShowcaseView.ConfigOptions();
-
 					configOptions3.showcaseId = 4;
-
+					configOptions3.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions3.hideOnClickOutside = false;
+					configOptions3.block = true;
 					ShowcaseViews views2 = new ShowcaseViews(MainActivity.this,
 							R.layout.activity_main);
 
 					views2.addView(new ItemViewProperties(
-							R.id.topics_preview_main_frame, R.string.demo_open_right_title,
-							R.string.demo_open_right_message, 0f, new float[] { 600, 300, 0, 300 }, configOptions3));
+							R.id.scrollView_main_content,
+							R.string.demo_open_right_title,
+							R.string.demo_open_right_message, 0f, new float[] {
+									600, 500, 0, 500 }, configOptions3));
 					views2.show();
-					
+
 					break;
 
 				case R.id.right_drawer:
+					ShowcaseView.ConfigOptions configOptions4 = new ShowcaseView.ConfigOptions();
+					configOptions4.showcaseId = 5;
+					configOptions4.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions4.hideOnClickOutside = false;
+					configOptions4.block = true;
+					ShowcaseViews views3 = new ShowcaseViews(MainActivity.this,
+							R.layout.activity_main);
+
+					views3.addView(new ItemViewProperties(
+							R.id.scrollView_main_content,
+							R.string.demo_end_title, R.string.demo_end_message,
+							0f, configOptions4));
+					views3.show();
+
 					break;
 
-				default:
-					break;
 				}
 
 			}
 		});
-
 	}
 
 	@Override
