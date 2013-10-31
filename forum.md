@@ -1,0 +1,1 @@
+[gimmick:Disqus](moody_app)
