@@ -1,1 +1,1 @@
-[gimmick:Disqus](moody_app)
+[gimmick:Disqus](moodyapp)
