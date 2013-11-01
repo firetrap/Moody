@@ -13,8 +13,8 @@ Moody will be our main access to the Moodle e-learning platform, but it was also
 - Native Android Application.
 - All the main existent features.
 - Access to the content of a courses.
-- Be able to downnload/upload files.
-- Activities/events enrolment.
+- Be able to download/upload files.
+- Activities/events enrollment.
 - Forum/messaging interaction.
 - Profile edition.
 - Use the hardware features of mobile devices.

@@ -1,13 +1,33 @@
 Moody is a android open-source application for the [Moodle e-learning platform](https://moodle.org/about/).
 
 
-This wiki is the main source of documentation for developers working with (or contributing to) moody/moodyRest projects. If this is your first time hearing about Moody, we recommend starting with the Moody [website](http://firetrap.github.io/Moody/).
+This website is the main source of documentation for developers working with (or contributing to) moody/moodyRest projects. If this is your first time hearing about Moody, we recommend starting with the Moody [website](http://firetrap.github.io/Moody/).
 
 
 
-<a name="how-it-works"/>
-##How it works
-1. The client sends a username and password to the web service login script.
+## Features
+
+  * Native Android application
+  * Open source UI themes and completely customizable
+  * Free
+  * Access to courses while offline
+
+----------
+
+## Requirements
+
+* Moodle >= 2.2 
+* Android >= 3.0.x
+* Internet connection
+
+**Warning:** Not all functions are available in Moodle 2.2, for better experience we recommend Moodle >= 2.5
+
+
+----------
+
+
+## How it works
+1. The client sends a user name and password to the web service login script.
 1. The script returns a token for that user account.
 1. The client calls a particular web service function on a protocol server including the token .
 1. The protocol server uses the token to check that the user can call the function.
@@ -17,6 +37,9 @@ This wiki is the main source of documentation for developers working with (or co
 1. The core function can return a result to the external function.
 1. The external function will return a result to the protocol server.
 1. The protocol server returns the result to the client.
+
+
+----------
 
 
 ## What Moody can do
@@ -29,7 +52,19 @@ This wiki is the main source of documentation for developers working with (or co
 * Edit profile picture
 
 
-## First time with moody
-If you want to see Moody on action before download, take a step in [First time with Moody](first-time-with-moody.md)
+----------
 
 
+## Credits / Technologies
+Moody would not exist if it weren't for those great pieces of software, sources or binaries:
+
+  * [genymotion][genymotion]
+  * [MoodleRest][MoodleRest]
+  * [ShowcaseView][ShowcaseView]
+
+Special thanks for the logo inspiration to [pooley][pooley]
+
+  [genymotion]: http://www.genymotion.com/
+  [MoodleRest]: http://bantonia.users.sourceforge.net/
+  [ShowcaseView]: https://github.com/Espiandev/ShowcaseView
+  [pooley]: http://www.el-be.fr/beta/home/portfolio.php

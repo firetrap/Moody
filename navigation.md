@@ -1,7 +1,7 @@
 # Moody
 
 [About](about.md)
-[Docs]()
+[Quickstart]()
 
   * [Moodle Setup Guide](moodle-setup-guide.md)
   * [First time with Moody](first-time-with-moody.md)
