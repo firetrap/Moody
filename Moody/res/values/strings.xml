@@ -164,7 +164,7 @@
 	<string name="demo_search_title">Search</string>
 	<string name="demo_search_message">Here you can search within your courses, if none of the results are what you were looking for, you also have an option to search	on web.</string>
 	<string name="demo_contacts_title">Contacts</string>
-	<string name="demo_contacts_message">Here are your contacts,strangers and blocked.\nKnow more im Moody wiki.</string>
+	<string name="demo_contacts_message">Here are your contacts,strangers and blocked.\nKnow more in Moody wiki.</string>
 	<string name="demo_end_title">Don\'t bug me no more!</string>
 	<string name="demo_end_message">And this is the end, if you have further questions go to Moody wiki or contact the support.</string>
 	<string name="demo_add_favorite_title">Favorites</string>

@@ -39,6 +39,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
@@ -237,13 +238,13 @@ public class MainActivity extends Activity implements OnClickListener,
 				case R.id.right_drawer:
 					ShowcaseView.ConfigOptions configOptions8 = new ShowcaseView.ConfigOptions();
 					configOptions8.showcaseId = R.id.DEMO_FAVORITES;
-					// configOptions8.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions8.shotType = ShowcaseView.TYPE_ONE_SHOT;
 					configOptions8.hideOnClickOutside = false;
 					configOptions8.block = true;
 
 					ShowcaseView.ConfigOptions configOptions9 = new ShowcaseView.ConfigOptions();
 					configOptions9.showcaseId = R.id.DEMO_END;
-					// configOptions9.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions9.shotType = ShowcaseView.TYPE_ONE_SHOT;
 					configOptions9.hideOnClickOutside = false;
 					configOptions9.block = true;
 
@@ -747,6 +748,11 @@ public class MainActivity extends Activity implements OnClickListener,
 			break;
 
 		case R.id.wiki_button:
+			intent = new Intent(Intent.ACTION_VIEW);
+			intent.setData(Uri
+					.parse("http://firetrap.github.io/Moody/#!index.md"));
+			startActivity(intent);
+
 			break;
 
 		default:
