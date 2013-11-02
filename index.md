@@ -1,7 +1,7 @@
 Moody is a android open-source application for the [Moodle e-learning platform](https://moodle.org/about/).
 
 
-This website is the main source of documentation for developers working with (or contributing to) moody/moodyRest projects. If this is your first time hearing about Moody, we recommend starting with the Moody [website](http://firetrap.github.io/Moody/).
+This website is the main source of documentation for developers working with (or contributing to) moody/moodyRest projects. If this is your first time hearing about Moody, we recommend starting with the [About](about.md).
 
 
 
