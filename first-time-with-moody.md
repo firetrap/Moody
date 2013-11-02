@@ -50,6 +50,9 @@ This menu lists all courses in which the user is enrolled, clicking in one of th
 ![](http://i.imgur.com/9hTVJ6c.png) 
 
 
+----------
+
+
 ##Topics Preview
 After the user entered in one course the main view will display all the topics that course contains.
 Clickig in one of the course the user will see the contents of the topic
@@ -162,6 +165,8 @@ In settings you are able to:
 - change sync frequency (15 minutes - Never)
 ![](http://i.imgur.com/9jDsUjy.png)
 
+
+----------
 
 
 ##Demo
