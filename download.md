@@ -1,1 +1,1 @@
-**Not yet available, expected release data - December 2013**
+**Not yet available, expected release date - December 2013**
