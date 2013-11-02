@@ -4,7 +4,7 @@ First time with Moody
 This a start introduction of what you can expect in the first time you use Moody.
 Moody is available only in English, but in the future it will support more languages and even more features.
 
-Lets get started, Moody to work needs
+Lets get started.
 
 ##Login
 On the first time you start Moody you will be prompt to inside:
@@ -28,7 +28,6 @@ Here you can see the most common errors:
 
 ----------
 
-
 ##User
 In user section will be able to:
 
@@ -43,6 +42,30 @@ In user section will be able to:
 **Note:** After you logout all your preferences and files related to your account will be deleted and you will be redirected to the login view.
 
 ----------
+
+
+##Courses
+The user courses will all be listed in the right menu.
+This menu lists all courses in which the user is enrolled, clicking in one of them the main view will update with all the topics which course contains.
+![](http://i.imgur.com/9hTVJ6c.png) 
+
+
+##Topics Preview
+After the user entered in one course the main view will display all the topics that course contains.
+Clickig in one of the course the user will see the contents of the topic
+![](http://i.imgur.com/OXFXbhm.png)
+
+----------
+
+
+##Contents
+Many of your courses will have plenty files beside the plain-text, Moody using third party applications as PDF reader, YouTube and others can access to all files you need, if Android cant open some of the file formats available in Moodle try to download in Play Store some application capable to open the format. 
+![](http://i.imgur.com/YwdmYZe.png)
+![](http://i.imgur.com/gH9ZaLu.png)
+
+
+----------
+
 
 ##Cloud services
 The cloud section give the user the capability to access directly to Dropbox or Google Drive, if the selected service isn't installed in the device Moody it will prompt if the user want to download it from Play Store.
@@ -75,20 +98,12 @@ The contacts section have two direct actions associated:
 ![](http://i.imgur.com/ieNyqFJ.png)
 ![](http://i.imgur.com/hCmkRhX.png)
 
-
-----------
-
-
-##Contents
-Many of your courses will have plenty files beside the plain-text, Moody using third party applications as PDF reader, YouTube and others can access to all files you need, if Android cant open some of the file formats available in Moodle try to download in Play Store some application capable to open the format. 
-![](http://i.imgur.com/YwdmYZe.png)
-![](http://i.imgur.com/gH9ZaLu.png)
-
 ----------
 
 ##Notifications
 Moody is able to notificate the user about new content available in user favorites courses.
-The notification can be:
+The user can dismiss the notification or click, on click the Moody will be open in the notification context.
+A notification can be:
 
 * A new topic in a course
 * New files in a topic
@@ -120,11 +135,12 @@ In this section you can manage your sections, like contacts the favorites has al
 
 ##Latest 
 The Latest section is where all the new contents added in your courses will be displayed even if the course isn't a favorite.
-When you sign in Moody for the first time, it will be empty until new contents are added to Moodle
+**On click the user will go to the topic clicked.**
 
 ![](http://i.imgur.com/9zVA4mJ.png)
 ![](http://i.imgur.com/d9DfYpR.png)
 
+**Note:** When you sign in Moody for the first time, it will be empty until new contents are added to Moodle
 
 ----------
 
