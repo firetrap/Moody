@@ -6,8 +6,12 @@ import model.ModConstants;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;
+import android.animation.Animator;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -35,7 +40,20 @@ public class FragTopics extends Fragment {
 	Long topicId;
 	String courseName;
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onViewCreated(view, savedInstanceState);
+	}
+
 	public FragTopics() {
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
 	}
 
 	@Override
@@ -270,7 +288,5 @@ public class FragTopics extends Fragment {
 
 		super.onResume();
 	}
-
-
 
 }

@@ -17,9 +17,12 @@ import restPackage.MoodleRestMessage;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.view.View;
+import android.widget.ProgressBar;
 
 /**
  * @author firetrap
@@ -27,6 +30,11 @@ import android.os.StrictMode;
  */
 public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 	Object jObj = null;
+
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+	}
 
 	@Override
 	protected Object doInBackground(Object... params) {

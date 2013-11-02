@@ -4,7 +4,7 @@ import managers.ManAlertDialog;
 import managers.ManUserContacts;
 import model.ModMessage;
 import restPackage.MoodleContact;
-import restPackage.MoodleRestAction;
+import restPackage.MoodleContactAction;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -56,7 +56,7 @@ public class FragUserContacts extends DialogFragment {
 										.blockContact(getArguments().getLong(
 												"contact"));
 
-								showResult(MoodleRestAction.BLOCK);
+								showResult(MoodleContactAction.BLOCK);
 
 							} catch (Exception e) {
 
@@ -92,7 +92,7 @@ public class FragUserContacts extends DialogFragment {
 										.unblockContact(getArguments().getLong(
 												"contact"));
 
-								showResult(MoodleRestAction.UNBLOCK);
+								showResult(MoodleContactAction.UNBLOCK);
 
 							} catch (Exception e) {
 
@@ -127,7 +127,7 @@ public class FragUserContacts extends DialogFragment {
 										.createContact(getArguments().getLong(
 												"contact"));
 
-								showResult(MoodleRestAction.CREATE);
+								showResult(MoodleContactAction.CREATE);
 
 							} catch (Exception e) {
 
@@ -164,7 +164,7 @@ public class FragUserContacts extends DialogFragment {
 									.deleteContact(getArguments().getLong(
 											"contact"));
 
-							showResult(MoodleRestAction.DELETE);
+							showResult(MoodleContactAction.DELETE);
 
 						} catch (Exception e) {
 
@@ -209,7 +209,7 @@ public class FragUserContacts extends DialogFragment {
 		return view;
 	}
 
-	private void showResult(MoodleRestAction action) {
+	private void showResult(MoodleContactAction action) {
 		MoodleContact contact = null;
 
 		String actionName = "";

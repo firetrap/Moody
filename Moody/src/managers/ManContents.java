@@ -363,6 +363,4 @@ public class ManContents {
 		}
 	}
 
-
-
 }

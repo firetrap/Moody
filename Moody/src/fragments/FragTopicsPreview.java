@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.moody.R;
@@ -204,12 +205,15 @@ public class FragTopicsPreview extends Fragment {
 				FragmentTransaction fragmentTransaction = fragmentManager
 						.beginTransaction();
 
+				ProgressBar progressBar = new ProgressBar(getActivity());
+				progressBar.bringToFront();
 				FragTopics insideTopicsFrag = new FragTopics();
 				insideTopicsFrag.setArguments(bundle);
 				fragmentTransaction.addToBackStack(null);
 				fragmentTransaction
 						.replace(R.id.mainFragment, insideTopicsFrag);
 				fragmentTransaction.commit();
+				progressBar.setVisibility(View.GONE);
 			}
 		});
 	}

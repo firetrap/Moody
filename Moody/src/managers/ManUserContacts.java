@@ -10,7 +10,7 @@ import model.ModConstants;
 import restPackage.MoodleContact;
 import restPackage.MoodleContactState;
 import restPackage.MoodleMessage;
-import restPackage.MoodleRestAction;
+import restPackage.MoodleContactAction;
 import restPackage.MoodleServices;
 import android.content.Context;
 import connections.DataAsyncTask;
@@ -104,9 +104,9 @@ public class ManUserContacts {
 	 * @param id
 	 * 
 	 */
-	private void actionContact(Long id, MoodleRestAction action) {
+	private void actionContact(Long id, MoodleContactAction action) {
 		Long[] a = { id };
-
+		actionContacts(a, action);
 		actionContacts(a, action);
 	}
 
@@ -168,7 +168,7 @@ public class ManUserContacts {
 	 * @param ids
 	 * 
 	 */
-	private void actionContacts(Long[] ids, MoodleRestAction action) {
+	private void actionContacts(Long[] ids, MoodleContactAction action) {
 
 		MoodleServices service = null;
 
@@ -202,7 +202,7 @@ public class ManUserContacts {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 
 	 * Method to that send the message to the contact.
@@ -213,9 +213,11 @@ public class ManUserContacts {
 	 */
 	public void sendMessage(String message, Long id) {
 		try {
-			
-			new DataAsyncTask().execute(url, token, MoodleServices.CORE_MESSAGE_SEND_INSTANT_MESSAGES, new MoodleMessage(id, message, "4")).get();
-			
+
+			new DataAsyncTask().execute(url, token,
+					MoodleServices.CORE_MESSAGE_SEND_INSTANT_MESSAGES,
+					new MoodleMessage(id, message, "4")).get();
+
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -244,11 +246,11 @@ public class ManUserContacts {
 
 			blockeds.remove(getContact(id));
 			saveBlockedContacts(blockeds);
-			actionContact(id, MoodleRestAction.UNBLOCK);
+			actionContact(id, MoodleContactAction.UNBLOCK);
 		}
 
 		if (isContact(id))
-			actionContact(id, MoodleRestAction.DELETE);
+			actionContact(id, MoodleContactAction.DELETE);
 	}
 
 	/**
@@ -263,7 +265,7 @@ public class ManUserContacts {
 	 *            TODO: adapt to delete blocked contacts
 	 */
 	public void deleteContacts(Long[] ids) {
-		actionContacts(ids, MoodleRestAction.DELETE);
+		actionContacts(ids, MoodleContactAction.DELETE);
 	}
 
 	/**
@@ -278,7 +280,7 @@ public class ManUserContacts {
 	 */
 	public void createContact(Long id) {
 		if ((!isContact(id)) || (isStranger(id)))
-			actionContact(id, MoodleRestAction.CREATE);
+			actionContact(id, MoodleContactAction.CREATE);
 	}
 
 	/**
@@ -292,7 +294,7 @@ public class ManUserContacts {
 	 * 
 	 */
 	public void createContacts(Long[] ids) {
-		actionContacts(ids, MoodleRestAction.CREATE);
+		actionContacts(ids, MoodleContactAction.CREATE);
 	}
 
 	/**
@@ -315,7 +317,7 @@ public class ManUserContacts {
 			blockeds.add(getContact(id));
 
 			saveBlockedContacts(blockeds);
-			actionContact(id, MoodleRestAction.BLOCK);
+			actionContact(id, MoodleContactAction.BLOCK);
 		}
 	}
 
@@ -331,7 +333,7 @@ public class ManUserContacts {
 	 *            TODO: adapt to block many contacts
 	 */
 	public void blockContacts(Long[] ids) {
-		actionContacts(ids, MoodleRestAction.BLOCK);
+		actionContacts(ids, MoodleContactAction.BLOCK);
 	}
 
 	/**
@@ -360,7 +362,7 @@ public class ManUserContacts {
 			blockeds.remove(unblocked);
 			saveBlockedContacts(blockeds);
 
-			actionContact(id, MoodleRestAction.UNBLOCK);
+			actionContact(id, MoodleContactAction.UNBLOCK);
 
 			if (unblocked.getState() != MoodleContactState.STRANGERS)
 				createContact(id);
@@ -379,7 +381,7 @@ public class ManUserContacts {
 	 *            TODO: adapt to unblock many contacts
 	 */
 	public void unblockContacts(Long[] ids) {
-		actionContacts(ids, MoodleRestAction.UNBLOCK);
+		actionContacts(ids, MoodleContactAction.UNBLOCK);
 	}
 
 	/**
