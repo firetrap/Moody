@@ -5,7 +5,7 @@ This forum is realized via [Disqus](http://disqus.com) and the [Disqus Gimmick](
 
 This board is intended for general discussion, help and support requests, but **not** bug reports.
 
-Note: Bugs or issues you have with Moody *should not go here*. Instead, contact directly the support team [new issue on Moody](<mailto:moodymobileapp@gmail.com>).
+Note: Bugs or issues you have with Moody *should not go here*. Instead, contact directly the support team <a href="mailto:moodymobileapp@gmail.com">new issue on Moody</a>.
 
 
 [gimmick:Disqus](moodyapp)
