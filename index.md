@@ -62,6 +62,8 @@ Moody would not exist if it weren't for those great pieces of software, sources 
   * [MoodleRest][MoodleRest]
   * [ShowcaseView][ShowcaseView]
 
+Special thanks to Bill Antonia for the amazing work with [MoodleRest][MoodleRest]
+
 Special thanks for the logo inspiration to [pooley][pooley]
 
   [genymotion]: http://www.genymotion.com/
