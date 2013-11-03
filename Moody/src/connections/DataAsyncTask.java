@@ -17,12 +17,9 @@ import restPackage.MoodleRestMessage;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.StrictMode;
-import android.view.View;
-import android.widget.ProgressBar;
 
 /**
  * @author firetrap
@@ -116,7 +113,7 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 	 *            ids - The object to be parsed to Long[].
 	 * @return resultList - The ids List
 	 */
-	public Long[] parseIds(Object ids) {
+	private Long[] parseIds(Object ids) {
 
 		Long[] resultList = null;
 
