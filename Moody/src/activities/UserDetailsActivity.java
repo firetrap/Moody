@@ -22,7 +22,7 @@ public class UserDetailsActivity extends Activity
 // implements TextWatcher
 {
 
-	public void initComponents() {
+	private void initComponents() {
 		/**
 		 * ADDS LISTENERS, SO INPUT CAN BE VALIDATED
 		 * ((EditText)findViewById(R.id
@@ -51,13 +51,13 @@ public class UserDetailsActivity extends Activity
 		}
 	}
 
-	public void showHideLayout(int lID, Boolean show) {
+	private void showHideLayout(int lID, Boolean show) {
 
 		findViewById(lID).setVisibility(!(show) ? View.GONE : View.VISIBLE);
 
 	}
 
-	public void initTextView(int vID, String text, boolean hasHTML) {
+	private void initTextView(int vID, String text, boolean hasHTML) {
 
 		// precisa de cast porque a View não tem text.
 		// se for campo que tenha HTML formata.
@@ -66,7 +66,7 @@ public class UserDetailsActivity extends Activity
 
 	}
 
-	public void processTextView(int vID, int lID, String text, boolean hasHTML) {
+	private void processTextView(int vID, int lID, String text, boolean hasHTML) {
 
 		if (!(isValid(text)))
 			showHideLayout(lID, false);
@@ -75,7 +75,7 @@ public class UserDetailsActivity extends Activity
 
 	}
 
-	public void initDetails(MoodleUser user) {
+	private void initDetails(MoodleUser user) {
 
 		processTextView(R.id.textView_full_name, R.id.relativeLayout_fullname,
 				user.getFullname(), false);
@@ -102,7 +102,7 @@ public class UserDetailsActivity extends Activity
 
 	}
 
-	public boolean isValid(String propertie) {
+	private boolean isValid(String propertie) {
 		return ((propertie != null) && (!propertie.isEmpty()));
 	}
 
