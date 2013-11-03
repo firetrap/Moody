@@ -40,20 +40,7 @@ public class FragTopics extends Fragment {
 	Long topicId;
 	String courseName;
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onViewCreated(view, savedInstanceState);
-	}
-
 	public FragTopics() {
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
-		super.onAttach(activity);
 	}
 
 	@Override
@@ -262,7 +249,7 @@ public class FragTopics extends Fragment {
 
 	// Because android doesn't support string switch i've to do with if else
 	// statements
-	public int getCorrectDrawable(String url) {
+	private int getCorrectDrawable(String url) {
 
 		if (url.contains(".youtube.")) {
 			return R.drawable.youtube;
