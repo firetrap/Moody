@@ -81,8 +81,8 @@ public class MainActivity extends Activity implements OnClickListener,
 	// ManSession Manager Class
 	ManSession session;
 
-	public long startTime;
-	public long endTime;
+	private long startTime;
+	private long endTime;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -537,14 +537,14 @@ public class MainActivity extends Activity implements OnClickListener,
 		}
 	}
 
-	public void populateFullName() {
+	private void populateFullName() {
 
 		TextView view = (TextView) findViewById(R.id.fullname_textview);
 		view.setText(session.getValues(ModConstants.KEY_FULL_NAME, null));
 
 	}
 
-	public void populateUserPicture() {
+	private void populateUserPicture() {
 		ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
 		if (session.getValues("PIC_PATH", null) == null) {
 

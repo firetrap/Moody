@@ -42,10 +42,6 @@ public class FragUserCloud extends DialogFragment {
 
 					@Override
 					public void onClick(View v) {
-
-						Toast.makeText(getActivity().getBaseContext(),
-								"dropbox", Toast.LENGTH_SHORT).show();
-
 						processCloud(ModConstants.DIALOG_FRAG_USER_CLOUD_DROPBOX);
 
 					}
@@ -56,10 +52,6 @@ public class FragUserCloud extends DialogFragment {
 
 					@Override
 					public void onClick(View v) {
-
-						Toast.makeText(getActivity().getBaseContext(), "drive",
-								Toast.LENGTH_SHORT).show();
-
 						processCloud(ModConstants.DIALOG_FRAG_USER_CLOUD_DRIVE);
 
 					}
