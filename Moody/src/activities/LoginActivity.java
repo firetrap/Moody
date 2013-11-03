@@ -157,7 +157,7 @@ public class LoginActivity extends Activity {
 	 * If there are form errors (invalid email, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
-	public void attemptLogin() {
+	private void attemptLogin() {
 		if (mAuthTask != null) {
 			return;
 		}
@@ -245,7 +245,7 @@ public class LoginActivity extends Activity {
 	 * Represents an asynchronous login/registration initActivity used to
 	 * authenticate the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+	private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
 		JSONObject jObj = null;
 
@@ -479,8 +479,8 @@ public class LoginActivity extends Activity {
 
 	/**
 	 * 
-	 * Android OS doesn't support hiding view's on SoftKeyboard call, so we
-	 * have to implement our own method
+	 * Android OS doesn't support hiding view's on SoftKeyboard call, so we have
+	 * to implement our own method
 	 * 
 	 */
 	private void onSoftKeyboardState() {
