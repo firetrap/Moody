@@ -38,16 +38,6 @@ public class FragUserContactMessage extends DialogFragment {
 
 		view = inflater.inflate(R.layout.frag_message, container);
 
-//		((Button) view.findViewById(R.id.button_cancel))
-//				.setOnClickListener(new OnClickListener() {
-//
-//					@Override
-//					public void onClick(View v) {
-//						// TODO Auto-generated method stub
-//						dismiss();
-//					}
-//				});
-
 		((ImageButton) view.findViewById(R.id.button_send))
 				.setOnClickListener(new OnClickListener() {
 					@Override

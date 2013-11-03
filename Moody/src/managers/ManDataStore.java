@@ -20,10 +20,18 @@ import android.content.Context;
 public class ManDataStore {
 	Context context;
 
+	/**
+	 * @param context
+	 */
 	public ManDataStore(Context context) {
 		this.context = context;
 	}
 
+	/**
+	 * @param obj
+	 * @return ByteArray()
+	 * @throws IOException
+	 */
 	private static byte[] serialize(Object obj) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		ObjectOutputStream o = new ObjectOutputStream(b);
@@ -31,6 +39,12 @@ public class ManDataStore {
 		return b.toByteArray();
 	}
 
+	/**
+	 * @param bytes
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	private static Object deserialize(byte[] bytes) throws IOException,
 			ClassNotFoundException {
 		ByteArrayInputStream b = new ByteArrayInputStream(bytes);
@@ -38,7 +52,11 @@ public class ManDataStore {
 		return o.readObject();
 	}
 
-	// Save the Object in cacheDir
+	/**
+	 * @param object
+	 * @param fileName
+	 *            Save the Object in cacheDir
+	 */
 	public void storeData(Object object, String fileName) {
 
 		try {
@@ -61,7 +79,11 @@ public class ManDataStore {
 
 	}
 
-	// Load the object
+	/**
+	 * @param fileName
+	 * @return deserialize(object) or null
+	 *  Loads the object
+	 */
 	public Object getData(String fileName) {
 		String filePath = "/" + fileName + ".data";
 		try {

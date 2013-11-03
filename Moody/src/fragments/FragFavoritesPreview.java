@@ -136,8 +136,6 @@ public class FragFavoritesPreview extends Fragment {
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		insertPoint.setOrientation(LinearLayout.VERTICAL);
-		// insertPoint.addView(inflater.inflate(
-		// R.layout.favorites_course_preview_header, null));
 
 		if (favorites.isEmpty()) {
 			insertPoint.addView(inflater.inflate(R.layout.frag_empty_favorites, null));

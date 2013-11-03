@@ -104,7 +104,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	/**
-	 * 
+	 * Method to initialize the demo overlay on first run.
 	 */
 	private void initDemoOverlay() {
 		ShowcaseView.ConfigOptions configOptions1 = new ShowcaseView.ConfigOptions();
@@ -123,7 +123,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	/**
-	 * 
+	 * The listener of the left/right drawerLayout
 	 */
 	private void drawerLayoutListener() {
 		myDrawerLayout.setDrawerListener(new DrawerListener() {
@@ -344,11 +344,18 @@ public class MainActivity extends Activity implements OnClickListener,
 		}
 	}
 
+	/**
+	 * Method responsible to initialize the right menu
+	 */
 	private void populateRight() {
 		setupSearchView();
 		populateContacts();
 	}
 
+	/**
+	 * Initialization of searchView
+	 * 
+	 */
 	private void setupSearchView() {
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		final SearchView searchView = (SearchView) findViewById(R.id.searchView);
@@ -357,6 +364,11 @@ public class MainActivity extends Activity implements OnClickListener,
 		searchView.setSearchableInfo(searchableInfo);
 	}
 
+	/**
+	 * 
+	 * Method to initialize the contacts
+	 * 
+	 */
 	private void populateContacts() {
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -503,12 +515,19 @@ public class MainActivity extends Activity implements OnClickListener,
 		});
 	}
 
+	/**
+	 * Method to initialize the leftMenu
+	 */
 	private void populateLeft() {
 		populateFullName();
 		populateUserCourses();
 		populateUserPicture();
 	}
 
+	/**
+	 * Method responsible to differentiate what type of notification the user
+	 * has received
+	 */
 	private void receiveNotification() {
 		if (getIntent().getFlags() == R.id.MOODY_NOTIFICATION_ACTION_TOPIC) {
 			int courseId2 = getIntent().getFlags();
@@ -537,6 +556,11 @@ public class MainActivity extends Activity implements OnClickListener,
 		}
 	}
 
+	/**
+	 * 
+	 * Method to initialize the user name textview
+	 * 
+	 */
 	private void populateFullName() {
 
 		TextView view = (TextView) findViewById(R.id.fullname_textview);
@@ -544,6 +568,11 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	}
 
+	/**
+	 * 
+	 * Method to responsible to get the user picture from Moodle
+	 * 
+	 */
 	private void populateUserPicture() {
 		ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
 		if (session.getValues("PIC_PATH", null) == null) {
@@ -568,6 +597,11 @@ public class MainActivity extends Activity implements OnClickListener,
 		}
 	}
 
+	/**
+	 * 
+	 * Method to initialize the user courses
+	 * 
+	 */
 	private void populateUserCourses() {
 
 		// Get all the courses from current user
@@ -583,7 +617,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		if (courses == null || courses.length == 0) {
 
 			fatalError("Moody Fatal Error - Get Courses",
-					"An Error Ocurred Retrieving Data contact your Moodle Administrator");
+					"An Error Occurred Retrieving Data contact your Moodle Administrator");
 
 		} else {
 			for (int j = 0; j < courses.length; j++) {
@@ -657,7 +691,6 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	}
 
-	// Method to decide what to do from what button was pressed
 	@Override
 	public void onClick(View v) {
 
@@ -683,7 +716,7 @@ public class MainActivity extends Activity implements OnClickListener,
 					case DialogInterface.BUTTON_POSITIVE:
 						session.logoutUser();
 
-						// limpa cache ao fazer logout.
+						// Clear cache on logout
 						new ManDataStore(getApplicationContext()).deleteCache();
 
 						Intent intent = new Intent(getApplicationContext(),
@@ -760,15 +793,13 @@ public class MainActivity extends Activity implements OnClickListener,
 		}
 	}
 
+	/**
+	 * 
+	 * The view id is the same id of the courses
+	 * 
+	 * @param v
+	 */
 	public void onCoursesClick(View v) {
-
-		// LOADING
-		// Intent intent = new Intent(getApplicationContext(),
-		// LoadingActivity.class);
-		// startActivity(intent);
-
-		// The view id is the same id of the courses
-
 		String courseName = organizedCourses.get(Integer.toString(v.getId()));
 		String courseId = Integer.toString(v.getId());
 
@@ -883,7 +914,7 @@ public class MainActivity extends Activity implements OnClickListener,
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						session.logoutUser();
-						// limpa cache ao fazer logout.
+						// Clear cache on logout
 						new ManDataStore(getApplicationContext()).deleteCache();
 						finish();
 						android.os.Process.killProcess(android.os.Process
@@ -893,6 +924,14 @@ public class MainActivity extends Activity implements OnClickListener,
 				}, false);
 	}
 
+	/**
+	 * 
+	 * Private method for tests proposes only
+	 * 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
 	private long performanceMeasure(long startTime, long endTime) {
 		long timestamp = endTime - startTime;
 		return timestamp;

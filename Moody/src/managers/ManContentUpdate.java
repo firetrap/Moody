@@ -11,6 +11,10 @@ import android.content.Context;
 
 import com.android.moody.R;
 
+/**
+ * @author firetrap
+ * 
+ */
 public class ManContentUpdate {
 	ManDataStore data;
 	Context context;
@@ -18,6 +22,11 @@ public class ManContentUpdate {
 	String courseId;
 	ServiceNotifications notification;
 
+	/**
+	 * @param context
+	 * @param courseName
+	 * @param courseId
+	 */
 	public ManContentUpdate(Context context, String courseName, String courseId) {
 		this.context = context;
 		this.courseName = courseName;
@@ -27,6 +36,10 @@ public class ManContentUpdate {
 				courseId);
 	}
 
+	/**
+	 * @param newCourse
+	 * @param fileName
+	 */
 	public void hasNewContent(Object newCourse, String fileName) {
 		MoodleCourseContent[] oldObj = (MoodleCourseContent[]) data
 				.getData(fileName);

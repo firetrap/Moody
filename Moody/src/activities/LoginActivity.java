@@ -72,7 +72,7 @@ public class LoginActivity extends Activity {
 	private View mLoginStatusView;
 	private String mPassword;
 
-	// Values for username and password at the time of the login attempt.
+	// Values for user name and password at the time of the login attempt.
 	private String mUrl;
 	// UI references.
 	private EditText mUrlView;
@@ -80,7 +80,7 @@ public class LoginActivity extends Activity {
 	private EditText mUserView;
 	private String mUser;
 
-	// Licence and trademark
+	// License and trademark
 	private TextView trademark;
 	private TextView licence;
 
@@ -176,7 +176,7 @@ public class LoginActivity extends Activity {
 		String error = "Errors found: \n\n";
 		View focusView = null;
 
-		// Check for url.
+		// Check for URL.
 		if (TextUtils.isEmpty(mUrl)) {
 			mUrlView.setError(getString(R.string.error_field_required));
 			focusView = mUrlView;
@@ -190,7 +190,7 @@ public class LoginActivity extends Activity {
 			error += "URL\n";
 		}
 
-		// Check if URL contains the required http protocol.
+		// Check if URL contains the required HTTP protocol.
 		else {
 			if (!mUrl.subSequence(0, 7).equals("http://")) {
 				mUrl = "http://" + mUrl;
@@ -311,7 +311,7 @@ public class LoginActivity extends Activity {
 
 						return false;
 					}
-					// On getToken sucess it will get the user id
+					// On getToken success it will get the user id
 					if (jObj.has("token")) {
 						finalToken = (String) jObj.get("token");
 						MoodleCallRestWebService.init(mUrl

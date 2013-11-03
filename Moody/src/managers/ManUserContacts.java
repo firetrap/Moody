@@ -8,9 +8,9 @@ import java.util.concurrent.ExecutionException;
 
 import model.ModConstants;
 import restPackage.MoodleContact;
+import restPackage.MoodleContactAction;
 import restPackage.MoodleContactState;
 import restPackage.MoodleMessage;
-import restPackage.MoodleContactAction;
 import restPackage.MoodleServices;
 import android.content.Context;
 import connections.DataAsyncTask;

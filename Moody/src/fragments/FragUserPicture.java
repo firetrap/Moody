@@ -45,7 +45,7 @@ public class FragUserPicture extends DialogFragment {
 	private String fileManagerImagePath;
 	private String selectedImagePath;
 
-	public String getPath(Uri uri) {
+	private String getPath(Uri uri) {
 		String selectedImagePath;
 		// 1:MEDIA GALLERY --- query from MediaStore.Images.Media.DATA
 		final String[] projection = { MediaColumns.DATA };
@@ -86,7 +86,6 @@ public class FragUserPicture extends DialogFragment {
 						ModConstants.DIALOG_FRAG_USER_PIC);
 				this.dismiss();
 			}
-
 			if (requestCode == REQUEST_IMAGE) {
 
 				try {
@@ -103,7 +102,6 @@ public class FragUserPicture extends DialogFragment {
 				activity.onFinishEditDialog(cameraImagePath,
 						ModConstants.DIALOG_FRAG_USER_PIC);
 				this.dismiss();
-
 			}
 		}
 
@@ -150,7 +148,6 @@ public class FragUserPicture extends DialogFragment {
 						startActivityForResult(
 								Intent.createChooser(intent, "Select Picture"),
 								PICTURE_GALLERY);
-
 					}
 				});
 
@@ -159,19 +156,11 @@ public class FragUserPicture extends DialogFragment {
 
 					@Override
 					public void onClick(View v) {
-						// Intent intent = new Intent(getActivity()
-						// .getApplicationContext(),
-						// UserDetailsActivity.class);
-						// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						// startActivity(intent);
-						// dismiss();
-
 						final Intent intent = new Intent(
 								MediaStore.ACTION_IMAGE_CAPTURE);
 						intent.putExtra(MediaStore.EXTRA_OUTPUT,
 								Uri.fromFile(destination));
 						startActivityForResult(intent, REQUEST_IMAGE);
-
 					}
 				});
 

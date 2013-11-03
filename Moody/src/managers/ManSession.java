@@ -23,7 +23,10 @@ public class ManSession {
 	// Shared Preferences
 	SharedPreferences pref;
 
-	// Constructor
+
+	/**
+	 * @param context
+	 */
 	public ManSession(Context context) {
 		this._context = context;
 		pref = _context.getSharedPreferences(ModConstants.PREF_NAME,
@@ -31,6 +34,9 @@ public class ManSession {
 		editor = pref.edit();
 	}
 
+	/**
+	 * @param preference
+	 */
 	public void addPref(String preference) {
 
 		// Storing preference in preferences

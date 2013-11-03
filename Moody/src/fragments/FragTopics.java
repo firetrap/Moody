@@ -34,7 +34,6 @@ import com.android.moody.R;
 public class FragTopics extends Fragment {
 
 	Object course;
-	// ManSession Manager Class
 	ManSession session;
 	String courseId;
 	Long topicId;
@@ -175,6 +174,11 @@ public class FragTopics extends Fragment {
 	}
 
 	/**
+	 * 
+	 * One of the most important method in the project, is responsible to get
+	 * the contents from the modules and display it in view according with which
+	 * type of data
+	 * 
 	 * @param singleModule
 	 * @param topicsContent
 	 */
@@ -207,24 +211,14 @@ public class FragTopics extends Fragment {
 					} else if (moduleContents[j].getFilename()
 							.equalsIgnoreCase("index.html")) {
 
-						// the fileName is
-						// contentFileName+CourseId+TopicId+ModuleId+content
-						// number
 						String indexURL = new ManContents(getActivity()
 								.getApplicationContext()).parseFile(url,
 								moduleContents[j].getFilename() + courseId
 										+ topicId + singleModule.getId());
 
-						// if (indexURL.contains("youtube")) {
-
 						moduleFile.setText(indexURL);
 						moduleFile.setCompoundDrawablesWithIntrinsicBounds(
 								getCorrectDrawable(indexURL), 0, 0, 0);
-						// }
-						// else {
-						// moduleFile.setText(Html.fromHtml(indexURL));
-						//
-						// }
 
 						Linkify.addLinks(moduleFile, Linkify.WEB_URLS);
 					}
@@ -247,8 +241,13 @@ public class FragTopics extends Fragment {
 		}
 	}
 
-	// Because android doesn't support string switch i've to do with if else
-	// statements
+	/**
+	 * 
+	 * Return the correct draw to the view
+	 * 
+	 * @param url
+	 * @return drawable id
+	 */
 	private int getCorrectDrawable(String url) {
 
 		if (url.contains(".youtube.")) {
@@ -261,10 +260,6 @@ public class FragTopics extends Fragment {
 			return R.drawable.ppt;
 		} else if (url.contains(".xls")) {
 			return R.drawable.xls;
-			// } else if (url.contains(".zip") || url.contains(".rar")) {
-			// return R.drawable.zip;
-			// } else if (url.contains(".mp3")) {
-			// return R.drawable.mp3;
 		}
 		return 0;
 

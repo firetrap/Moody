@@ -22,12 +22,18 @@ public class ManSearch {
 
 	ContentResolver cr;
 
+	/**
+	 * @param context
+	 */
 	public ManSearch(Context context) {
 		this.context = context;
 		this.contents = new ManContents(context);
 
 	}
 
+	/**
+	 * @param query
+	 */
 	public void doMySearch(String query) {
 
 		// Get all user courses
@@ -43,6 +49,10 @@ public class ManSearch {
 		}
 	}
 
+	/**
+	 * @param courseContent
+	 * @param query
+	 */
 	private void searchContents(MoodleCourseContent[] courseContent,
 			String query) {
 
@@ -68,6 +78,10 @@ public class ManSearch {
 
 	}
 
+	/**
+	 * @param moodleModules
+	 * @param query
+	 */
 	private void searchModules(MoodleModule[] moodleModules, String query) {
 
 		if (moodleModules != null) {

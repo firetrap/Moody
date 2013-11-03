@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.android.moody.R;
 
@@ -35,7 +34,8 @@ public class FragUserCloud extends DialogFragment {
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		getDialog().getWindow().requestFeature(STYLE_NO_TITLE);
 
-		final View view = inflater.inflate(R.layout.dialog_cloud_apps, container);
+		final View view = inflater.inflate(R.layout.dialog_cloud_apps,
+				container);
 
 		((Button) view.findViewById(R.id.cloud_dropbox_btn))
 				.setOnClickListener(new OnClickListener() {
@@ -111,13 +111,24 @@ public class FragUserCloud extends DialogFragment {
 
 	}
 
+	/**
+	 * Call the browser or the play store if installed
+	 * 
+	 * @param uri
+	 */
 	private void callOnline(String uri) {
 		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-
 		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivity(intent);
 	}
 
+	/**
+	 * 
+	 * Check if the cloud service has been chosen from the user is installed.
+	 * 
+	 * @param uri
+	 * @return
+	 */
 	private boolean isInstalled(String uri) {
 
 		try {

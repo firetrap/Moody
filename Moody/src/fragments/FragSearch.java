@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 
 import com.android.moody.R;
 
-//public class FragSearch extends Activity {
 public class FragSearch extends Fragment {
 
 	@Override

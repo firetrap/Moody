@@ -44,6 +44,9 @@ public class ManContents {
 	Context context;
 	ManDataStore data;
 
+	/**
+	 * @param context
+	 */
 	public ManContents(Context context) {
 		this.context = context;
 		this.data = new ManDataStore(context);
@@ -194,12 +197,13 @@ public class ManContents {
 		return null;
 	}
 
-	// MOODLE SPECIFIC INDEX.HTML GET CONTENT
 	/**
 	 * @param context
 	 * @param fileUrl
 	 * @param fileName
 	 * @return String
+	 * 
+	 *         Because of moodle specific index.html get content
 	 */
 	public String parseFile(String fileUrl, String fileName) {
 		Document doc;

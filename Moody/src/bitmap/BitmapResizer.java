@@ -9,6 +9,15 @@ import android.graphics.BitmapFactory;
  */
 public class BitmapResizer {
 
+	/**
+	 * 
+	 * Calculates the required sample size for the view
+	 * 
+	 * @param options
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return
+	 */
 	public static int calculateInSampleSize(BitmapFactory.Options options,
 			int reqWidth, int reqHeight) {
 		// Raw height and width of image
@@ -33,6 +42,17 @@ public class BitmapResizer {
 		return inSampleSize;
 	}
 
+	/**
+	 * 
+	 * Bitmap custom decoder, its needed to prevent out of memory on large
+	 * images
+	 * 
+	 * @param inputText
+	 * @param resId
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return
+	 */
 	public static Bitmap decodeSampledBitmapFromResource(String inputText,
 			int resId, int reqWidth, int reqHeight) {
 

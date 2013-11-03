@@ -22,6 +22,10 @@ import android.os.AsyncTask;
 import android.os.StrictMode;
 
 /**
+ * 
+ * This class is responsible to get date from Server and return the required
+ * object, it runs in a new thread
+ * 
  * @author firetrap
  * 
  */
@@ -134,10 +138,13 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 	}
 
 	/**
-	 * Returns a Drawable object containing the image located at
+	 * * Returns a Drawable object containing the image located at
 	 * 'imageWebAddress' if successful, and null otherwise. (Pre:
 	 * 'imageWebAddress' is non-null and non-empty; method should not be called
 	 * from the main/ui thread.)
+	 * 
+	 * @param imageWebAddress
+	 * @return
 	 */
 	public static Drawable createDrawableFromUrl(String imageWebAddress) {
 		Drawable drawable = null;

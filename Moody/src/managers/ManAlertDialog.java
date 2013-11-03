@@ -12,9 +12,8 @@ import com.android.moody.R;
 
 /**
  * 
- * AlertDialogMAnager servirá para notificar caso não a dropbox ou drive. Caso
- * não esteja instalado pergunta se quer ir sacar e vai para o menu de decisão
- * de abertura. - Classe que será responsável por
+ * AlertDialogMAnager it's to notify if Gdrive or dropbox are not installed. If
+ * not installed asks if you want to download it from Play Store.
  * 
  * @author SérgioFilipe
  * 
@@ -44,17 +43,11 @@ public final class ManAlertDialog {
 
 	/**
 	 * 
-	 * Método showMessageDialog - Para mensagens de erro, sucesso ou simples
-	 * Debugging
+	 * Método showMessageDialog - For error messages
 	 * 
 	 * @param context
-	 *            - Contexto actual da aplicação (estado da Actividade actual)
-	 *            (Activity).
 	 * @param mensagem
-	 *            - Mensagem do Dialog
 	 * @param status
-	 *            - Flag para definir icon da janela (true -> success, false ->
-	 *            error, null -> sem Icon)
 	 * 
 	 **/
 	public static void showMessageDialog(Activity context, ModMessage mensagem,
@@ -73,6 +66,12 @@ public final class ManAlertDialog {
 				}, status);
 	}
 
+	/**
+	 * @param context
+	 * @param mensagem
+	 * @param onClick
+	 * @param status
+	 */
 	public static void showMessageDialog(Activity context, ModMessage mensagem,
 			DialogInterface.OnClickListener onClick, Boolean status) {
 
@@ -85,6 +84,13 @@ public final class ManAlertDialog {
 
 	}
 
+	/**
+	 * @param context
+	 * @param mensagem
+	 * @param frtOnClick
+	 * @param sndOnClick
+	 * @param status
+	 */
 	public static void showMessageDialog(Activity context, ModMessage mensagem,
 			DialogInterface.OnClickListener frtOnClick,
 			DialogInterface.OnClickListener sndOnClick, Boolean status) {
@@ -101,30 +107,20 @@ public final class ManAlertDialog {
 
 	}
 
+	/**
+	 * @param context
+	 * @param mensagem
+	 * @param status
+	 */
 	private static void initBuilder(Activity context, ModMessage mensagem,
 			Boolean status) {
 
 		builder = new AlertDialog.Builder(context);
-
 		getBuilder().setTitle(mensagem.getAssunto());
 		getBuilder().setMessage(mensagem.getCorpo());
-
-		// ################################ ADAPTAR PARA USAR OS ICONS DA
-		// APLICAÇÃO!!!! ############################
-		// if(status != null)
-		// getAlertDialog().setIcon((status) ? R.drawable.success :
-		// R.drawable.fail);
-		// #########################################################################################################
-
 		alertDialog = getBuilder().create();
-
 	}
 
-	/**
-	 * 
-	 * Construtor privado - Assegura que classe não é instanciavel.
-	 * 
-	 **/
 	private ManAlertDialog() {
 		throw new AssertionError();
 	}

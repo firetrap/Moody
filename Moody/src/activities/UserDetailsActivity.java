@@ -18,27 +18,19 @@ import com.android.moody.R;
  * @author SérgioFilipe
  * 
  */
-public class UserDetailsActivity extends Activity
-// implements TextWatcher
-{
+public class UserDetailsActivity extends Activity {
 
+	/**
+	 * Method responsible to initialize the userDetails activity
+	 */
 	private void initComponents() {
-		/**
-		 * ADDS LISTENERS, SO INPUT CAN BE VALIDATED
-		 * ((EditText)findViewById(R.id
-		 * .editText_firstname)).addTextChangedListener(this);
-		 * ((EditText)findViewById
-		 * (R.id.editText_lastname)).addTextChangedListener(this);
-		 * ((EditText)findViewById
-		 * (R.id.editText_email)).addTextChangedListener(this);
-		 **/
 		MoodleUser user = new ManContents(getApplicationContext()).getUser();
 
 		if (user != null) {
 			initDetails(user);
 		} else {
 			ManAlertDialog.showMessageDialog(this, new ModMessage(
-					"Moody Error", "An Error Ocurred Retrieving Data"),
+					"Moody Error", "An Error Occurred Retrieving Data"),
 					new DialogInterface.OnClickListener() {
 
 						@Override
@@ -51,21 +43,43 @@ public class UserDetailsActivity extends Activity
 		}
 	}
 
+	/**
+	 * responsible to show or hide only the available fields from Moodle
+	 * 
+	 * @param lID
+	 * @param show
+	 */
 	private void showHideLayout(int lID, Boolean show) {
 
 		findViewById(lID).setVisibility(!(show) ? View.GONE : View.VISIBLE);
 
 	}
 
+	/**
+	 * 
+	 * Check if the data from Moodle is string or HTML and set the correct
+	 * attribute
+	 * 
+	 * @param vID
+	 * @param text
+	 * @param hasHTML
+	 */
 	private void initTextView(int vID, String text, boolean hasHTML) {
 
-		// precisa de cast porque a View não tem text.
-		// se for campo que tenha HTML formata.
 		((TextView) findViewById(vID)).setText(!((hasHTML)) ? text : Html
 				.fromHtml(text));
 
 	}
 
+	/**
+	 * 
+	 * If the field is valid it show it else hide the textview
+	 * 
+	 * @param vID
+	 * @param lID
+	 * @param text
+	 * @param hasHTML
+	 */
 	private void processTextView(int vID, int lID, String text, boolean hasHTML) {
 
 		if (!(isValid(text)))
@@ -75,6 +89,11 @@ public class UserDetailsActivity extends Activity
 
 	}
 
+	/**
+	 * Initialize all the required views
+	 * 
+	 * @param user
+	 */
 	private void initDetails(MoodleUser user) {
 
 		processTextView(R.id.textView_full_name, R.id.relativeLayout_fullname,
