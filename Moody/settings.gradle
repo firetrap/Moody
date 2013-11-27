@@ -1,0 +1,4 @@
+include ':Documents:GitHub:demoOverlay:library'
+include ':Documents:GitHub:Moody:Moody'
+include ':EclipseProjects:Libs:NineOldAndroids-master:library'
+include ':Documents:GitHub:MoodyRest:moodyRest'
