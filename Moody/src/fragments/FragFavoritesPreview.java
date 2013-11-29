@@ -70,7 +70,6 @@ public class FragFavoritesPreview extends Fragment {
 		session = new ManSession(getActivity().getApplicationContext());
 
 		mCallback = onActionModeCallback();
-		initLayouts();
 
 		return createContent(new ManFavorites(getActivity()
 				.getApplicationContext()).getFavorites());
@@ -146,7 +145,8 @@ public class FragFavoritesPreview extends Fragment {
 					R.layout.frag_empty_favorites, null));
 			return contentsLayout;
 		} else
-			mainLayout.addView(createTopicsHeader(inflater));
+			initLayouts();
+		mainLayout.addView(createTopicsHeader(inflater));
 		contentScrollable.addView(createContentRows(contentsLayout, favorites,
 				inflater));
 		mainLayout.addView(contentScrollable);
@@ -185,6 +185,33 @@ public class FragFavoritesPreview extends Fragment {
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		contentsLayout.setOrientation(LinearLayout.VERTICAL);
+	}
+
+	/**
+	 * Method to create the header of the topics preview with the course path
+	 * and the "add favorites" button
+	 * 
+	 * @param CourseName
+	 * @param courseId
+	 * @param inflater
+	 * @return View
+	 */
+	protected View createTopicsHeader(LayoutInflater inflater) {
+		View topicsHeaderView = inflater.inflate(R.layout.frag_header, null);
+
+		TextView header = (TextView) topicsHeaderView
+				.findViewById(R.id.course_path_textView);
+		ImageButton addFavorite = (ImageButton) topicsHeaderView
+				.findViewById(R.id.add_favorites_button);
+		addFavorite.setVisibility(View.GONE);
+
+		header.setText(Html.fromHtml(session.getValues(
+				ModConstants.KEY_FULL_NAME, null)
+				+ " > <font color=#BE245A>"
+				+ getResources().getString(R.string.favorites_header)
+				+ "</font>"));
+
+		return topicsHeaderView;
 	}
 
 	/**
