@@ -338,31 +338,4 @@ public class FragFavoritesPreview extends Fragment {
 		return tVContent;
 	}
 
-	/**
-	 * Method to create the header of the topics preview with the course path
-	 * and the "add favorites" button
-	 * 
-	 * @param CourseName
-	 * @param courseId
-	 * @param inflater
-	 * @return View
-	 */
-	protected View createTopicsHeader(LayoutInflater inflater) {
-		View topicsHeaderView = inflater.inflate(R.layout.frag_header, null);
-
-		TextView header = (TextView) topicsHeaderView
-				.findViewById(R.id.course_path_textView);
-		ImageButton addFavorite = (ImageButton) topicsHeaderView
-				.findViewById(R.id.add_favorites_button);
-		addFavorite.setVisibility(View.GONE);
-
-		header.setText(Html.fromHtml(session.getValues(
-				ModConstants.KEY_FULL_NAME, null)
-				+ " > <font color=#BE245A>"
-				+ getResources().getString(R.string.favorites_header)
-				+ "</font>"));
-
-		return topicsHeaderView;
-	}
-
 }
