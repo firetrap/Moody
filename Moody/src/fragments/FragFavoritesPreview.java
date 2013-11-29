@@ -26,7 +26,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -47,6 +49,12 @@ public class FragFavoritesPreview extends Fragment {
 	ActionMode mMode;
 	ArrayList<Long> selectedIds;
 
+	private LinearLayout mainLayout;
+
+	private ScrollView contentScrollable;
+
+	private LinearLayout contentsLayout;
+
 	/**
 	 * 
 	 */
@@ -62,6 +70,7 @@ public class FragFavoritesPreview extends Fragment {
 		session = new ManSession(getActivity().getApplicationContext());
 
 		mCallback = onActionModeCallback();
+		initLayouts();
 
 		return createContent(new ManFavorites(getActivity()
 				.getApplicationContext()).getFavorites());
@@ -121,7 +130,8 @@ public class FragFavoritesPreview extends Fragment {
 
 	/**
 	 * 
-	 * Create the "row" with the header and the content
+	 * If favorites is empty inflate empty layout else create the rows with the
+	 * favorites
 	 * 
 	 * @param CourseName
 	 * @param courseId
@@ -130,18 +140,51 @@ public class FragFavoritesPreview extends Fragment {
 	protected LinearLayout createContent(ArrayList<Long> favorites) {
 		LayoutInflater inflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		LinearLayout insertPoint = new LinearLayout(getActivity());
-
-		insertPoint.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		insertPoint.setOrientation(LinearLayout.VERTICAL);
 
 		if (favorites.isEmpty()) {
-			insertPoint.addView(inflater.inflate(R.layout.frag_empty_favorites, null));
-			return insertPoint;
+			contentsLayout.addView(inflater.inflate(
+					R.layout.frag_empty_favorites, null));
+			return contentsLayout;
 		} else
-			return createContentRows(insertPoint, favorites, inflater);
+			mainLayout.addView(createTopicsHeader(inflater));
+		contentScrollable.addView(createContentRows(contentsLayout, favorites,
+				inflater));
+		mainLayout.addView(contentScrollable);
+		return mainLayout;
+	}
+
+	/**
+	 * 
+	 * This method is responsible to initialize the required layouts
+	 * 
+	 */
+	private void initLayouts() {
+
+		// The mainLayout is a linearLayout witch will wrap another linearLayout
+		// with the static header and the scrollable content
+		mainLayout = new LinearLayout(getActivity());
+		mainLayout.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		mainLayout.setOrientation(LinearLayout.VERTICAL);
+
+		// The scrollView responsible to scroll the contents layout
+		contentScrollable = new ScrollView(getActivity());
+		contentScrollable.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
+				.getLayoutParams();
+		scroll_params.setMargins(0, 10, 0, 0);
+		contentScrollable.setLayoutParams(scroll_params);
+
+		// The linearLayout which wrap all the topics, this linearLayout is
+		// inside the scrollView
+		contentsLayout = new LinearLayout(getActivity());
+		contentsLayout.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		contentsLayout.setOrientation(LinearLayout.VERTICAL);
 	}
 
 	/**
@@ -150,10 +193,10 @@ public class FragFavoritesPreview extends Fragment {
 	 * 
 	 * @param rows
 	 * @param inflater
-	 * @param insertPoint
+	 * @param contentsLayout
 	 * @param courseId
 	 */
-	protected LinearLayout createContentRows(LinearLayout insertPoint,
+	protected LinearLayout createContentRows(LinearLayout contentsLayout,
 			ArrayList<Long> favorites, LayoutInflater inflater) {
 		MoodleCourse[] userCourses = new ManContents(getActivity()
 				.getApplicationContext()).getCourses();
@@ -175,20 +218,8 @@ public class FragFavoritesPreview extends Fragment {
 			row.setLayoutParams(new LayoutParams(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-			View view = inflater.inflate(R.layout.frag_favorites_preview_context,
-					null);
-
-			if (i > 0) {
-				((TextView) view.findViewById(R.id.favorites_header_title))
-						.setVisibility(View.GONE);
-			} else {
-				((TextView) view.findViewById(R.id.favorites_header_title))
-						.setText(Html.fromHtml(session.getValues(
-								ModConstants.KEY_FULL_NAME, null)
-								+ " > <font color=#BE245A>"
-								+ getResources().getString(
-										R.string.favorites_header) + "</font>"));
-			}
+			View view = inflater.inflate(
+					R.layout.frag_favorites_preview_context, null);
 
 			((TextView) view.findViewById(R.id.favorites_title))
 					.setText(courseInfo.getFullname());
@@ -207,11 +238,11 @@ public class FragFavoritesPreview extends Fragment {
 			setOnFavorite(courseInfo, favoritesCard);
 
 			row.addView(view);
-			insertPoint.addView(row);
+			contentsLayout.addView(row);
 
 		}
 
-		return insertPoint;
+		return contentsLayout;
 	}
 
 	/**
@@ -305,6 +336,33 @@ public class FragFavoritesPreview extends Fragment {
 		}
 
 		return tVContent;
+	}
+
+	/**
+	 * Method to create the header of the topics preview with the course path
+	 * and the "add favorites" button
+	 * 
+	 * @param CourseName
+	 * @param courseId
+	 * @param inflater
+	 * @return View
+	 */
+	protected View createTopicsHeader(LayoutInflater inflater) {
+		View topicsHeaderView = inflater.inflate(R.layout.frag_header, null);
+
+		TextView header = (TextView) topicsHeaderView
+				.findViewById(R.id.course_path_textView);
+		ImageButton addFavorite = (ImageButton) topicsHeaderView
+				.findViewById(R.id.add_favorites_button);
+		addFavorite.setVisibility(View.GONE);
+
+		header.setText(Html.fromHtml(session.getValues(
+				ModConstants.KEY_FULL_NAME, null)
+				+ " > <font color=#BE245A>"
+				+ getResources().getString(R.string.favorites_header)
+				+ "</font>"));
+
+		return topicsHeaderView;
 	}
 
 }

@@ -123,7 +123,7 @@ public class FragTopics extends Fragment {
 			LayoutInflater inflater) {
 
 		final View topicsHeaderView = inflater.inflate(
-				R.layout.frag_topics_preview_header, null);
+				R.layout.frag_header, null);
 
 		final TextView path = (TextView) topicsHeaderView
 				.findViewById(R.id.course_path_textView);

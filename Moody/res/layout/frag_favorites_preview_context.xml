@@ -12,22 +12,6 @@
         android:layout_marginTop="2dp"
         android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/favorites_header_title"
-            style="@style/CardText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/card"
-            android:gravity="left"
-            android:paddingBottom="10dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="10dp"
-            android:text="@string/favorites_header" />
-
         <ui.CheckableLinearLayout
             android:id="@+id/favorites_layout"
             android:layout_width="match_parent"

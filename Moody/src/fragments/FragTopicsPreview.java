@@ -126,7 +126,7 @@ public class FragTopicsPreview extends Fragment {
 	protected View createTopicsHeader(String CourseName, String courseId,
 			LayoutInflater inflater) {
 		View topicsHeaderView = inflater.inflate(
-				R.layout.frag_topics_preview_header, null);
+				R.layout.frag_header, null);
 		int id = Integer.parseInt(courseId);
 
 		TextView courseName = (TextView) topicsHeaderView
