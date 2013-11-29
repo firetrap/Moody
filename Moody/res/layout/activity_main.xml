@@ -5,8 +5,8 @@
 
     <!-- The main content view -->
 
-    <ScrollView
-        android:id="@+id/scrollView_main_content"
+    <FrameLayout
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/C_Light_Grey" >
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
         </LinearLayout>
-    </ScrollView>
+    </FrameLayout>
 
     <!-- The left navigation drawer -->
 

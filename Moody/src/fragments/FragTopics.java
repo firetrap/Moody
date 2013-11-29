@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -38,6 +39,9 @@ public class FragTopics extends Fragment {
 	String courseId;
 	Long topicId;
 	String courseName;
+	private LinearLayout mainLayout;
+	private ScrollView contentScrollable;
+	private LinearLayout contentsLayout;
 
 	public FragTopics() {
 	}
@@ -66,20 +70,53 @@ public class FragTopics extends Fragment {
 		LayoutInflater inflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		LinearLayout insertPoint = new LinearLayout(getActivity());
-		insertPoint.setLayoutParams(new LayoutParams(
+		initLayouts();
+
+		View topicsHeaderView = onCreateHeader(courseName,
+				singleTopic.getName(), inflater);
+
+		mainLayout.addView(topicsHeaderView);
+
+		createTopicsContent(singleTopic, inflater, contentsLayout);
+
+		contentScrollable.addView(contentsLayout);
+		mainLayout.addView(contentScrollable);
+
+		return mainLayout;
+	}
+
+	/**
+	 * 
+	 * This method is responsible to initialize the required layouts
+	 * 
+	 */
+	private void initLayouts() {
+
+		// The mainLayout is a linearLayout witch will wrap another linearLayout
+		// with the static header and the scrollable content
+		mainLayout = new LinearLayout(getActivity());
+		mainLayout.setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		insertPoint.setOrientation(LinearLayout.VERTICAL);
+		mainLayout.setOrientation(LinearLayout.VERTICAL);
 
-		String topicName = singleTopic.getName();
-		View inflateHeader = onCreateHeader(courseName, topicName, inflater);
+		// The scrollView responsible to scroll the contents layout
+		contentScrollable = new ScrollView(getActivity());
+		contentScrollable.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
+				.getLayoutParams();
+		scroll_params.setMargins(0, 10, 0, 0);
+		contentScrollable.setLayoutParams(scroll_params);
 
-		insertPoint.addView(inflateHeader);
-
-		createTopicsContent(singleTopic, inflater, insertPoint);
-
-		return insertPoint;
+		// The linearLayout which wrap all the topics, this linearLayout is
+		// inside the scrollView
+		contentsLayout = new LinearLayout(getActivity());
+		contentsLayout.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		contentsLayout.setOrientation(LinearLayout.VERTICAL);
 	}
 
 	private View onCreateHeader(String courseName, String topicName,

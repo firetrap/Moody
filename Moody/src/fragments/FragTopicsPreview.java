@@ -18,6 +18,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.moody.R;
@@ -29,6 +31,9 @@ import com.android.moody.R;
 public class FragTopicsPreview extends Fragment {
 	// ManSession Manager Class
 	ManSession session;
+	private LinearLayout mainLayout;
+	private ScrollView contentScrollable;
+	private LinearLayout contentsLayout;
 
 	public FragTopicsPreview() {
 	}
@@ -56,21 +61,57 @@ public class FragTopicsPreview extends Fragment {
 		LayoutInflater inflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		LinearLayout insertPoint = new LinearLayout(getActivity());
-		insertPoint.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		insertPoint.setOrientation(LinearLayout.VERTICAL);
+		initLayouts();
 
 		View topicsHeaderView = createTopicsHeader(CourseName, courseId,
 				inflater);
+		// Add the header to the main Layout
+		mainLayout.addView(topicsHeaderView);
 
-		insertPoint.addView(topicsHeaderView);
+		createTopicsContent(inflater, contentsLayout, courseId);
 
-		createTopicsContent(inflater, insertPoint, courseId);
+		// add the linearLayout with the contents to scrollView
+		contentScrollable.addView(contentsLayout);
+	
+		// add the scrollView with the contents to mainLayout
+		mainLayout.addView(contentScrollable);
 
-		return insertPoint;
+		return mainLayout;
 
+	}
+
+	/**
+	 * 
+	 * This method is responsible to initialize the required layouts
+	 * 
+	 */
+	private void initLayouts() {
+
+		// The mainLayout is a linearLayout witch will wrap another linearLayout
+		// with the static header and the scrollable content
+		mainLayout = new LinearLayout(getActivity());
+		mainLayout.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		mainLayout.setOrientation(LinearLayout.VERTICAL);
+
+		// The scrollView responsible to scroll the contents layout
+		contentScrollable = new ScrollView(getActivity());
+		contentScrollable.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
+				.getLayoutParams();
+		scroll_params.setMargins(0, 10, 0, 0);
+		contentScrollable.setLayoutParams(scroll_params);
+
+		// The linearLayout which wrap all the topics, this linearLayout is
+		// inside the scrollView
+		contentsLayout = new LinearLayout(getActivity());
+		contentsLayout.setLayoutParams(new LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		contentsLayout.setOrientation(LinearLayout.VERTICAL);
 	}
 
 	/**

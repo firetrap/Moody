@@ -115,7 +115,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		ShowcaseViews views1 = new ShowcaseViews(MainActivity.this,
 				R.layout.activity_main);
 
-		views1.addView(new ItemViewProperties(R.id.scrollView_main_content,
+		views1.addView(new ItemViewProperties(R.id.main_content,
 				R.string.demo_open_left_title, R.string.demo_open_left_message,
 				0f, new float[] { 0, 600, 300, 600 }, configOptions1));
 
@@ -227,7 +227,7 @@ public class MainActivity extends Activity implements OnClickListener,
 							R.layout.activity_main);
 
 					views4.addView(new ItemViewProperties(
-							R.id.scrollView_main_content,
+							R.id.main_content,
 							R.string.demo_open_right_title,
 							R.string.demo_open_right_message, 0f, new float[] {
 									600, 500, 0, 500 }, configOptions7));
@@ -252,13 +252,13 @@ public class MainActivity extends Activity implements OnClickListener,
 							R.layout.activity_main);
 
 					views5.addView(new ItemViewProperties(
-							R.id.scrollView_main_content,
+							R.id.main_content,
 							R.string.demo_add_favorite_title,
 							R.string.demo_add_favorite_message, 0f,
 							new float[] { 610, 190, 610, 190 }, configOptions8));
 
 					views5.addView(new ItemViewProperties(
-							R.id.scrollView_main_content,
+							R.id.main_content,
 							R.string.demo_end_title, R.string.demo_end_message,
 							0f, configOptions9));
 
