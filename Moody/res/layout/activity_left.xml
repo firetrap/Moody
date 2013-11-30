@@ -42,12 +42,7 @@
                 android:layout_height="25dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="140dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/border_shape"
-                android:contentDescription="@string/login_image"
-                android:onClick="onClick"
-                android:scaleType="fitXY"
-                android:src="@drawable/logout" />
+                android:layout_marginTop="10dp" android:background="@drawable/logout" android:contentDescription="@string/login_image" android:onClick="onClick" android:scaleType="fitXY"/>
 
             <TextView
                 android:id="@+id/fullname_textview"
@@ -152,9 +147,13 @@
             android:layout_marginBottom="10dp"
             android:layout_weight="1.25"
             android:background="@drawable/card_w_shadow"
-            android:drawableLeft="@drawable/wiki"
+            android:drawableLeft="@drawable/help"
             android:drawablePadding="10dp"
-            android:gravity="left|center_vertical" android:onClick="onClick" android:paddingLeft="10dp" android:text="@string/wiki" android:textSize="@dimen/card_medium_text"/>
+            android:gravity="left|center_vertical" 
+            android:onClick="onClick" 
+            android:paddingLeft="10dp" 
+            android:text="@string/help" 
+            android:textSize="@dimen/card_medium_text"/>
     </LinearLayout>
 
 </ScrollView>

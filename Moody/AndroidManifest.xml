@@ -3,7 +3,7 @@
     package="com.android.moody"
     android:installLocation="internalOnly"
     android:versionCode="0"
-    android:versionName="0.8.2.4 alpha" >
+    android:versionName="0.9 alpha" >
 
     <permission
         android:name="com.android.moody.permission.GET_SERVER_DATA"
@@ -12,7 +12,7 @@
     <uses-sdk
         android:maxSdkVersion="18"
         android:minSdkVersion="11"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <uses-permission android:name="com.android.moody.permission.GET_SERVER_DATA" />
     <uses-permission android:name="android.permission.INTERNET" />
