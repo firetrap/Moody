@@ -13,18 +13,7 @@
 
 		<TextView 
 		    android:id="@+id/course_path_textView" 
-		    style="@style/CardsLayoutTitle"
-			android:layout_width="0dip" 
-			android:layout_height="wrap_content"
-			android:layout_gravity="left" 
-			android:layout_marginRight="10dp"
-			android:layout_weight="1" 
-			android:ellipsize="start"
-			android:paddingBottom="10dp" 
-			android:paddingLeft="10dp"
-			android:paddingTop="10dp" 
-			android:singleLine="true" 
-			android:text="@string/course_path" />
+		    style="@style/CardsHeaderTitle" android:layout_width="0dip" android:layout_height="wrap_content" android:layout_gravity="left" android:layout_marginRight="10dp" android:layout_weight="1" android:ellipsize="start" android:paddingBottom="10dp" android:paddingLeft="10dp" android:paddingTop="10dp" android:singleLine="true" android:text="@string/course_path"/>
 
 		<!-- android:textColor="@color/card_title_text" -->
 
