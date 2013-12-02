@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -100,6 +99,8 @@ public class FragTopicsPreview extends Fragment {
 		contentScrollable.setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+		contentScrollable.setVerticalScrollBarEnabled(false); 
+		contentScrollable.setHorizontalScrollBarEnabled(false);
 		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
 				.getLayoutParams();
 		scroll_params.setMargins(0, 10, 0, 0);
@@ -132,7 +133,7 @@ public class FragTopicsPreview extends Fragment {
 		TextView courseName = (TextView) topicsHeaderView
 				.findViewById(R.id.course_path_textView);
 
-		courseName.setText(Html.fromHtml("Courses ><font color=#68d5fe>"
+		courseName.setText(Html.fromHtml("Courses ><font color=#52c2ea>"
 				+ CourseName + "</font>"));
 
 		// If the course is already cached as favorite, hides the button,

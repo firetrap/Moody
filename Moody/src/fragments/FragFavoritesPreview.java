@@ -28,8 +28,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.moody.R;
@@ -173,6 +173,8 @@ public class FragFavoritesPreview extends Fragment {
 		contentScrollable.setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+		contentScrollable.setVerticalScrollBarEnabled(false); 
+		contentScrollable.setHorizontalScrollBarEnabled(false);
 		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
 				.getLayoutParams();
 		scroll_params.setMargins(0, 10, 0, 0);

@@ -6,12 +6,8 @@ import model.ModConstants;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;
-import android.animation.Animator;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -21,9 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.moody.R;
@@ -105,6 +100,8 @@ public class FragTopics extends Fragment {
 		contentScrollable.setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+		contentScrollable.setVerticalScrollBarEnabled(false); 
+		contentScrollable.setHorizontalScrollBarEnabled(false);
 		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
 				.getLayoutParams();
 		scroll_params.setMargins(0, 10, 0, 0);
@@ -129,7 +126,7 @@ public class FragTopics extends Fragment {
 				.findViewById(R.id.course_path_textView);
 
 		path.setText(Html.fromHtml("Courses > " + courseName + " > "
-				+ "<font color=#68d5fe>" + topicName + "</font>"));
+				+ "<font color=#52c2ea>" + topicName + "</font>"));
 
 		final ImageButton addFavorites = (ImageButton) topicsHeaderView
 				.findViewById(R.id.add_favorites_button);

@@ -6,7 +6,8 @@
     android:layout_gravity="right"
     android:layout_weight="1"
     android:background="@color/C_Light_Grey"
-    android:clickable="false" >
+    android:clickable="false"
+    android:scrollbars="none" >
 
     <LinearLayout
         android:id="@+id/right_linear_Layout"
