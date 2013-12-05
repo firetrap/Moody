@@ -20,9 +20,7 @@
 	<string name="title_activity_login">Sign in</string>
 	<string name="prompt_username">Username</string>
 	<string name="prompt_password">Password</string>
-	<string name="action_sign_in_register">
-		<b>Sign in</b>
-	</string>
+	<string name="action_sign_in_register"> <b>Sign in</b>	</string>
 	<string name="action_sign_in_short">Sign in</string>
 	<string name="action_forgot_password">Recover lost password</string>
 	<string name="login_progress_signing_in">Signing in&#8230;</string>
@@ -149,6 +147,12 @@
 	<string name="message_send">Send</string>
 	<string name="message_hint">Type message</string>
 
+	<!-- Other Strings -->
+	<string name="exit_msg">Press back again to exit.</string>
+	<string name="no_internet">There was a problem retrieving data. Check your internet connection.</string>
+	
+	
+	
 	<!-- Strings Related to Demo Overlay -->
 	<string name="demo_open_left_title">Welcome! Let\'s get started</string>
 	<string name="demo_open_left_message">Here is the main view, where all begins.\nSwipe

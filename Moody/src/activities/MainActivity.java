@@ -39,6 +39,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -84,6 +85,8 @@ public class MainActivity extends Activity implements OnClickListener,
 	private long startTime;
 	private long endTime;
 
+	private int pressed = 0;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		startTime = System.currentTimeMillis();
@@ -100,7 +103,21 @@ public class MainActivity extends Activity implements OnClickListener,
 		receiveNotification();
 		initDemoOverlay();
 		drawerLayoutListener();
+		warningMessage(checkConnection(), Toast.LENGTH_LONG, null,
+				getString(R.string.no_internet));
 
+	}
+
+	/**
+	 * 
+	 */
+	private void warningMessage(boolean statement, int duration,
+			String sucessMessage, String errorMessage) {
+		if (statement) {
+			if (sucessMessage != null)
+				Toast.makeText(this, sucessMessage, duration).show();
+		} else if (errorMessage != null)
+			Toast.makeText(this, errorMessage, duration).show();
 	}
 
 	/**
@@ -226,8 +243,7 @@ public class MainActivity extends Activity implements OnClickListener,
 					ShowcaseViews views4 = new ShowcaseViews(MainActivity.this,
 							R.layout.activity_main);
 
-					views4.addView(new ItemViewProperties(
-							R.id.main_content,
+					views4.addView(new ItemViewProperties(R.id.main_content,
 							R.string.demo_open_right_title,
 							R.string.demo_open_right_message, 0f, new float[] {
 									600, 500, 0, 500 }, configOptions7));
@@ -251,14 +267,12 @@ public class MainActivity extends Activity implements OnClickListener,
 					ShowcaseViews views5 = new ShowcaseViews(MainActivity.this,
 							R.layout.activity_main);
 
-					views5.addView(new ItemViewProperties(
-							R.id.main_content,
+					views5.addView(new ItemViewProperties(R.id.main_content,
 							R.string.demo_add_favorite_title,
 							R.string.demo_add_favorite_message, 0f,
 							new float[] { 610, 190, 610, 190 }, configOptions8));
 
-					views5.addView(new ItemViewProperties(
-							R.id.main_content,
+					views5.addView(new ItemViewProperties(R.id.main_content,
 							R.string.demo_end_title, R.string.demo_end_message,
 							0f, configOptions9));
 
@@ -337,9 +351,16 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void onBackPressed() {
+
 		if (getFragmentManager().getBackStackEntryCount() == 1) {
-			finish();
+			pressed++;
+			if (pressed == 1)
+				Toast.makeText(this, getString(R.string.exit_msg),
+						Toast.LENGTH_SHORT).show();
+			if (pressed > 1)
+				finish();
 		} else {
+			pressed = 0;
 			super.onBackPressed();
 		}
 	}
@@ -764,8 +785,9 @@ public class MainActivity extends Activity implements OnClickListener,
 		case R.id.favorites_button:
 
 			FragFavoritesPreview fragmentFavorites = new FragFavoritesPreview();
-			fragmentTransaction.addToBackStack(null);
+			clearBackStack();
 			fragmentTransaction.replace(R.id.mainFragment, fragmentFavorites);
+
 			fragmentTransaction.commit();
 
 			myDrawerLayout.closeDrawer(Gravity.LEFT);
@@ -795,6 +817,19 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	/**
 	 * 
+	 * Method responsible to clear fragments backstack
+	 * 
+	 */
+	private void clearBackStack() {
+		FragmentManager fm = this.getFragmentManager();
+
+		for (int i = 0; i < fm.getBackStackEntryCount(); i++) {
+			fm.popBackStack();
+		}
+	}
+
+	/**
+	 * 
 	 * The view id is the same id of the courses
 	 * 
 	 * @param v
@@ -812,6 +847,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		FragTopicsPreview fragment = new FragTopicsPreview();
 
 		fragment.setArguments(bundle);
+		// fragmentTransaction.add(fragment, "courses");
 		fragmentTransaction.addToBackStack(null);
 		fragmentTransaction.replace(R.id.mainFragment, fragment);
 		fragmentTransaction.commit();
@@ -935,6 +971,30 @@ public class MainActivity extends Activity implements OnClickListener,
 	private long performanceMeasure(long startTime, long endTime) {
 		long timestamp = endTime - startTime;
 		return timestamp;
+	}
+
+	/**
+	 * Check if the has internet connection
+	 * 
+	 * @return true or false
+	 */
+	public boolean checkConnection() {
+		ConnectivityManager connec = (ConnectivityManager) this
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		android.net.NetworkInfo wifi = connec
+				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		android.net.NetworkInfo mobile = connec
+				.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+		// Here if condition check for wifi and mobile network is available or
+		// not.
+		// If anyone of them is available or connected then it will return true,
+		// otherwise false;
+
+		if (wifi.isConnected() || mobile.isConnected()) {
+			return true;
+		}
+		return false;
 	}
 
 }

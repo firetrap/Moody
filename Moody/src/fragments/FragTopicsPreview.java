@@ -251,7 +251,9 @@ public class FragTopicsPreview extends Fragment {
 				progressBar.bringToFront();
 				FragTopics insideTopicsFrag = new FragTopics();
 				insideTopicsFrag.setArguments(bundle);
+//				fragmentTransaction.add(insideTopicsFrag, "topic_frag");
 				fragmentTransaction.addToBackStack(null);
+
 				fragmentTransaction
 						.replace(R.id.mainFragment, insideTopicsFrag);
 				fragmentTransaction.commit();

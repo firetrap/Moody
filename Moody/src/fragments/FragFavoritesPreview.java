@@ -13,6 +13,7 @@ import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import ui.CheckableLinearLayout;
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -75,6 +76,7 @@ public class FragFavoritesPreview extends Fragment {
 				.getApplicationContext()).getFavorites());
 	}
 
+	
 	/**
 	 * @return Callback
 	 */
@@ -95,7 +97,7 @@ public class FragFavoritesPreview extends Fragment {
 				FragmentTransaction fr = getFragmentManager()
 						.beginTransaction();
 				FragFavoritesPreview fragment = new FragFavoritesPreview();
-				fr.addToBackStack(null);
+				fr.disallowAddToBackStack();
 				fr.replace(R.id.mainFragment, fragment);
 				fr.commit();
 			}
@@ -139,14 +141,13 @@ public class FragFavoritesPreview extends Fragment {
 	protected LinearLayout createContent(ArrayList<Long> favorites) {
 		LayoutInflater inflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+		initLayouts();
 		if (favorites.isEmpty()) {
 			contentsLayout.addView(inflater.inflate(
 					R.layout.frag_empty_favorites, null));
 			return contentsLayout;
 		} else
-			initLayouts();
-		mainLayout.addView(createTopicsHeader(inflater));
+			mainLayout.addView(createTopicsHeader(inflater));
 		contentScrollable.addView(createContentRows(contentsLayout, favorites,
 				inflater));
 		mainLayout.addView(contentScrollable);
@@ -173,7 +174,7 @@ public class FragFavoritesPreview extends Fragment {
 		contentScrollable.setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
-		contentScrollable.setVerticalScrollBarEnabled(false); 
+		contentScrollable.setVerticalScrollBarEnabled(false);
 		contentScrollable.setHorizontalScrollBarEnabled(false);
 		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
 				.getLayoutParams();
@@ -299,6 +300,8 @@ public class FragFavoritesPreview extends Fragment {
 
 					FragTopicsPreview insideTopicsFrag = new FragTopicsPreview();
 					insideTopicsFrag.setArguments(bundle);
+//					fragmentTransaction.add(insideTopicsFrag, "topic_frag");
+					fragmentTransaction.addToBackStack(null);
 					fragmentTransaction.replace(R.id.mainFragment,
 							insideTopicsFrag);
 					fragmentTransaction.commit();
