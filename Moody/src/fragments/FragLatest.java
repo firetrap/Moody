@@ -127,6 +127,9 @@ public class FragLatest extends Fragment {
 	private void initResources() {
 		latestList = (LinkedList<ObjectLatest>) new ManDataStore(getActivity())
 				.getData("Latest");
+		if (latestList.size() > 20)
+			latestList = (LinkedList<ObjectLatest>) latestList.subList(0, 20);
+
 		// Get from resource the number of cards per line
 		cardsPerLine = getResources()
 				.getInteger(R.integer.latest_item_per_line);

@@ -807,7 +807,6 @@ public class MainActivity extends Activity implements OnClickListener,
 			intent.setData(Uri
 					.parse("http://firetrap.github.io/Moody/#!first-time-with-moody.md"));
 			startActivity(intent);
-
 			break;
 
 		default:
