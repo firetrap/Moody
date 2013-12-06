@@ -13,7 +13,6 @@ import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import ui.CheckableLinearLayout;
-import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
