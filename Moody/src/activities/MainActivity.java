@@ -805,7 +805,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		case R.id.wiki_button:
 			intent = new Intent(Intent.ACTION_VIEW);
 			intent.setData(Uri
-					.parse("http://firetrap.github.io/Moody/#!index.md"));
+					.parse("http://firetrap.github.io/Moody/#!first-time-with-moody.md"));
 			startActivity(intent);
 
 			break;
