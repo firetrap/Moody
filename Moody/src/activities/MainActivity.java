@@ -75,7 +75,7 @@ import connections.DataAsyncTask;
 public class MainActivity extends Activity implements OnClickListener,
 		InterDialogFrag {
 
-	private DrawerLayout myDrawerLayout;
+	private DrawerLayout moodydrawerLayout;
 
 	private HashMap<String, String> organizedCourses = new HashMap<String, String>();
 
@@ -96,7 +96,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		setContentView(R.layout.activity_main);
 		// shared pref
 		session = new ManSession(getApplicationContext());
-		myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		moodydrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 		populateLeft();
 		populateRight();
@@ -143,7 +143,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	 * The listener of the left/right drawerLayout
 	 */
 	private void drawerLayoutListener() {
-		myDrawerLayout.setDrawerListener(new DrawerListener() {
+		moodydrawerLayout.setDrawerListener(new DrawerListener() {
 			@Override
 			public void onDrawerStateChanged(int arg0) {
 				// TODO Auto-generated method stub
@@ -769,7 +769,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 			startActivity(intent);
 
-			myDrawerLayout.closeDrawer(Gravity.LEFT);
+			moodydrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
 
 		case R.id.latest_button:
@@ -779,7 +779,7 @@ public class MainActivity extends Activity implements OnClickListener,
 			fragmentTransaction.replace(R.id.mainFragment, fragmentLatest);
 			fragmentTransaction.commit();
 
-			myDrawerLayout.closeDrawer(Gravity.LEFT);
+			moodydrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
 
 		case R.id.favorites_button:
@@ -787,10 +787,8 @@ public class MainActivity extends Activity implements OnClickListener,
 			FragFavoritesPreview fragmentFavorites = new FragFavoritesPreview();
 			clearBackStack();
 			fragmentTransaction.replace(R.id.mainFragment, fragmentFavorites);
-
 			fragmentTransaction.commit();
-
-			myDrawerLayout.closeDrawer(Gravity.LEFT);
+			moodydrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
 
 		case R.id.cloud_button:
@@ -850,7 +848,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		fragmentTransaction.addToBackStack(null);
 		fragmentTransaction.replace(R.id.mainFragment, fragment);
 		fragmentTransaction.commit();
-		myDrawerLayout.closeDrawer(Gravity.LEFT);
+		moodydrawerLayout.closeDrawer(Gravity.LEFT);
 
 	}
 
@@ -863,7 +861,7 @@ public class MainActivity extends Activity implements OnClickListener,
 			startActivity(new Intent(getApplicationContext(),
 					SettingsActivity.class));
 
-			myDrawerLayout.closeDrawer(Gravity.LEFT);
+			moodydrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
 
 		case R.id.action_refresh:
