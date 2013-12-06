@@ -3,7 +3,7 @@
 
     <!-- Latest cards per line -->
     <integer name="latest_item_per_line">2</integer>
-    <integer name="latest_max_limit">21</integer>
+    <integer name="latest_max_limit">20</integer>
     
 
 </resources>
