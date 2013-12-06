@@ -28,7 +28,6 @@ public class FragLatest extends Fragment {
 	LinkedList<ObjectLatest> latestList;
 	// Get from resource the number of cards per line
 	int cardsPerLine;
-	int numberLatests = 21;
 	private LinearLayout mainLayout;
 	private ScrollView contentScrollable;
 	private LinearLayout contentsLayout;
@@ -185,7 +184,10 @@ public class FragLatest extends Fragment {
 				.getData("Latest");
 		if (latestList.size() > 20)
 			latestList = (LinkedList<ObjectLatest>) latestList.subList(
-					latestList.size() - numberLatests, latestList.size());
+					latestList.size()
+							- getResources().getInteger(
+									R.integer.latest_max_limit),
+					latestList.size());
 
 		// Get from resource the number of cards per line
 		cardsPerLine = getResources()
