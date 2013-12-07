@@ -148,7 +148,7 @@
 	<string name="message_hint">Type message</string>
 
 	<!-- Other Strings -->
-	<string name="exit_msg">Press back again to exit.</string>
+	<string name="exit_msg">Press back once again to exit.</string>
 	<string name="no_internet">There was a problem retrieving data. Check your internet connection.</string>
 	
 	

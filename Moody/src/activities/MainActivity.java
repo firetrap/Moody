@@ -85,7 +85,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	private long startTime;
 	private long endTime;
 
-	private int pressed = 0;
+	private static long back_pressed;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -353,14 +353,13 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void onBackPressed() {
 
 		if (getFragmentManager().getBackStackEntryCount() == 1) {
-			pressed++;
-			if (pressed == 1)
+			if (back_pressed + 2000 > System.currentTimeMillis()) {
+				finish();
+			} else
 				Toast.makeText(this, getString(R.string.exit_msg),
 						Toast.LENGTH_SHORT).show();
-			if (pressed > 1)
-				finish();
+			back_pressed = System.currentTimeMillis();
 		} else {
-			pressed = 0;
 			super.onBackPressed();
 		}
 	}
