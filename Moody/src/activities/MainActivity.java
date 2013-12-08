@@ -8,6 +8,7 @@ import fragments.FragUserCloud;
 import fragments.FragUserContactMessage;
 import fragments.FragUserContacts;
 import fragments.FragUserPicture;
+import interfaces.FragmentUpdater;
 import interfaces.InterDialogFrag;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import restPackage.MoodleUser;
 import service.ServiceBackground;
 import ui.CardTextView;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
@@ -52,6 +54,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -992,5 +995,16 @@ public class MainActivity extends Activity implements OnClickListener,
 		}
 		return false;
 	}
+
+	// @Override
+	// public void atualizaFragmentComResposta(View param) {
+	// ViewGroup vg = (ViewGroup) findViewById (R.id.main_content);
+	// //// View old = findViewById(78);
+	// //// int index = vg.indexOfChild(old);
+	// //// vg.removeViewAt(index);
+	// // vg.addView(param);
+	// Fragment asd = new Fragment()
+	//
+	// }
 
 }

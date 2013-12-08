@@ -1,5 +1,10 @@
 package fragments;
 
+import interfaces.FragmentUpdater;
+import interfaces.InterDialogFrag;
+
+import java.net.URL;
+
 import managers.ManContents;
 import managers.ManSession;
 import model.ModConstants;
@@ -7,7 +12,11 @@ import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -37,6 +46,9 @@ public class FragTopics extends Fragment {
 	private LinearLayout mainLayout;
 	private ScrollView contentScrollable;
 	private LinearLayout contentsLayout;
+	private View myView;
+	private View myTempView;
+	private Fragment myFragment;
 
 	public FragTopics() {
 	}
@@ -51,13 +63,20 @@ public class FragTopics extends Fragment {
 		topicId = Long.parseLong(getArguments().getString("topicId"));
 		courseName = getArguments().getString("courseName");
 
-		MoodleCourseContent[] courseTopics = new ManContents(getActivity()
-				.getApplicationContext()).getContent(courseId);
+		// MoodleCourseContent[] courseTopics = new ManContents(getActivity()
+		// .getApplicationContext()).getContent(courseId);
+		//
+		// MoodleCourseContent singleTopic = new ManContents(getActivity()
+		// .getApplicationContext()).getTopic(topicId, courseTopics);
 
-		MoodleCourseContent singleTopic = new ManContents(getActivity()
-				.getApplicationContext()).getTopic(topicId, courseTopics);
+		new HeavyWork().execute();
 
-		return createTopics(singleTopic, courseName, courseId, topicId);
+		// return createTopics(singleTopic, courseName, courseId,
+		// topicId);
+		myView = new View(getActivity());
+
+		myView.setId(78);
+		return myView;
 	}
 
 	private View createTopics(MoodleCourseContent singleTopic,
@@ -100,7 +119,7 @@ public class FragTopics extends Fragment {
 		contentScrollable.setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
-		contentScrollable.setVerticalScrollBarEnabled(false); 
+		contentScrollable.setVerticalScrollBarEnabled(false);
 		contentScrollable.setHorizontalScrollBarEnabled(false);
 		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
 				.getLayoutParams();
@@ -119,8 +138,8 @@ public class FragTopics extends Fragment {
 	private View onCreateHeader(String courseName, String topicName,
 			LayoutInflater inflater) {
 
-		final View topicsHeaderView = inflater.inflate(
-				R.layout.frag_header, null);
+		final View topicsHeaderView = inflater.inflate(R.layout.frag_header,
+				null);
 
 		final TextView path = (TextView) topicsHeaderView
 				.findViewById(R.id.course_path_textView);
@@ -303,6 +322,50 @@ public class FragTopics extends Fragment {
 	public void onResume() {
 
 		super.onResume();
+	}
+
+	private class HeavyWork extends AsyncTask<Void, Void, Void> {
+		private ProgressDialog dialog;
+		final FragmentUpdater activity = (FragmentUpdater) getActivity();
+
+		// Do the long-running work in here
+		@Override
+		protected Void doInBackground(Void... params) {
+
+			MoodleCourseContent[] courseTopics = new ManContents(getActivity()
+					.getApplicationContext()).getContent(courseId);
+
+			MoodleCourseContent singleTopic = new ManContents(getActivity()
+					.getApplicationContext()).getTopic(topicId, courseTopics);
+
+			myTempView = createTopics(singleTopic, courseName, courseId,
+					topicId);
+			return null;
+
+		}
+
+		protected void onPreExecute() {
+			dialog = new ProgressDialog(getActivity());
+			dialog.show();
+		}
+
+		// This is called each time you call publishProgress()
+		// protected void onProgressUpdate(Integer... progress) {
+		// }
+
+		// This is called when doInBackground() is finished
+		@Override
+		protected void onPostExecute(Void ignore) {
+			myView = myTempView;
+			activity.atualizaFragmentComResposta(myTempView);
+			dialog.dismiss();
+		}
+
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 	}
 
 }

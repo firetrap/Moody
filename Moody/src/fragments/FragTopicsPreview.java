@@ -1,5 +1,6 @@
 package fragments;
 
+import interfaces.FragmentUpdater;
 import managers.ManContents;
 import managers.ManFavorites;
 import managers.ManSession;
@@ -8,7 +9,9 @@ import restPackage.MoodleModule;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -17,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -27,12 +29,15 @@ import com.android.moody.R;
  * @author firetrap
  * 
  */
-public class FragTopicsPreview extends Fragment {
+public class FragTopicsPreview extends Fragment implements FragmentUpdater {
 	// ManSession Manager Class
 	ManSession session;
 	private LinearLayout mainLayout;
 	private ScrollView contentScrollable;
 	private LinearLayout contentsLayout;
+	private String courseId;
+	private String courseName;
+	private String topicId;
 
 	public FragTopicsPreview() {
 	}
@@ -71,7 +76,7 @@ public class FragTopicsPreview extends Fragment {
 
 		// add the linearLayout with the contents to scrollView
 		contentScrollable.addView(contentsLayout);
-	
+
 		// add the scrollView with the contents to mainLayout
 		mainLayout.addView(contentScrollable);
 
@@ -99,7 +104,7 @@ public class FragTopicsPreview extends Fragment {
 		contentScrollable.setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
-		contentScrollable.setVerticalScrollBarEnabled(false); 
+		contentScrollable.setVerticalScrollBarEnabled(false);
 		contentScrollable.setHorizontalScrollBarEnabled(false);
 		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
 				.getLayoutParams();
@@ -126,8 +131,7 @@ public class FragTopicsPreview extends Fragment {
 	 */
 	protected View createTopicsHeader(String CourseName, String courseId,
 			LayoutInflater inflater) {
-		View topicsHeaderView = inflater.inflate(
-				R.layout.frag_header, null);
+		View topicsHeaderView = inflater.inflate(R.layout.frag_header, null);
 		int id = Integer.parseInt(courseId);
 
 		TextView courseName = (TextView) topicsHeaderView
@@ -232,11 +236,12 @@ public class FragTopicsPreview extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				String courseId = Integer.toString(v.getId());
-				String courseName = courseContent[contentIdx].getName();
-				String topicId = (String) v.getTag();
 
+				// TODO Auto-generated method stub
+				courseId = Integer.toString(v.getId());
+				courseName = courseContent[contentIdx].getName();
+				topicId = (String) v.getTag();
+				// new HeavyWork().execute();
 				Bundle bundle = new Bundle();
 				bundle.putString("courseId", courseId);
 				bundle.putString("courseName", courseName);
@@ -247,17 +252,12 @@ public class FragTopicsPreview extends Fragment {
 				FragmentTransaction fragmentTransaction = fragmentManager
 						.beginTransaction();
 
-				ProgressBar progressBar = new ProgressBar(getActivity());
-				progressBar.bringToFront();
 				FragTopics insideTopicsFrag = new FragTopics();
 				insideTopicsFrag.setArguments(bundle);
-//				fragmentTransaction.add(insideTopicsFrag, "topic_frag");
 				fragmentTransaction.addToBackStack(null);
-
-				fragmentTransaction
-						.replace(R.id.mainFragment, insideTopicsFrag);
+				fragmentTransaction.replace(R.id.mainFragment,
+						insideTopicsFrag, courseId + topicId);
 				fragmentTransaction.commit();
-				progressBar.setVisibility(View.GONE);
 			}
 		});
 	}
@@ -268,4 +268,56 @@ public class FragTopicsPreview extends Fragment {
 
 	}
 
+	private class HeavyWork extends AsyncTask<Void, Void, Void> {
+		private ProgressDialog dialog;
+
+		// Do the long-running work in here
+		@Override
+		protected Void doInBackground(Void... params) {
+			Bundle bundle = new Bundle();
+			bundle.putString("courseId", courseId);
+			bundle.putString("courseName", courseName);
+			bundle.putString("topicId", topicId);
+
+			FragmentManager fragmentManager = getActivity()
+					.getFragmentManager();
+			FragmentTransaction fragmentTransaction = fragmentManager
+					.beginTransaction();
+
+			FragTopics insideTopicsFrag = new FragTopics();
+			insideTopicsFrag.setArguments(bundle);
+			fragmentTransaction.addToBackStack(null);
+
+			fragmentTransaction.replace(R.id.mainFragment, insideTopicsFrag);
+			fragmentTransaction.commit();
+			return null;
+
+		}
+
+		protected void onPreExecute() {
+			dialog = new ProgressDialog(getActivity());
+			dialog.show();
+		}
+
+		// This is called each time you call publishProgress()
+		// protected void onProgressUpdate(Integer... progress) {
+		// }
+
+		// This is called when doInBackground() is finished
+		@Override
+		protected void onPostExecute(Void ignore) {
+
+			dialog.dismiss();
+		}
+
+	}
+
+	@Override
+	public void atualizaFragmentComResposta(View param) {
+		Fragment n = getFragmentManager().findFragmentByTag(courseId + topicId);
+		ViewGroup old = (ViewGroup) n.getView();
+		old.removeAllViews();
+		old.addView(param);
+
+	}
 }
