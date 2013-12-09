@@ -7,6 +7,8 @@ import model.ModConstants;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -41,8 +43,15 @@ public class FragTopics extends Fragment {
 	private ScrollView contentScrollable;
 	private LinearLayout contentsLayout;
 	private View myView;
+	private String topicIdString;
+	private int conta = 0;
 
 	public FragTopics() {
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
 	}
 
 	@Override
@@ -53,12 +62,11 @@ public class FragTopics extends Fragment {
 
 		courseId = getArguments().getString("courseId");
 		topicId = Long.parseLong(getArguments().getString("topicId"));
+		topicIdString = getArguments().getString("topicId");
 		courseName = getArguments().getString("courseName");
+		if (conta == 0)
+			new HeavyWork().execute();
 
-		new HeavyWork().execute();
-
-		// Create empty view because i need to return something
-		myView = new View(getActivity());
 		return myView;
 	}
 
@@ -314,7 +322,7 @@ public class FragTopics extends Fragment {
 		// Do the long-running work in here
 		@Override
 		protected Void doInBackground(Void... params) {
-
+			conta++;
 			MoodleCourseContent[] courseTopics = new ManContents(getActivity()
 					.getApplicationContext()).getContent(courseId);
 
@@ -336,7 +344,7 @@ public class FragTopics extends Fragment {
 		// This is called when doInBackground() is finished
 		@Override
 		protected void onPostExecute(Void ignore) {
-			activity.updater(myView);
+			activity.updater(myView, courseId, topicIdString);
 			dialog.dismiss();
 		}
 

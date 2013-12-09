@@ -1,6 +1,5 @@
 package fragments;
 
-import interfaces.FragmentUpdater;
 import managers.ManContents;
 import managers.ManFavorites;
 import managers.ManSession;
@@ -29,7 +28,7 @@ import com.android.moody.R;
  * @author firetrap
  * 
  */
-public class FragTopicsPreview extends Fragment implements FragmentUpdater {
+public class FragTopicsPreview extends Fragment {
 	// ManSession Manager Class
 	ManSession session;
 	private LinearLayout mainLayout;
@@ -312,12 +311,4 @@ public class FragTopicsPreview extends Fragment implements FragmentUpdater {
 
 	}
 
-	@Override
-	public void updater(View param) {
-		Fragment n = getFragmentManager().findFragmentByTag(courseId + topicId);
-		ViewGroup old = (ViewGroup) n.getView();
-		old.removeAllViews();
-		old.addView(param);
-
-	}
 }

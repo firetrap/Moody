@@ -90,6 +90,8 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	private static long back_pressed;
 
+	static public ArrayList<FragTopics> fragmentsList = new ArrayList<FragTopics>();
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		startTime = System.currentTimeMillis();
@@ -997,11 +999,19 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	@Override
-	public void updater(View param) {
-		 ViewGroup vg = (ViewGroup) findViewById (R.id.main_content);
-		 vg.removeAllViews();
-		 vg.addView(param);
+	public void updater(View param, String courseId, String topicId) {
+		FragTopics n = (FragTopics) getFragmentManager().findFragmentByTag(
+				courseId + topicId);
+		View old = n.getView();
+		old = param;
+
+		FragmentTransaction fragmentTransaction = getFragmentManager()
+				.beginTransaction();
+
+		fragmentTransaction.remove(n);
+		fragmentTransaction.replace(R.id.mainFragment, n, courseId + topicId);
+		fragmentTransaction.commit();
+
 	}
 
-	
 }
