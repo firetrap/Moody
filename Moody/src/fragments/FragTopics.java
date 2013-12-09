@@ -1,10 +1,6 @@
 package fragments;
 
 import interfaces.FragmentUpdater;
-import interfaces.InterDialogFrag;
-
-import java.net.URL;
-
 import managers.ManContents;
 import managers.ManSession;
 import model.ModConstants;
@@ -12,8 +8,6 @@ import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -47,8 +41,6 @@ public class FragTopics extends Fragment {
 	private ScrollView contentScrollable;
 	private LinearLayout contentsLayout;
 	private View myView;
-	private View myTempView;
-	private Fragment myFragment;
 
 	public FragTopics() {
 	}
@@ -63,19 +55,10 @@ public class FragTopics extends Fragment {
 		topicId = Long.parseLong(getArguments().getString("topicId"));
 		courseName = getArguments().getString("courseName");
 
-		// MoodleCourseContent[] courseTopics = new ManContents(getActivity()
-		// .getApplicationContext()).getContent(courseId);
-		//
-		// MoodleCourseContent singleTopic = new ManContents(getActivity()
-		// .getApplicationContext()).getTopic(topicId, courseTopics);
-
 		new HeavyWork().execute();
 
-		// return createTopics(singleTopic, courseName, courseId,
-		// topicId);
+		// Create empty view because i need to return something
 		myView = new View(getActivity());
-
-		myView.setId(78);
 		return myView;
 	}
 
@@ -338,8 +321,9 @@ public class FragTopics extends Fragment {
 			MoodleCourseContent singleTopic = new ManContents(getActivity()
 					.getApplicationContext()).getTopic(topicId, courseTopics);
 
-			myTempView = createTopics(singleTopic, courseName, courseId,
-					topicId);
+			// This createTopics call another methods from the fragment class to
+			// get the data and create views
+			myView = createTopics(singleTopic, courseName, courseId, topicId);
 			return null;
 
 		}
@@ -349,15 +333,10 @@ public class FragTopics extends Fragment {
 			dialog.show();
 		}
 
-		// This is called each time you call publishProgress()
-		// protected void onProgressUpdate(Integer... progress) {
-		// }
-
 		// This is called when doInBackground() is finished
 		@Override
 		protected void onPostExecute(Void ignore) {
-			myView = myTempView;
-			activity.atualizaFragmentComResposta(myTempView);
+			activity.updater(myView);
 			dialog.dismiss();
 		}
 

@@ -313,7 +313,7 @@ public class FragTopicsPreview extends Fragment implements FragmentUpdater {
 	}
 
 	@Override
-	public void atualizaFragmentComResposta(View param) {
+	public void updater(View param) {
 		Fragment n = getFragmentManager().findFragmentByTag(courseId + topicId);
 		ViewGroup old = (ViewGroup) n.getView();
 		old.removeAllViews();

@@ -76,7 +76,7 @@ import connections.DataAsyncTask;
  * 
  */
 public class MainActivity extends Activity implements OnClickListener,
-		InterDialogFrag {
+		InterDialogFrag, FragmentUpdater {
 
 	private DrawerLayout moodydrawerLayout;
 
@@ -996,15 +996,12 @@ public class MainActivity extends Activity implements OnClickListener,
 		return false;
 	}
 
-	// @Override
-	// public void atualizaFragmentComResposta(View param) {
-	// ViewGroup vg = (ViewGroup) findViewById (R.id.main_content);
-	// //// View old = findViewById(78);
-	// //// int index = vg.indexOfChild(old);
-	// //// vg.removeViewAt(index);
-	// // vg.addView(param);
-	// Fragment asd = new Fragment()
-	//
-	// }
+	@Override
+	public void updater(View param) {
+		 ViewGroup vg = (ViewGroup) findViewById (R.id.main_content);
+		 vg.removeAllViews();
+		 vg.addView(param);
+	}
 
+	
 }
