@@ -7,13 +7,14 @@ import model.ModConstants;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -37,14 +38,13 @@ public class FragTopics extends Fragment {
 	Object course;
 	ManSession session;
 	String courseId;
-	Long topicId;
+	String topicId;
 	String courseName;
 	private LinearLayout mainLayout;
 	private ScrollView contentScrollable;
 	private LinearLayout contentsLayout;
 	private View myView;
-	private String topicIdString;
-	private int conta = 0;
+	private boolean asyncTaskRunned = false;
 
 	public FragTopics() {
 	}
@@ -61,12 +61,16 @@ public class FragTopics extends Fragment {
 		session = new ManSession(getActivity().getApplicationContext());
 
 		courseId = getArguments().getString("courseId");
-		topicId = Long.parseLong(getArguments().getString("topicId"));
-		topicIdString = getArguments().getString("topicId");
+		topicId = getArguments().getString("topicId");
 		courseName = getArguments().getString("courseName");
-		if (conta == 0)
-			new HeavyWork().execute();
+		if (!asyncTaskRunned) {
+			if (Build.VERSION.SDK_INT >= 11)
+				new HeavyWork()
+						.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			else
+				new HeavyWork().execute();
 
+		}
 		return myView;
 	}
 
@@ -316,38 +320,60 @@ public class FragTopics extends Fragment {
 	}
 
 	private class HeavyWork extends AsyncTask<Void, Void, Void> {
+
 		private ProgressDialog dialog;
+
 		final FragmentUpdater activity = (FragmentUpdater) getActivity();
+		private CountDownTimer cvt = createCountDownTimer();
 
 		// Do the long-running work in here
 		@Override
 		protected Void doInBackground(Void... params) {
-			conta++;
 			MoodleCourseContent[] courseTopics = new ManContents(getActivity()
 					.getApplicationContext()).getContent(courseId);
 
 			MoodleCourseContent singleTopic = new ManContents(getActivity()
-					.getApplicationContext()).getTopic(topicId, courseTopics);
-
+					.getApplicationContext()).getTopic(Long.parseLong(topicId),
+					courseTopics);
 			// This createTopics call another methods from the fragment class to
 			// get the data and create views
-			myView = createTopics(singleTopic, courseName, courseId, topicId);
+			myView = createTopics(singleTopic, courseName, courseId,
+					Long.parseLong(topicId));
+			if (dialog != null)
+				dialog.dismiss();
 			return null;
 
 		}
 
 		protected void onPreExecute() {
-			dialog = new ProgressDialog(getActivity());
-			dialog.show();
+			asyncTaskRunned = true;
+			cvt.start();
 		}
 
 		// This is called when doInBackground() is finished
 		@Override
 		protected void onPostExecute(Void ignore) {
-			activity.updater(myView, courseId, topicIdString);
-			dialog.dismiss();
+			cvt.cancel();
+			activity.updater(myView, courseId, topicId);
+			if (dialog != null)
+				dialog.dismiss();
 		}
 
+		private CountDownTimer createCountDownTimer() {
+			return new CountDownTimer(250, 10) {
+				@Override
+				public void onTick(long millisUntilFinished) {
+
+				}
+
+				@Override
+				public void onFinish() {
+					dialog = new ProgressDialog(getActivity());
+					dialog.setMessage("Loading...");
+					dialog.show();
+				}
+			};
+		}
 	}
 
 	@Override

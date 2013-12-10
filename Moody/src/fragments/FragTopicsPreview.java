@@ -8,9 +8,7 @@ import restPackage.MoodleModule;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -46,8 +44,8 @@ public class FragTopicsPreview extends Fragment {
 			Bundle savedInstanceState) {
 
 		session = new ManSession(getActivity().getApplicationContext());
-		String courseName = getArguments().getString("courseName");
-		String courseId = getArguments().getString("courseId");
+		courseName = getArguments().getString("courseName");
+		courseId = getArguments().getString("courseId");
 
 		return createTopicsRows(courseName, courseId);
 	}
@@ -238,7 +236,6 @@ public class FragTopicsPreview extends Fragment {
 
 				// TODO Auto-generated method stub
 				courseId = Integer.toString(v.getId());
-				courseName = courseContent[contentIdx].getName();
 				topicId = (String) v.getTag();
 				// new HeavyWork().execute();
 				Bundle bundle = new Bundle();
@@ -264,50 +261,6 @@ public class FragTopicsPreview extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-	}
-
-	private class HeavyWork extends AsyncTask<Void, Void, Void> {
-		private ProgressDialog dialog;
-
-		// Do the long-running work in here
-		@Override
-		protected Void doInBackground(Void... params) {
-			Bundle bundle = new Bundle();
-			bundle.putString("courseId", courseId);
-			bundle.putString("courseName", courseName);
-			bundle.putString("topicId", topicId);
-
-			FragmentManager fragmentManager = getActivity()
-					.getFragmentManager();
-			FragmentTransaction fragmentTransaction = fragmentManager
-					.beginTransaction();
-
-			FragTopics insideTopicsFrag = new FragTopics();
-			insideTopicsFrag.setArguments(bundle);
-			fragmentTransaction.addToBackStack(null);
-
-			fragmentTransaction.replace(R.id.mainFragment, insideTopicsFrag);
-			fragmentTransaction.commit();
-			return null;
-
-		}
-
-		protected void onPreExecute() {
-			dialog = new ProgressDialog(getActivity());
-			dialog.show();
-		}
-
-		// This is called each time you call publishProgress()
-		// protected void onProgressUpdate(Integer... progress) {
-		// }
-
-		// This is called when doInBackground() is finished
-		@Override
-		protected void onPostExecute(Void ignore) {
-
-			dialog.dismiss();
-		}
 
 	}
 

@@ -31,7 +31,6 @@ import restPackage.MoodleUser;
 import service.ServiceBackground;
 import ui.CardTextView;
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
@@ -54,7 +53,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -975,7 +973,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	}
 
 	/**
-	 * Check if the has internet connection
+	 * Check if the has Internet connection
 	 * 
 	 * @return true or false
 	 */
@@ -1000,16 +998,12 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void updater(View param, String courseId, String topicId) {
-		FragTopics n = (FragTopics) getFragmentManager().findFragmentByTag(
+		FragTopics currentFrag = (FragTopics) getFragmentManager().findFragmentByTag(
 				courseId + topicId);
-		View old = n.getView();
-		old = param;
-
 		FragmentTransaction fragmentTransaction = getFragmentManager()
 				.beginTransaction();
-
-		fragmentTransaction.remove(n);
-		fragmentTransaction.replace(R.id.mainFragment, n, courseId + topicId);
+		fragmentTransaction.remove(currentFrag);
+		fragmentTransaction.replace(R.id.mainFragment, currentFrag, courseId + topicId);
 		fragmentTransaction.commit();
 
 	}
