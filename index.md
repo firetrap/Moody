@@ -19,6 +19,7 @@ This website is the main source of documentation for developers working with (or
 * Moodle >= 2.2 
 * Android >= 3.0.x
 * Internet connection
+* Moody web service enabled in the Moodle Server
 
 **Warning:** Not all functions are available in Moodle 2.2, for better experience we recommend Moodle >= 2.5
 
