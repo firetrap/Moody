@@ -9,7 +9,7 @@ import restPackage.MoodleModuleContent;
 import service.ServiceNotifications;
 import android.content.Context;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 
 /**
  * @author firetrap

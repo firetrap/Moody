@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import model.ModConstants;
 import android.content.Context;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 
 /**
  * @author SérgioFilipe

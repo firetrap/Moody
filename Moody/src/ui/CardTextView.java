@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 
 import fragments.FragSearch;
 import fragments.FragTopics;

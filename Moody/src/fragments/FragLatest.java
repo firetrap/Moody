@@ -18,7 +18,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 
 /**
  * @author firetrap

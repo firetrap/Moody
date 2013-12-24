@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 
 /**
  * @author SérgioFilipe

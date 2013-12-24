@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 
 public class FragSearch extends Fragment {
 

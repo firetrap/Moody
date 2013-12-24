@@ -19,7 +19,7 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 
 /**
  *  

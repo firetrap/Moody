@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 
 /**
  * @author firetrap

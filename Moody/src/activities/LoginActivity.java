@@ -42,7 +42,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 
 /**
  * 
@@ -183,12 +183,13 @@ public class LoginActivity extends Activity {
 			cancel = true;
 			error += "URL\n";
 
-		} else if (mUrl.length() < 20) {
-			mUrlView.setError(getString(R.string.error_invalid_url));
-			focusView = mUrlView;
-			cancel = true;
-			error += "URL\n";
-		}
+		} 
+		// else if (mUrl.length() < 20) {
+		// mUrlView.setError(getString(R.string.error_invalid_url));
+		// focusView = mUrlView;
+		// cancel = true;
+		// error += "URL\n";
+		// }
 
 		// Check if URL contains the required HTTP protocol.
 		else {
@@ -204,12 +205,13 @@ public class LoginActivity extends Activity {
 			cancel = true;
 			error += "Password\n";
 
-		} else if (mPassword.length() <= 4) {
-			mPasswordView.setError(getString(R.string.error_invalid_password));
-			focusView = mPasswordView;
-			cancel = true;
-			error += "Password\n";
-		}
+		} 
+		// else if (mPassword.length() <= 4) {
+		// mPasswordView.setError(getString(R.string.error_invalid_password));
+		// focusView = mPasswordView;
+		// cancel = true;
+		// error += "Password\n";
+		// }
 
 		// Check for a valid user.
 		if (TextUtils.isEmpty(mUser)) {

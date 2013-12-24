@@ -14,7 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 
 /**
  * @author SérgioFilipe

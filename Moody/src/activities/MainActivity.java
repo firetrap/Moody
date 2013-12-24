@@ -62,7 +62,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseViews;
 import com.espian.showcaseview.ShowcaseViews.ItemViewProperties;

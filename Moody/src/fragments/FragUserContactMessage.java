@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.android.moody.R;
+import com.firetrap.moody.R;
 
 /**
  * @author Sfbramos
