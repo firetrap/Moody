@@ -1,5 +1,6 @@
 package activities;
 
+import fragments.FragCoursesList;
 import fragments.FragFavoritesPreview;
 import fragments.FragLatest;
 import fragments.FragTopics;
@@ -13,7 +14,6 @@ import interfaces.InterDialogFrag;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import managers.ManAlertDialog;
 import managers.ManContents;
@@ -62,10 +62,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
 
-import com.firetrap.moody.R;
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseViews;
 import com.espian.showcaseview.ShowcaseViews.ItemViewProperties;
+import com.firetrap.moody.R;
 
 import connections.DataAsyncTask;
 
@@ -88,7 +88,8 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	private static long back_pressed;
 
-	static public ArrayList<FragTopics> fragmentsList = new ArrayList<FragTopics>();
+	// static public ArrayList<FragTopics> fragmentsList = new
+	// ArrayList<FragTopics>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -570,12 +571,25 @@ public class MainActivity extends Activity implements OnClickListener,
 		} else {
 			// When its created it will get any course to populate the main
 			// fragment
+			// Entry<String, String> course = organizedCourses.entrySet()
+			// .iterator().next();
+			// int startUpCourseId = Integer.parseInt(course.getKey());
+			// Button btnTag = (Button) findViewById(startUpCourseId);
+			// btnTag.performClick();
 
-			Entry<String, String> course = organizedCourses.entrySet()
-					.iterator().next();
-			int startUpCourseId = Integer.parseInt(course.getKey());
-			Button btnTag = (Button) findViewById(startUpCourseId);
-			btnTag.performClick();
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("organizedCourses", organizedCourses);
+
+			FragmentTransaction fragmentTransaction = getFragmentManager()
+					.beginTransaction();
+			FragCoursesList fragment = new FragCoursesList();
+
+			fragment.setArguments(bundle);
+			fragmentTransaction.addToBackStack(null);
+			fragmentTransaction.replace(R.id.mainFragment, fragment);
+			fragmentTransaction.commit();
+			moodydrawerLayout.closeDrawer(Gravity.LEFT);
+
 		}
 	}
 
@@ -998,12 +1012,13 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void updater(View param, String courseId, String topicId) {
-		FragTopics currentFrag = (FragTopics) getFragmentManager().findFragmentByTag(
-				courseId + topicId);
+		FragTopics currentFrag = (FragTopics) getFragmentManager()
+				.findFragmentByTag(courseId + topicId);
 		FragmentTransaction fragmentTransaction = getFragmentManager()
 				.beginTransaction();
 		fragmentTransaction.remove(currentFrag);
-		fragmentTransaction.replace(R.id.mainFragment, currentFrag, courseId + topicId);
+		fragmentTransaction.replace(R.id.mainFragment, currentFrag, courseId
+				+ topicId);
 		fragmentTransaction.commit();
 
 	}

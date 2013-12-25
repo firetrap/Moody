@@ -13,6 +13,8 @@
     <color name="C_Medium_Green">#00B08D</color>
     <color name="C_Agressive_Pink">#ff0099</color>
     <color name="C_Favorites_Pink">#BE245A</color>
+    <color name="C_Tomato_Red">#ff393a</color>
+
           <!-- Cards Colors -->
     <color name="stroke">#dddddd</color>
     <color name="text_light">#66000000</color>
@@ -23,4 +25,6 @@
     <color name="card_separator">#ffe5e5e5</color>
     <color name="card_border">#ffdedede</color>
 
+    
+    
 </resources>
