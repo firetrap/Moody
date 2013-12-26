@@ -8,6 +8,7 @@ import managers.ManUserContacts;
 import model.ModMessage;
 import restPackage.MoodleContact;
 import android.app.DialogFragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,4 +94,5 @@ public class FragUserContactMessage extends DialogFragment {
 
 		return view;
 	}
+
 }

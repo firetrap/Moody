@@ -212,22 +212,11 @@ public class ManUserContacts {
 	 * @param action
 	 */
 	public void sendMessage(String message, Long id) {
-		try {
 
-			new DataAsyncTask().execute(url, token,
-					MoodleServices.CORE_MESSAGE_SEND_INSTANT_MESSAGES,
-					new MoodleMessage(id, message, "4")).get();
+		new DataAsyncTask().execute(url, token,
+				MoodleServices.CORE_MESSAGE_SEND_INSTANT_MESSAGES,
+				new MoodleMessage(id, message, "4"));
 
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	/**
