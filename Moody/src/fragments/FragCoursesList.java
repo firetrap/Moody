@@ -76,7 +76,7 @@ public class FragCoursesList extends Fragment {
 						topics.append(courseContent[k].getName() + "\n");
 					}
 					setContent(latestView, topics.toString());
-					onClick(innerLayout, ids.get(plus - 1), names.get(plus - 1));
+					onClick(latestView, ids.get(plus - 1), names.get(plus - 1));
 					innerLayout.addView(latestView);
 				}
 				contentsLayout.addView(innerLayout);
@@ -160,21 +160,21 @@ public class FragCoursesList extends Fragment {
 	}
 
 	/**
-	 * @param innerLayout
+	 * @param latestView
 	 * @param courses
 	 */
-	private void onClick(LinearLayout innerLayout, final String courseId,
+	private void onClick(View latestView, final String courseId,
 			final String courseName) {
-		innerLayout.setOnClickListener(new View.OnClickListener() {
+		latestView.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// String courseName = courses2.getFullname();
-				// String courseId = Long.toString(courses2.getId());
+				String courseName2 = courseName;
+				String courseId2 = courseId;
 
 				Bundle bundle = new Bundle();
-				bundle.putString("courseName", courseName);
-				bundle.putString("courseId", courseId);
+				bundle.putString("courseName", courseName2);
+				bundle.putString("courseId", courseId2);
 
 				FragmentTransaction fragmentTransaction = getFragmentManager()
 						.beginTransaction();

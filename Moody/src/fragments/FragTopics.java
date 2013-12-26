@@ -1,6 +1,15 @@
 package fragments;
 
 import interfaces.FragmentUpdater;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import managers.ManContents;
 import managers.ManSession;
 import model.ModConstants;
@@ -18,9 +27,11 @@ import android.os.CountDownTimer;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -45,6 +56,7 @@ public class FragTopics extends Fragment {
 	private LinearLayout contentsLayout;
 	private View myView;
 	private boolean asyncTaskRunned = false;
+	static Context ctx;
 
 	public FragTopics() {
 	}
@@ -57,6 +69,7 @@ public class FragTopics extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		ctx = getActivity().getApplicationContext();
 
 		session = new ManSession(getActivity().getApplicationContext());
 
@@ -298,6 +311,8 @@ public class FragTopics extends Fragment {
 	 */
 	private int getCorrectDrawable(String url) {
 
+		getMimeType(url);
+
 		if (url.contains(".youtube.")) {
 			return R.drawable.youtube;
 		} else if (url.contains(".pdf")) {
@@ -311,6 +326,35 @@ public class FragTopics extends Fragment {
 		}
 		return 0;
 
+	}
+
+	// application/msword
+
+	public static String getMimeType(String url) {
+		String type = null;
+		String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+
+		if (extension != null) {
+			MimeTypeMap mime = MimeTypeMap.getSingleton();
+			type = mime.getMimeTypeFromExtension(extension);
+			writeStringAsFile(type + "\n", "mime.txt");
+
+		}
+		return type;
+
+	}
+
+	public static void writeStringAsFile(final String fileContents,
+			String fileName) {
+
+		try {
+			FileWriter out = new FileWriter(new File(ctx.getFilesDir(),
+					fileName), true);
+			out.write(fileContents);
+			out.close();
+		} catch (IOException e) {
+
+		}
 	}
 
 	@Override
