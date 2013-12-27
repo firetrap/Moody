@@ -311,24 +311,38 @@ public class FragTopics extends Fragment {
 	 */
 	private int getCorrectDrawable(String url) {
 
-		getMimeType(url);
-
-		if (url.contains(".youtube.")) {
+		if (url.contains(".youtube."))
 			return R.drawable.youtube;
-		} else if (url.contains(".pdf")) {
-			return R.drawable.pdf;
-		} else if (url.contains(".doc")) {
-			return R.drawable.docs;
-		} else if (url.contains(".ppt")) {
-			return R.drawable.ppt;
-		} else if (url.contains(".xls")) {
-			return R.drawable.xls;
+
+		if (getMimeType(url) != null) {
+			if (getMimeType(url).equalsIgnoreCase("application/pdf")) {
+				return R.drawable.pdf;
+			}
+			if (getMimeType(url).equalsIgnoreCase("application/msword")
+					|| getMimeType(url)
+							.equalsIgnoreCase(
+									"application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
+				return R.drawable.docs;
+			}
+			if (getMimeType(url).equalsIgnoreCase(
+					"application/vnd.ms-powerpoint")
+					|| getMimeType(url)
+							.equalsIgnoreCase(
+									"application/vnd.openxmlformats-officedocument.presentationml.presentation")) {
+				return R.drawable.ppt;
+			}
+			if (getMimeType(url).equalsIgnoreCase("application/vnd.ms-excel")
+					|| getMimeType(url)
+							.equalsIgnoreCase(
+									"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
+				return R.drawable.xls;
+			}
 		}
-		return 0;
+
+		return R.drawable.generic;
 
 	}
 
-	// application/msword
 
 	public static String getMimeType(String url) {
 		String type = null;
@@ -337,7 +351,7 @@ public class FragTopics extends Fragment {
 		if (extension != null) {
 			MimeTypeMap mime = MimeTypeMap.getSingleton();
 			type = mime.getMimeTypeFromExtension(extension);
-			writeStringAsFile(type + "\n", "mime.txt");
+//			writeStringAsFile(type + "\n", "mime.txt");
 
 		}
 		return type;
