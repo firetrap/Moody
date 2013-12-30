@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.jsoup.examples.HtmlToPlainText;
+
 import managers.ManContents;
 import managers.ManSession;
 import model.ModConstants;
@@ -214,9 +216,11 @@ public class FragTopics extends Fragment {
 			if (!singleModule.getName().isEmpty()) {
 				moduleName.setText(singleModule.getName());
 
-				if (!singleModule.getDescription().isEmpty()) {
+				if (!Html.fromHtml(singleModule.getDescription()).toString()
+						.isEmpty()) {
 
 					String moduleDescription = singleModule.getDescription();
+
 					String parsed = new ManContents(getActivity()
 							.getApplicationContext())
 							.parseFile(moduleDescription);
@@ -230,7 +234,7 @@ public class FragTopics extends Fragment {
 					 * https://tracker.moodle.org/browse/MDL-43513
 					 * 
 					 */
-					if (clearSource(parsed).contains("youtube")) {
+					if (cleared.contains("youtube")) {
 						TextView bla = new TextView(getActivity());
 
 						bla.setText(cleared);
@@ -249,7 +253,7 @@ public class FragTopics extends Fragment {
 						// Linkify.addLinks(topicContent, Linkify.ALL);
 					}
 
-					if (clearSource(parsed).contains("image")) {
+					if (cleared.contains("image")) {
 						// topicContent.setVisibility(View.GONE);
 						// moduleImage.setVisibility(View.VISIBLE);
 						// moduleImage

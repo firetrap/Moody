@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import managers.ManContents;
+import managers.ManFavorites;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import android.app.Fragment;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -70,6 +72,22 @@ public class FragCoursesList extends Fragment {
 					View latestView = inflateLatestView(inflater);
 
 					setCardTitle(latestView, names.get(plus - 1));
+
+					// If the course is already cached as favorite, hides the
+					// button,
+					// otherwise configs it's ID
+					if (!new ManFavorites(getActivity().getApplicationContext())
+							.isFavorite(Long.parseLong(ids.get(plus - 1)))) {
+						ImageButton addFavorites = (ImageButton) latestView
+								.findViewById(R.id.courses_list_favorites);
+
+						addFavorites.setId(Integer.parseInt(ids.get(plus - 1)));
+						addFavorites.setTag("add_favorites_button_"
+								+ ids.get(plus - 1));
+					} else
+						((ImageButton) latestView
+								.findViewById(R.id.courses_list_favorites))
+								.setVisibility(View.GONE);
 
 					StringBuilder topics = new StringBuilder();
 					for (int k = 0; k < courseContent.length; k++) {

@@ -236,11 +236,23 @@ public class ManContents {
 		String src;
 
 		doc = Jsoup.parse(html);
-		if (!(doc.outerHtml().contains("src"))) {
+		if (!doc.outerHtml().contains("src")) {
 
 		} else {
 			Elements element = doc.select("[src]");
 			src = element.attr("src");
+			// if (src.contains("youtube")) {
+			// src = src.split("\\?")[0].replace("v/", "watch?v=");
+			// return src;
+			// }
+			return src;
+		}
+
+		if (!doc.outerHtml().contains("href")) {
+
+		} else {
+			Elements element = doc.select("[href]");
+			src = element.attr("href");
 			// if (src.contains("youtube")) {
 			// src = src.split("\\?")[0].replace("v/", "watch?v=");
 			// return src;
