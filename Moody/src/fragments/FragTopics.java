@@ -2,13 +2,11 @@ package fragments;
 
 import interfaces.FragmentUpdater;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.net.URL;
 
 import managers.ManContents;
 import managers.ManSession;
@@ -20,6 +18,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,12 +26,12 @@ import android.os.CountDownTimer;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
@@ -207,10 +206,61 @@ public class FragTopics extends Fragment {
 				moduleName.setText(singleModule.getName());
 
 				if (!singleModule.getDescription().isEmpty()) {
+
 					String moduleDescription = singleModule.getDescription();
-					topicContent.setText(Html.fromHtml(moduleDescription));
-					topicContent.setMovementMethod(LinkMovementMethod
-							.getInstance());
+					String parsed = new ManContents(getActivity()
+							.getApplicationContext())
+							.parseFile(moduleDescription);
+					String cleared = clearSource(parsed);
+
+					/**
+					 * 
+					 * Added a link to image because the impossibility of access
+					 * to images inside description, the function is prepared to
+					 * receive an image and display it. ISSUE reported in
+					 * https://tracker.moodle.org/browse/MDL-43513
+					 * 
+					 */
+					if (clearSource(parsed).contains("youtube")) {
+						TextView bla = new TextView(getActivity());
+
+						bla.setText(cleared);
+						bla.setCompoundDrawablesWithIntrinsicBounds(
+								getCorrectDrawable(cleared), 0, 0, 0);
+						Linkify.addLinks(bla, Linkify.ALL);
+
+						LinearLayout recebe = (LinearLayout) topicsContent
+								.findViewById(R.id.test_ll);
+						recebe.addView(bla);
+
+						// String cleared = clearSource(parsed);
+						// topicContent.setText(cleared);
+						// topicContent.setCompoundDrawablesWithIntrinsicBounds(
+						// getCorrectDrawable(cleared), 0, 0, 0);
+						// Linkify.addLinks(topicContent, Linkify.ALL);
+					}
+
+					if (clearSource(parsed).contains("image")) {
+						// topicContent.setVisibility(View.GONE);
+						// moduleImage.setVisibility(View.VISIBLE);
+						// moduleImage
+						// .setImageDrawable(LoadImageFromWebOperations(parsed));
+
+						topicContent.setText(Html.fromHtml("<a href=" + parsed
+								+ ">" + "Image - accessible only from broswer"
+								+ "</a>"));
+						topicContent.setCompoundDrawablesWithIntrinsicBounds(
+								getCorrectDrawable(parsed), 0, 0, 0);
+						topicContent.setMovementMethod(LinkMovementMethod
+								.getInstance());
+
+					} else {
+
+						topicContent.setText(Html.fromHtml(moduleDescription));
+						topicContent.setMovementMethod(LinkMovementMethod
+								.getInstance());
+					}
+
 				} else {
 					topicContent.setVisibility(View.GONE);
 					b++;
@@ -248,6 +298,10 @@ public class FragTopics extends Fragment {
 
 		TextView moduleFile = (TextView) topicsContent
 				.findViewById(R.id.module_files);
+
+		// ImageView moduleImage = (ImageView) topicsContent
+		// .findViewById(R.id.module_image);
+
 		for (int j = 0; j < moduleContents.length; j++) {
 
 			if (!moduleContents[j].getFileURL().isEmpty()) {
@@ -276,12 +330,21 @@ public class FragTopics extends Fragment {
 								.getApplicationContext()).parseFile(url,
 								moduleContents[j].getFilename() + courseId
 										+ topicId + singleModule.getId());
+						if (clearSource(indexURL).contains("image")) {
+							// moduleFile.setVisibility(View.GONE);
+							// moduleImage.setVisibility(View.VISIBLE);
+							// moduleImage
+							// .setImageDrawable(LoadImageFromWebOperations(indexURL));
 
-						moduleFile.setText(indexURL);
-						moduleFile.setCompoundDrawablesWithIntrinsicBounds(
-								getCorrectDrawable(indexURL), 0, 0, 0);
+						} else {
+							moduleFile.setText(indexURL);
+							moduleFile.setCompoundDrawablesWithIntrinsicBounds(
+									getCorrectDrawable(indexURL), 0, 0, 0);
 
-						Linkify.addLinks(moduleFile, Linkify.WEB_URLS);
+							Linkify.addLinks(moduleFile, Linkify.WEB_URLS);
+
+						}
+
 					}
 				}
 				if (moduleContents[j].getType().equals("url")) {
@@ -300,6 +363,32 @@ public class FragTopics extends Fragment {
 			}
 
 		}
+	}
+
+	public static Drawable LoadImageFromWebOperations(String url) {
+		try {
+			InputStream is = (InputStream) new URL(url).getContent();
+			Drawable d = Drawable.createFromStream(is, null);
+			return d;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public String clearSource(String src) {
+		if (src.contains("youtube")) {
+			String cleaned = src.split("\\&")[0];
+			// return src.split("\\?")[0].replace("v/", "watch?v=");
+			return cleaned.replace("v/", "watch?v=");
+		}
+		String mimeType = getMimeType(src);
+		if (mimeType != null) {
+			if (mimeType.contains("image")) {
+				return mimeType;
+			}
+		}
+
+		return src;
 	}
 
 	/**
@@ -337,12 +426,12 @@ public class FragTopics extends Fragment {
 									"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
 				return R.drawable.xls;
 			}
+
 		}
 
 		return R.drawable.generic;
 
 	}
-
 
 	public static String getMimeType(String url) {
 		String type = null;
@@ -351,7 +440,7 @@ public class FragTopics extends Fragment {
 		if (extension != null) {
 			MimeTypeMap mime = MimeTypeMap.getSingleton();
 			type = mime.getMimeTypeFromExtension(extension);
-//			writeStringAsFile(type + "\n", "mime.txt");
+			// writeStringAsFile(type + "\n", "mime.txt");
 
 		}
 		return type;

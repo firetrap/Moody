@@ -220,10 +220,32 @@ public class ManContents {
 		} else {
 			Elements element = doc.select("[src]");
 			src = element.attr("src");
-			if (src.contains("youtube")) {
-				src = src.split("\\?")[0].replace("v/", "watch?v=");
-				return src;
-			}
+			// if (src.contains("youtube")) {
+			// src = src.split("\\?")[0].replace("v/", "watch?v=");
+			// return src;
+			// }
+			return src;
+		}
+
+		return new PlainText().getPlainText(doc.body());
+
+	}
+
+	public String parseFile(String html) {
+		Document doc;
+		String src;
+
+		doc = Jsoup.parse(html);
+		if (!(doc.outerHtml().contains("src"))) {
+
+		} else {
+			Elements element = doc.select("[src]");
+			src = element.attr("src");
+			// if (src.contains("youtube")) {
+			// src = src.split("\\?")[0].replace("v/", "watch?v=");
+			// return src;
+			// }
+			return src;
 		}
 
 		return new PlainText().getPlainText(doc.body());
