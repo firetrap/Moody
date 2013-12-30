@@ -173,4 +173,5 @@
 	<string name="demo_end_message">And this is the end, if you have further questions go to Moody wiki or contact the support.</string>
 	<string name="demo_add_favorite_title">Favorites</string>
 	<string name="demo_add_favorite_message">You only receive notifications after you add courses to your favorites</string>
+	<string name="topic_summary">Topic Summary</string>
 </resources>

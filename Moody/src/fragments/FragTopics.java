@@ -31,7 +31,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
@@ -170,6 +169,16 @@ public class FragTopics extends Fragment {
 	protected void createTopicsContent(MoodleCourseContent singleTopic,
 			LayoutInflater inflater, LinearLayout insertPoint) {
 
+		String summaryContent = singleTopic.getSummary();
+		if (!summaryContent.isEmpty()) {
+
+			View topicSummary = inflater.inflate(R.layout.topic_summary, null);
+
+			TextView summary = (TextView) topicSummary
+					.findViewById(R.id.summary_text);
+			summary.setText(Html.fromHtml(summaryContent));
+			insertPoint.addView(topicSummary);
+		}
 		MoodleModule[] modulesArray = singleTopic.getMoodleModules();
 
 		if (modulesArray != null)
