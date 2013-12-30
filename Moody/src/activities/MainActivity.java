@@ -14,6 +14,7 @@ import interfaces.InterDialogFrag;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import managers.ManAlertDialog;
 import managers.ManContents;
@@ -25,6 +26,7 @@ import managers.ManUserContacts;
 import model.ModConstants;
 import model.ModMessage;
 import model.ObjectSearch;
+import model.ModDevice;
 import restPackage.MoodleContact;
 import restPackage.MoodleCourse;
 import restPackage.MoodleUser;
@@ -86,17 +88,18 @@ public class MainActivity extends Activity implements OnClickListener,
 	private long startTime;
 	private long endTime;
 
-	private static long back_pressed;
+	private ModDevice md;
 
-	// static public ArrayList<FragTopics> fragmentsList = new
-	// ArrayList<FragTopics>();
+	private float screenX;
+
+	private float screenY;
+
+	private static long back_pressed;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		startTime = System.currentTimeMillis();
 		super.onCreate(savedInstanceState);
-		// startService(new Intent(getApplicationContext(),
-		// ServiceBackground.class));
 		setContentView(R.layout.activity_main);
 		// shared pref
 		session = new ManSession(getApplicationContext());
@@ -128,8 +131,12 @@ public class MainActivity extends Activity implements OnClickListener,
 	 * Method to initialize the demo overlay on first run.
 	 */
 	private void initDemoOverlay() {
+		md = new ModDevice(getApplicationContext());
+		screenX = md.getX();
+		screenY = md.getY();
+
 		ShowcaseView.ConfigOptions configOptions1 = new ShowcaseView.ConfigOptions();
-		configOptions1.shotType = ShowcaseView.TYPE_ONE_SHOT;
+		// configOptions1.shotType = ShowcaseView.TYPE_ONE_SHOT;
 		configOptions1.hideOnClickOutside = false;
 		configOptions1.block = true;
 		configOptions1.showcaseId = R.id.DEMO_OPEN_LEFT;
@@ -138,7 +145,8 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		views1.addView(new ItemViewProperties(R.id.main_content,
 				R.string.demo_open_left_title, R.string.demo_open_left_message,
-				0f, new float[] { 0, 600, 300, 600 }, configOptions1));
+				0f, new float[] { 0, screenY / 2, screenX / 2, screenY / 2 },
+				configOptions1));
 
 		views1.show();
 	}
@@ -164,71 +172,9 @@ public class MainActivity extends Activity implements OnClickListener,
 				switch (arg0.getId()) {
 
 				case R.id.left_drawer:
-					ShowcaseView.ConfigOptions configOptions2 = new ShowcaseView.ConfigOptions();
-					configOptions2.showcaseId = R.id.DEMO_USER_SECTION;
-					configOptions2.shotType = ShowcaseView.TYPE_ONE_SHOT;
-					configOptions2.hideOnClickOutside = false;
-					configOptions2.block = true;
-
-					ShowcaseView.ConfigOptions configOptions3 = new ShowcaseView.ConfigOptions();
-					configOptions3.showcaseId = R.id.DEMO_COURSES_SECTION;
-					configOptions3.shotType = ShowcaseView.TYPE_ONE_SHOT;
-					configOptions3.hideOnClickOutside = false;
-					configOptions3.block = true;
-
-					ShowcaseView.ConfigOptions configOptions4 = new ShowcaseView.ConfigOptions();
-					configOptions4.showcaseId = R.id.DEMO_NAVIGATION_SECTION;
-					configOptions4.shotType = ShowcaseView.TYPE_ONE_SHOT;
-					configOptions4.hideOnClickOutside = false;
-					configOptions4.block = true;
-
-					ShowcaseViews views2 = new ShowcaseViews(MainActivity.this,
-							R.layout.activity_main);
-
-					views2.addView(new ItemViewProperties(
-							R.id.login_image_button, R.string.demo_user_title,
-							R.string.demo_user_message, 0f, new float[] { 350,
-									250, 350, 250 }, configOptions2));
-
-					views2.addView(new ItemViewProperties(
-							R.id.begin_of_courses, R.string.demo_courses_title,
-							R.string.demo_courses_message, 0f, new float[] {
-									350, 600, 350, 600 }, configOptions3));
-
-					views2.addView(new ItemViewProperties(
-							R.id.favorites_button,
-							R.string.demo_navigation_title,
-							R.string.demo_navigation_message, 0f, new float[] {
-									350, 950, 350, 950 }, configOptions4));
-					views2.show();
 					break;
 
 				case R.id.right_drawer:
-					ShowcaseView.ConfigOptions configOptions5 = new ShowcaseView.ConfigOptions();
-					configOptions5.showcaseId = R.id.DEMO_SEARCH_SECTION;
-					configOptions5.shotType = ShowcaseView.TYPE_ONE_SHOT;
-					configOptions5.hideOnClickOutside = false;
-					configOptions5.block = true;
-					ShowcaseView.ConfigOptions configOptions6 = new ShowcaseView.ConfigOptions();
-					configOptions6.showcaseId = R.id.DEMO_CONTACTS_SECTION;
-					configOptions6.shotType = ShowcaseView.TYPE_ONE_SHOT;
-					configOptions6.hideOnClickOutside = false;
-					configOptions6.block = true;
-
-					ShowcaseViews views3 = new ShowcaseViews(MainActivity.this,
-							R.layout.activity_main);
-
-					views3.addView(new ItemViewProperties(R.id.searchView,
-							R.string.demo_search_title,
-							R.string.demo_search_message, 0f, new float[] {
-									380, 500, 380, 200 }, configOptions5));
-
-					views3.addView(new ItemViewProperties(
-							R.id.contacts_linear_layout,
-							R.string.demo_contacts_title,
-							R.string.demo_contacts_message, 0f, new float[] {
-									350, 500, 350, 500 }, configOptions6));
-					views3.show();
 					break;
 
 				}
@@ -241,7 +187,7 @@ public class MainActivity extends Activity implements OnClickListener,
 				case R.id.left_drawer:
 					ShowcaseView.ConfigOptions configOptions7 = new ShowcaseView.ConfigOptions();
 					configOptions7.showcaseId = R.id.DEMO_OPEN_RIGHT;
-					configOptions7.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					// configOptions7.shotType = ShowcaseView.TYPE_ONE_SHOT;
 					configOptions7.hideOnClickOutside = false;
 					configOptions7.block = true;
 					ShowcaseViews views4 = new ShowcaseViews(MainActivity.this,
@@ -250,7 +196,8 @@ public class MainActivity extends Activity implements OnClickListener,
 					views4.addView(new ItemViewProperties(R.id.main_content,
 							R.string.demo_open_right_title,
 							R.string.demo_open_right_message, 0f, new float[] {
-									600, 500, 0, 500 }, configOptions7));
+									screenX, screenY / 2, screenX / 2,
+									screenY / 2 }, configOptions7));
 					views4.show();
 
 					break;
@@ -258,7 +205,7 @@ public class MainActivity extends Activity implements OnClickListener,
 				case R.id.right_drawer:
 					ShowcaseView.ConfigOptions configOptions8 = new ShowcaseView.ConfigOptions();
 					configOptions8.showcaseId = R.id.DEMO_FAVORITES;
-					configOptions8.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					// configOptions8.shotType = ShowcaseView.TYPE_ONE_SHOT;
 					configOptions8.hideOnClickOutside = false;
 					configOptions8.block = true;
 
@@ -271,10 +218,30 @@ public class MainActivity extends Activity implements OnClickListener,
 					ShowcaseViews views5 = new ShowcaseViews(MainActivity.this,
 							R.layout.activity_main);
 
-					views5.addView(new ItemViewProperties(R.id.main_content,
-							R.string.demo_add_favorite_title,
-							R.string.demo_add_favorite_message, 0f,
-							new float[] { 610, 190, 610, 190 }, configOptions8));
+					Entry<String, String> course = organizedCourses.entrySet()
+							.iterator().next();
+					int startUpCourseId = Integer.parseInt(course.getKey());
+
+					ImageButton fav = (ImageButton) findViewById(startUpCourseId);
+					if (fav == null) {
+						views5.addView(new ItemViewProperties(
+								R.id.main_content,
+								R.string.demo_add_favorite_title,
+								R.string.demo_add_favorite_message, 0f,
+								configOptions8));
+					} else {
+						int[] locationOnScreen = new int[2];
+
+						fav.getLocationOnScreen(locationOnScreen);
+						views5.addView(new ItemViewProperties(
+								R.id.main_content,
+								R.string.demo_add_favorite_title,
+								R.string.demo_add_favorite_message, 0f,
+								new float[] { screenX - (screenX / 3),
+										screenY - (screenY / 3),
+										locationOnScreen[0],
+										locationOnScreen[1] }, configOptions8));
+					}
 
 					views5.addView(new ItemViewProperties(R.id.main_content,
 							R.string.demo_end_title, R.string.demo_end_message,
