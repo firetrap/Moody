@@ -33,6 +33,7 @@ import restPackage.MoodleUser;
 import service.ServiceBackground;
 import ui.CardTextView;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
@@ -64,6 +65,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
 
+import com.espian.showcaseview.OnShowcaseEventListener;
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseViews;
 import com.espian.showcaseview.ShowcaseViews.ItemViewProperties;
@@ -87,14 +89,15 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	private long startTime;
 	private long endTime;
-
 	private ModDevice md;
 
 	private float screenX;
 
 	private float screenY;
 
-	private static long back_pressed;
+	private int shotType = ShowcaseView.TYPE_ONE_SHOT;
+
+	private static long backPressed;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -136,7 +139,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		screenY = md.getY();
 
 		ShowcaseView.ConfigOptions configOptions1 = new ShowcaseView.ConfigOptions();
-		// configOptions1.shotType = ShowcaseView.TYPE_ONE_SHOT;
+		configOptions1.shotType = shotType;
 		configOptions1.hideOnClickOutside = false;
 		configOptions1.block = true;
 		configOptions1.showcaseId = R.id.DEMO_OPEN_LEFT;
@@ -149,6 +152,41 @@ public class MainActivity extends Activity implements OnClickListener,
 				configOptions1));
 
 		views1.show();
+
+	}
+
+	public void help() {
+
+		CharSequence options[] = new CharSequence[] { "Tutorial",
+				"Moody web site" };
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Help");
+		builder.setItems(options, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (which == 0) {
+					if (getFragmentManager().getBackStackEntryCount() > 1) {
+						do {
+							getFragmentManager().popBackStackImmediate();
+						} while (getFragmentManager().getBackStackEntryCount() > 1);
+					}
+					shotType = ShowcaseView.TYPE_NO_LIMIT;
+					initDemoOverlay();
+
+				} else {
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.setData(Uri
+							.parse("http://firetrap.github.io/Moody/#!first-time-with-moody.md"));
+					startActivity(intent);
+					{
+
+					}
+				}
+			}
+		});
+		builder.show();
+
 	}
 
 	/**
@@ -187,7 +225,7 @@ public class MainActivity extends Activity implements OnClickListener,
 				case R.id.left_drawer:
 					ShowcaseView.ConfigOptions configOptions7 = new ShowcaseView.ConfigOptions();
 					configOptions7.showcaseId = R.id.DEMO_OPEN_RIGHT;
-					// configOptions7.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions7.shotType = shotType;
 					configOptions7.hideOnClickOutside = false;
 					configOptions7.block = true;
 					ShowcaseViews views4 = new ShowcaseViews(MainActivity.this,
@@ -199,19 +237,18 @@ public class MainActivity extends Activity implements OnClickListener,
 									screenX, screenY / 2, screenX / 2,
 									screenY / 2 }, configOptions7));
 					views4.show();
-
 					break;
 
 				case R.id.right_drawer:
 					ShowcaseView.ConfigOptions configOptions8 = new ShowcaseView.ConfigOptions();
 					configOptions8.showcaseId = R.id.DEMO_FAVORITES;
-					// configOptions8.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions8.shotType = shotType;
 					configOptions8.hideOnClickOutside = false;
 					configOptions8.block = true;
 
 					ShowcaseView.ConfigOptions configOptions9 = new ShowcaseView.ConfigOptions();
 					configOptions9.showcaseId = R.id.DEMO_END;
-					configOptions9.shotType = ShowcaseView.TYPE_ONE_SHOT;
+					configOptions9.shotType = shotType;
 					configOptions9.hideOnClickOutside = false;
 					configOptions9.block = true;
 
@@ -250,7 +287,6 @@ public class MainActivity extends Activity implements OnClickListener,
 					views5.show();
 
 					break;
-
 				}
 
 			}
@@ -307,9 +343,9 @@ public class MainActivity extends Activity implements OnClickListener,
 		switch (code) {
 		case ModConstants.DIALOG_FRAG_USER_PIC:
 			session.addPref(inputText);
-			ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
+			ImageButton loginButton = (ImageButton) findViewById(R.id.login_image_button);
 
-			login_button.setImageBitmap(BitmapResizer
+			loginButton.setImageBitmap(BitmapResizer
 					.decodeSampledBitmapFromResource(inputText,
 							R.id.login_image_button, 100, 100));
 			break;
@@ -324,12 +360,12 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void onBackPressed() {
 
 		if (getFragmentManager().getBackStackEntryCount() == 1) {
-			if (back_pressed + 2000 > System.currentTimeMillis()) {
+			if (backPressed + 2000 > System.currentTimeMillis()) {
 				finish();
 			} else
 				Toast.makeText(this, getString(R.string.exit_msg),
 						Toast.LENGTH_SHORT).show();
-			back_pressed = System.currentTimeMillis();
+			backPressed = System.currentTimeMillis();
 		} else {
 			super.onBackPressed();
 		}
@@ -578,7 +614,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	 * 
 	 */
 	private void populateUserPicture() {
-		ImageButton login_button = (ImageButton) findViewById(R.id.login_image_button);
+		final ImageButton loginButton = (ImageButton) findViewById(R.id.login_image_button);
 		if (session.getValues("PIC_PATH", null) == null) {
 
 			Drawable pic = null;
@@ -588,12 +624,12 @@ public class MainActivity extends Activity implements OnClickListener,
 			user.getProfileImageURL();
 			pic = DataAsyncTask
 					.createDrawableFromUrl(user.getProfileImageURL());
-			login_button.setBackgroundResource(R.drawable.bkgd_imagebutton);
-			login_button.setImageDrawable(pic);
+			loginButton.setBackgroundResource(R.drawable.bkgd_imagebutton);
+			loginButton.setImageDrawable(pic);
 
 		} else {
 
-			login_button.setImageBitmap(BitmapResizer
+			loginButton.setImageBitmap(BitmapResizer
 					.decodeSampledBitmapFromResource(
 							session.getValues("PIC_PATH", null),
 							R.id.login_image_button, 100, 100));
@@ -784,10 +820,7 @@ public class MainActivity extends Activity implements OnClickListener,
 			break;
 
 		case R.id.wiki_button:
-			intent = new Intent(Intent.ACTION_VIEW);
-			intent.setData(Uri
-					.parse("http://firetrap.github.io/Moody/#!first-time-with-moody.md"));
-			startActivity(intent);
+			help();
 			break;
 
 		default:
