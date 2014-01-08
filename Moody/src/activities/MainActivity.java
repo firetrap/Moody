@@ -24,9 +24,13 @@ import managers.ManSearch;
 import managers.ManSession;
 import managers.ManUserContacts;
 import model.ModConstants;
+import model.ModDevice;
 import model.ModMessage;
 import model.ObjectSearch;
-import model.ModDevice;
+
+import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
+
 import restPackage.MoodleContact;
 import restPackage.MoodleCourse;
 import restPackage.MoodleUser;
@@ -65,7 +69,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
 
-import com.espian.showcaseview.OnShowcaseEventListener;
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseViews;
 import com.espian.showcaseview.ShowcaseViews.ItemViewProperties;
@@ -77,6 +80,8 @@ import connections.DataAsyncTask;
  * @author firetrap
  * 
  */
+
+@ReportsCrashes(formKey = "", formUri = "https://moody.iriscouch.com/acra-moody/_design/acra-storage/_update/report", reportType = org.acra.sender.HttpSender.Type.JSON, httpMethod = org.acra.sender.HttpSender.Method.PUT, formUriBasicAuthLogin = "moody", formUriBasicAuthPassword = "moody")
 public class MainActivity extends Activity implements OnClickListener,
 		InterDialogFrag, FragmentUpdater {
 
@@ -103,6 +108,8 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void onCreate(Bundle savedInstanceState) {
 		startTime = System.currentTimeMillis();
 		super.onCreate(savedInstanceState);
+		// The following line triggers the initialization of ACRA
+		ACRA.init(this.getApplication());
 		setContentView(R.layout.activity_main);
 		// shared pref
 		session = new ManSession(getApplicationContext());
