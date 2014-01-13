@@ -1,5 +1,6 @@
 package activities;
 
+import fragments.FragChangeLog;
 import fragments.FragCoursesList;
 import fragments.FragFavoritesPreview;
 import fragments.FragLatest;
@@ -11,6 +12,7 @@ import fragments.FragUserContacts;
 import fragments.FragUserPicture;
 import interfaces.FragmentUpdater;
 import interfaces.InterDialogFrag;
+import it.gmariotti.changelibs.library.view.ChangeLogListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +40,7 @@ import service.ServiceBackground;
 import ui.CardTextView;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
@@ -106,10 +109,10 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		startTime = System.currentTimeMillis();
 		super.onCreate(savedInstanceState);
 		// The following line triggers the initialization of ACRA
 		ACRA.init(this.getApplication());
+		startTime = System.currentTimeMillis();
 		setContentView(R.layout.activity_main);
 		// shared pref
 		session = new ManSession(getApplicationContext());
@@ -122,6 +125,8 @@ public class MainActivity extends Activity implements OnClickListener,
 		drawerLayoutListener();
 		warningMessage(checkConnection(), Toast.LENGTH_LONG, null,
 				getString(R.string.no_internet));
+
+		ChangeLogListView sad = new ChangeLogListView(getApplicationContext());
 
 	}
 
@@ -621,7 +626,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	 * 
 	 */
 	private void populateUserPicture() {
-		final ImageButton loginButton = (ImageButton) findViewById(R.id.login_image_button);
+		ImageButton loginButton = (ImageButton) findViewById(R.id.login_image_button);
 		if (session.getValues("PIC_PATH", null) == null) {
 
 			Drawable pic = null;
@@ -894,6 +899,21 @@ public class MainActivity extends Activity implements OnClickListener,
 			startActivity(new Intent(this, MainActivity.class));
 			break;
 
+		case R.id.menu_changelog:
+			FragChangeLog dialogStandardFragment = new FragChangeLog();
+			FragmentManager fm = getFragmentManager();
+			FragmentTransaction ft = fm.beginTransaction();
+			Fragment prev = fm.findFragmentByTag("changelogdemo_dialog");
+			if (prev != null) {
+				ft.remove(prev);
+			}
+			// ft.addToBackStack(null);
+
+			dialogStandardFragment.show(ft, "changelogdemo_dialog");
+
+			moodydrawerLayout.closeDrawer(Gravity.LEFT);
+			break;
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -1021,13 +1041,14 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void updater(View param, String courseId, String topicId) {
 		FragTopics currentFrag = (FragTopics) getFragmentManager()
 				.findFragmentByTag(courseId + topicId);
-		FragmentTransaction fragmentTransaction = getFragmentManager()
-				.beginTransaction();
-		fragmentTransaction.remove(currentFrag);
-		fragmentTransaction.replace(R.id.mainFragment, currentFrag, courseId
-				+ topicId);
-		fragmentTransaction.commit();
-
+		if (currentFrag != null) {
+			FragmentTransaction fragmentTransaction = getFragmentManager()
+					.beginTransaction();
+			fragmentTransaction.remove(currentFrag);
+			fragmentTransaction.replace(R.id.mainFragment, currentFrag,
+					courseId + topicId);
+			fragmentTransaction.commit();
+			getFragmentManager().executePendingTransactions();
+		}
 	}
-
 }

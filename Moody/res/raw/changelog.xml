@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog bulletedList="true">
+
+	<changelogversion versionName="0.7.2 alpha" changeDate="Dec 30,2013">
+		<changelogtext>Fixed asynctask bugs</changelogtext>
+		<changelogtext>[b]New![/b] Added initial menu with the courses</changelogtext>
+		<changelogtext>Tutorial Reviewed</changelogtext>
+		<changelogtext>[b]New![/b] Tutorial working with any screen size</changelogtext>
+		<changelogtext>[b]New![/b] Added help context menu</changelogtext>
+		<changelogtext>Messages now work with asyncTask</changelogtext>
+		<changelogtext>[b]New![/b] Added topic summary to the topics</changelogtext>
+		<changelogtext>Topics description reviewed</changelogtext>
+		<changelogtext>Added the ability to get images from Moodle but it's impossible because of a Moodle Core limitation.</changelogtext>
+	</changelogversion>
+
+    <changelogversion versionName="0.7.1 alpha" changeDate="Dec 24,2013">
+        <changelogtext>Fixed minor authentication bugs</changelogtext>
+        <changelogtext>Fixed some issues with Samsung devices</changelogtext>
+    </changelogversion>
+
+</changelog>
