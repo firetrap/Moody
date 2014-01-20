@@ -28,7 +28,7 @@ This website is the main source of documentation for developers working with (or
 
 
 ## How it works
-![](http://i.imgur.com/Qvuxwn3.png)
+![](http://i.imgur.com/nM07CRB.png)
 
 1. The client sends a user name and password to the web service login script.
 1. The script returns a token for that user account.
