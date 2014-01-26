@@ -28,7 +28,7 @@ _Site admin > Plugins > Web services > Manage protocols > Enable REST protocol &
 
 ## 3. Define REST protocol for the roles
 _Site admin > Users > Permissions > Define roles > Settings > TICK: Rest Protocol for the roles_
-** Warning: **In Moodle 2.6++ you have to enable REST Protocol for each roll you want to have acess
+**Warning:** In Moodle 2.6++ you have to enable REST Protocol for each roll you want to have acess
 
 
 
@@ -38,7 +38,7 @@ _Site admin > Users > Permissions > Define roles > Settings > TICK: Rest Protoco
 
 ## 4. Create tokens for web/mobile services
 _Site admin > Users> Permissions > Define roles > Settings > TICK: Create Tokens for web/mobile services> Save Changes_
-** Warning: **In Moodle 2.6++ you have to enable "Create Tokens for web/mobile services" for each roll you want to have acess
+**Warning:** In Moodle 2.6++ you have to enable "Create Tokens for web/mobile services" for each roll you want to have acess
 
 
 [ ![Image](http://i.imgur.com/7ORahp8.png"Image title") ](http://i.imgur.com/tlnHHRm.png)
