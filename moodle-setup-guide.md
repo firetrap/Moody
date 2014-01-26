@@ -50,7 +50,7 @@ _Site admin > Plugins > Web services > External Services > TICK: > Save Changes_
 
 ---
 
-## 5. Create the "moody_service"
+## 6. Create the "moody_service"
 _Site admin > Plugins > Web services > External Services > Add > Create a new service "moody_service" with no required capabilities, enabled and can download files > Save Changes_
 
 
@@ -58,7 +58,7 @@ _Site admin > Plugins > Web services > External Services > Add > Create a new se
 
 ---
 
-## 6. Add functions to the service"
+## 7. Add functions to the service"
 _Site admin > Plugins > Web services > External Service > moody_service > Functions > add all non-deprecated functions > save changes_
 
 
@@ -66,7 +66,7 @@ _Site admin > Plugins > Web services > External Service > moody_service > Functi
 
 ---
 
-## 7. Config phpMyAdmin
+## 8. Config phpMyAdmin
 _Server > phpMyAdmin > Search for "mdl_external_service" > Add "moody_service" to the shortname> save&exit_
 
 
