@@ -42,8 +42,16 @@ _Site admin > Users> Permissions > Define roles > Settings > TICK: Create Tokens
 
 ---
 
+## 5. Enable web services for mobile devices
+_Site admin > Plugins > Web services > External Services > TICK: > Save Changes_
+
+
+[ ![Image](http://i.imgur.com/DsblIgc.png"Image title") ](http://i.imgur.com/DsblIgc.png)
+
+---
+
 ## 5. Create the "moody_service"
-_Site admin > Plugins > Web services > External Service > Add > Create a new service "moody_service" with no required capabilities, enabled and can download files > Save Changes_
+_Site admin > Plugins > Web services > External Services > Add > Create a new service "moody_service" with no required capabilities, enabled and can download files > Save Changes_
 
 
 [ ![Image](http://i.imgur.com/oXxXUIy.png"Image title") ](http://i.imgur.com/OFbrmrO.png)
