@@ -31,8 +31,7 @@ _Site admin > Users > Permissions > Define roles > Settings > TICK: Rest Protoco
 **Warning:** In Moodle 2.6++ you have to enable REST Protocol for each roll you want to have acess
 
 
-
-[ ![Image](http://i.imgur.com/NiGd3Ma.png"Image title") ](http://i.imgur.com/5lt1AOX.png)
+[ ![Image](http://i.imgur.com/7ORahp8.png"Image title") ](http://i.imgur.com/tlnHHRm.png)
 
 ---
 
@@ -40,8 +39,7 @@ _Site admin > Users > Permissions > Define roles > Settings > TICK: Rest Protoco
 _Site admin > Users> Permissions > Define roles > Settings > TICK: Create Tokens for web/mobile services> Save Changes_
 **Warning:** In Moodle 2.6++ you have to enable "Create Tokens for web/mobile services" for each roll you want to have acess
 
-
-[ ![Image](http://i.imgur.com/7ORahp8.png"Image title") ](http://i.imgur.com/tlnHHRm.png)
+[ ![Image](http://i.imgur.com/NiGd3Ma.png"Image title") ](http://i.imgur.com/5lt1AOX.png)
 
 ---
 
