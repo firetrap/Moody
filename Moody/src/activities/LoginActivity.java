@@ -24,6 +24,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -37,6 +38,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -140,8 +142,7 @@ public class LoginActivity extends Activity {
 						}
 					});
 
-			onSoftKeyboardState();
-
+//			onSoftKeyboardState();
 		}
 	}
 
@@ -193,7 +194,7 @@ public class LoginActivity extends Activity {
 
 		// Check if URL contains the required HTTP protocol.
 		else {
-			if (!mUrl.subSequence(0, 7).equals("http://")) {
+			if (mUrl.length() < 4 || !mUrl.subSequence(0, 4).equals("http")) {
 				mUrl = "http://" + mUrl;
 			}
 		}
@@ -234,6 +235,8 @@ public class LoginActivity extends Activity {
 			// Show a progress spinner, and kick off a background initActivity
 			// to
 			// perform the user login attempt.
+			hideKeyboard(); 
+			
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
@@ -241,6 +244,16 @@ public class LoginActivity extends Activity {
 
 			// Log.d("MoodyDebug", mToken);
 		}
+	}
+
+	/**
+	 * Esconde o teclado
+	 * 
+	 * @author hsousa
+	 */
+	private void hideKeyboard() {
+		InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 
 	/**
@@ -485,6 +498,7 @@ public class LoginActivity extends Activity {
 	 * to implement our own method
 	 * 
 	 */
+	@SuppressWarnings("unused")
 	private void onSoftKeyboardState() {
 		final View activityRootView = findViewById(R.id.login_form);
 		activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(
