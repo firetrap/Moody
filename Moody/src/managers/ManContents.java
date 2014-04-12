@@ -38,11 +38,11 @@ import connections.DataAsyncTask;
  */
 public class ManContents {
 	// ManSession Manager Class
-	ManSession session;
-	Object getContent;
+	ManSession		session;
+	Object			getContent;
 
-	Context context;
-	ManDataStore data;
+	Context			context;
+	ManDataStore	data;
 
 	/**
 	 * @param context
@@ -69,11 +69,9 @@ public class ManContents {
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
 		String userId = session.getValues(ModConstants.KEY_ID, null);
-		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name()
-				+ userId;
+		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name() + userId;
 		try {
-			getContent = new DataAsyncTask().execute(url, token,
-					MoodleServices.CORE_USER_GET_USERS_BY_ID, userId).get();
+			getContent = new DataAsyncTask().execute(url, token, MoodleServices.CORE_USER_GET_USERS_BY_ID, userId).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -88,12 +86,10 @@ public class ManContents {
 	public MoodleUser getUser() {
 		session = new ManSession(context);
 		String userId = session.getValues(ModConstants.KEY_ID, null);
-		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name()
-				+ userId;
+		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name() + userId;
 
-		if (!data.isInCache(fileName)) {
+		if (!data.isInCache(fileName))
 			setUser();
-		}
 
 		return (MoodleUser) data.getData(fileName);
 	}
@@ -103,12 +99,10 @@ public class ManContents {
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
 		String userId = session.getValues(ModConstants.KEY_ID, null);
-		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name()
-				+ userId;
+		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name() + userId;
 
 		try {
-			getContent = new DataAsyncTask().execute(url, token,
-					MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
+			getContent = new DataAsyncTask().execute(url, token, MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -123,8 +117,7 @@ public class ManContents {
 	public MoodleCourse[] getCourses() {
 		session = new ManSession(context);
 		String userId = session.getValues(ModConstants.KEY_ID, null);
-		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name()
-				+ userId;
+		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name() + userId;
 
 		if (!data.isInCache(fileName)) {
 			setCourses();
@@ -142,12 +135,10 @@ public class ManContents {
 		String url = session.getValues(ModConstants.KEY_URL, null);
 		String token = session.getValues(ModConstants.KEY_TOKEN, null);
 
-		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name()
-				+ courseId;
+		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name() + courseId;
 
 		try {
-			getContent = new DataAsyncTask().execute(url, token,
-					MoodleServices.CORE_COURSE_GET_CONTENTS, courseId).get();
+			getContent = new DataAsyncTask().execute(url, token, MoodleServices.CORE_COURSE_GET_CONTENTS, courseId).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -158,8 +149,7 @@ public class ManContents {
 
 		// If true send the object to check if has new contents
 		if (data.isInCache(fileName) && courseName != null) {
-			new ManContentUpdate(context, courseName, courseId).hasNewContent(
-					getContent, fileName);
+			new ManContentUpdate(context, courseName, courseId).hasNewContent(getContent, fileName);
 		}
 
 		data.storeData(getContent, fileName);
@@ -170,8 +160,7 @@ public class ManContents {
 	 * @return MoodleCourseContent[]
 	 */
 	public MoodleCourseContent[] getContent(String courseId) {
-		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name()
-				+ courseId;
+		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name() + courseId;
 
 		if (!data.isInCache(fileName)) {
 			setContent(null, courseId);
@@ -186,8 +175,7 @@ public class ManContents {
 	 * 
 	 * @return MoodleCourseContent
 	 */
-	public MoodleCourseContent getTopic(Long topicId,
-			MoodleCourseContent[] courseContent) {
+	public MoodleCourseContent getTopic(Long topicId, MoodleCourseContent[] courseContent) {
 		for (int j = 0; j < courseContent.length; j++) {
 			if (courseContent[j].getId() == topicId) {
 				return courseContent[j];
@@ -213,8 +201,7 @@ public class ManContents {
 			getFile(fileUrl, fileName);
 		}
 
-		doc = Jsoup.parse((String) new ManDataStore(context).getData(fileName),
-				"UTF-8");
+		doc = Jsoup.parse((String) new ManDataStore(context).getData(fileName), "UTF-8");
 		if (!(doc.outerHtml().contains("src"))) {
 
 		} else {
@@ -276,8 +263,7 @@ public class ManContents {
 			URL url = new URL(fileUrl);
 			URLConnection conn = url.openConnection();
 			// open the stream and put it into BufferedReader
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					conn.getInputStream()));
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			while ((inputLine = br.readLine()) != null) {
 				outPut += inputLine;
 			}
@@ -323,11 +309,12 @@ public class ManContents {
 
 		// the formatting rules, implemented in a breadth-first DOM traverse
 		private class FormattingVisitor implements NodeVisitor {
-			private static final int maxWidth = 80;
-			private int width = 0;
-			private StringBuilder accum = new StringBuilder(); // holds the
-																// accumulated
-																// text
+			private static final int	maxWidth	= 80;
+			private int					width		= 0;
+			private StringBuilder		accum		= new StringBuilder();	// holds
+																			// the
+																			// accumulated
+																			// text
 
 			// hit when the node is first seen
 			@Override
@@ -361,9 +348,7 @@ public class ManContents {
 					width = 0; // reset counter if starts with a newline. only
 								// from
 								// formats above, not in natural text
-				if (text.equals(" ")
-						&& (accum.length() == 0 || StringUtil.in(
-								accum.substring(accum.length() - 1), " ", "\n")))
+				if (text.equals(" ") && (accum.length() == 0 || StringUtil.in(accum.substring(accum.length() - 1), " ", "\n")))
 					return; // don't accumulate long runs of empty spaces
 
 				if (!(text.length() + width > maxWidth)) { // fits as is,
