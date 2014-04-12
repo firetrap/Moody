@@ -1,9 +1,8 @@
 package connections;
 
-import java.io.IOException;
+import interfaces.AsyncResult;
+
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import restPackage.MoodleCallRestWebService;
@@ -12,15 +11,15 @@ import restPackage.MoodleCourseContent;
 import restPackage.MoodleMessage;
 import restPackage.MoodleRestCourse;
 import restPackage.MoodleRestEnrol;
-import restPackage.MoodleRestException;
 import restPackage.MoodleRestMessage;
-import restPackage.MoodleRestMessageException;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.StrictMode;
+import android.os.CountDownTimer;
 
 /**
  * 
@@ -31,11 +30,21 @@ import android.os.StrictMode;
  * 
  */
 public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
-	Object	jObj	= null;
+	Object jObj = null;
+	public AsyncResult asyncInterface = null;
+	private ProgressDialog dialog;
+	private CountDownTimer cvt = createCountDownTimer();
+	private Context context;
+
+	public DataAsyncTask(Context context) {
+		this.context = context;
+		dialog = new ProgressDialog(context);
+	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
+		cvt.start();
 	}
 
 	@Override
@@ -49,6 +58,7 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 
 		long userId;
 		long courseId;
+
 		try {
 			switch (webService) {
 			case CORE_ENROL_GET_USERS_COURSES:
@@ -87,6 +97,12 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 			case CORE_MESSAGE_SEND_INSTANT_MESSAGES:
 				return MoodleRestMessage.sendInstantMessage((MoodleMessage) webServiceParams);
 
+			case MOODLE_USER_GET_PICTURE:
+				InputStream inputStream = new URL(urlString).openStream();
+				Drawable drawable = Drawable.createFromStream(inputStream, null);
+				inputStream.close();
+				return drawable;
+
 			default:
 				return null;
 
@@ -123,32 +139,29 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 
 	@Override
 	protected void onPostExecute(Object obj) {
+		cvt.cancel();
+		if (dialog != null && dialog.isShowing())
+			dialog.dismiss();
+		asyncInterface.pictureAsyncTaskResult(obj);
 
 	}
 
-	/**
-	 * * Returns a Drawable object containing the image located at
-	 * 'imageWebAddress' if successful, and null otherwise. (Pre:
-	 * 'imageWebAddress' is non-null and non-empty; method should not be called
-	 * from the main/ui thread.)
-	 * 
-	 * @param imageWebAddress
-	 * @return
-	 */
-	public static Drawable createDrawableFromUrl(String imageWebAddress) {
-		Drawable drawable = null;
+	private CountDownTimer createCountDownTimer() {
+		return new CountDownTimer(250, 10) {
+			@Override
+			public void onTick(long millisUntilFinished) {
 
-		final StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		StrictMode.setThreadPolicy(policy);
+			}
 
-		try {
-			final InputStream inputStream = new URL(imageWebAddress).openStream();
-			drawable = Drawable.createFromStream(inputStream, null);
-			inputStream.close();
-		} catch (final MalformedURLException ex) {
-		} catch (final IOException ex) {
-		}
-
-		return drawable;
+			@Override
+			public void onFinish() {
+				dialog = new ProgressDialog(context);
+				dialog.setMessage("Loading...");
+				dialog.setCancelable(false);
+				dialog.setCanceledOnTouchOutside(false);
+				dialog.show();
+			}
+		};
 	}
+
 }
