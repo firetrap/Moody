@@ -22,13 +22,13 @@ import connections.DataAsyncTask;
  * 
  */
 public class ManUserContacts {
-	private ManSession session;
-	private Object getContext;
-	private Context context;
-	private ManDataStore data;
-	private String userId;
-	private String url;
-	private String token;
+	private ManSession		session;
+	private Object			getContext;
+	private Context			context;
+	private ManDataStore	data;
+	private String			userId;
+	private String			url;
+	private String			token;
 
 	public ManUserContacts(Context context) {
 		this.context = context;
@@ -51,8 +51,7 @@ public class ManUserContacts {
 	 * @return MoodleContact[]
 	 */
 	public MoodleContact[] getContacts() {
-		String fileName = MoodleServices.CORE_MESSAGE_GET_CONTACTS.name()
-				+ userId;
+		String fileName = MoodleServices.CORE_MESSAGE_GET_CONTACTS.name() + userId;
 
 		if (!data.isInCache(fileName))
 			setContacts();
@@ -65,8 +64,7 @@ public class ManUserContacts {
 
 		for (MoodleContact contact : contacts) {
 			// do not remove the curve braces because it won't work.
-			if (Long.valueOf(contact.getContactProfile().getId()) == Long
-					.valueOf(id)) {
+			if (Long.valueOf(contact.getContactProfile().getId()) == Long.valueOf(id)) {
 				return contact;
 			}
 		}
@@ -75,12 +73,10 @@ public class ManUserContacts {
 	}
 
 	public void setContacts() {
-		String fileName = MoodleServices.CORE_MESSAGE_GET_CONTACTS.name()
-				+ userId;
+		String fileName = MoodleServices.CORE_MESSAGE_GET_CONTACTS.name() + userId;
 
 		try {
-			getContext = new DataAsyncTask().execute(url, token,
-					MoodleServices.CORE_MESSAGE_GET_CONTACTS, null).get();
+			getContext = new DataAsyncTask(context).execute(url, token, MoodleServices.CORE_MESSAGE_GET_CONTACTS, null).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,8 +125,7 @@ public class ManUserContacts {
 	 * Method that return true if the user has blocked contacts
 	 */
 	public boolean hasBlockedContacts() {
-		return ((getBlockedContacts() != null) && (!getBlockedContacts()
-				.isEmpty()));
+		return ((getBlockedContacts() != null) && (!getBlockedContacts().isEmpty()));
 	}
 
 	/**
@@ -188,7 +183,7 @@ public class ManUserContacts {
 				break;
 			}
 
-			new DataAsyncTask().execute(url, token, service, ids).get();
+			new DataAsyncTask(context).execute(url, token, service, ids).get();
 
 			setContacts();
 		} catch (InterruptedException e) {
@@ -213,9 +208,8 @@ public class ManUserContacts {
 	 */
 	public void sendMessage(String message, Long id) {
 
-		new DataAsyncTask().execute(url, token,
-				MoodleServices.CORE_MESSAGE_SEND_INSTANT_MESSAGES,
-				new MoodleMessage(id, message, "4"));
+		new DataAsyncTask(context).execute(url, token, MoodleServices.CORE_MESSAGE_SEND_INSTANT_MESSAGES, new MoodleMessage(id, message,
+				"4"));
 
 	}
 
@@ -342,8 +336,7 @@ public class ManUserContacts {
 
 			// don't change beacause won't work.
 			for (MoodleContact contact : blockeds) {
-				if (Long.valueOf(contact.getContactProfile().getId()) == Long
-						.valueOf(id)) {
+				if (Long.valueOf(contact.getContactProfile().getId()) == Long.valueOf(id)) {
 					unblocked = contact;
 				}
 			}
@@ -398,8 +391,7 @@ public class ManUserContacts {
 				return null;
 
 			for (MoodleContact contact : list) {
-				if (Long.valueOf(contact.getContactProfile().getId()) == Long
-						.valueOf(id)) {
+				if (Long.valueOf(contact.getContactProfile().getId()) == Long.valueOf(id)) {
 					return contact;
 				}
 			}

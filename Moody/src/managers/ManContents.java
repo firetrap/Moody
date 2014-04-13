@@ -71,7 +71,7 @@ public class ManContents {
 		String userId = session.getValues(ModConstants.KEY_ID, null);
 		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name() + userId;
 		try {
-			getContent = new DataAsyncTask().execute(url, token, MoodleServices.CORE_USER_GET_USERS_BY_ID, userId).get();
+			getContent = new DataAsyncTask(context).execute(url, token, MoodleServices.CORE_USER_GET_USERS_BY_ID, userId).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,7 +102,7 @@ public class ManContents {
 		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name() + userId;
 
 		try {
-			getContent = new DataAsyncTask().execute(url, token, MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
+			getContent = new DataAsyncTask(context).execute(url, token, MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -138,7 +138,7 @@ public class ManContents {
 		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name() + courseId;
 
 		try {
-			getContent = new DataAsyncTask().execute(url, token, MoodleServices.CORE_COURSE_GET_CONTENTS, courseId).get();
+			getContent = new DataAsyncTask(context).execute(url, token, MoodleServices.CORE_COURSE_GET_CONTENTS, courseId).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
