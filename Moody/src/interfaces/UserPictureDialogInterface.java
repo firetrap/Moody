@@ -4,7 +4,7 @@ package interfaces;
  * @author firetrap
  * 
  */
-public interface InterDialogFrag {
+public interface UserPictureDialogInterface {
 	void onFinishEditDialog(String inputText, int code);
 
 }

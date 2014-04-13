@@ -10,9 +10,8 @@ import fragments.FragUserCloud;
 import fragments.FragUserContactMessage;
 import fragments.FragUserContacts;
 import fragments.FragUserPicture;
-import interfaces.AsyncResult;
-import interfaces.FragmentUpdater;
-import interfaces.InterDialogFrag;
+import interfaces.AsyncResultInterface;
+import interfaces.UserPictureDialogInterface;
 import it.gmariotti.changelibs.library.view.ChangeLogListView;
 
 import java.util.ArrayList;
@@ -87,26 +86,26 @@ import connections.DataAsyncTask;
  */
 
 @ReportsCrashes(formKey = "", formUri = "https://moody.iriscouch.com/acra-moody/_design/acra-storage/_update/report", reportType = org.acra.sender.HttpSender.Type.JSON, httpMethod = org.acra.sender.HttpSender.Method.PUT, formUriBasicAuthLogin = "moody", formUriBasicAuthPassword = "moody")
-public class MainActivity extends Activity implements AsyncResult, OnClickListener, InterDialogFrag, FragmentUpdater {
+public class MainActivity extends Activity implements AsyncResultInterface, OnClickListener, UserPictureDialogInterface {
 
-	private DrawerLayout moodydrawerLayout;
+	private DrawerLayout			moodydrawerLayout;
 
-	private HashMap<String, String> organizedCourses = new HashMap<String, String>();
+	private HashMap<String, String>	organizedCourses	= new HashMap<String, String>();
 
 	// ManSession Manager Class
-	ManSession session;
+	ManSession						session;
 
-	private long startTime;
-	private long endTime;
-	private ModDevice md;
+	private long					startTime;
+	private long					endTime;
+	private ModDevice				md;
 
-	private float screenX;
+	private float					screenX;
 
-	private float screenY;
+	private float					screenY;
 
-	private int shotType = ShowcaseView.TYPE_ONE_SHOT;
+	private int						shotType			= ShowcaseView.TYPE_ONE_SHOT;
 
-	private static long backPressed;
+	private static long				backPressed;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -942,16 +941,59 @@ public class MainActivity extends Activity implements AsyncResult, OnClickListen
 		return false;
 	}
 
+	// @Override
+	// public void updater(View param, String courseId, String topicId) {
+	// FragTopics currentFrag = (FragTopics)
+	// getFragmentManager().findFragmentByTag(courseId + topicId);
+	// if (currentFrag != null) {
+	// FragmentTransaction fragmentTransaction =
+	// getFragmentManager().beginTransaction();
+	// fragmentTransaction.remove(currentFrag);
+	// fragmentTransaction.replace(R.id.mainFragment, currentFrag, courseId +
+	// topicId);
+	// fragmentTransaction.commit();
+	// getFragmentManager().executePendingTransactions();
+	// }
+	// }
+
+	/**
+	 * The interface with all implemented methods with asyncTask response
+	 */
+
 	@Override
-	public void updater(View param, String courseId, String topicId) {
-		FragTopics currentFrag = (FragTopics) getFragmentManager().findFragmentByTag(courseId + topicId);
-		if (currentFrag != null) {
-			FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-			fragmentTransaction.remove(currentFrag);
-			fragmentTransaction.replace(R.id.mainFragment, currentFrag, courseId + topicId);
-			fragmentTransaction.commit();
-			getFragmentManager().executePendingTransactions();
-		}
+	public void coursesAsyncTaskResult(Object result) {
+	}
+
+	@Override
+	public void userAsyncTaskResult(Object result) {
+	}
+
+	@Override
+	public void courseContentsAsyncTaskResult(Object result) {
+	}
+
+	@Override
+	public void createContactsAsyncTaskResult(Object result) {
+	}
+
+	@Override
+	public void deleteContactsAsyncTaskResult(Object result) {
+	}
+
+	@Override
+	public void blockContactsAsyncTaskResult(Object result) {
+	}
+
+	@Override
+	public void unblockContactsAsyncTaskResult(Object result) {
+	}
+
+	@Override
+	public void getContactsAsyncTaskResult(Object result) {
+	}
+
+	@Override
+	public void sendInstanteMessageAsyncTaskResult(Object result) {
 	}
 
 	@Override

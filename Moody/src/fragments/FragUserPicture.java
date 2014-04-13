@@ -1,6 +1,6 @@
 package fragments;
 
-import interfaces.InterDialogFrag;
+import interfaces.UserPictureDialogInterface;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,7 +81,7 @@ public class FragUserPicture extends DialogFragment {
 				// MEDIA GALLERY
 				selectedImagePath = getPath(selectedImageUri);
 
-				final InterDialogFrag activity = (InterDialogFrag) getActivity();
+				final UserPictureDialogInterface activity = (UserPictureDialogInterface) getActivity();
 				activity.onFinishEditDialog(selectedImagePath,
 						ModConstants.DIALOG_FRAG_USER_PIC);
 				this.dismiss();
@@ -98,7 +98,7 @@ public class FragUserPicture extends DialogFragment {
 				options.inSampleSize = 10;
 				cameraImagePath = destination.getAbsolutePath();
 
-				final InterDialogFrag activity = (InterDialogFrag) getActivity();
+				final UserPictureDialogInterface activity = (UserPictureDialogInterface) getActivity();
 				activity.onFinishEditDialog(cameraImagePath,
 						ModConstants.DIALOG_FRAG_USER_PIC);
 				this.dismiss();

@@ -1,6 +1,6 @@
 package connections;
 
-import interfaces.AsyncResult;
+import interfaces.AsyncResultInterface;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -30,11 +30,12 @@ import android.os.CountDownTimer;
  * 
  */
 public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
-	Object jObj = null;
-	public AsyncResult asyncInterface = null;
-	private ProgressDialog dialog;
-	private CountDownTimer cvt = createCountDownTimer();
-	private Context context;
+	Object					jObj			= null;
+	public AsyncResultInterface		asyncInterface	= null;
+	private ProgressDialog	dialog;
+	private CountDownTimer	cvt				= createCountDownTimer();
+	private Context			context;
+	private MoodleServices	webService;
 
 	public DataAsyncTask(Context context) {
 		this.context = context;
@@ -51,7 +52,7 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 	protected Object doInBackground(Object... params) {
 		String urlString = (String) params[0];
 		String token = (String) params[1];
-		MoodleServices webService = (MoodleServices) params[2];
+		webService = (MoodleServices) params[2];
 		Object webServiceParams = params[3];
 
 		MoodleCallRestWebService.init(urlString + "/webservice/rest/server.php", token);
@@ -140,10 +141,54 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 	@Override
 	protected void onPostExecute(Object obj) {
 		cvt.cancel();
+
 		if (dialog != null && dialog.isShowing())
 			dialog.dismiss();
-		asyncInterface.pictureAsyncTaskResult(obj);
 
+		switch (webService) {
+		case CORE_ENROL_GET_USERS_COURSES:
+			asyncInterface.coursesAsyncTaskResult(obj);
+			break;
+
+		case CORE_USER_GET_USERS_BY_ID:
+			asyncInterface.userAsyncTaskResult(obj);
+			break;
+
+		case CORE_COURSE_GET_CONTENTS:
+			asyncInterface.courseContentsAsyncTaskResult(obj);
+			break;
+
+		case CORE_MESSAGE_CREATE_CONTACTS:
+			asyncInterface.createContactsAsyncTaskResult(obj);
+			break;
+
+		case CORE_MESSAGE_DELETE_CONTACTS:
+			asyncInterface.deleteContactsAsyncTaskResult(obj);
+			break;
+
+		case CORE_MESSAGE_BLOCK_CONTACTS:
+			asyncInterface.blockContactsAsyncTaskResult(obj);
+			break;
+
+		case CORE_MESSAGE_UNBLOCK_CONTACTS:
+			asyncInterface.unblockContactsAsyncTaskResult(obj);
+			break;
+
+		case CORE_MESSAGE_GET_CONTACTS:
+			asyncInterface.getContactsAsyncTaskResult(obj);
+			break;
+
+		case CORE_MESSAGE_SEND_INSTANT_MESSAGES:
+			asyncInterface.sendInstanteMessageAsyncTaskResult(obj);
+			break;
+
+		case MOODLE_USER_GET_PICTURE:
+			asyncInterface.pictureAsyncTaskResult(obj);
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	private CountDownTimer createCountDownTimer() {
