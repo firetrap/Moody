@@ -6,7 +6,7 @@ public interface AsyncResultInterface {
 
 	void userAsyncTaskResult(Object result);
 
-	abstract void courseContentsAsyncTaskResult(Object result);
+	void courseContentsAsyncTaskResult(Object result);
 
 	void createContactsAsyncTaskResult(Object result);
 

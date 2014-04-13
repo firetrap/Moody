@@ -105,6 +105,8 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 	private int						shotType			= ShowcaseView.TYPE_ONE_SHOT;
 
+	private MoodleUser				currentUser;
+
 	private static long				backPressed;
 
 	@Override
@@ -114,9 +116,8 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 		ACRA.init(this.getApplication());
 		startTime = System.currentTimeMillis();
 		setContentView(R.layout.activity_main);
-		// shared pref
-		session = new ManSession(getApplicationContext());
 		moodydrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		getServerData();
 
 		populateLeft();
 		populateRight();
@@ -127,6 +128,15 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 		ChangeLogListView sad = new ChangeLogListView(getApplicationContext());
 
+	}
+
+	private void getServerData() {
+		session = new ManSession(getApplicationContext());
+		String url = session.getValues(ModConstants.KEY_URL, null);
+		String token = session.getValues(ModConstants.KEY_TOKEN, null);
+		String userId = session.getValues(ModConstants.KEY_ID, null);
+
+		new DataAsyncTask(getApplicationContext()).execute(url, token, MoodleServices.CORE_USER_GET_USERS_BY_ID, userId);
 	}
 
 	/**
@@ -509,7 +519,7 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	private void populateLeft() {
 		populateFullName();
 		populateUserCourses();
-		populateUserPicture();
+		// populateUserPicture();
 	}
 
 	/**
@@ -575,8 +585,8 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	private void populateUserPicture() {
 		ImageButton loginButton = (ImageButton) findViewById(R.id.login_image_button);
 		if (session.getValues("PIC_PATH", null) == null) {
-			MoodleUser user = new ManContents(getApplicationContext()).getUser();
-			new DataAsyncTask(getApplicationContext()).execute(user.getProfileImageURL(), MoodleServices.MOODLE_USER_GET_PICTURE);
+			new DataAsyncTask(getApplicationContext()).execute(currentUser.getProfileImageURL(), null,
+					MoodleServices.MOODLE_USER_GET_PICTURE, null);
 		} else {
 			loginButton.setImageBitmap(BitmapResizer.decodeSampledBitmapFromResource(session.getValues("PIC_PATH", null),
 					R.id.login_image_button, 100, 100));
@@ -966,6 +976,10 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 	@Override
 	public void userAsyncTaskResult(Object result) {
+		if (result != null) {
+			currentUser = (MoodleUser) result;
+			populateUserPicture();
+		}
 	}
 
 	@Override
