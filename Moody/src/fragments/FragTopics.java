@@ -1,14 +1,10 @@
 package fragments;
 
-import interfaces.FragmentUpdater;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-
-import org.jsoup.examples.HtmlToPlainText;
 
 import managers.ManContents;
 import managers.ManSession;
@@ -18,13 +14,9 @@ import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -46,17 +38,17 @@ import com.firetrap.moody.R;
  */
 public class FragTopics extends Fragment {
 
-	Object course;
-	ManSession session;
-	String courseId;
-	String topicId;
-	String courseName;
-	private LinearLayout mainLayout;
-	private ScrollView contentScrollable;
-	private LinearLayout contentsLayout;
-	private View myView;
-	private boolean asyncTaskRunned = false;
-	static Context ctx;
+	Object					course;
+	ManSession				session;
+	String					courseId;
+	String					topicId;
+	String					courseName;
+	private LinearLayout	mainLayout;
+	private ScrollView		contentScrollable;
+	private LinearLayout	contentsLayout;
+	private View			myView;
+	private boolean			asyncTaskRunned	= false;
+	static Context			ctx;
 
 	public FragTopics() {
 	}
@@ -67,8 +59,7 @@ public class FragTopics extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		ctx = getActivity().getApplicationContext();
 
 		session = new ManSession(getActivity().getApplicationContext());
@@ -76,26 +67,22 @@ public class FragTopics extends Fragment {
 		courseId = getArguments().getString("courseId");
 		topicId = getArguments().getString("topicId");
 		courseName = getArguments().getString("courseName");
-		if (!asyncTaskRunned) {
-			if (Build.VERSION.SDK_INT >= 11)
-				new HeavyWork()
-						.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			else
-				new HeavyWork().execute();
-
-		}
+		// if (!asyncTaskRunned) {
+		// if (Build.VERSION.SDK_INT >= 11)
+		// new HeavyWork().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		// else
+		// new HeavyWork().execute();
+		//
+		// }
 		return myView;
 	}
 
-	private View createTopics(MoodleCourseContent singleTopic,
-			String courseName, String courseId, Long topicId) {
-		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	private View createTopics(MoodleCourseContent singleTopic, String courseName, String courseId, Long topicId) {
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		initLayouts();
 
-		View topicsHeaderView = onCreateHeader(courseName,
-				singleTopic.getName(), inflater);
+		View topicsHeaderView = onCreateHeader(courseName, singleTopic.getName(), inflater);
 
 		mainLayout.addView(topicsHeaderView);
 
@@ -117,46 +104,37 @@ public class FragTopics extends Fragment {
 		// The mainLayout is a linearLayout witch will wrap another linearLayout
 		// with the static header and the scrollable content
 		mainLayout = new LinearLayout(getActivity());
-		mainLayout.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+		mainLayout.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		mainLayout.setOrientation(LinearLayout.VERTICAL);
 
 		// The scrollView responsible to scroll the contents layout
 		contentScrollable = new ScrollView(getActivity());
-		contentScrollable.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+		contentScrollable.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
 		contentScrollable.setVerticalScrollBarEnabled(false);
 		contentScrollable.setHorizontalScrollBarEnabled(false);
-		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
-				.getLayoutParams();
+		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable.getLayoutParams();
 		scroll_params.setMargins(0, 10, 0, 0);
 		contentScrollable.setLayoutParams(scroll_params);
 
 		// The linearLayout which wrap all the topics, this linearLayout is
 		// inside the scrollView
 		contentsLayout = new LinearLayout(getActivity());
-		contentsLayout.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+		contentsLayout.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		contentsLayout.setOrientation(LinearLayout.VERTICAL);
 	}
 
-	private View onCreateHeader(String courseName, String topicName,
-			LayoutInflater inflater) {
+	private View onCreateHeader(String courseName, String topicName, LayoutInflater inflater) {
 
-		final View topicsHeaderView = inflater.inflate(R.layout.frag_header,
-				null);
+		final View topicsHeaderView = inflater.inflate(R.layout.frag_header, null);
 
-		final TextView path = (TextView) topicsHeaderView
-				.findViewById(R.id.course_path_textView);
+		final TextView path = (TextView) topicsHeaderView.findViewById(R.id.course_path_textView);
 
-		path.setText(Html.fromHtml("Courses > " + courseName + " > "
-				+ "<font color=#52c2ea>" + topicName + "</font>"));
+		path.setText(Html.fromHtml("Courses > " + courseName + " > " + "<font color=#52c2ea>" + topicName + "</font>"));
 
-		final ImageButton addFavorites = (ImageButton) topicsHeaderView
-				.findViewById(R.id.add_favorites_button);
+		final ImageButton addFavorites = (ImageButton) topicsHeaderView.findViewById(R.id.add_favorites_button);
 		addFavorites.setVisibility(View.GONE);
 		return topicsHeaderView;
 
@@ -168,16 +146,14 @@ public class FragTopics extends Fragment {
 	 * @param insertPoint
 	 * @param topicId
 	 */
-	protected void createTopicsContent(MoodleCourseContent singleTopic,
-			LayoutInflater inflater, LinearLayout insertPoint) {
+	protected void createTopicsContent(MoodleCourseContent singleTopic, LayoutInflater inflater, LinearLayout insertPoint) {
 
 		String summaryContent = singleTopic.getSummary();
 		if (!summaryContent.isEmpty()) {
 
 			View topicSummary = inflater.inflate(R.layout.topic_summary, null);
 
-			TextView summary = (TextView) topicSummary
-					.findViewById(R.id.summary_text);
+			TextView summary = (TextView) topicSummary.findViewById(R.id.summary_text);
 			summary.setText(Html.fromHtml(summaryContent));
 			insertPoint.addView(topicSummary);
 		}
@@ -193,37 +169,30 @@ public class FragTopics extends Fragment {
 	 * @param insertPoint
 	 * @param modulesArray
 	 */
-	private void getModules(LayoutInflater inflater, LinearLayout insertPoint,
-			MoodleModule[] modulesArray) {
+	private void getModules(LayoutInflater inflater, LinearLayout insertPoint, MoodleModule[] modulesArray) {
 
 		for (int i = 0; i < modulesArray.length; i++) {
 
 			View topicsContent = inflater.inflate(R.layout.frag_topic, null);
 
-			TextView moduleName = (TextView) topicsContent
-					.findViewById(R.id.module_label);
-			TextView topicContent = (TextView) topicsContent
-					.findViewById(R.id.module_text_content);
+			TextView moduleName = (TextView) topicsContent.findViewById(R.id.module_label);
+			TextView topicContent = (TextView) topicsContent.findViewById(R.id.module_text_content);
 
 			MoodleModule singleModule = modulesArray[i];
 
 			LinearLayout row = new LinearLayout(getActivity());
-			row.setLayoutParams(new LayoutParams(
-					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+			row.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
 			int b = 0;
 			if (!singleModule.getName().isEmpty()) {
 				moduleName.setText(singleModule.getName());
 
-				if (!Html.fromHtml(singleModule.getDescription()).toString()
-						.isEmpty()) {
+				if (!Html.fromHtml(singleModule.getDescription()).toString().isEmpty()) {
 
 					String moduleDescription = singleModule.getDescription();
 
-					String parsed = new ManContents(getActivity()
-							.getApplicationContext())
-							.parseFile(moduleDescription);
+					String parsed = new ManContents(getActivity().getApplicationContext()).parseFile(moduleDescription);
 					String cleared = clearSource(parsed);
 
 					/**
@@ -238,12 +207,10 @@ public class FragTopics extends Fragment {
 						TextView bla = new TextView(getActivity());
 
 						bla.setText(cleared);
-						bla.setCompoundDrawablesWithIntrinsicBounds(
-								getCorrectDrawable(cleared), 0, 0, 0);
+						bla.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(cleared), 0, 0, 0);
 						Linkify.addLinks(bla, Linkify.ALL);
 
-						LinearLayout recebe = (LinearLayout) topicsContent
-								.findViewById(R.id.test_ll);
+						LinearLayout recebe = (LinearLayout) topicsContent.findViewById(R.id.test_ll);
 						recebe.addView(bla);
 
 						// String cleared = clearSource(parsed);
@@ -259,19 +226,14 @@ public class FragTopics extends Fragment {
 						// moduleImage
 						// .setImageDrawable(LoadImageFromWebOperations(parsed));
 
-						topicContent.setText(Html.fromHtml("<a href=" + parsed
-								+ ">" + "Image - accessible only from broswer"
-								+ "</a>"));
-						topicContent.setCompoundDrawablesWithIntrinsicBounds(
-								getCorrectDrawable(parsed), 0, 0, 0);
-						topicContent.setMovementMethod(LinkMovementMethod
-								.getInstance());
+						topicContent.setText(Html.fromHtml("<a href=" + parsed + ">" + "Image - accessible only from broswer" + "</a>"));
+						topicContent.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(parsed), 0, 0, 0);
+						topicContent.setMovementMethod(LinkMovementMethod.getInstance());
 
 					} else {
 
 						topicContent.setText(Html.fromHtml(moduleDescription));
-						topicContent.setMovementMethod(LinkMovementMethod
-								.getInstance());
+						topicContent.setMovementMethod(LinkMovementMethod.getInstance());
 					}
 
 				} else {
@@ -282,8 +244,7 @@ public class FragTopics extends Fragment {
 				if (singleModule.getContent() != null) {
 					getModuleContents(singleModule, topicsContent);
 				} else {
-					topicsContent.findViewById(R.id.module_files)
-							.setVisibility(View.GONE);
+					topicsContent.findViewById(R.id.module_files).setVisibility(View.GONE);
 					b++;
 
 				}
@@ -309,8 +270,7 @@ public class FragTopics extends Fragment {
 	private void getModuleContents(MoodleModule singleModule, View topicsContent) {
 		MoodleModuleContent[] moduleContents = singleModule.getContent();
 
-		TextView moduleFile = (TextView) topicsContent
-				.findViewById(R.id.module_files);
+		TextView moduleFile = (TextView) topicsContent.findViewById(R.id.module_files);
 
 		// ImageView moduleImage = (ImageView) topicsContent
 		// .findViewById(R.id.module_image);
@@ -322,27 +282,19 @@ public class FragTopics extends Fragment {
 				String url = moduleContents[j].getFileURL();
 
 				if (moduleContents[j].getType().equals("file")) {
-					url += "&token="
-							+ session.getValues(ModConstants.KEY_TOKEN, null);
+					url += "&token=" + session.getValues(ModConstants.KEY_TOKEN, null);
 
-					if (!moduleContents[j].getFilename().equalsIgnoreCase(
-							"index.html")) {
+					if (!moduleContents[j].getFilename().equalsIgnoreCase("index.html")) {
 
-						moduleFile.setText(Html.fromHtml("<a href=" + url + ">"
-								+ moduleContents[j].getFilename() + "</a>"));
-						moduleFile.setCompoundDrawablesWithIntrinsicBounds(
-								getCorrectDrawable(url), 0, 0, 0);
+						moduleFile.setText(Html.fromHtml("<a href=" + url + ">" + moduleContents[j].getFilename() + "</a>"));
+						moduleFile.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(url), 0, 0, 0);
 
-						moduleFile.setMovementMethod(LinkMovementMethod
-								.getInstance());
+						moduleFile.setMovementMethod(LinkMovementMethod.getInstance());
 
-					} else if (moduleContents[j].getFilename()
-							.equalsIgnoreCase("index.html")) {
+					} else if (moduleContents[j].getFilename().equalsIgnoreCase("index.html")) {
 
-						String indexURL = new ManContents(getActivity()
-								.getApplicationContext()).parseFile(url,
-								moduleContents[j].getFilename() + courseId
-										+ topicId + singleModule.getId());
+						String indexURL = new ManContents(getActivity().getApplicationContext()).parseFile(url,
+								moduleContents[j].getFilename() + courseId + topicId + singleModule.getId());
 						if (clearSource(indexURL).contains("image")) {
 							// moduleFile.setVisibility(View.GONE);
 							// moduleImage.setVisibility(View.VISIBLE);
@@ -351,8 +303,7 @@ public class FragTopics extends Fragment {
 
 						} else {
 							moduleFile.setText(indexURL);
-							moduleFile.setCompoundDrawablesWithIntrinsicBounds(
-									getCorrectDrawable(indexURL), 0, 0, 0);
+							moduleFile.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(indexURL), 0, 0, 0);
 
 							Linkify.addLinks(moduleFile, Linkify.WEB_URLS);
 
@@ -362,14 +313,11 @@ public class FragTopics extends Fragment {
 				}
 				if (moduleContents[j].getType().equals("url")) {
 					String fileName = moduleContents[j].getFilename();
-					fileName = ((fileName == null) || fileName.isEmpty()) ? "External Content"
-							: moduleContents[j].getFilename();
+					fileName = ((fileName == null) || fileName.isEmpty()) ? "External Content" : moduleContents[j].getFilename();
 
-					moduleFile.setText(Html.fromHtml("<a href=" + url + ">"
-							+ fileName + "</a>"));
+					moduleFile.setText(Html.fromHtml("<a href=" + url + ">" + fileName + "</a>"));
 
-					moduleFile.setMovementMethod(LinkMovementMethod
-							.getInstance());
+					moduleFile.setMovementMethod(LinkMovementMethod.getInstance());
 
 				}
 
@@ -421,22 +369,15 @@ public class FragTopics extends Fragment {
 				return R.drawable.pdf;
 			}
 			if (getMimeType(url).equalsIgnoreCase("application/msword")
-					|| getMimeType(url)
-							.equalsIgnoreCase(
-									"application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
+					|| getMimeType(url).equalsIgnoreCase("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
 				return R.drawable.docs;
 			}
-			if (getMimeType(url).equalsIgnoreCase(
-					"application/vnd.ms-powerpoint")
-					|| getMimeType(url)
-							.equalsIgnoreCase(
-									"application/vnd.openxmlformats-officedocument.presentationml.presentation")) {
+			if (getMimeType(url).equalsIgnoreCase("application/vnd.ms-powerpoint")
+					|| getMimeType(url).equalsIgnoreCase("application/vnd.openxmlformats-officedocument.presentationml.presentation")) {
 				return R.drawable.ppt;
 			}
 			if (getMimeType(url).equalsIgnoreCase("application/vnd.ms-excel")
-					|| getMimeType(url)
-							.equalsIgnoreCase(
-									"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
+					|| getMimeType(url).equalsIgnoreCase("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
 				return R.drawable.xls;
 			}
 
@@ -460,12 +401,10 @@ public class FragTopics extends Fragment {
 
 	}
 
-	public static void writeStringAsFile(final String fileContents,
-			String fileName) {
+	public static void writeStringAsFile(final String fileContents, String fileName) {
 
 		try {
-			FileWriter out = new FileWriter(new File(ctx.getFilesDir(),
-					fileName), true);
+			FileWriter out = new FileWriter(new File(ctx.getFilesDir(), fileName), true);
 			out.write(fileContents);
 			out.close();
 		} catch (IOException e) {
@@ -479,62 +418,62 @@ public class FragTopics extends Fragment {
 		super.onResume();
 	}
 
-	private class HeavyWork extends AsyncTask<Void, Void, Void> {
-
-		private ProgressDialog dialog;
-
-		final FragmentUpdater activity = (FragmentUpdater) getActivity();
-		private CountDownTimer cvt = createCountDownTimer();
-
-		// Do the long-running work in here
-		@Override
-		protected Void doInBackground(Void... params) {
-			MoodleCourseContent[] courseTopics = new ManContents(getActivity()
-					.getApplicationContext()).getContent(courseId);
-
-			MoodleCourseContent singleTopic = new ManContents(getActivity()
-					.getApplicationContext()).getTopic(Long.parseLong(topicId),
-					courseTopics);
-			// This createTopics call another methods from the fragment class to
-			// get the data and create views
-			myView = createTopics(singleTopic, courseName, courseId,
-					Long.parseLong(topicId));
-			if (dialog != null)
-				dialog.dismiss();
-			return null;
-
-		}
-
-		protected void onPreExecute() {
-			asyncTaskRunned = true;
-			cvt.start();
-		}
-
-		// This is called when doInBackground() is finished
-		@Override
-		protected void onPostExecute(Void ignore) {
-			cvt.cancel();
-			activity.updater(myView, courseId, topicId);
-			if (dialog != null)
-				dialog.dismiss();
-		}
-
-		private CountDownTimer createCountDownTimer() {
-			return new CountDownTimer(250, 10) {
-				@Override
-				public void onTick(long millisUntilFinished) {
-
-				}
-
-				@Override
-				public void onFinish() {
-					dialog = new ProgressDialog(getActivity());
-					dialog.setMessage("Loading...");
-					dialog.show();
-				}
-			};
-		}
-	}
+	// private class HeavyWork extends AsyncTask<Void, Void, Void> {
+	//
+	// private ProgressDialog dialog;
+	//
+	// final FragmentUpdater activity = (FragmentUpdater) getActivity();
+	// private CountDownTimer cvt = createCountDownTimer();
+	//
+	// // Do the long-running work in here
+	// @Override
+	// protected Void doInBackground(Void... params) {
+	// MoodleCourseContent[] courseTopics = new
+	// ManContents(getActivity().getApplicationContext()).getContent(courseId);
+	//
+	// MoodleCourseContent singleTopic = new
+	// ManContents(getActivity().getApplicationContext()).getTopic(Long.parseLong(topicId),
+	// courseTopics);
+	// // This createTopics call another methods from the fragment class to
+	// // get the data and create views
+	// myView = createTopics(singleTopic, courseName, courseId,
+	// Long.parseLong(topicId));
+	// if (dialog != null)
+	// dialog.dismiss();
+	// return null;
+	//
+	// }
+	//
+	// protected void onPreExecute() {
+	// asyncTaskRunned = true;
+	// cvt.start();
+	// }
+	//
+	// // This is called when doInBackground() is finished
+	// @Override
+	// protected void onPostExecute(Void ignore) {
+	// cvt.cancel();
+	// activity.updater(myView, courseId, topicId);
+	// if (dialog != null)
+	// dialog.dismiss();
+	// }
+	//
+	// private CountDownTimer createCountDownTimer() {
+	// return new CountDownTimer(250, 10) {
+	// @Override
+	// public void onTick(long millisUntilFinished) {
+	//
+	// }
+	//
+	// @Override
+	// public void onFinish() {
+	// dialog = new ProgressDialog(getActivity());
+	// dialog.setMessage("Loading...");
+	// dialog.show();
+	// }
+	// };
+	// }
+	// }
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

@@ -30,12 +30,12 @@ import android.os.CountDownTimer;
  * 
  */
 public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
-	Object					jObj			= null;
-	public AsyncResultInterface		asyncInterface	= null;
-	private ProgressDialog	dialog;
-	private CountDownTimer	cvt				= createCountDownTimer();
-	private Context			context;
-	private MoodleServices	webService;
+	Object						jObj			= null;
+	public AsyncResultInterface	asyncInterface	= null;
+	private ProgressDialog		dialog;
+	private CountDownTimer		cvt				= createCountDownTimer();
+	private Context				context;
+	private MoodleServices		webService;
 
 	public DataAsyncTask(Context context) {
 		this.context = context;
@@ -116,7 +116,7 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 
 	/**
 	 * <p>
-	 * Method that parses a suposed id list object
+	 * Method that parses a supposed id list object
 	 * </p>
 	 * 
 	 * @param Object

@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import managers.ManAlertDialog;
-import managers.ManContents;
 import managers.ManDataStore;
 import managers.ManFavorites;
 import managers.ManSearch;
@@ -107,6 +106,12 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 	private MoodleUser				currentUser;
 
+	private String					url;
+
+	private String					token;
+
+	private String					userId;
+
 	private static long				backPressed;
 
 	@Override
@@ -117,6 +122,11 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 		startTime = System.currentTimeMillis();
 		setContentView(R.layout.activity_main);
 		moodydrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+		session = new ManSession(getApplicationContext());
+		url = session.getValues(ModConstants.KEY_URL, null);
+		token = session.getValues(ModConstants.KEY_TOKEN, null);
+		userId = session.getValues(ModConstants.KEY_ID, null);
 		getServerData();
 
 		populateLeft();
@@ -131,11 +141,6 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	}
 
 	private void getServerData() {
-		session = new ManSession(getApplicationContext());
-		String url = session.getValues(ModConstants.KEY_URL, null);
-		String token = session.getValues(ModConstants.KEY_TOKEN, null);
-		String userId = session.getValues(ModConstants.KEY_ID, null);
-
 		new DataAsyncTask(getApplicationContext()).execute(url, token, MoodleServices.CORE_USER_GET_USERS_BY_ID, userId);
 	}
 
@@ -373,7 +378,7 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	 */
 	private void populateRight() {
 		setupSearchView();
-		populateContacts();
+//		populateContacts();
 	}
 
 	/**
@@ -571,10 +576,8 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	 * 
 	 */
 	private void populateFullName() {
-
 		TextView view = (TextView) findViewById(R.id.fullname_textview);
 		view.setText(session.getValues(ModConstants.KEY_FULL_NAME, null));
-
 	}
 
 	/**
@@ -601,44 +604,10 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	private void populateUserCourses() {
 
 		// Get all the courses from current user
-		MoodleCourse[] courses = new ManContents(getApplicationContext()).getCourses();
+		// MoodleCourse[] courses = new
+		// ManContents(getApplicationContext()).getCourses();
 
-		// Start populating the menus and views
-		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		LinearLayout inserPoint = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
-
-		if (courses == null || courses.length == 0) {
-
-			fatalError("Moody Fatal Error - Get Courses", "An Error Occurred Retrieving Data contact your Moodle Administrator");
-
-		} else {
-			for (int j = 0; j < courses.length; j++) {
-
-				LinearLayout row = new LinearLayout(this);
-				row.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-				View view = inflater.inflate(R.layout.courses_button_left_drawer, null);
-
-				Button btnTag = (Button) view.findViewById(R.id.course_id);
-				btnTag.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-
-				String name = courses[j].getFullname();
-				int id = courses[j].getId().intValue();
-				btnTag.setText(name);
-				btnTag.setId(id);
-
-				organizedCourses.put(Integer.toString(id), name);
-
-				row.addView(view);
-
-				inserPoint.addView(row, 3);
-
-			}
-
-		}
-
+		new DataAsyncTask(getApplicationContext()).execute(url, token, MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId);
 	}
 
 	public void onAddFavoritesClick(View v) {
@@ -671,9 +640,8 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 		ManAlertDialog.showMessageDialog(
 				this,
-				new ModMessage(getResources().getString(R.string.favorites_add_message),
-						String.format(getResources().getString(R.string.favorites_add_confirm_message),
-								organizedCourses.get(Integer.toString(v.getId())))), dialogClickListener, dialogClickListener, false);
+				new ModMessage(getString(R.string.favorites_add_message), String.format(getString(R.string.favorites_add_confirm_message),
+						organizedCourses.get(Integer.toString(v.getId())))), dialogClickListener, dialogClickListener, false);
 
 	}
 
@@ -972,6 +940,43 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 	@Override
 	public void coursesAsyncTaskResult(Object result) {
+		MoodleCourse[] courses = (MoodleCourse[]) result;
+
+		// Start populating the menus and views
+		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		LinearLayout inserPoint = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
+
+		if (courses == null || courses.length == 0) {
+
+			fatalError("Moody Fatal Error - Get Courses", "An Error Occurred Retrieving Data contact your Moodle Administrator");
+
+		} else {
+			for (int j = 0; j < courses.length; j++) {
+
+				LinearLayout row = new LinearLayout(this);
+				row.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+				View view = inflater.inflate(R.layout.courses_button_left_drawer, null);
+
+				Button btnTag = (Button) view.findViewById(R.id.course_id);
+				btnTag.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+
+				String name = courses[j].getFullname();
+				int id = courses[j].getId().intValue();
+				btnTag.setText(name);
+				btnTag.setId(id);
+
+				organizedCourses.put(Integer.toString(id), name);
+
+				row.addView(view);
+
+				inserPoint.addView(row, 3);
+
+			}
+
+		}
 	}
 
 	@Override
