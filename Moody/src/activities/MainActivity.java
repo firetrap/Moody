@@ -10,13 +10,15 @@ import fragments.FragUserCloud;
 import fragments.FragUserContactMessage;
 import fragments.FragUserContacts;
 import fragments.FragUserPicture;
-import interfaces.AsyncResultInterface;
+import interfaces.MainActivityAsyncInterface;
+import interfaces.UserDetailsInterface;
 import interfaces.UserPictureDialogInterface;
 import it.gmariotti.changelibs.library.view.ChangeLogListView;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import managers.ManAlertDialog;
 import managers.ManDataStore;
@@ -25,15 +27,21 @@ import managers.ManSearch;
 import managers.ManSession;
 import managers.ManUserContacts;
 import model.ModConstants;
-import model.ModDevice;
 import model.ModMessage;
 import model.ObjectSearch;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
+import restPackage.MoodleCallRestWebService;
 import restPackage.MoodleContact;
 import restPackage.MoodleCourse;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleMessage;
+import restPackage.MoodleRestCourse;
+import restPackage.MoodleRestEnrol;
+import restPackage.MoodleRestMessage;
+import restPackage.MoodleRestUser;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
 import service.ServiceBackground;
@@ -43,6 +51,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
@@ -52,7 +61,9 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.util.Log;
@@ -71,47 +82,25 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import bitmap.BitmapResizer;
-
-import com.espian.showcaseview.ShowcaseView;
-import com.espian.showcaseview.ShowcaseViews;
-import com.espian.showcaseview.ShowcaseViews.ItemViewProperties;
 import com.firetrap.moody.R;
-
-import connections.DataAsyncTask;
+import connections.DataAsyncTaskNew;
 
 /**
  * @author firetrap
- * 
+ *
  */
 
 @ReportsCrashes(formKey = "", formUri = "https://moody.iriscouch.com/acra-moody/_design/acra-storage/_update/report", reportType = org.acra.sender.HttpSender.Type.JSON, httpMethod = org.acra.sender.HttpSender.Method.PUT, formUriBasicAuthLogin = "moody", formUriBasicAuthPassword = "moody")
-public class MainActivity extends Activity implements AsyncResultInterface, OnClickListener, UserPictureDialogInterface {
-
+public class MainActivity extends Activity implements MainActivityAsyncInterface, OnClickListener, UserPictureDialogInterface {
 	private DrawerLayout			moodydrawerLayout;
-
 	private HashMap<String, String>	organizedCourses	= new HashMap<String, String>();
-
-	// ManSession Manager Class
 	ManSession						session;
-
 	private long					startTime;
 	private long					endTime;
-	private ModDevice				md;
-
-	private float					screenX;
-
-	private float					screenY;
-
-	private int						shotType			= ShowcaseView.TYPE_ONE_SHOT;
-
-	private MoodleUser				currentUser;
-
+	public MoodleUser				currentUser;
 	private String					url;
-
 	private String					token;
-
 	private String					userId;
-
 	private static long				backPressed;
 
 	@Override
@@ -127,12 +116,11 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 		url = session.getValues(ModConstants.KEY_URL, null);
 		token = session.getValues(ModConstants.KEY_TOKEN, null);
 		userId = session.getValues(ModConstants.KEY_ID, null);
-		getServerData();
+		getUserData();
 
 		populateLeft();
 		populateRight();
 		receiveNotification();
-		initDemoOverlay();
 		drawerLayoutListener();
 		warningMessage(checkConnection(), Toast.LENGTH_LONG, null, getString(R.string.no_internet));
 
@@ -140,12 +128,28 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 	}
 
-	private void getServerData() {
-		new DataAsyncTask(getApplicationContext()).execute(url, token, MoodleServices.CORE_USER_GET_USERS_BY_ID, userId);
+	private void getUserData() {
+		new MainActivityAsyncTask(this).execute(url, token, MoodleServices.CORE_USER_GET_USERS_BY_ID, userId);
 	}
 
 	/**
-	 * 
+	 * Method to initialize the leftMenu
+	 */
+	private void populateLeft() {
+		populateFullName();
+		getUserCourses();
+	}
+
+	/**
+	 * Method responsible to initialize the right menu
+	 */
+	private void populateRight() {
+		setupSearchView();
+		// populateContacts();
+	}
+
+	/**
+	 *
 	 */
 	private void warningMessage(boolean statement, int duration, String sucessMessage, String errorMessage) {
 		if (statement) {
@@ -155,32 +159,8 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 			Toast.makeText(this, errorMessage, duration).show();
 	}
 
-	/**
-	 * Method to initialize the demo overlay on first run.
-	 */
-	private void initDemoOverlay() {
-		md = new ModDevice(getApplicationContext());
-		screenX = md.getX();
-		screenY = md.getY();
-
-		ShowcaseView.ConfigOptions configOptions1 = new ShowcaseView.ConfigOptions();
-		configOptions1.shotType = shotType;
-		configOptions1.hideOnClickOutside = false;
-		configOptions1.block = true;
-		configOptions1.showcaseId = R.id.DEMO_OPEN_LEFT;
-		ShowcaseViews views1 = new ShowcaseViews(MainActivity.this, R.layout.activity_main);
-
-		views1.addView(new ItemViewProperties(R.id.main_content, R.string.demo_open_left_title, R.string.demo_open_left_message, 0f,
-				new float[] { 0, screenY / 2, screenX / 2, screenY / 2 }, configOptions1));
-
-		views1.show();
-
-	}
-
 	public void help() {
-
 		CharSequence options[] = new CharSequence[] { "Tutorial", "Moody web site" };
-
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Help");
 		builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -192,8 +172,6 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 							getFragmentManager().popBackStackImmediate();
 						} while (getFragmentManager().getBackStackEntryCount() > 1);
 					}
-					shotType = ShowcaseView.TYPE_NO_LIMIT;
-					initDemoOverlay();
 
 				} else {
 					Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -206,7 +184,6 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 			}
 		});
 		builder.show();
-
 	}
 
 	/**
@@ -243,55 +220,9 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 			public void onDrawerClosed(View arg0) {
 				switch (arg0.getId()) {
 				case R.id.left_drawer:
-					ShowcaseView.ConfigOptions configOptions7 = new ShowcaseView.ConfigOptions();
-					configOptions7.showcaseId = R.id.DEMO_OPEN_RIGHT;
-					configOptions7.shotType = shotType;
-					configOptions7.hideOnClickOutside = false;
-					configOptions7.block = true;
-					ShowcaseViews views4 = new ShowcaseViews(MainActivity.this, R.layout.activity_main);
-
-					views4.addView(new ItemViewProperties(R.id.main_content, R.string.demo_open_right_title,
-							R.string.demo_open_right_message, 0f, new float[] { screenX, screenY / 2, screenX / 2, screenY / 2 },
-							configOptions7));
-					views4.show();
 					break;
 
 				case R.id.right_drawer:
-					ShowcaseView.ConfigOptions configOptions8 = new ShowcaseView.ConfigOptions();
-					configOptions8.showcaseId = R.id.DEMO_FAVORITES;
-					configOptions8.shotType = shotType;
-					configOptions8.hideOnClickOutside = false;
-					configOptions8.block = true;
-
-					ShowcaseView.ConfigOptions configOptions9 = new ShowcaseView.ConfigOptions();
-					configOptions9.showcaseId = R.id.DEMO_END;
-					configOptions9.shotType = shotType;
-					configOptions9.hideOnClickOutside = false;
-					configOptions9.block = true;
-
-					ShowcaseViews views5 = new ShowcaseViews(MainActivity.this, R.layout.activity_main);
-
-					Entry<String, String> course = organizedCourses.entrySet().iterator().next();
-					int startUpCourseId = Integer.parseInt(course.getKey());
-
-					ImageButton fav = (ImageButton) findViewById(startUpCourseId);
-					if (fav == null) {
-						views5.addView(new ItemViewProperties(R.id.main_content, R.string.demo_add_favorite_title,
-								R.string.demo_add_favorite_message, 0f, configOptions8));
-					} else {
-						int[] locationOnScreen = new int[2];
-
-						fav.getLocationOnScreen(locationOnScreen);
-						views5.addView(new ItemViewProperties(R.id.main_content, R.string.demo_add_favorite_title,
-								R.string.demo_add_favorite_message, 0f, new float[] { screenX - (screenX / 3), screenY - (screenY / 3),
-										locationOnScreen[0], locationOnScreen[1] }, configOptions8));
-					}
-
-					views5.addView(new ItemViewProperties(R.id.main_content, R.string.demo_end_title, R.string.demo_end_message, 0f,
-							configOptions9));
-
-					views5.show();
-
 					break;
 				}
 
@@ -304,17 +235,15 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 		endTime = System.currentTimeMillis();
 		Log.d("MoodyPerformance", Long.toString(performanceMeasure(startTime, endTime)));
 		super.onResume();
-
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onNewIntent(android.content.Intent)
 	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
-
 		// Get the intent, verify the action and get the query
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			search(intent);
@@ -323,12 +252,8 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// // Inflate the menu; this adds items to the action bar if it is
-		// present.
 		getMenuInflater().inflate(R.menu.activity_main, menu);
-
 		return true;
-
 	}
 
 	/*
@@ -337,10 +262,10 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	 * implemented as planned, moodle doesn't support the users to update their
 	 * own user details this issue is described and reported here
 	 * https://tracker.moodle.org/browse/CONTRIB-4282 The next code it's ready
-	 * 
+	 *
 	 * TO DO: implement the user update details in Moody when Moodle.org decide
 	 * to add the required web service function.
-	 * 
+	 *
 	 * @see interfaces.InterDialogFrag#onFinishEditDialog(java.lang.String, int)
 	 */
 	@Override
@@ -374,16 +299,8 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	}
 
 	/**
-	 * Method responsible to initialize the right menu
-	 */
-	private void populateRight() {
-		setupSearchView();
-//		populateContacts();
-	}
-
-	/**
 	 * Initialization of searchView
-	 * 
+	 *
 	 */
 	private void setupSearchView() {
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -393,9 +310,9 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	}
 
 	/**
-	 * 
+	 *
 	 * Method to initialize the contacts
-	 * 
+	 *
 	 */
 	private void populateContacts() {
 		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -519,15 +436,6 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	}
 
 	/**
-	 * Method to initialize the leftMenu
-	 */
-	private void populateLeft() {
-		populateFullName();
-		populateUserCourses();
-		// populateUserPicture();
-	}
-
-	/**
 	 * Method responsible to differentiate what type of notification the user
 	 * has received
 	 */
@@ -547,33 +455,23 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 			fragmentTransaction.replace(R.id.mainFragment, insideTopicsFrag);
 			fragmentTransaction.commit();
 		} else {
-			// When its created it will get any course to populate the main
-			// fragment
-			// Entry<String, String> course = organizedCourses.entrySet()
-			// .iterator().next();
-			// int startUpCourseId = Integer.parseInt(course.getKey());
-			// Button btnTag = (Button) findViewById(startUpCourseId);
-			// btnTag.performClick();
-
-			Bundle bundle = new Bundle();
-			bundle.putSerializable("organizedCourses", organizedCourses);
-
-			FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-			FragCoursesList fragment = new FragCoursesList();
-
-			fragment.setArguments(bundle);
-			fragmentTransaction.addToBackStack(null);
-			fragmentTransaction.replace(R.id.mainFragment, fragment);
-			fragmentTransaction.commit();
-			moodydrawerLayout.closeDrawer(Gravity.LEFT);
-
+			// Bundle bundle = new Bundle();
+			// bundle.putSerializable("organizedCourses", organizedCourses);
+			// FragmentTransaction fragmentTransaction =
+			// getFragmentManager().beginTransaction();
+			// FragCoursesList fragment = new FragCoursesList();
+			// fragment.setArguments(bundle);
+			// fragmentTransaction.addToBackStack(null);
+			// fragmentTransaction.replace(R.id.mainFragment, fragment);
+			// fragmentTransaction.commit();
+			// moodydrawerLayout.closeDrawer(Gravity.LEFT);
 		}
 	}
 
 	/**
-	 * 
+	 *
 	 * Method to initialize the user name textview
-	 * 
+	 *
 	 */
 	private void populateFullName() {
 		TextView view = (TextView) findViewById(R.id.fullname_textview);
@@ -581,15 +479,14 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	}
 
 	/**
-	 * 
+	 *
 	 * Method to responsible to get the user picture from Moodle
-	 * 
+	 *
 	 */
-	private void populateUserPicture() {
+	void populateUserPicture() {
 		ImageButton loginButton = (ImageButton) findViewById(R.id.login_image_button);
 		if (session.getValues("PIC_PATH", null) == null) {
-			new DataAsyncTask(getApplicationContext()).execute(currentUser.getProfileImageURL(), null,
-					MoodleServices.MOODLE_USER_GET_PICTURE, null);
+			new MainActivityAsyncTask(this).execute(currentUser.getProfileImageURL(), null, MoodleServices.MOODLE_USER_GET_PICTURE, null);
 		} else {
 			loginButton.setImageBitmap(BitmapResizer.decodeSampledBitmapFromResource(session.getValues("PIC_PATH", null),
 					R.id.login_image_button, 100, 100));
@@ -597,17 +494,12 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	}
 
 	/**
-	 * 
+	 *
 	 * Method to initialize the user courses
-	 * 
+	 *
 	 */
-	private void populateUserCourses() {
-
-		// Get all the courses from current user
-		// MoodleCourse[] courses = new
-		// ManContents(getApplicationContext()).getCourses();
-
-		new DataAsyncTask(getApplicationContext()).execute(url, token, MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId);
+	private void getUserCourses() {
+		new MainActivityAsyncTask(this).execute(url, token, MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId);
 	}
 
 	public void onAddFavoritesClick(View v) {
@@ -654,13 +546,12 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 		switch (v.getId()) {
 		case R.id.login_image_button:
-
 			fm = getFragmentManager();
 			FragUserPicture userDetailsDialog = new FragUserPicture();
 			userDetailsDialog.setRetainInstance(true);
 			userDetailsDialog.show(fm, "fragment_name");
-
 			break;
+
 		case R.id.logout_image_button:
 			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 				@Override
@@ -686,33 +577,26 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 					}
 				}
 			};
-
 			ManAlertDialog.showMessageDialog(this, new ModMessage("Logout", "Are you sure?"), dialogClickListener, dialogClickListener,
 					false);
-
 			break;
 
 		case R.id.fullname_textview:
 			intent = new Intent(getApplicationContext(), UserDetailsActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
 			startActivity(intent);
-
 			moodydrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
 
 		case R.id.latest_button:
-
 			FragLatest fragmentLatest = new FragLatest();
 			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.replace(R.id.mainFragment, fragmentLatest);
 			fragmentTransaction.commit();
-
 			moodydrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
 
 		case R.id.favorites_button:
-
 			FragFavoritesPreview fragmentFavorites = new FragFavoritesPreview();
 			clearBackStack();
 			fragmentTransaction.replace(R.id.mainFragment, fragmentFavorites);
@@ -721,12 +605,10 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 			break;
 
 		case R.id.cloud_button:
-
 			fm = getFragmentManager();
 			FragUserCloud userCloudDialog = new FragUserCloud();
 			userCloudDialog.setRetainInstance(true);
 			userCloudDialog.show(fm, "fragment_name");
-
 			break;
 
 		case R.id.wiki_button:
@@ -739,42 +621,36 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	}
 
 	/**
-	 * 
+	 *
 	 * Method responsible to clear fragments backstack
-	 * 
+	 *
 	 */
 	private void clearBackStack() {
 		FragmentManager fm = this.getFragmentManager();
-
 		for (int i = 0; i < fm.getBackStackEntryCount(); i++) {
 			fm.popBackStack();
 		}
 	}
 
 	/**
-	 * 
+	 *
 	 * The view id is the same id of the courses
-	 * 
+	 *
 	 * @param v
 	 */
 	public void onCoursesClick(View v) {
 		String courseName = organizedCourses.get(Integer.toString(v.getId()));
 		String courseId = Integer.toString(v.getId());
-
 		Bundle bundle = new Bundle();
 		bundle.putString("courseName", courseName);
 		bundle.putString("courseId", courseId);
-
 		FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 		FragTopicsPreview fragment = new FragTopicsPreview();
-
 		fragment.setArguments(bundle);
-		// fragmentTransaction.add(fragment, "courses");
 		fragmentTransaction.addToBackStack(null);
 		fragmentTransaction.replace(R.id.mainFragment, fragment);
 		fragmentTransaction.commit();
 		moodydrawerLayout.closeDrawer(Gravity.LEFT);
-
 	}
 
 	@Override
@@ -782,16 +658,12 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
-
 			startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-
 			moodydrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
 
 		case R.id.action_refresh:
-
 			startService(new Intent(this, ServiceBackground.class));
-
 			startActivity(new Intent(this, MainActivity.class));
 			break;
 
@@ -800,20 +672,17 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 			FragmentManager fm = getFragmentManager();
 			FragmentTransaction ft = fm.beginTransaction();
 			Fragment prev = fm.findFragmentByTag("changelogdemo_dialog");
-			if (prev != null) {
+
+			if (prev != null)
 				ft.remove(prev);
-			}
-			// ft.addToBackStack(null);
 
 			dialogStandardFragment.show(ft, "changelogdemo_dialog");
-
 			moodydrawerLayout.closeDrawer(Gravity.LEFT);
 			break;
 
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-
 		return true;
 	}
 
@@ -854,7 +723,6 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 					searchResults.addView(ll);
 				}
-
 			}
 			searchResults.addView(new CardTextView(this, R.id.MOODY_SEARCH_WEB_SEARCH_ACTION_MODULE, null, null, query));
 			searchResults.invalidate();
@@ -863,10 +731,10 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	}
 
 	/**
-	 * 
+	 *
 	 * * Moody Fatal Error Method it will display an alert dialog with the
 	 * message and it will clear app data and kill the app
-	 * 
+	 *
 	 * @param title
 	 * @param msg
 	 */
@@ -886,9 +754,9 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	}
 
 	/**
-	 * 
+	 *
 	 * Private method for tests proposes only
-	 * 
+	 *
 	 * @param startTime
 	 * @param endTime
 	 * @return
@@ -900,39 +768,17 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 
 	/**
 	 * Check if the has Internet connection
-	 * 
+	 *
 	 * @return true or false
 	 */
 	public boolean checkConnection() {
 		ConnectivityManager connec = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 		android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-		// Here if condition check for wifi and mobile network is available or
-		// not.
-		// If anyone of them is available or connected then it will return true,
-		// otherwise false;
-
-		if (wifi.isConnected() || mobile.isConnected()) {
+		if (wifi.isConnected() || mobile.isConnected())
 			return true;
-		}
 		return false;
 	}
-
-	// @Override
-	// public void updater(View param, String courseId, String topicId) {
-	// FragTopics currentFrag = (FragTopics)
-	// getFragmentManager().findFragmentByTag(courseId + topicId);
-	// if (currentFrag != null) {
-	// FragmentTransaction fragmentTransaction =
-	// getFragmentManager().beginTransaction();
-	// fragmentTransaction.remove(currentFrag);
-	// fragmentTransaction.replace(R.id.mainFragment, currentFrag, courseId +
-	// topicId);
-	// fragmentTransaction.commit();
-	// getFragmentManager().executePendingTransactions();
-	// }
-	// }
 
 	/**
 	 * The interface with all implemented methods with asyncTask response
@@ -941,42 +787,43 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 	@Override
 	public void coursesAsyncTaskResult(Object result) {
 		MoodleCourse[] courses = (MoodleCourse[]) result;
-
 		// Start populating the menus and views
 		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
 		LinearLayout inserPoint = (LinearLayout) findViewById(R.id.linear_layout_inside_left);
 
-		if (courses == null || courses.length == 0) {
-
+		if (courses == null || courses.length == 0)
 			fatalError("Moody Fatal Error - Get Courses", "An Error Occurred Retrieving Data contact your Moodle Administrator");
-
-		} else {
+		else
 			for (int j = 0; j < courses.length; j++) {
-
 				LinearLayout row = new LinearLayout(this);
 				row.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 				View view = inflater.inflate(R.layout.courses_button_left_drawer, null);
-
 				Button btnTag = (Button) view.findViewById(R.id.course_id);
 				btnTag.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 						android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-
 				String name = courses[j].getFullname();
 				int id = courses[j].getId().intValue();
 				btnTag.setText(name);
 				btnTag.setId(id);
-
 				organizedCourses.put(Integer.toString(id), name);
-
 				row.addView(view);
-
 				inserPoint.addView(row, 3);
 
+				initCoursesPreview();
 			}
+	}
 
-		}
+	private void initCoursesPreview() {
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("organizedCourses", organizedCourses);
+		FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+		FragCoursesList fragment = new FragCoursesList();
+		fragment.setArguments(bundle);
+		fragmentTransaction.addToBackStack(null);
+		fragmentTransaction.replace(R.id.mainFragment, fragment);
+		fragmentTransaction.commit();
+		moodydrawerLayout.closeDrawer(Gravity.LEFT);
 	}
 
 	@Override
@@ -1021,4 +868,173 @@ public class MainActivity extends Activity implements AsyncResultInterface, OnCl
 		loginButton.setBackgroundResource(R.drawable.bkgd_imagebutton);
 		loginButton.setImageDrawable((Drawable) result);
 	}
+}
+
+class MainActivityAsyncTask extends AsyncTask<Object, Void, Object> {
+	Object					jObj	= null;
+	private ProgressDialog	dialog;
+	private CountDownTimer	cvt		= createCountDownTimer();
+	private Context			context;
+	private MoodleServices	webService;
+
+	public MainActivityAsyncTask(Context context) {
+		this.context = context;
+	}
+
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+		cvt.start();
+	}
+
+	@Override
+	protected Object doInBackground(Object... params) {
+		String urlString = (String) params[0];
+		String token = (String) params[1];
+		webService = (MoodleServices) params[2];
+		Object webServiceParams = params[3];
+
+		MoodleCallRestWebService.init(urlString + "/webservice/rest/server.php", token);
+
+		long userId;
+		long courseId;
+		try {
+			switch (webService) {
+			case CORE_ENROL_GET_USERS_COURSES:
+				userId = Long.parseLong((String) webServiceParams);
+				MoodleCourse[] courses = MoodleRestEnrol.getUsersCourses(userId);
+				return courses;
+
+			case CORE_USER_GET_USERS_BY_ID:
+				userId = Long.parseLong((String) webServiceParams);
+				MoodleUser user = MoodleRestUser.getUserById(userId);
+				return user;
+
+			case CORE_COURSE_GET_CONTENTS:
+				courseId = Long.parseLong((String) webServiceParams);
+				MoodleCourseContent[] courseContent = MoodleRestCourse.getCourseContent(courseId, null);
+				return courseContent;
+			case CORE_MESSAGE_CREATE_CONTACTS:
+				MoodleRestMessage.createContacts(parseIds(webServiceParams));
+				return true;
+
+			case CORE_MESSAGE_DELETE_CONTACTS:
+				MoodleRestMessage.deleteContacts(parseIds(webServiceParams));
+				return true;
+
+			case CORE_MESSAGE_BLOCK_CONTACTS:
+				MoodleRestMessage.blockContacts(parseIds(webServiceParams));
+				return true;
+
+			case CORE_MESSAGE_UNBLOCK_CONTACTS:
+				MoodleRestMessage.unblockContacts(parseIds(webServiceParams));
+				return true;
+
+			case CORE_MESSAGE_GET_CONTACTS:
+				return MoodleRestMessage.getContacts();
+
+			case CORE_MESSAGE_SEND_INSTANT_MESSAGES:
+				return MoodleRestMessage.sendInstantMessage((MoodleMessage) webServiceParams);
+
+			case MOODLE_USER_GET_PICTURE:
+				InputStream inputStream = new URL(urlString).openStream();
+				Drawable drawable = Drawable.createFromStream(inputStream, null);
+				inputStream.close();
+				return drawable;
+
+			default:
+				return null;
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * <p>
+	 * Method that parses a supposed id list object
+	 * </p>
+	 *
+	 * @param Object
+	 *            ids - The object to be parsed to Long[].
+	 * @return resultList - The ids List
+	 */
+	private Long[] parseIds(Object ids) {
+		Long[] resultList = null;
+		try {
+			resultList = (Long[]) ids;
+		} catch (Exception e) {
+			resultList = new Long[1];
+			resultList[0] = (Long) ids;
+		}
+		return resultList;
+	}
+
+	@Override
+	protected void onPostExecute(Object obj) {
+		cvt.cancel();
+
+		if (dialog != null && dialog.isShowing())
+			dialog.dismiss();
+
+		switch (webService) {
+		case CORE_ENROL_GET_USERS_COURSES:
+			break;
+
+		case CORE_USER_GET_USERS_BY_ID:
+			if (obj != null) {
+				currentUser = (MoodleUser) obj;
+				populateUserPicture();
+			}
+			break;
+
+		case CORE_COURSE_GET_CONTENTS:
+			break;
+
+		case CORE_MESSAGE_CREATE_CONTACTS:
+			break;
+
+		case CORE_MESSAGE_DELETE_CONTACTS:
+			break;
+
+		case CORE_MESSAGE_BLOCK_CONTACTS:
+			break;
+
+		case CORE_MESSAGE_UNBLOCK_CONTACTS:
+			break;
+
+		case CORE_MESSAGE_GET_CONTACTS:
+			break;
+
+		case CORE_MESSAGE_SEND_INSTANT_MESSAGES:
+			break;
+
+		case MOODLE_USER_GET_PICTURE:
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	private CountDownTimer createCountDownTimer() {
+		return new CountDownTimer(250, 10) {
+			@Override
+			public void onTick(long millisUntilFinished) {
+
+			}
+
+			@Override
+			public void onFinish() {
+				dialog = new ProgressDialog(context);
+				dialog.setMessage("Loading...");
+				dialog.setCancelable(false);
+				dialog.setCanceledOnTouchOutside(false);
+				dialog.show();
+			}
+		};
+	}
+
 }

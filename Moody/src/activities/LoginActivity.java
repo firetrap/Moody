@@ -47,47 +47,47 @@ import android.widget.TextView;
 import com.firetrap.moody.R;
 
 /**
- * 
+ *
  * Activity which displays a login screen to the user, offering registration as
  * well.
- * 
+ *
  * @author firetrap
- * 
+ *
  */
 public class LoginActivity extends Activity {
 
 	/**
 	 * The default email to populate the email field with.
 	 */
-	public static String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+	public static String	EXTRA_EMAIL	= "com.example.android.authenticatordemo.extra.EMAIL";
 
-	private String finalToken = "";
+	private String			finalToken	= "";
 
 	/**
 	 * Keep track of the login initActivity to ensure we can cancel it if
 	 * requested.
 	 */
-	private UserLoginTask mAuthTask = null;
+	private UserLoginTask	mAuthTask	= null;
 
-	private View mLoginFormView;
-	private TextView mLoginStatusMessageView;
-	private View mLoginStatusView;
-	private String mPassword;
+	private View			mLoginFormView;
+	private TextView		mLoginStatusMessageView;
+	private View			mLoginStatusView;
+	private String			mPassword;
 
 	// Values for user name and password at the time of the login attempt.
-	private String mUrl;
+	private String			mUrl;
 	// UI references.
-	private EditText mUrlView;
-	private EditText mPasswordView;
-	private EditText mUserView;
-	private String mUser;
+	private EditText		mUrlView;
+	private EditText		mPasswordView;
+	private EditText		mUserView;
+	private String			mUser;
 
 	// License and trademark
-	private TextView trademark;
-	private TextView licence;
+	private TextView		trademark;
+	private TextView		licence;
 
 	// ManSession Manager Class
-	ManSession session;
+	ManSession				session;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +95,7 @@ public class LoginActivity extends Activity {
 		session = new ManSession(getApplicationContext());
 
 		if (session.isLoggedIn()) {
-			final Intent intent = new Intent(getApplicationContext(),
-					MainActivity.class);
+			final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 			startActivity(intent);
 			finish();
 
@@ -117,32 +116,29 @@ public class LoginActivity extends Activity {
 			mUserView.setText(mUser);
 
 			mPasswordView = (EditText) findViewById(R.id.password);
-			mPasswordView
-					.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-						@Override
-						public boolean onEditorAction(TextView textView,
-								int id, KeyEvent keyEvent) {
-							if (id == R.id.login || id == EditorInfo.IME_NULL) {
-								attemptLogin();
-								return true;
-							}
-							return false;
-						}
-					});
+			mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+				@Override
+				public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+					if (id == R.id.login || id == EditorInfo.IME_NULL) {
+						attemptLogin();
+						return true;
+					}
+					return false;
+				}
+			});
 
 			mLoginFormView = findViewById(R.id.login_form);
 			mLoginStatusView = findViewById(R.id.login_status);
 			mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-			findViewById(R.id.sign_in_button).setOnClickListener(
-					new View.OnClickListener() {
-						@Override
-						public void onClick(View view) {
-							attemptLogin();
-						}
-					});
+			findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					attemptLogin();
+				}
+			});
 
-//			onSoftKeyboardState();
+			// onSoftKeyboardState();
 		}
 	}
 
@@ -184,7 +180,7 @@ public class LoginActivity extends Activity {
 			cancel = true;
 			error += "URL\n";
 
-		} 
+		}
 		// else if (mUrl.length() < 20) {
 		// mUrlView.setError(getString(R.string.error_invalid_url));
 		// focusView = mUrlView;
@@ -206,7 +202,7 @@ public class LoginActivity extends Activity {
 			cancel = true;
 			error += "Password\n";
 
-		} 
+		}
 		// else if (mPassword.length() <= 4) {
 		// mPasswordView.setError(getString(R.string.error_invalid_password));
 		// focusView = mPasswordView;
@@ -227,16 +223,14 @@ public class LoginActivity extends Activity {
 			// form field with an error.
 
 			focusView.requestFocus();
-			ManAlertDialog.showMessageDialog(this, new ModMessage(
-					getResources().getString(R.string.login_error), error),
-					false);
+			ManAlertDialog.showMessageDialog(this, new ModMessage(getResources().getString(R.string.login_error), error), false);
 
 		} else {
 			// Show a progress spinner, and kick off a background initActivity
 			// to
 			// perform the user login attempt.
-			hideKeyboard(); 
-			
+			hideKeyboard();
+
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
@@ -248,7 +242,7 @@ public class LoginActivity extends Activity {
 
 	/**
 	 * Esconde o teclado
-	 * 
+	 *
 	 * @author hsousa
 	 */
 	private void hideKeyboard() {
@@ -262,28 +256,25 @@ public class LoginActivity extends Activity {
 	 */
 	private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-		JSONObject jObj = null;
+		JSONObject			jObj		= null;
 
-		private String error = getResources().getString(R.string.errors_found)
-				+ "\n\n";
-		private EditText focusView = new EditText(getApplicationContext());
+		private String		error		= getResources().getString(R.string.errors_found) + "\n\n";
+		private EditText	focusView	= new EditText(getApplicationContext());
 
-		private String userId = "";
-		private String fullName = "";
+		private String		userId		= "";
+		private String		fullName	= "";
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
 
-			String url = mUrl + "/login/token.php?username=" + mUser
-					+ "&password=" + mPassword + "&service="
+			String url = mUrl + "/login/token.php?username=" + mUser + "&password=" + mPassword + "&service="
 					+ getResources().getString(R.string.moodle_service_name);
 
 			try {
 				return loadFromNetwork(url);
 			} catch (IOException e) {
 
-				error += getResources().getString(R.string.error_internet_url)
-						+ "\n";
+				error += getResources().getString(R.string.error_internet_url) + "\n";
 				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			}
@@ -297,8 +288,7 @@ public class LoginActivity extends Activity {
 
 			try {
 				inputStream = downloadUrl(urlString);
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(inputStream, "UTF-8"), 8);
+				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
 				StringBuilder sb = new StringBuilder();
 				String line = null;
 				while ((line = reader.readLine()) != null) {
@@ -309,50 +299,41 @@ public class LoginActivity extends Activity {
 				jObj = new JSONObject(json);
 
 				if (jObj == null) {
-					error += getResources().getString(
-							R.string.error_internet_url)
-							+ "\n";
+					error += getResources().getString(R.string.error_internet_url) + "\n";
 					focusView.setError(getString(R.string.error_invalid_url));
 					return false;
 
 				} else {
 					if (jObj.has("error")) {
-						error += getResources().getString(
-								R.string.error_authentication_service)
-								+ " - " + (String) jObj.get("error") + "\n";
+						error += getResources().getString(R.string.error_authentication_service) + " - " + (String) jObj.get("error")
+								+ "\n";
 
-						focusView
-								.setError(getString(R.string.error_incorrect_password_username));
+						focusView.setError(getString(R.string.error_incorrect_password_username));
 
 						return false;
 					}
 					// On getToken success it will get the user id
 					if (jObj.has("token")) {
 						finalToken = (String) jObj.get("token");
-						MoodleCallRestWebService.init(mUrl
-								+ "/webservice/rest/server.php", finalToken);
-						MoodleWebService getSiteInfo = MoodleRestWebService
-								.getSiteInfo();
+						MoodleCallRestWebService.init(mUrl + "/webservice/rest/server.php", finalToken);
+						MoodleWebService getSiteInfo = MoodleRestWebService.getSiteInfo();
 						userId = Long.toString(getSiteInfo.getUserId());
 						fullName = getSiteInfo.getFullName();
 					}
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
-				error += getResources().getString(R.string.error_internet_url)
-						+ "\n";
+				error += getResources().getString(R.string.error_internet_url) + "\n";
 				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			} catch (MoodleRestWebServiceException e) {
 				e.printStackTrace();
-				error += getResources().getString(R.string.error_get_user_info)
-						+ "\n";
+				error += getResources().getString(R.string.error_get_user_info) + "\n";
 				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			} catch (MoodleRestException e) {
 				e.printStackTrace();
-				error += getResources().getString(R.string.error_get_user_info)
-						+ "\n";
+				error += getResources().getString(R.string.error_get_user_info) + "\n";
 				focusView.setError(getString(R.string.error_invalid_url));
 				return false;
 			}
@@ -398,34 +379,26 @@ public class LoginActivity extends Activity {
 				// Send to shared preferences:
 				// user-name, user-token, user-id, full name
 				session = new ManSession(getApplicationContext());
-				session.createLoginSession(mUser, fullName, finalToken, userId,
-						mUrl);
+				session.createLoginSession(mUser, fullName, finalToken, userId, mUrl);
 
 				showProgress(true);
-				getApplicationContext().startService(
-						new Intent(getApplicationContext(),
-								ServiceBackground.class));
+				getApplicationContext().startService(new Intent(getApplicationContext(), ServiceBackground.class));
 				Handler handler = new Handler();
 				handler.postDelayed(initActivity, 5000);
 
 			} else {
-				if (focusView.getError().equals(
-						getString(R.string.error_invalid_url))) {
+				if (focusView.getError().equals(getString(R.string.error_invalid_url))) {
 					mUrlView.setError(getString(R.string.error_invalid_url));
 					mUrlView.requestFocus();
 				}
-				if (focusView.getError().equals(
-						getString(R.string.error_incorrect_password_username))) {
-					mPasswordView
-							.setError(getString(R.string.error_incorrect_password_username));
+				if (focusView.getError().equals(getString(R.string.error_incorrect_password_username))) {
+					mPasswordView.setError(getString(R.string.error_incorrect_password_username));
 					mPasswordView.requestFocus();
-					mUserView
-							.setError(getString(R.string.error_incorrect_password_username));
+					mUserView.setError(getString(R.string.error_incorrect_password_username));
 					mUserView.requestFocus();
 				}
 
-				ManAlertDialog.showMessageDialog(LoginActivity.this,
-						new ModMessage("Login Error", error), false);
+				ManAlertDialog.showMessageDialog(LoginActivity.this, new ModMessage("Login Error", error), false);
 			}
 		}
 	}
@@ -439,30 +412,23 @@ public class LoginActivity extends Activity {
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			int shortAnimTime = getResources().getInteger(
-					android.R.integer.config_shortAnimTime);
+			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
 			mLoginStatusView.setVisibility(View.VISIBLE);
-			mLoginStatusView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 1 : 0)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLoginStatusView.setVisibility(show ? View.VISIBLE
-									: View.GONE);
-						}
-					});
+			mLoginStatusView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+				}
+			});
 
 			mLoginFormView.setVisibility(View.VISIBLE);
-			mLoginFormView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 0 : 1)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLoginFormView.setVisibility(show ? View.GONE
-									: View.VISIBLE);
-						}
-					});
+			mLoginFormView.animate().setDuration(shortAnimTime).alpha(show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+				}
+			});
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.
@@ -477,67 +443,55 @@ public class LoginActivity extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * This will wait until the main activity is loaded to start the intent
-	 * 
+	 *
 	 */
-	private Runnable initActivity = new Runnable() {
-		public void run() {
+	private Runnable	initActivity	= new Runnable() {
+											public void run() {
 
-			Intent intent = new Intent(getApplicationContext(),
-					MainActivity.class);
-			// intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			startActivity(intent);
-			finish();
-		}
-	};
+												Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+												// intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+												startActivity(intent);
+												finish();
+											}
+										};
 
 	/**
-	 * 
+	 *
 	 * Android OS doesn't support hiding view's on SoftKeyboard call, so we have
 	 * to implement our own method
-	 * 
+	 *
 	 */
 	@SuppressWarnings("unused")
 	private void onSoftKeyboardState() {
 		final View activityRootView = findViewById(R.id.login_form);
-		activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(
-				new OnGlobalLayoutListener() {
-					@Override
-					public void onGlobalLayout() {
-						Rect r = new Rect();
-						// r will be populated with the coordinates of your
-						// view that area still visible.
-						activityRootView.getWindowVisibleDisplayFrame(r);
+		activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				Rect r = new Rect();
+				// r will be populated with the coordinates of your
+				// view that area still visible.
+				activityRootView.getWindowVisibleDisplayFrame(r);
 
-						int heightDiff = activityRootView.getRootView()
-								.getHeight() - (r.bottom - r.top);
-						if (heightDiff > 100) {
-							// if more than 100 pixels,its probably a
-							// keyboard
+				int heightDiff = activityRootView.getRootView().getHeight() - (r.bottom - r.top);
+				if (heightDiff > 100) {
+					// if more than 100 pixels,its probably a
+					// keyboard
 
-							findViewById(R.id.login_logo).setVisibility(
-									View.GONE);
-							findViewById(R.id.LoginFormContainer)
-									.setLayoutParams(
-											new LinearLayout.LayoutParams(
-													LayoutParams.MATCH_PARENT,
-													LayoutParams.WRAP_CONTENT));
-							activityRootView.invalidate();
+					findViewById(R.id.login_logo).setVisibility(View.GONE);
+					findViewById(R.id.LoginFormContainer).setLayoutParams(
+							new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+					activityRootView.invalidate();
 
-						} else {
-							findViewById(R.id.login_logo).setVisibility(
-									View.VISIBLE);
-							findViewById(R.id.LoginFormContainer)
-									.setLayoutParams(
-											new LinearLayout.LayoutParams(
-													LayoutParams.MATCH_PARENT,
-													0, 2f));
-							activityRootView.invalidate();
+				} else {
+					findViewById(R.id.login_logo).setVisibility(View.VISIBLE);
+					findViewById(R.id.LoginFormContainer).setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0, 2f));
+					activityRootView.invalidate();
 
-						}
-					}
-				});
+				}
+			}
+		});
 	}
 
 }

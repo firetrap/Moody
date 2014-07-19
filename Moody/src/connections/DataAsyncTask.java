@@ -1,6 +1,9 @@
 package connections;
 
-import interfaces.AsyncResultInterface;
+import fragments.FragTopics;
+import fragments.FragTopicsPreview;
+import interfaces.MainActivityAsyncInterface;
+import interfaces.UserDetailsInterface;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -15,6 +18,8 @@ import restPackage.MoodleRestMessage;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
+import activities.MainActivity;
+import activities.UserDetailsActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -22,20 +27,23 @@ import android.os.AsyncTask;
 import android.os.CountDownTimer;
 
 /**
- * 
+ *
  * This class is responsible to get date from Server and return the required
  * object, it runs in a new thread
- * 
+ *
  * @author firetrap
- * 
+ *
  */
 public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
-	Object						jObj			= null;
-	public AsyncResultInterface	asyncInterface	= null;
-	private ProgressDialog		dialog;
-	private CountDownTimer		cvt				= createCountDownTimer();
-	private Context				context;
-	private MoodleServices		webService;
+	Object								jObj	= null;
+	private MainActivityAsyncInterface	mainActivityInterface;
+	private UserDetailsInterface		userDetailsInterface;
+	private ProgressDialog				dialog;
+	private CountDownTimer				cvt		= createCountDownTimer();
+	private Context						context;
+	private MoodleServices				webService;
+	private String						parentActivity;
+	private String						fillTheSpace;
 
 	public DataAsyncTask(Context context) {
 		this.context = context;
@@ -54,6 +62,7 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 		String token = (String) params[1];
 		webService = (MoodleServices) params[2];
 		Object webServiceParams = params[3];
+		parentActivity = (String) params[4];
 
 		MoodleCallRestWebService.init(urlString + "/webservice/rest/server.php", token);
 
@@ -118,7 +127,7 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 	 * <p>
 	 * Method that parses a supposed id list object
 	 * </p>
-	 * 
+	 *
 	 * @param Object
 	 *            ids - The object to be parsed to Long[].
 	 * @return resultList - The ids List
@@ -147,43 +156,144 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 
 		switch (webService) {
 		case CORE_ENROL_GET_USERS_COURSES:
-			asyncInterface.coursesAsyncTaskResult(obj);
+			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
+				mainActivityInterface.userAsyncTaskResult(obj);
+
+			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
 			break;
 
 		case CORE_USER_GET_USERS_BY_ID:
-			asyncInterface.userAsyncTaskResult(obj);
+			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
+				mainActivityInterface.userAsyncTaskResult(obj);
+
+			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
 			break;
 
 		case CORE_COURSE_GET_CONTENTS:
-			asyncInterface.courseContentsAsyncTaskResult(obj);
+			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
+				mainActivityInterface.userAsyncTaskResult(obj);
+
+			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
 			break;
 
 		case CORE_MESSAGE_CREATE_CONTACTS:
-			asyncInterface.createContactsAsyncTaskResult(obj);
+			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
+				mainActivityInterface.userAsyncTaskResult(obj);
+
+			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
 			break;
 
 		case CORE_MESSAGE_DELETE_CONTACTS:
-			asyncInterface.deleteContactsAsyncTaskResult(obj);
+			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
+				mainActivityInterface.userAsyncTaskResult(obj);
+
+			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
 			break;
 
 		case CORE_MESSAGE_BLOCK_CONTACTS:
-			asyncInterface.blockContactsAsyncTaskResult(obj);
+			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
+				mainActivityInterface.userAsyncTaskResult(obj);
+
+			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
 			break;
 
 		case CORE_MESSAGE_UNBLOCK_CONTACTS:
-			asyncInterface.unblockContactsAsyncTaskResult(obj);
+			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
+				mainActivityInterface.userAsyncTaskResult(obj);
+
+			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
 			break;
 
 		case CORE_MESSAGE_GET_CONTACTS:
-			asyncInterface.getContactsAsyncTaskResult(obj);
+			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
+				mainActivityInterface.userAsyncTaskResult(obj);
+
+			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
 			break;
 
 		case CORE_MESSAGE_SEND_INSTANT_MESSAGES:
-			asyncInterface.sendInstanteMessageAsyncTaskResult(obj);
+			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
+				mainActivityInterface.userAsyncTaskResult(obj);
+
+			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
 			break;
 
 		case MOODLE_USER_GET_PICTURE:
-			asyncInterface.pictureAsyncTaskResult(obj);
+			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
+				mainActivityInterface.userAsyncTaskResult(obj);
+
+			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+
+			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
+				fillTheSpace = "TODO - Interface for each parent class";
+			mainActivityInterface.pictureAsyncTaskResult(obj);
 			break;
 
 		default:

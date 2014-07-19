@@ -30,11 +30,11 @@ import connections.DataAsyncTask;
 
 /**
  * @author firetrap
- * 
+ *
  *         This class return the requested data, the procedure is always tries
  *         to get data from cache if it doesn't exist it will download from
  *         server and store in cache
- * 
+ *
  */
 public class ManContents {
 	// ManSession Manager Class
@@ -172,7 +172,7 @@ public class ManContents {
 	/**
 	 * @param topicId
 	 * @param courseContent
-	 * 
+	 *
 	 * @return MoodleCourseContent
 	 */
 	public MoodleCourseContent getTopic(Long topicId, MoodleCourseContent[] courseContent) {
@@ -190,7 +190,7 @@ public class ManContents {
 	 * @param fileUrl
 	 * @param fileName
 	 * @return String
-	 * 
+	 *
 	 *         Because of moodle specific index.html get content
 	 */
 	public String parseFile(String fileUrl, String fileName) {
@@ -285,7 +285,7 @@ public class ManContents {
 	 * <p/>
 	 * Note that this is a fairly simplistic formatter -- for real world use
 	 * you'll want to embrace and extend.
-	 * 
+	 *
 	 * @author Jonathan Hedley
 	 * @author firetrap - re-build,corrected and extended to work with android
 	 */
@@ -293,7 +293,7 @@ public class ManContents {
 
 		/**
 		 * Format an Element to plain-text
-		 * 
+		 *
 		 * @param element
 		 *            the root element to format
 		 * @return formatted text

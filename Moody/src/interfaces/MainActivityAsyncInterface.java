@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface AsyncResultInterface {
+public interface MainActivityAsyncInterface {
 
 	void coursesAsyncTaskResult(Object result);
 
