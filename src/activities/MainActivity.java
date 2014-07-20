@@ -985,8 +985,8 @@ class MainActivityAsyncTask extends AsyncTask<Object, Void, Object> {
 
 		case CORE_USER_GET_USERS_BY_ID:
 			if (obj != null) {
-				currentUser = (MoodleUser) obj;
-				populateUserPicture();
+//				currentUser = (MoodleUser) obj;
+//		        populateUserPicture();
 			}
 			break;
 

@@ -1,9 +1,15 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.8.+'
+    }
+}
 apply plugin: 'android'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(':Documents:GitHub:MoodyRest:moodyRest')
-    compile project(':Documents:GitHub:changeLogLib:changeLogLib')
 }
 
 android {
