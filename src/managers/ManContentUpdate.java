@@ -1,5 +1,9 @@
 package managers;
 
+import android.content.Context;
+
+import com.firetrap.moody.R;
+
 import java.util.LinkedList;
 
 import model.ObjectLatest;
@@ -7,9 +11,6 @@ import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
 import restPackage.MoodleModuleContent;
 import service.ServiceNotifications;
-import android.content.Context;
-
-import com.firetrap.moody.R;
 
 /**
  * @author firetrap

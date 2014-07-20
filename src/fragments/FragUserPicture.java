@@ -1,14 +1,5 @@
 package fragments;
 
-import interfaces.UserPictureDialogInterface;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
-import managers.ManAlertDialog;
-import model.ModConstants;
-import model.ModMessage;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -26,6 +17,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.firetrap.moody.R;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import interfaces.UserPictureDialogInterface;
+import managers.ManAlertDialog;
+import model.ModConstants;
+import model.ModMessage;
 
 /**
  * @author firetrap

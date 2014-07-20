@@ -1,13 +1,14 @@
 package managers;
 
-import java.util.HashMap;
-
-import model.ModConstants;
-import activities.LoginActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+
+import java.util.HashMap;
+
+import activities.LoginActivity;
+import model.ModConstants;
 
 /**
  * @author firetrap

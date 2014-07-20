@@ -1,10 +1,5 @@
 package fragments;
 
-import managers.ManAlertDialog;
-import managers.ManUserContacts;
-import model.ModMessage;
-import restPackage.MoodleContact;
-import restPackage.MoodleContactAction;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -16,8 +11,14 @@ import android.widget.Button;
 
 import com.firetrap.moody.R;
 
+import managers.ManAlertDialog;
+import managers.ManUserContacts;
+import model.ModMessage;
+import restPackage.MoodleContact;
+import restPackage.MoodleContactAction;
+
 /**
- * @author SérgioFilipe
+ * @author Sï¿½rgioFilipe
  * 
  */
 public class FragUserContacts extends DialogFragment {

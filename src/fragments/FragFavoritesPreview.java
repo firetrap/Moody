@@ -3,16 +3,6 @@
  */
 package fragments;
 
-import java.util.ArrayList;
-
-import managers.ManContents;
-import managers.ManFavorites;
-import managers.ManSession;
-import model.ModConstants;
-import restPackage.MoodleCourse;
-import restPackage.MoodleCourseContent;
-import restPackage.MoodleModule;
-import ui.CheckableLinearLayout;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -34,8 +24,19 @@ import android.widget.TextView;
 
 import com.firetrap.moody.R;
 
+import java.util.ArrayList;
+
+import managers.ManContents;
+import managers.ManFavorites;
+import managers.ManSession;
+import model.ModConstants;
+import restPackage.MoodleCourse;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleModule;
+import ui.CheckableLinearLayout;
+
 /**
- * @author SérgioFilipe
+ * @author Sï¿½rgioFilipe
  * 
  */
 public class FragFavoritesPreview extends Fragment {

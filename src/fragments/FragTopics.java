@@ -1,17 +1,5 @@
 package fragments;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-
-import managers.ManContents;
-import managers.ManSession;
-import model.ModConstants;
-import restPackage.MoodleCourseContent;
-import restPackage.MoodleModule;
-import restPackage.MoodleModuleContent;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -31,6 +19,19 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.firetrap.moody.R;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
+import managers.ManContents;
+import managers.ManSession;
+import model.ModConstants;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleModule;
+import restPackage.MoodleModuleContent;
 
 /**
  * @author firetrap

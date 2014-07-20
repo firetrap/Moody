@@ -1,10 +1,5 @@
 package fragments;
 
-import managers.ManContents;
-import managers.ManFavorites;
-import managers.ManSession;
-import restPackage.MoodleCourseContent;
-import restPackage.MoodleModule;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -21,6 +16,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.firetrap.moody.R;
+
+import managers.ManContents;
+import managers.ManFavorites;
+import managers.ManSession;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleModule;
 
 /**
  * @author firetrap

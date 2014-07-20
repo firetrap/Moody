@@ -1,14 +1,15 @@
 package managers;
 
-import java.util.ArrayList;
-
-import model.ModConstants;
 import android.content.Context;
 
 import com.firetrap.moody.R;
 
+import java.util.ArrayList;
+
+import model.ModConstants;
+
 /**
- * @author SérgioFilipe
+ * @author Sï¿½rgioFilipe
  * @contributor firetrap
  * 
  */

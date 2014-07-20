@@ -1,5 +1,7 @@
 package managers;
 
+import android.content.Context;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -10,8 +12,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-
-import android.content.Context;
 
 /**
  * @author firetrap

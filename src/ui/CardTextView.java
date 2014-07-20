@@ -1,6 +1,5 @@
 package ui;
 
-import model.ObjectSearch;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -18,6 +17,7 @@ import com.firetrap.moody.R;
 
 import fragments.FragSearch;
 import fragments.FragTopics;
+import model.ObjectSearch;
 
 public class CardTextView extends TextView {
 

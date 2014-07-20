@@ -1,11 +1,5 @@
 package fragments;
 
-import java.util.LinkedList;
-
-import managers.ManContents;
-import managers.ManDataStore;
-import model.ObjectLatest;
-import restPackage.MoodleCourseContent;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -19,6 +13,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.firetrap.moody.R;
+
+import java.util.LinkedList;
+
+import managers.ManContents;
+import managers.ManDataStore;
+import model.ObjectLatest;
+import restPackage.MoodleCourseContent;
 
 /**
  * @author firetrap

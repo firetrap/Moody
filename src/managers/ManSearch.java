@@ -1,13 +1,14 @@
 package managers;
 
+import android.content.ContentResolver;
+import android.content.Context;
+
 import java.util.ArrayList;
 
 import model.ObjectSearch;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleModule;
-import android.content.ContentResolver;
-import android.content.Context;
 
 public class ManSearch {
 	Context context;

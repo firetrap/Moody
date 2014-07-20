@@ -1,25 +1,5 @@
 package activities;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import managers.ManAlertDialog;
-import managers.ManSession;
-import model.ModMessage;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import restPackage.MoodleCallRestWebService;
-import restPackage.MoodleRestException;
-import restPackage.MoodleRestWebService;
-import restPackage.MoodleRestWebServiceException;
-import restPackage.MoodleWebService;
-import service.ServiceBackground;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -45,6 +25,26 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.firetrap.moody.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import managers.ManAlertDialog;
+import managers.ManSession;
+import model.ModMessage;
+import restPackage.MoodleCallRestWebService;
+import restPackage.MoodleRestException;
+import restPackage.MoodleRestWebService;
+import restPackage.MoodleRestWebServiceException;
+import restPackage.MoodleWebService;
+import service.ServiceBackground;
 
 /**
  *

@@ -1,14 +1,7 @@
 package managers;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.concurrent.ExecutionException;
-
-import model.ModConstants;
+import android.content.Context;
+import android.text.Html;
 
 import org.jsoup.Jsoup;
 import org.jsoup.helper.StringUtil;
@@ -20,13 +13,20 @@ import org.jsoup.select.Elements;
 import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.concurrent.ExecutionException;
+
+import connections.DataAsyncTask;
+import model.ModConstants;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
-import android.content.Context;
-import android.text.Html;
-import connections.DataAsyncTask;
 
 /**
  * @author firetrap

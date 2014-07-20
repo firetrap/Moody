@@ -1,7 +1,5 @@
 package service;
 
-import managers.ManDataStore;
-import activities.MainActivity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,6 +10,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.firetrap.moody.R;
+
+import activities.MainActivity;
+import managers.ManDataStore;
 
 /**
  * @author firetrap

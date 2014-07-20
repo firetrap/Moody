@@ -1,11 +1,12 @@
 package service;
 
-import managers.ManContents;
-import managers.ManSession;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+
+import managers.ManContents;
+import managers.ManSession;
 
 /**
  * @author firetrap

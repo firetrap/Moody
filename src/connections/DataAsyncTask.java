@@ -1,13 +1,20 @@
 package connections;
 
-import fragments.FragTopics;
-import fragments.FragTopicsPreview;
-import interfaces.MainActivityAsyncInterface;
-import interfaces.UserDetailsInterface;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.CountDownTimer;
 
 import java.io.InputStream;
 import java.net.URL;
 
+import activities.MainActivity;
+import activities.UserDetailsActivity;
+import fragments.FragTopics;
+import fragments.FragTopicsPreview;
+import interfaces.MainActivityAsyncInterface;
+import interfaces.UserDetailsInterface;
 import restPackage.MoodleCallRestWebService;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
@@ -18,13 +25,6 @@ import restPackage.MoodleRestMessage;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
-import activities.MainActivity;
-import activities.UserDetailsActivity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.CountDownTimer;
 
 /**
  *

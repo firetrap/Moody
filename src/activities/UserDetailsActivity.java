@@ -1,12 +1,5 @@
 package activities;
 
-import interfaces.UserDetailsInterface;
-import managers.ManAlertDialog;
-import managers.ManSession;
-import model.ModConstants;
-import model.ModMessage;
-import restPackage.MoodleServices;
-import restPackage.MoodleUser;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,11 +10,17 @@ import android.widget.TextView;
 
 import com.firetrap.moody.R;
 
-import connections.DataAsyncTask;
 import connections.DataAsyncTaskNew;
+import interfaces.UserDetailsInterface;
+import managers.ManAlertDialog;
+import managers.ManSession;
+import model.ModConstants;
+import model.ModMessage;
+import restPackage.MoodleServices;
+import restPackage.MoodleUser;
 
 /**
- * @author SérgioFilipe
+ * @author Sï¿½rgioFilipe
  *
  */
 public class UserDetailsActivity extends Activity implements UserDetailsInterface {

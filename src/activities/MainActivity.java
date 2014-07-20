@@ -1,51 +1,5 @@
 package activities;
 
-import fragments.FragChangeLog;
-import fragments.FragCoursesList;
-import fragments.FragFavoritesPreview;
-import fragments.FragLatest;
-import fragments.FragTopics;
-import fragments.FragTopicsPreview;
-import fragments.FragUserCloud;
-import fragments.FragUserContactMessage;
-import fragments.FragUserContacts;
-import fragments.FragUserPicture;
-import interfaces.MainActivityAsyncInterface;
-import interfaces.UserDetailsInterface;
-import interfaces.UserPictureDialogInterface;
-import it.gmariotti.changelibs.library.view.ChangeLogListView;
-
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import managers.ManAlertDialog;
-import managers.ManDataStore;
-import managers.ManFavorites;
-import managers.ManSearch;
-import managers.ManSession;
-import managers.ManUserContacts;
-import model.ModConstants;
-import model.ModMessage;
-import model.ObjectSearch;
-
-import org.acra.ACRA;
-import org.acra.annotation.ReportsCrashes;
-
-import restPackage.MoodleCallRestWebService;
-import restPackage.MoodleContact;
-import restPackage.MoodleCourse;
-import restPackage.MoodleCourseContent;
-import restPackage.MoodleMessage;
-import restPackage.MoodleRestCourse;
-import restPackage.MoodleRestEnrol;
-import restPackage.MoodleRestMessage;
-import restPackage.MoodleRestUser;
-import restPackage.MoodleServices;
-import restPackage.MoodleUser;
-import service.ServiceBackground;
-import ui.CardTextView;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -81,9 +35,53 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
-import bitmap.BitmapResizer;
+
 import com.firetrap.moody.R;
-import connections.DataAsyncTaskNew;
+
+import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
+
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import bitmap.BitmapResizer;
+import fragments.FragChangeLog;
+import fragments.FragCoursesList;
+import fragments.FragFavoritesPreview;
+import fragments.FragLatest;
+import fragments.FragTopics;
+import fragments.FragTopicsPreview;
+import fragments.FragUserCloud;
+import fragments.FragUserContactMessage;
+import fragments.FragUserContacts;
+import fragments.FragUserPicture;
+import interfaces.MainActivityAsyncInterface;
+import interfaces.UserPictureDialogInterface;
+import it.gmariotti.changelibs.library.view.ChangeLogListView;
+import managers.ManAlertDialog;
+import managers.ManDataStore;
+import managers.ManFavorites;
+import managers.ManSearch;
+import managers.ManSession;
+import managers.ManUserContacts;
+import model.ModConstants;
+import model.ModMessage;
+import model.ObjectSearch;
+import restPackage.MoodleCallRestWebService;
+import restPackage.MoodleContact;
+import restPackage.MoodleCourse;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleMessage;
+import restPackage.MoodleRestCourse;
+import restPackage.MoodleRestEnrol;
+import restPackage.MoodleRestMessage;
+import restPackage.MoodleRestUser;
+import restPackage.MoodleServices;
+import restPackage.MoodleUser;
+import service.ServiceBackground;
+import ui.CardTextView;
 
 /**
  * @author firetrap

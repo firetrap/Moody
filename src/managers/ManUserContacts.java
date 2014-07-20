@@ -3,17 +3,18 @@
  */
 package managers;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import connections.DataAsyncTask;
 import model.ModConstants;
 import restPackage.MoodleContact;
 import restPackage.MoodleContactAction;
 import restPackage.MoodleContactState;
 import restPackage.MoodleMessage;
 import restPackage.MoodleServices;
-import android.content.Context;
-import connections.DataAsyncTask;
 
 /**
  * @author MoodyProject Team

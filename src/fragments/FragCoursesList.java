@@ -1,5 +1,19 @@
 package fragments;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import com.firetrap.moody.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -8,19 +22,6 @@ import managers.ManContents;
 import managers.ManFavorites;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.ImageButton;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
-import com.firetrap.moody.R;
 
 public class FragCoursesList extends Fragment {
 	// LinkedList<ObjectLatest> latestList;

@@ -3,12 +3,7 @@
  */
 package fragments;
 
-import managers.ManAlertDialog;
-import managers.ManUserContacts;
-import model.ModMessage;
-import restPackage.MoodleContact;
 import android.app.DialogFragment;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +13,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.firetrap.moody.R;
+
+import managers.ManAlertDialog;
+import managers.ManUserContacts;
+import model.ModMessage;
+import restPackage.MoodleContact;
 
 /**
  * @author Sfbramos

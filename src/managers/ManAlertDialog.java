@@ -3,19 +3,20 @@
  */
 package managers;
 
-import model.ModMessage;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import com.firetrap.moody.R;
 
+import model.ModMessage;
+
 /**
  * 
  * AlertDialogMAnager it's to notify if Gdrive or dropbox are not installed. If
  * not installed asks if you want to download it from Play Store.
  * 
- * @author SérgioFilipe
+ * @author Sï¿½rgioFilipe
  * 
  */
 public final class ManAlertDialog {
@@ -43,7 +44,7 @@ public final class ManAlertDialog {
 
 	/**
 	 * 
-	 * Método showMessageDialog - For error messages
+	 * Mï¿½todo showMessageDialog - For error messages
 	 * 
 	 * @param context
 	 * @param mensagem

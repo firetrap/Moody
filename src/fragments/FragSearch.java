@@ -1,10 +1,5 @@
 package fragments;
 
-import java.util.ArrayList;
-
-import managers.ManSearch;
-import model.ObjectSearch;
-import ui.CardTextView;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +8,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.firetrap.moody.R;
+
+import java.util.ArrayList;
+
+import managers.ManSearch;
+import model.ObjectSearch;
+import ui.CardTextView;
 
 public class FragSearch extends Fragment {
 

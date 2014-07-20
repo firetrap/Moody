@@ -3,9 +3,6 @@
  */
 package fragments;
 
-import managers.ManAlertDialog;
-import model.ModConstants;
-import model.ModMessage;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,8 +17,12 @@ import android.widget.Button;
 
 import com.firetrap.moody.R;
 
+import managers.ManAlertDialog;
+import model.ModConstants;
+import model.ModMessage;
+
 /**
- * @author SérgioFilipe
+ * @author Sï¿½rgioFilipe
  * 
  */
 public class FragUserCloud extends DialogFragment {
@@ -77,7 +78,7 @@ public class FragUserCloud extends DialogFragment {
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
 
-						// Se tem google play chama, senão chama o browser.
+						// Se tem google play chama, senï¿½o chama o browser.
 						try {
 
 							callOnline("market://details?id=" + appName);
