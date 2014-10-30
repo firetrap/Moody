@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Moody</string>
+    <string name="menu_settings">Settings</string>
+    <string name="hello_world">Hello Sergio</string>
+    <string name="title_activity_menu_esq">Menu_esq</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="title_activity_main_view">MainView</string>
+    <string name="login_image"></string>
+    <string name="title_activity_left">LeftActivity</string>
+    <string name="title_activity_right">RightActivity</string>
+    <string name="moody_ok">OK</string>
+    <string name="moody_yes">Yes</string>
+    <string name="moody_no">No</string>
+    <string name="break_line">\n</string>
+
+    <!-- Strings related to login -->
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in_register"><b>Sign in</b></string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_forgot_password">Recover lost password</string>
+    <string name="login_progress_signing_in">Signing in&#8230;</string>
+    <string name="error_invalid_username">This username is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password_username">This username/password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="prompt_url">Moodle URL</string>
+    <string name="error_invalid_url">This url is invalid.</string>
+    <string name="moody_trademark"><a href="http://firetrap.github.io/Moody">Moody</a></string>
+    <string name="licences"><a href="http://source.android.com/source/licenses.html">Apache Software License, Version 2.0</a></string>
+
+    <!-- Strings related to populate -->
+    <string name="fullName_textView">User Name</string>
+    <string name="title_activity_user_details">Details:</string>
+
+    <!-- Strings related to user details -->
+    <string name="working">Working&#8230;</string>
+    <string name="user_details_title">Details: </string>
+    <string name="user_details_hint_firstname">Fill First Name</string>
+    <string name="user_details_text_firstname">First Name: </string>
+    <string name="user_details_hint_lastname">Fill Surname</string>
+    <string name="user_details_text_lastname">Surname: </string>
+    <string name="user_details_hint_email">Fill Email Contact</string>
+    <string name="user_details_text_email">Email: </string>
+    <string name="user_details_hint_address">Fill Address</string>
+    <string name="user_details_text_address">Address: </string>
+    <string name="user_details_hint_phone">Fill Phone Contact</string>
+    <string name="user_details_text_phone">Phone: </string>
+    <string name="user_details_hint_mobile_phone">Fill Mobile Phone Contact</string>
+    <string name="user_details_text_mobile_phone">Mobile Phone: </string>
+    <string name="user_details_hint_skype">Fill Skype ID</string>
+    <string name="user_details_text_skype">Skype ID: </string>
+    <string name="user_details_hint_yahoo">Fill Yahoo ID</string>
+    <string name="user_details_text_yahoo">Yahoo ID: </string>
+    <string name="user_details_hint_url">Fill Personal Web Page </string>
+    <string name="user_details_text_url">Web Page: </string>
+    <string name="user_details_hint_description">Fill Your Description</string>
+    <string name="user_details_text_description">Description: </string>
+    <string name="upload_from_gallery">Gallery</string>
+    <string name="upload_from_camera">Camera</string>
+    <string name="favorites">Favorites</string>
+    <string name="latest">Latest</string>
+    <string name="cloud">Cloud</string>
+    <string name="help">Help</string>
+    <string name="navigation_string">Navigation</string>
+    <string name="courses_list">Courses</string>
+    <string name="courses_left_drawer">Courses</string>
+    <string name="course_path">Courses > Your Course</string>
+    <string name="arrow_description">To enter in the topic</string>
+    <string name="add_favorite_description">To add new favorite</string>
+    <string name="topic_string">Topic</string>
+    <string name="topic_title">Your Topic TItle</string>
+    <string name="title_activity_main_activity1">MainActivity1</string>
+    <string name="cloud_dialog_dropbox">Dropbox</string>
+    <string name="cloud_dialog_drive">Google Drive</string>
+    <string name="content_preview">Ipsolum lorus iplorum</string>
+    <string name="topics_contents">Your topics contents</string>
+    <string name="topic_label">Your Topic Label</string>
+    <string name="title_activity_teste">TesteActivity</string>
+    <string name="module_name">Module Name</string>
+    <string name="module_description">Module Description</string>
+    <string name="module_files">Modules Files</string>
+    <string name="title_activity_topics_preview">TopicsPreview</string>
+    <string name="title_activity_loading">Loading</string>
+    <string name="loading_data">Loading</string>
+
+    <!-- Strings related to Favorites -->
+    <string name="empty_screen_text">You dont have any favorites&#8230;</string>
+    <string name="favorites_content_empty">Empty</string>
+    <string name="favorites_body_empty">You dont have any favorite courses difined&#8230;
+		Yet!</string>
+    <string name="favorites_title">Your Favorite Courses</string>
+    <string name="title_activity_favorites">FavoritesActivity</string>
+    <string name="favorites_file_name">favorite_ids</string>
+    <string name="favorites_add_message">Favorites</string>
+    <string name="favorites_added_message">Added to Favorites</string>
+    <string name="favorites_add_confirm_message">Do you want to add %s to favorites?</string>
+    <string name="favorites_broadcast_filter_name">activities.FavoritesActivity</string>
+    <string name="favorites_header">Favorites</string>
+    <string name="favorites_delete">Delete</string>
+
+    <!-- Strings Related to moodle Service -->
+    <string name="moody_service">Moody Data Service</string>
+    <string name="moodle_service_name">moody_service</string>
+
+    <!-- Strings Related to Error Messages -->
+    <string name="login_error">Login Error</string>
+    <string name="errors_found">Errors found:</string>
+    <string name="error_internet_url">Error in Authentication service - check your
+		internet service or the website URL</string>
+    <string name="error_authentication_service">Error in Authentication service</string>
+    <string name="error_get_user_info">Error getting user information - contact your
+		Moodle administrator</string>
+
+    <!-- Strings Related to Latest -->
+    <string name="title_activity_frag_latest">FragLatest</string>
+    <string name="empty_latest_message">No new contents&#8230; Please return later</string>
+
+    <!-- Strings Related to Search -->
+    <string name="app_label">Moody</string>
+    <string name="search_hint">Search contents</string>
+    <string name="title_activity_searchable">SearchableActivity</string>
+    <string name="query_hint">Search contents</string>
+    <string name="search_on_web">Search on Web</string>
+    <string name="no_results">No results found for: </string>
+    <string name="all_results">View all search results</string>
+
+    <!-- Strings Related to Contacts -->
+    <string name="contacts_create_contact">Add to Contacts</string>
+    <string name="contacts_delete_contact">Remove From Contacts</string>
+    <string name="contacts_delete">Remove</string>
+    <string name="contacts_block_contact">Block</string>
+    <string name="contacts_unblock_contact">Unblock</string>
+    <string name="contacts_send_message_contact">Send Message</string>
+    <string name="contacts_no_contacts">No Contacts</string>
+    <string name="message_send">Send</string>
+    <string name="message_hint">Type message</string>
+
+    <!-- Other Strings -->
+    <string name="exit_msg">Press back once again to exit.</string>
+    <string name="no_internet">There was a problem retrieving data. Check your internet connection.</string>
+
+    <!-- Strings Related to Demo Overlay -->
+    <string name="demo_open_left_title">Welcome! Let\'s get started</string>
+    <string name="demo_open_left_message">Here is the main view, where all begins.\nSwipe
+		from left to right to open the left menu.</string>
+    <string name="demo_user_title">User section</string>
+    <string name="demo_user_message">This is your user section, where you can change your profile picture, see your user details or logout.</string>
+    <string name="demo_courses_title">Courses section</string>
+    <string name="demo_courses_message">In this section you can access all your courses,you can click to enter in each one.</string>
+    <string name="demo_navigation_title">Navigation section</string>
+    <string name="demo_navigation_message">Here you can acess to the latest contents of all	your courses,manage your favorites, direct acess to cloud storage and go to Moody wiki.</string>
+    <string name="demo_open_right_title">Right menu</string>
+    <string name="demo_open_right_message">Swipe from right to left to open the right menu.</string>
+    <string name="demo_search_title">Search</string>
+    <string name="demo_search_message">Here you can search within your courses, if none of the results are what you were looking for, you also have an option to search	on web.</string>
+    <string name="demo_contacts_title">Contacts</string>
+    <string name="demo_contacts_message">Here are your contacts,strangers and blocked.\nKnow more in Moody wiki.</string>
+    <string name="demo_end_title">Don\'t bug me no more!</string>
+    <string name="demo_end_message">And this is the end, if you have further questions go to Moody site or contact the support.</string>
+    <string name="demo_add_favorite_title">Favorites</string>
+    <string name="demo_add_favorite_message">You only receive notifications after you add courses to your favorites</string>
+    <string name="topic_summary">Topic Summary</string>
+    <string name="demo_changelog_title">Release Notes</string>
+
+    <!-- Strings Related to context menu -->
+    <string name="menu_changelog">Release Notes</string>
+    <string name="logout_confirmation_title">Logout</string>
+    <string name="logout_confirmation_content">Are you sure?</string>
+    <string name="refresh_title">Refresh</string>
+
+
+</resources>

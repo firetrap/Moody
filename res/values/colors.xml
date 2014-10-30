@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="C_White">#ffffff</color>
+    <color name="C_Black">#000000</color>
+    <color name="C_Blue_Light">#68d5fe</color>
+    <color name="C_Blue_Medium">#5ab8dc</color>
+    <color name="C_Blue_Dark">#3d7f97</color>
+    <color name="C_Light_Grey">#dddddd</color>
+    <color name="transparent">#00000000</color>
+    <color name="C_Red_Salmon">#FF555A</color>
+    <color name="C_Moodle_Orange">#FF9320</color>
+    <color name="C_Medium_Green">#00B08D</color>
+    <color name="C_Agressive_Pink">#ff0099</color>
+    <color name="C_Favorites_Pink">#BE245A</color>
+    <color name="C_Tomato_Red">#ff393a</color>
+
+          <!-- Cards Colors -->
+    <color name="stroke">#dddddd</color>
+    <color name="text_light">#66000000</color>
+    <color name="card_text">#ff8d8d8d</color>
+    <color name="card_title_text">#ff707070</color>
+    <color name="card_light_text">#ffb5b5b5</color>
+    <color name="card_grid_text">#ff707070</color>
+    <color name="card_separator">#ffe5e5e5</color>
+    <color name="card_border">#ffdedede</color>
+
+    
+    
+</resources>
