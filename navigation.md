@@ -15,4 +15,4 @@
 
 
 [gimmick:theme](spacelab)
-[gimmick:ForkMeOnGitHub ({ color: 'darkblue',  position: 'right' })](https://github.com/firetrap/MoodyRest)
+[gimmick:ForkMeOnGitHub ({ color: 'darkblue',  position: 'right' })](https://github.com/firetrap/Moody)
