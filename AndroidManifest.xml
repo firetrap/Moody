@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.firetrap.moody"
     android:installLocation="internalOnly"
-    android:versionCode="3"
+    android:versionCode="8"
     android:versionName="0.7.2 alpha" >
 
     <permission
@@ -11,7 +11,7 @@
 
     <uses-sdk
         android:minSdkVersion="13"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="com.android.moody.permission.GET_SERVER_DATA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -31,6 +31,7 @@
         <activity
             android:name="activities.MainActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:label="@string/app_name"
             android:launchMode="singleTop" >
             <intent-filter>
@@ -44,6 +45,7 @@
         <activity
             android:name="activities.LoginActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:noHistory="true"
             android:windowSoftInputMode="adjustPan|stateHidden" >
             <intent-filter>
@@ -54,16 +56,19 @@
         </activity>
         <activity
             android:name="activities.UserDetailsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_user_details" >
         </activity>
         <activity android:name="activities.LoadingActivity" >
         </activity>
         <activity
             android:name="activities.SettingsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
             android:name="fragments.FragSearch"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_searchable" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

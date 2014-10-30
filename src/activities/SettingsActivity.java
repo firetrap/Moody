@@ -1,5 +1,7 @@
 package activities;
 
+import java.util.List;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -18,8 +20,6 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 
 import com.firetrap.moody.R;
-
-import java.util.List;
 
 /**
  *  

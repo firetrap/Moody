@@ -1,7 +1,14 @@
 package managers;
 
-import android.content.Context;
-import android.text.Html;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.concurrent.ExecutionException;
+
+import model.ModConstants;
 
 import org.jsoup.Jsoup;
 import org.jsoup.helper.StringUtil;
@@ -13,20 +20,22 @@ import org.jsoup.select.Elements;
 import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.concurrent.ExecutionException;
-
-import connections.DataAsyncTask;
-import model.ModConstants;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleServices;
-import restPackage.MoodleUser;
+import android.content.Context;
+import android.os.StrictMode;
+import android.text.Html;
+import connections.DataAsyncTask;
+
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 /**
  * @author firetrap
@@ -71,7 +80,7 @@ public class ManContents {
 		String userId = session.getValues(ModConstants.KEY_ID, null);
 		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name() + userId;
 		try {
-			getContent = new DataAsyncTask(context).execute(url, token, MoodleServices.CORE_USER_GET_USERS_BY_ID, userId).get();
+			getContent = new DataAsyncTask().execute(url, token, MoodleServices.CORE_USER_GET_USERS_BY_ID, userId).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,18 +89,6 @@ public class ManContents {
 			e.printStackTrace();
 		}
 		data.storeData(getContent, fileName);
-
-	}
-
-	public MoodleUser getUser() {
-		session = new ManSession(context);
-		String userId = session.getValues(ModConstants.KEY_ID, null);
-		String fileName = MoodleServices.CORE_USER_GET_USERS_BY_ID.name() + userId;
-
-		if (!data.isInCache(fileName))
-			setUser();
-
-		return (MoodleUser) data.getData(fileName);
 	}
 
 	private void setCourses() {
@@ -102,7 +99,7 @@ public class ManContents {
 		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name() + userId;
 
 		try {
-			getContent = new DataAsyncTask(context).execute(url, token, MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
+			getContent = new DataAsyncTask().execute(url, token, MoodleServices.CORE_ENROL_GET_USERS_COURSES, userId).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -138,12 +135,10 @@ public class ManContents {
 		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name() + courseId;
 
 		try {
-			getContent = new DataAsyncTask(context).execute(url, token, MoodleServices.CORE_COURSE_GET_CONTENTS, courseId).get();
+			getContent = new DataAsyncTask().execute(url, token, MoodleServices.CORE_COURSE_GET_CONTENTS, courseId).get();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -153,20 +148,6 @@ public class ManContents {
 		}
 
 		data.storeData(getContent, fileName);
-	}
-
-	/**
-	 * @param courseId
-	 * @return MoodleCourseContent[]
-	 */
-	public MoodleCourseContent[] getContent(String courseId) {
-		String fileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name() + courseId;
-
-		if (!data.isInCache(fileName)) {
-			setContent(null, courseId);
-		}
-
-		return (MoodleCourseContent[]) data.getData(fileName);
 	}
 
 	/**
@@ -258,6 +239,11 @@ public class ManContents {
 	private void getFile(String fileUrl, String fileName) {
 		String inputLine;
 		String outPut = "";
+
+		// This is the lazy way but is only get html files at this time can be
+		// like this, but in a near future it will be inside an AsyncTask
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 		try {
 			// get URL content
 			URL url = new URL(fileUrl);

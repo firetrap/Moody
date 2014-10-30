@@ -64,13 +64,19 @@
 
     <!-- Login form -->
 
-           <LinearLayout
-               android:id="@+id/login_form"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:background="@drawable/default_background"
-               android:orientation="vertical"
-               android:visibility="visible" >
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:id="@+id/login_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/default_background"
+            android:orientation="vertical"
+            android:visibility="visible" >
 
             <ImageView
                 android:id="@+id/login_logo"
@@ -108,10 +114,7 @@
                         android:hint="@string/prompt_url"
                         android:inputType="textUri"
                         android:maxLines="1"
-                        android:singleLine="true" >
-
-                        <requestFocus />
-                    </EditText>
+                        android:singleLine="true" />
 
                     <EditText
                         android:id="@+id/username"
@@ -144,7 +147,6 @@
                         android:paddingRight="32dp"
                         android:text="@string/action_sign_in_register" />
                 </LinearLayout>
-
             </FrameLayout>
 
             <LinearLayout
@@ -190,5 +192,7 @@
                     android:background="@drawable/multi_color_line" />
             </LinearLayout>
         </LinearLayout>
+
+    </ScrollView>
 
 </merge>

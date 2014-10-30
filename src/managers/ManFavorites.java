@@ -1,17 +1,25 @@
 package managers;
 
+import java.util.ArrayList;
+
+import model.ModConstants;
 import android.content.Context;
 
 import com.firetrap.moody.R;
 
-import java.util.ArrayList;
-
-import model.ModConstants;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 /**
- * @author Sï¿½rgioFilipe
+ * @author SérgioFilipe
  * @contributor firetrap
- * 
+ *
  */
 public class ManFavorites {
 
@@ -50,11 +58,8 @@ public class ManFavorites {
 	 * @param ids
 	 */
 	public void actionFavorite(ArrayList<Long> ids) {
-		String userId = new ManSession(context).getValues(ModConstants.KEY_ID,
-				null);
-		String fileName = context.getResources().getString(
-				R.string.favorites_file_name)
-				+ userId;
+		String userId = new ManSession(context).getValues(ModConstants.KEY_ID, null);
+		String fileName = context.getResources().getString(R.string.favorites_file_name) + userId;
 		ArrayList<Long> idList = getFavorites();
 
 		for (Long id : ids) {
@@ -74,14 +79,10 @@ public class ManFavorites {
 	 */
 	@SuppressWarnings("unchecked")
 	public ArrayList<Long> getFavorites() {
-		String userId = new ManSession(context).getValues(ModConstants.KEY_ID,
-				null);
-		String fileName = context.getResources().getString(
-				R.string.favorites_file_name)
-				+ userId;
+		String userId = new ManSession(context).getValues(ModConstants.KEY_ID, null);
+		String fileName = context.getResources().getString(R.string.favorites_file_name) + userId;
 
-		return (isInCache(fileName)) ? (ArrayList<Long>) data.getData(fileName)
-				: new ArrayList<Long>();
+		return (isInCache(fileName)) ? (ArrayList<Long>) data.getData(fileName) : new ArrayList<Long>();
 	}
 
 	/**

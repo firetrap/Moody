@@ -1,8 +1,11 @@
 /**
- * 
+ *
  */
 package fragments;
 
+import managers.ManAlertDialog;
+import model.ModConstants;
+import model.ModMessage;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,13 +20,18 @@ import android.widget.Button;
 
 import com.firetrap.moody.R;
 
-import managers.ManAlertDialog;
-import model.ModConstants;
-import model.ModMessage;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 /**
- * @author Sï¿½rgioFilipe
- * 
+ * @author SérgioFilipe
+ *
  */
 public class FragUserCloud extends DialogFragment {
 
@@ -78,7 +86,7 @@ public class FragUserCloud extends DialogFragment {
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
 
-						// Se tem google play chama, senï¿½o chama o browser.
+						// Se tem google play chama, senão chama o browser.
 						try {
 
 							callOnline("market://details?id=" + appName);
@@ -114,7 +122,7 @@ public class FragUserCloud extends DialogFragment {
 
 	/**
 	 * Call the browser or the play store if installed
-	 * 
+	 *
 	 * @param uri
 	 */
 	private void callOnline(String uri) {
@@ -124,9 +132,9 @@ public class FragUserCloud extends DialogFragment {
 	}
 
 	/**
-	 * 
+	 *
 	 * Check if the cloud service has been chosen from the user is installed.
-	 * 
+	 *
 	 * @param uri
 	 * @return
 	 */

@@ -1,10 +1,33 @@
 package fragments;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+
+import managers.ManContents;
+import managers.ManDataStore;
+import managers.ManSession;
+import model.ModConstants;
+import restPackage.MoodleCallRestWebService;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleModule;
+import restPackage.MoodleModuleContent;
+import restPackage.MoodleRestCourse;
+import restPackage.MoodleRestCourseException;
+import restPackage.MoodleRestException;
+import restPackage.MoodleServices;
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -20,36 +43,33 @@ import android.widget.TextView;
 
 import com.firetrap.moody.R;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-
-import managers.ManContents;
-import managers.ManSession;
-import model.ModConstants;
-import restPackage.MoodleCourseContent;
-import restPackage.MoodleModule;
-import restPackage.MoodleModuleContent;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 /**
  * @author firetrap
- * 
+ *
  */
 public class FragTopics extends Fragment {
 
-	Object					course;
-	ManSession				session;
-	String					courseId;
-	String					topicId;
-	String					courseName;
-	private LinearLayout	mainLayout;
-	private ScrollView		contentScrollable;
-	private LinearLayout	contentsLayout;
-	private View			myView;
-	private boolean			asyncTaskRunned	= false;
-	static Context			ctx;
+	Object course;
+	ManSession session;
+	String courseId;
+	String topicId;
+	String courseName;
+	private LinearLayout mainLayout;
+	private ScrollView contentScrollable;
+	private LinearLayout contentsLayout;
+	private View myView;
+	private boolean asyncTaskRunned = false;
+	static Context context;
+	private ManDataStore data;
 
 	public FragTopics() {
 	}
@@ -61,20 +81,23 @@ public class FragTopics extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		ctx = getActivity().getApplicationContext();
+		context = getActivity();
+
+		// Cache data store
+		data = new ManDataStore(context);
 
 		session = new ManSession(getActivity().getApplicationContext());
 
 		courseId = getArguments().getString("courseId");
 		topicId = getArguments().getString("topicId");
 		courseName = getArguments().getString("courseName");
-		// if (!asyncTaskRunned) {
-		// if (Build.VERSION.SDK_INT >= 11)
-		// new HeavyWork().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		// else
-		// new HeavyWork().execute();
-		//
-		// }
+		if (!asyncTaskRunned) {
+			if (Build.VERSION.SDK_INT >= 11)
+				new FragTopicsAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			else
+				new FragTopicsAsync().execute();
+
+		}
 		return myView;
 	}
 
@@ -96,9 +119,9 @@ public class FragTopics extends Fragment {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method is responsible to initialize the required layouts
-	 * 
+	 *
 	 */
 	private void initLayouts() {
 
@@ -186,85 +209,92 @@ public class FragTopics extends Fragment {
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
 			int b = 0;
-			if (!singleModule.getName().isEmpty()) {
-				moduleName.setText(singleModule.getName());
+			// if (!singleModule.getName().isEmpty()) {
+			if (singleModule.getName().trim().length() > 0) {
+				// Test if Char is human readable or garbage from moodle DB;
+				if (Character.isLetterOrDigit(singleModule.getName().trim().charAt(0))) {
+					moduleName.setText(singleModule.getName());
+					if (!Html.fromHtml(singleModule.getDescription()).toString().isEmpty()) {
 
-				if (!Html.fromHtml(singleModule.getDescription()).toString().isEmpty()) {
+						String moduleDescription = singleModule.getDescription();
 
-					String moduleDescription = singleModule.getDescription();
+						String parsed = new ManContents(getActivity().getApplicationContext()).parseFile(moduleDescription);
+						String cleared = clearSource(parsed);
 
-					String parsed = new ManContents(getActivity().getApplicationContext()).parseFile(moduleDescription);
-					String cleared = clearSource(parsed);
+						/**
+						 *
+						 * Added a link to image because the impossibility of
+						 * access to images inside description, the function is
+						 * prepared to receive an image and display it. ISSUE
+						 * reported in
+						 * https://tracker.moodle.org/browse/MDL-43513
+						 *
+						 */
+						if (cleared.contains("youtube")) {
+							TextView bla = new TextView(getActivity());
 
-					/**
-					 * 
-					 * Added a link to image because the impossibility of access
-					 * to images inside description, the function is prepared to
-					 * receive an image and display it. ISSUE reported in
-					 * https://tracker.moodle.org/browse/MDL-43513
-					 * 
-					 */
-					if (cleared.contains("youtube")) {
-						TextView bla = new TextView(getActivity());
+							bla.setText(cleared);
+							bla.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(cleared), 0, 0, 0);
+							Linkify.addLinks(bla, Linkify.ALL);
 
-						bla.setText(cleared);
-						bla.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(cleared), 0, 0, 0);
-						Linkify.addLinks(bla, Linkify.ALL);
+							LinearLayout recebe = (LinearLayout) topicsContent.findViewById(R.id.test_ll);
+							recebe.addView(bla);
 
-						LinearLayout recebe = (LinearLayout) topicsContent.findViewById(R.id.test_ll);
-						recebe.addView(bla);
+							// String cleared = clearSource(parsed);
+							// topicContent.setText(cleared);
+							// topicContent.setCompoundDrawablesWithIntrinsicBounds(
+							// getCorrectDrawable(cleared), 0, 0, 0);
+							// Linkify.addLinks(topicContent, Linkify.ALL);
+						}
 
-						// String cleared = clearSource(parsed);
-						// topicContent.setText(cleared);
-						// topicContent.setCompoundDrawablesWithIntrinsicBounds(
-						// getCorrectDrawable(cleared), 0, 0, 0);
-						// Linkify.addLinks(topicContent, Linkify.ALL);
-					}
+						if (cleared.contains("image")) {
+							// topicContent.setVisibility(View.GONE);
+							// moduleImage.setVisibility(View.VISIBLE);
+							// moduleImage
+							// .setImageDrawable(LoadImageFromWebOperations(parsed));
 
-					if (cleared.contains("image")) {
-						// topicContent.setVisibility(View.GONE);
-						// moduleImage.setVisibility(View.VISIBLE);
-						// moduleImage
-						// .setImageDrawable(LoadImageFromWebOperations(parsed));
+							topicContent
+									.setText(Html.fromHtml("<a href=" + parsed + ">" + "Image - accessible only from broswer" + "</a>"));
+							topicContent.setCompoundDrawablesWithIntrinsicBounds(R.drawable.jpg, 0, 0, 0);
+							topicContent.setMovementMethod(LinkMovementMethod.getInstance());
 
-						topicContent.setText(Html.fromHtml("<a href=" + parsed + ">" + "Image - accessible only from broswer" + "</a>"));
-						topicContent.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(parsed), 0, 0, 0);
-						topicContent.setMovementMethod(LinkMovementMethod.getInstance());
+						} else {
+
+							topicContent.setText(Html.fromHtml(moduleDescription));
+							if (getMimeType(moduleDescription) != null)
+								topicContent.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(moduleDescription), 0, 0, 0);
+							topicContent.setMovementMethod(LinkMovementMethod.getInstance());
+						}
 
 					} else {
+						topicContent.setVisibility(View.GONE);
+						b++;
 
-						topicContent.setText(Html.fromHtml(moduleDescription));
-						topicContent.setMovementMethod(LinkMovementMethod.getInstance());
+					}
+					if (singleModule.getContent() != null) {
+						getModuleContents(singleModule, topicsContent);
+					} else {
+						topicsContent.findViewById(R.id.module_files).setVisibility(View.GONE);
+						b++;
+
 					}
 
-				} else {
-					topicContent.setVisibility(View.GONE);
-					b++;
-
-				}
-				if (singleModule.getContent() != null) {
-					getModuleContents(singleModule, topicsContent);
-				} else {
-					topicsContent.findViewById(R.id.module_files).setVisibility(View.GONE);
-					b++;
-
-				}
-
-				if (b < 2) {
-					row.addView(topicsContent);
-					insertPoint.addView(row);
+					if (b < 2) {
+						row.addView(topicsContent);
+						insertPoint.addView(row);
+					}
 				}
 			}
 		}
-
+		// }
 	}
 
 	/**
-	 * 
+	 *
 	 * One of the most important method in the project, is responsible to get
 	 * the contents from the modules and display it in view according with which
 	 * type of data
-	 * 
+	 *
 	 * @param singleModule
 	 * @param topicsContent
 	 */
@@ -294,8 +324,8 @@ public class FragTopics extends Fragment {
 
 					} else if (moduleContents[j].getFilename().equalsIgnoreCase("index.html")) {
 
-						String indexURL = new ManContents(getActivity().getApplicationContext()).parseFile(url,
-								moduleContents[j].getFilename() + courseId + topicId + singleModule.getId());
+						String indexURL = new ManContents(context).parseFile(url, moduleContents[j].getFilename() + courseId + topicId
+								+ singleModule.getId());
 						if (clearSource(indexURL).contains("image")) {
 							// moduleFile.setVisibility(View.GONE);
 							// moduleImage.setVisibility(View.VISIBLE);
@@ -304,8 +334,8 @@ public class FragTopics extends Fragment {
 
 						} else {
 							moduleFile.setText(indexURL);
-							moduleFile.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(indexURL), 0, 0, 0);
-
+							if (getCorrectDrawable(indexURL) != 0)
+								moduleFile.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(indexURL), 0, 0, 0);
 							Linkify.addLinks(moduleFile, Linkify.WEB_URLS);
 
 						}
@@ -354,9 +384,9 @@ public class FragTopics extends Fragment {
 	}
 
 	/**
-	 * 
+	 *
 	 * Return the correct draw to the view
-	 * 
+	 *
 	 * @param url
 	 * @return drawable id
 	 */
@@ -366,26 +396,34 @@ public class FragTopics extends Fragment {
 			return R.drawable.youtube;
 
 		if (getMimeType(url) != null) {
-			if (getMimeType(url).equalsIgnoreCase("application/pdf")) {
+			if (getMimeType(url).equalsIgnoreCase("application/pdf"))
 				return R.drawable.pdf;
-			}
+
 			if (getMimeType(url).equalsIgnoreCase("application/msword")
-					|| getMimeType(url).equalsIgnoreCase("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
+					|| getMimeType(url).equalsIgnoreCase("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
 				return R.drawable.docs;
-			}
+
 			if (getMimeType(url).equalsIgnoreCase("application/vnd.ms-powerpoint")
-					|| getMimeType(url).equalsIgnoreCase("application/vnd.openxmlformats-officedocument.presentationml.presentation")) {
+					|| getMimeType(url).equalsIgnoreCase("application/vnd.openxmlformats-officedocument.presentationml.presentation"))
 				return R.drawable.ppt;
-			}
+
 			if (getMimeType(url).equalsIgnoreCase("application/vnd.ms-excel")
-					|| getMimeType(url).equalsIgnoreCase("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
+					|| getMimeType(url).equalsIgnoreCase("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
 				return R.drawable.xls;
-			}
 
+			if (getMimeType(url).equalsIgnoreCase("video/x-flv"))
+				return R.drawable.flv;
+
+			if (getMimeType(url).equalsIgnoreCase("image/jpeg"))
+				return R.drawable.jpg;
+
+			if (getMimeType(url).equalsIgnoreCase("image/gif"))
+				return R.drawable.gif;
+
+			if (getMimeType(url).equalsIgnoreCase("image/png"))
+				return R.drawable.png;
 		}
-
-		return R.drawable.generic;
-
+		return 0;
 	}
 
 	public static String getMimeType(String url) {
@@ -395,17 +433,19 @@ public class FragTopics extends Fragment {
 		if (extension != null) {
 			MimeTypeMap mime = MimeTypeMap.getSingleton();
 			type = mime.getMimeTypeFromExtension(extension);
-			// writeStringAsFile(type + "\n", "mime.txt");
-
+		}
+		// When the mimeType is not recognized by the mimeType List
+		if (extension.isEmpty()) {
+			if (url.contains((".flv")))
+				type = "video/x-flv";
 		}
 		return type;
-
 	}
 
 	public static void writeStringAsFile(final String fileContents, String fileName) {
 
 		try {
-			FileWriter out = new FileWriter(new File(ctx.getFilesDir(), fileName), true);
+			FileWriter out = new FileWriter(new File(context.getFilesDir(), fileName), true);
 			out.write(fileContents);
 			out.close();
 		} catch (IOException e) {
@@ -419,66 +459,87 @@ public class FragTopics extends Fragment {
 		super.onResume();
 	}
 
-	// private class HeavyWork extends AsyncTask<Void, Void, Void> {
-	//
-	// private ProgressDialog dialog;
-	//
-	// final FragmentUpdater activity = (FragmentUpdater) getActivity();
-	// private CountDownTimer cvt = createCountDownTimer();
-	//
-	// // Do the long-running work in here
-	// @Override
-	// protected Void doInBackground(Void... params) {
-	// MoodleCourseContent[] courseTopics = new
-	// ManContents(getActivity().getApplicationContext()).getContent(courseId);
-	//
-	// MoodleCourseContent singleTopic = new
-	// ManContents(getActivity().getApplicationContext()).getTopic(Long.parseLong(topicId),
-	// courseTopics);
-	// // This createTopics call another methods from the fragment class to
-	// // get the data and create views
-	// myView = createTopics(singleTopic, courseName, courseId,
-	// Long.parseLong(topicId));
-	// if (dialog != null)
-	// dialog.dismiss();
-	// return null;
-	//
-	// }
-	//
-	// protected void onPreExecute() {
-	// asyncTaskRunned = true;
-	// cvt.start();
-	// }
-	//
-	// // This is called when doInBackground() is finished
-	// @Override
-	// protected void onPostExecute(Void ignore) {
-	// cvt.cancel();
-	// activity.updater(myView, courseId, topicId);
-	// if (dialog != null)
-	// dialog.dismiss();
-	// }
-	//
-	// private CountDownTimer createCountDownTimer() {
-	// return new CountDownTimer(250, 10) {
-	// @Override
-	// public void onTick(long millisUntilFinished) {
-	//
-	// }
-	//
-	// @Override
-	// public void onFinish() {
-	// dialog = new ProgressDialog(getActivity());
-	// dialog.setMessage("Loading...");
-	// dialog.show();
-	// }
-	// };
-	// }
-	// }
+	private class FragTopicsAsync extends AsyncTask<Void, Void, Void> {
+
+		private ProgressDialog dialog;
+		private CountDownTimer cvt = createCountDownTimer();
+		private MoodleCourseContent singleTopic;
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			asyncTaskRunned = true;
+			cvt.start();
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			String serverUrl = session.getValues(ModConstants.KEY_URL, null);
+			String token = session.getValues(ModConstants.KEY_TOKEN, null);
+			String fileName2Store = MoodleServices.CORE_COURSE_GET_CONTENTS.name() + courseId;
+
+			MoodleCallRestWebService.init(serverUrl + "/webservice/rest/server.php", token);
+			MoodleCourseContent[] courseTopics = null;
+
+			if (data.isInCache(fileName2Store)) {
+				courseTopics = (MoodleCourseContent[]) data.getData(fileName2Store);
+			} else {
+				try {
+					courseTopics = MoodleRestCourse.getCourseContent(Long.parseLong(courseId), null);
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				} catch (MoodleRestCourseException e) {
+					e.printStackTrace();
+				} catch (MoodleRestException e) {
+					e.printStackTrace();
+				}
+
+				// Store all objects in cache for future faster access
+				if (courseTopics != null)
+					data.storeData(courseTopics, fileName2Store);
+			}
+			singleTopic = new ManContents(context).getTopic(Long.parseLong(topicId), courseTopics);
+			myView = createTopics(singleTopic, courseName, courseId, Long.parseLong(topicId));
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void ignore) {
+			cvt.cancel();
+			updateFragment();
+			if (dialog != null && dialog.isShowing())
+				dialog.dismiss();
+		}
+
+		private CountDownTimer createCountDownTimer() {
+			return new CountDownTimer(50, 10) {
+				@Override
+				public void onTick(long millisUntilFinished) {
+				}
+
+				@Override
+				public void onFinish() {
+					dialog = new ProgressDialog(context);
+					dialog.setMessage("Loading...");
+					dialog.setCancelable(false);
+					dialog.setCanceledOnTouchOutside(false);
+					dialog.show();
+				}
+			};
+		}
+	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+	}
+
+	public void updateFragment() {
+		getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+		getFragmentManager().executePendingTransactions();
+
 	}
 
 }

@@ -1,5 +1,25 @@
 package activities;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import managers.ManAlertDialog;
+import managers.ManSession;
+import model.ModMessage;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import restPackage.MoodleCallRestWebService;
+import restPackage.MoodleRestException;
+import restPackage.MoodleRestWebService;
+import restPackage.MoodleRestWebServiceException;
+import restPackage.MoodleWebService;
+import service.ServiceBackground;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -26,25 +46,14 @@ import android.widget.TextView;
 
 import com.firetrap.moody.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import managers.ManAlertDialog;
-import managers.ManSession;
-import model.ModMessage;
-import restPackage.MoodleCallRestWebService;
-import restPackage.MoodleRestException;
-import restPackage.MoodleRestWebService;
-import restPackage.MoodleRestWebServiceException;
-import restPackage.MoodleWebService;
-import service.ServiceBackground;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 /**
  *
@@ -59,35 +68,35 @@ public class LoginActivity extends Activity {
 	/**
 	 * The default email to populate the email field with.
 	 */
-	public static String	EXTRA_EMAIL	= "com.example.android.authenticatordemo.extra.EMAIL";
+	public static String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
 
-	private String			finalToken	= "";
+	private String finalToken = "";
 
 	/**
 	 * Keep track of the login initActivity to ensure we can cancel it if
 	 * requested.
 	 */
-	private UserLoginTask	mAuthTask	= null;
+	private UserLoginTask mAuthTask = null;
 
-	private View			mLoginFormView;
-	private TextView		mLoginStatusMessageView;
-	private View			mLoginStatusView;
-	private String			mPassword;
+	private View mLoginFormView;
+	private TextView mLoginStatusMessageView;
+	private View mLoginStatusView;
+	private String mPassword;
 
 	// Values for user name and password at the time of the login attempt.
-	private String			mUrl;
+	private String mUrl;
 	// UI references.
-	private EditText		mUrlView;
-	private EditText		mPasswordView;
-	private EditText		mUserView;
-	private String			mUser;
+	private EditText mUrlView;
+	private EditText mPasswordView;
+	private EditText mUserView;
+	private String mUser;
 
 	// License and trademark
-	private TextView		trademark;
-	private TextView		licence;
+	private TextView trademark;
+	private TextView licence;
 
 	// ManSession Manager Class
-	ManSession				session;
+	ManSession session;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -168,6 +177,11 @@ public class LoginActivity extends Activity {
 		mUrl = mUrlView.getText().toString().trim();
 		mUser = mUserView.getText().toString().trim();
 		mPassword = mPasswordView.getText().toString().trim();
+
+		// FOR DEV ONLY, IT WILL CONNECT TO THE TESTS SERVER
+		mUrl = "193.137.46.10/default_site/Moody";
+		mUser = "student";
+		mPassword = "student";
 
 		boolean cancel = false;
 		String error = "Errors found: \n\n";
@@ -256,13 +270,13 @@ public class LoginActivity extends Activity {
 	 */
 	private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-		JSONObject			jObj		= null;
+		JSONObject jObj = null;
 
-		private String		error		= getResources().getString(R.string.errors_found) + "\n\n";
-		private EditText	focusView	= new EditText(getApplicationContext());
+		private String error = getResources().getString(R.string.errors_found) + "\n\n";
+		private EditText focusView = new EditText(getApplicationContext());
 
-		private String		userId		= "";
-		private String		fullName	= "";
+		private String userId = "";
+		private String fullName = "";
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -447,15 +461,15 @@ public class LoginActivity extends Activity {
 	 * This will wait until the main activity is loaded to start the intent
 	 *
 	 */
-	private Runnable	initActivity	= new Runnable() {
-											public void run() {
+	private Runnable initActivity = new Runnable() {
+		public void run() {
 
-												Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-												// intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-												startActivity(intent);
-												finish();
-											}
-										};
+			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+			// intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			startActivity(intent);
+			finish();
+		}
+	};
 
 	/**
 	 *

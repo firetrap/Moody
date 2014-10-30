@@ -1,5 +1,6 @@
 package fragments;
 
+import it.gmariotti.changelibs.library.view.ChangeLogListView;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -10,7 +11,14 @@ import android.view.LayoutInflater;
 
 import com.firetrap.moody.R;
 
-import it.gmariotti.changelibs.library.view.ChangeLogListView;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 public class FragChangeLog extends DialogFragment {
 

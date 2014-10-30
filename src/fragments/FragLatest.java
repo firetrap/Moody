@@ -1,5 +1,14 @@
 package fragments;
 
+import java.util.LinkedList;
+
+import managers.ManContents;
+import managers.ManDataStore;
+import managers.ManSession;
+import model.ModConstants;
+import model.ObjectLatest;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleServices;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -14,28 +23,38 @@ import android.widget.TextView;
 
 import com.firetrap.moody.R;
 
-import java.util.LinkedList;
-
-import managers.ManContents;
-import managers.ManDataStore;
-import model.ObjectLatest;
-import restPackage.MoodleCourseContent;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 /**
  * @author firetrap
- * 
+ *
  */
 public class FragLatest extends Fragment {
-	LinkedList<ObjectLatest> latestList;
+	LinkedList<ObjectLatest>	latestList;
 	// Get from resource the number of cards per line
-	int cardsPerLine;
-	private LinearLayout mainLayout;
-	private ScrollView contentScrollable;
-	private LinearLayout contentsLayout;
+	int							cardsPerLine;
+	private LinearLayout		mainLayout;
+	private ScrollView			contentScrollable;
+	private LinearLayout		contentsLayout;
+	private ManSession			session;
+	private String				userId;
+	private ManDataStore		data;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// shared pref
+		session = new ManSession(getActivity());
+		// Logged user id
+		userId = session.getValues(ModConstants.KEY_ID, null);
+		// Cache data store
+		this.data = new ManDataStore(getActivity());
 
 		if (new ManDataStore(getActivity()).isInCache("Latest")) {
 			initLayouts();
@@ -54,11 +73,14 @@ public class FragLatest extends Fragment {
 						final ObjectLatest latest = latestList.getFirst();
 						latestList.removeFirst();
 
-						MoodleCourseContent[] course = new ManContents(
-								getActivity()).getContent(latest.getCourseId());
-						MoodleCourseContent topic = new ManContents(
-								getActivity()).getTopic(
-								Long.parseLong(latest.getTopicId()), course);
+						String courseId = latest.getCourseId();
+						long topicId = Long.parseLong(latest.getTopicId());
+						// If everything is normal the contents are already
+						// cached by the
+						// main activity.
+						String contentsFileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name() + courseId + userId;
+						MoodleCourseContent[] course = (MoodleCourseContent[]) data.getData(contentsFileName);
+						MoodleCourseContent topic = new ManContents(getActivity()).getTopic(topicId, course);
 
 						View latestView = inflateLatestView(inflater);
 						setCourseTitle(latest, latestView);
@@ -87,8 +109,7 @@ public class FragLatest extends Fragment {
 	 */
 	private LinearLayout createHorizontalLinearLayout() {
 		LinearLayout innerLayout = new LinearLayout(getActivity());
-		innerLayout.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+		innerLayout.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
 		innerLayout.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -96,37 +117,33 @@ public class FragLatest extends Fragment {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method is responsible to initialize the required layouts
-	 * 
+	 *
 	 */
 	private void initLayouts() {
 
 		// The mainLayout is a linearLayout witch will wrap another linearLayout
 		// with the static header and the scrollable content
 		mainLayout = new LinearLayout(getActivity());
-		mainLayout.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+		mainLayout.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		mainLayout.setOrientation(LinearLayout.VERTICAL);
 
 		// The scrollView responsible to scroll the contents layout
 		contentScrollable = new ScrollView(getActivity());
-		contentScrollable.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+		contentScrollable.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
 		contentScrollable.setVerticalScrollBarEnabled(false);
 		contentScrollable.setHorizontalScrollBarEnabled(false);
-		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
-				.getLayoutParams();
+		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable.getLayoutParams();
 		scroll_params.setMargins(0, 10, 0, 0);
 		contentScrollable.setLayoutParams(scroll_params);
 
 		// The linearLayout which wrap all the topics, this linearLayout is
 		// inside the scrollView
 		contentsLayout = new LinearLayout(getActivity());
-		contentsLayout.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+		contentsLayout.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		contentsLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -148,16 +165,13 @@ public class FragLatest extends Fragment {
 				bundle.putString("courseName", latest.getCourseName());
 				bundle.putString("topicId", latest.getTopicId());
 
-				FragmentManager fragmentManager = getActivity()
-						.getFragmentManager();
-				FragmentTransaction fragmentTransaction = fragmentManager
-						.beginTransaction();
+				FragmentManager fragmentManager = getActivity().getFragmentManager();
+				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 				FragTopics insideTopicsFrag = new FragTopics();
 				insideTopicsFrag.setArguments(bundle);
 				fragmentTransaction.addToBackStack(null);
-				fragmentTransaction
-						.replace(R.id.mainFragment, insideTopicsFrag);
+				fragmentTransaction.replace(R.id.mainFragment, insideTopicsFrag);
 				fragmentTransaction.commit();
 			}
 		});
@@ -169,8 +183,7 @@ public class FragLatest extends Fragment {
 	 */
 	private View inflateLatestView(LayoutInflater inflater) {
 		View view = inflater.inflate(R.layout.frag_latest, null);
-		view.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+		view.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT, 1f));
 		return view;
 	}
@@ -181,18 +194,12 @@ public class FragLatest extends Fragment {
 	 */
 	@SuppressWarnings("unchecked")
 	private void initResources() {
-		latestList = (LinkedList<ObjectLatest>) new ManDataStore(getActivity())
-				.getData("Latest");
+		latestList = (LinkedList<ObjectLatest>) new ManDataStore(getActivity()).getData("Latest");
 		if (latestList.size() > 20) {
-			latestList.subList(
-					0,
-					latestList.size()
-							- getResources().getInteger(
-									R.integer.latest_max_limit)).clear();
+			latestList.subList(0, latestList.size() - getResources().getInteger(R.integer.latest_max_limit)).clear();
 		}
 		// Get from resource the number of cards per line
-		cardsPerLine = getResources()
-				.getInteger(R.integer.latest_item_per_line);
+		cardsPerLine = getResources().getInteger(R.integer.latest_item_per_line);
 	}
 
 	/**
@@ -201,8 +208,7 @@ public class FragLatest extends Fragment {
 	 */
 	private TextView setLayoutTitle() {
 		TextView large_title = new TextView(getActivity());
-		large_title.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+		large_title.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		large_title.setText("Latest Contents");
 		large_title.setTextAppearance(getActivity(), R.style.CardsLayoutTitle);
@@ -232,8 +238,7 @@ public class FragLatest extends Fragment {
 	 * @param view
 	 */
 	private void setCourseTitle(ObjectLatest latest, View view) {
-		TextView courseTitle = (TextView) view
-				.findViewById(R.id.latest_preview_course_title);
+		TextView courseTitle = (TextView) view.findViewById(R.id.latest_preview_course_title);
 		courseTitle.setText(latest.getCourseName());
 	}
 
@@ -242,8 +247,7 @@ public class FragLatest extends Fragment {
 	 * @param view
 	 */
 	private void setTopicTitle(MoodleCourseContent topic, View view) {
-		TextView topicTitle = (TextView) view
-				.findViewById(R.id.latest_preview_topic_title);
+		TextView topicTitle = (TextView) view.findViewById(R.id.latest_preview_topic_title);
 		topicTitle.setText(topic.getName());
 	}
 
@@ -252,8 +256,7 @@ public class FragLatest extends Fragment {
 	 * @param view
 	 */
 	private void setContentDescription(ObjectLatest latest, View view) {
-		TextView contentDescription = (TextView) view
-				.findViewById(R.id.latest_preview_description);
+		TextView contentDescription = (TextView) view.findViewById(R.id.latest_preview_description);
 		contentDescription.setText(latest.getNewContent());
 	}
 

@@ -3,20 +3,28 @@
  */
 package managers;
 
+import model.ModMessage;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import com.firetrap.moody.R;
 
-import model.ModMessage;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 /**
  * 
  * AlertDialogMAnager it's to notify if Gdrive or dropbox are not installed. If
  * not installed asks if you want to download it from Play Store.
  * 
- * @author Sï¿½rgioFilipe
+ * @author SérgioFilipe
  * 
  */
 public final class ManAlertDialog {
@@ -44,7 +52,7 @@ public final class ManAlertDialog {
 
 	/**
 	 * 
-	 * Mï¿½todo showMessageDialog - For error messages
+	 * Método showMessageDialog - For error messages
 	 * 
 	 * @param context
 	 * @param mensagem

@@ -1,10 +1,22 @@
 /**
- * 
+ *
  */
 package fragments;
 
+import java.util.ArrayList;
+
+import managers.ManDataStore;
+import managers.ManFavorites;
+import managers.ManSession;
+import model.ModConstants;
+import restPackage.MoodleCourse;
+import restPackage.MoodleCourseContent;
+import restPackage.MoodleModule;
+import restPackage.MoodleServices;
+import ui.CheckableLinearLayout;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentManager.OnBackStackChangedListener;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
@@ -24,59 +36,56 @@ import android.widget.TextView;
 
 import com.firetrap.moody.R;
 
-import java.util.ArrayList;
-
-import managers.ManContents;
-import managers.ManFavorites;
-import managers.ManSession;
-import model.ModConstants;
-import restPackage.MoodleCourse;
-import restPackage.MoodleCourseContent;
-import restPackage.MoodleModule;
-import ui.CheckableLinearLayout;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 /**
- * @author Sï¿½rgioFilipe
- * 
+ * @author firetrap
+ * @author Sérgio Filipe
+ *
  */
-public class FragFavoritesPreview extends Fragment {
+public class FragFavoritesPreview extends Fragment implements OnBackStackChangedListener {
 
 	// ManSession Manager Class
 	ManSession session;
-
 	LayoutInflater myInflater;
-
 	ActionMode.Callback mCallback;
 	ActionMode mMode;
 	ArrayList<Long> selectedIds;
-
 	private LinearLayout mainLayout;
-
 	private ScrollView contentScrollable;
-
 	private LinearLayout contentsLayout;
+	private String userId;
+	ManDataStore data;
 
 	/**
-	 * 
+	 *
 	 */
 	public FragFavoritesPreview() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// shared pref
+		session = new ManSession(getActivity());
+		// Logged user id
+		userId = session.getValues(ModConstants.KEY_ID, null);
+		// Cache data store
+		this.data = new ManDataStore(getActivity());
 
 		selectedIds = new ArrayList<Long>();
 		session = new ManSession(getActivity().getApplicationContext());
-
 		mCallback = onActionModeCallback();
-
-		return createContent(new ManFavorites(getActivity()
-				.getApplicationContext()).getFavorites());
+		return createContent(new ManFavorites(getActivity().getApplicationContext()).getFavorites());
 	}
 
-	
 	/**
 	 * @return Callback
 	 */
@@ -87,17 +96,15 @@ public class FragFavoritesPreview extends Fragment {
 			// startActionMode()
 			@Override
 			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-
 				getActivity().getMenuInflater().inflate(R.menu.favorites, menu);
 				return true;
 			}
 
 			@Override
 			public void onDestroyActionMode(ActionMode mode) {
-				FragmentTransaction fr = getFragmentManager()
-						.beginTransaction();
+				FragmentTransaction fr = getFragmentManager().beginTransaction();
 				FragFavoritesPreview fragment = new FragFavoritesPreview();
-				fr.disallowAddToBackStack();
+				fr.addToBackStack(getTag());
 				fr.replace(R.id.mainFragment, fragment);
 				fr.commit();
 			}
@@ -114,8 +121,7 @@ public class FragFavoritesPreview extends Fragment {
 				switch (item.getItemId()) {
 				case R.id.action_delete:
 
-					new ManFavorites(getActivity().getApplicationContext())
-							.removeFavorite(selectedIds);
+					new ManFavorites(getActivity().getApplicationContext()).removeFavorite(selectedIds);
 
 					// Automatically exists the action mode, when the user
 					// selects this action
@@ -130,62 +136,55 @@ public class FragFavoritesPreview extends Fragment {
 	}
 
 	/**
-	 * 
+	 *
 	 * If favorites is empty inflate empty layout else create the rows with the
 	 * favorites
-	 * 
+	 *
 	 * @param CourseName
 	 * @param courseId
 	 * @return View
 	 */
 	protected LinearLayout createContent(ArrayList<Long> favorites) {
-		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		initLayouts();
 		if (favorites.isEmpty()) {
-			contentsLayout.addView(inflater.inflate(
-					R.layout.frag_empty_favorites, null));
+			contentsLayout.addView(inflater.inflate(R.layout.frag_empty_favorites, null));
 			return contentsLayout;
 		} else
 			mainLayout.addView(createTopicsHeader(inflater));
-		contentScrollable.addView(createContentRows(contentsLayout, favorites,
-				inflater));
+		contentScrollable.addView(createContentRows(contentsLayout, favorites, inflater));
 		mainLayout.addView(contentScrollable);
 		return mainLayout;
 	}
 
 	/**
-	 * 
+	 *
 	 * This method is responsible to initialize the required layouts
-	 * 
+	 *
 	 */
 	private void initLayouts() {
 
 		// The mainLayout is a linearLayout witch will wrap another linearLayout
 		// with the static header and the scrollable content
 		mainLayout = new LinearLayout(getActivity());
-		mainLayout.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+		mainLayout.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		mainLayout.setOrientation(LinearLayout.VERTICAL);
 
 		// The scrollView responsible to scroll the contents layout
 		contentScrollable = new ScrollView(getActivity());
-		contentScrollable.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+		contentScrollable.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
 		contentScrollable.setVerticalScrollBarEnabled(false);
 		contentScrollable.setHorizontalScrollBarEnabled(false);
-		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable
-				.getLayoutParams();
+		LinearLayout.LayoutParams scroll_params = (LinearLayout.LayoutParams) contentScrollable.getLayoutParams();
 		scroll_params.setMargins(0, 10, 0, 0);
 		contentScrollable.setLayoutParams(scroll_params);
 
 		// The linearLayout which wrap all the topics, this linearLayout is
 		// inside the scrollView
 		contentsLayout = new LinearLayout(getActivity());
-		contentsLayout.setLayoutParams(new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+		contentsLayout.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		contentsLayout.setOrientation(LinearLayout.VERTICAL);
 	}
@@ -193,7 +192,7 @@ public class FragFavoritesPreview extends Fragment {
 	/**
 	 * Method to create the header of the topics preview with the course path
 	 * and the "add favorites" button
-	 * 
+	 *
 	 * @param CourseName
 	 * @param courseId
 	 * @param inflater
@@ -202,17 +201,12 @@ public class FragFavoritesPreview extends Fragment {
 	protected View createTopicsHeader(LayoutInflater inflater) {
 		View topicsHeaderView = inflater.inflate(R.layout.frag_header, null);
 
-		TextView header = (TextView) topicsHeaderView
-				.findViewById(R.id.course_path_textView);
-		ImageButton addFavorite = (ImageButton) topicsHeaderView
-				.findViewById(R.id.add_favorites_button);
+		TextView header = (TextView) topicsHeaderView.findViewById(R.id.course_path_textView);
+		ImageButton addFavorite = (ImageButton) topicsHeaderView.findViewById(R.id.add_favorites_button);
 		addFavorite.setVisibility(View.GONE);
 
-		header.setText(Html.fromHtml(session.getValues(
-				ModConstants.KEY_FULL_NAME, null)
-				+ " > <font color=#BE245A>"
-				+ getResources().getString(R.string.favorites_header)
-				+ "</font>"));
+		header.setText(Html.fromHtml(session.getValues(ModConstants.KEY_FULL_NAME, null) + " > <font color=#BE245A>"
+				+ getResources().getString(R.string.favorites_header) + "</font>"));
 
 		return topicsHeaderView;
 	}
@@ -220,50 +214,45 @@ public class FragFavoritesPreview extends Fragment {
 	/**
 	 * Method to create the topics preview with the courses content and add this
 	 * content to the "row"
-	 * 
+	 *
 	 * @param rows
 	 * @param inflater
 	 * @param contentsLayout
 	 * @param courseId
 	 */
-	protected LinearLayout createContentRows(LinearLayout contentsLayout,
-			ArrayList<Long> favorites, LayoutInflater inflater) {
-		MoodleCourse[] userCourses = new ManContents(getActivity()
-				.getApplicationContext()).getCourses();
+	protected LinearLayout createContentRows(LinearLayout contentsLayout, ArrayList<Long> favorites, LayoutInflater inflater) {
+		// If everything is normal the courses are already cached by the
+		// main activity.
+		String fileName = MoodleServices.CORE_ENROL_GET_USERS_COURSES.name() + userId;
+		MoodleCourse[] userCourses = (MoodleCourse[]) data.getData(fileName);
 
 		for (int i = 0; i < favorites.size(); i++) {
 
-			final MoodleCourse courseInfo = getCourse(favorites.get(i),
-					userCourses);
+			final MoodleCourse courseInfo = getCourse(favorites.get(i), userCourses);
 
 			String courseId = Long.toString(courseInfo.getId());
 
-			MoodleCourseContent[] contents = new ManContents(getActivity()
-					.getApplicationContext()).getContent(courseId);
+			// If everything is normal the contents are already cached by the
+			// main activity.
+			String contentsFileName = MoodleServices.CORE_COURSE_GET_CONTENTS.name() + courseId + userId;
+			MoodleCourseContent[] contents = (MoodleCourseContent[]) data.getData(contentsFileName);
 
 			MoodleModule[] modules = contents[0].getMoodleModules();
 
 			LinearLayout row = new LinearLayout(getActivity());
 
-			row.setLayoutParams(new LayoutParams(
-					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+			row.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-			View view = inflater.inflate(
-					R.layout.frag_favorites_preview_context, null);
+			View view = inflater.inflate(R.layout.frag_favorites_preview_context, null);
 
-			((TextView) view.findViewById(R.id.favorites_title))
-					.setText(courseInfo.getFullname());
+			((TextView) view.findViewById(R.id.favorites_title)).setText(courseInfo.getFullname());
 
-			TextView description = (TextView) view
-					.findViewById(R.id.favorites_description);
+			TextView description = (TextView) view.findViewById(R.id.favorites_description);
 
-			description.setText((modules != null) ? getModuleInfo(modules)
-					: "No info");
+			description.setText((modules != null) ? getModuleInfo(modules) : "No info");
 
-			CheckableLinearLayout favoritesCard = (CheckableLinearLayout) view
-					.findViewById(R.id.favorites_layout);
-			favoritesCard
-					.setId(Integer.parseInt(courseInfo.getId().toString()));
+			CheckableLinearLayout favoritesCard = (CheckableLinearLayout) view.findViewById(R.id.favorites_layout);
+			favoritesCard.setId(Integer.parseInt(courseInfo.getId().toString()));
 
 			setOnFavorite(courseInfo, favoritesCard);
 
@@ -279,8 +268,7 @@ public class FragFavoritesPreview extends Fragment {
 	 * @param courseInfo
 	 * @param favoritesLayout
 	 */
-	private void setOnFavorite(final MoodleCourse courseInfo,
-			final CheckableLinearLayout favoritesLayout) {
+	private void setOnFavorite(final MoodleCourse courseInfo, final CheckableLinearLayout favoritesLayout) {
 		favoritesLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -295,19 +283,16 @@ public class FragFavoritesPreview extends Fragment {
 					bundle.putString("courseName", courseName);
 
 					FragmentManager fragmentManager = getFragmentManager();
-					FragmentTransaction fragmentTransaction = fragmentManager
-							.beginTransaction();
+					FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 					FragTopicsPreview insideTopicsFrag = new FragTopicsPreview();
 					insideTopicsFrag.setArguments(bundle);
-//					fragmentTransaction.add(insideTopicsFrag, "topic_frag");
+					// fragmentTransaction.add(insideTopicsFrag, "topic_frag");
 					fragmentTransaction.addToBackStack(null);
-					fragmentTransaction.replace(R.id.mainFragment,
-							insideTopicsFrag);
+					fragmentTransaction.replace(R.id.mainFragment, insideTopicsFrag);
 					fragmentTransaction.commit();
 				} else {
 					favoritesLayout.performLongClick();
-
 				}
 
 			}
@@ -368,6 +353,12 @@ public class FragFavoritesPreview extends Fragment {
 		}
 
 		return tVContent;
+	}
+
+	@Override
+	public void onBackStackChanged() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

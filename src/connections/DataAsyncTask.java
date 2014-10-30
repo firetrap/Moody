@@ -1,30 +1,35 @@
 package connections;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.CountDownTimer;
-
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
-import activities.MainActivity;
-import activities.UserDetailsActivity;
-import fragments.FragTopics;
-import fragments.FragTopicsPreview;
-import interfaces.MainActivityAsyncInterface;
-import interfaces.UserDetailsInterface;
 import restPackage.MoodleCallRestWebService;
 import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleMessage;
 import restPackage.MoodleRestCourse;
 import restPackage.MoodleRestEnrol;
+import restPackage.MoodleRestException;
 import restPackage.MoodleRestMessage;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.StrictMode;
+
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
+
 
 /**
  *
@@ -35,97 +40,87 @@ import restPackage.MoodleUser;
  *
  */
 public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
-	Object								jObj	= null;
-	private MainActivityAsyncInterface	mainActivityInterface;
-	private UserDetailsInterface		userDetailsInterface;
-	private ProgressDialog				dialog;
-	private CountDownTimer				cvt		= createCountDownTimer();
-	private Context						context;
-	private MoodleServices				webService;
-	private String						parentActivity;
-	private String						fillTheSpace;
-
-	public DataAsyncTask(Context context) {
-		this.context = context;
-		dialog = new ProgressDialog(context);
-	}
+	Object jObj = null;
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		cvt.start();
 	}
 
 	@Override
 	protected Object doInBackground(Object... params) {
-		String urlString = (String) params[0];
-		String token = (String) params[1];
-		webService = (MoodleServices) params[2];
-		Object webServiceParams = params[3];
-		parentActivity = (String) params[4];
-
-		MoodleCallRestWebService.init(urlString + "/webservice/rest/server.php", token);
-
-		long userId;
-		long courseId;
 
 		try {
-			switch (webService) {
-			case CORE_ENROL_GET_USERS_COURSES:
-				userId = Long.parseLong((String) webServiceParams);
-				MoodleCourse[] courses = MoodleRestEnrol.getUsersCourses(userId);
-				return courses;
 
-			case CORE_USER_GET_USERS_BY_ID:
-				userId = Long.parseLong((String) webServiceParams);
-				MoodleUser user = MoodleRestUser.getUserById(userId);
-				return user;
-
-			case CORE_COURSE_GET_CONTENTS:
-				courseId = Long.parseLong((String) webServiceParams);
-				MoodleCourseContent[] courseContent = MoodleRestCourse.getCourseContent(courseId, null);
-				return courseContent;
-			case CORE_MESSAGE_CREATE_CONTACTS:
-				MoodleRestMessage.createContacts(parseIds(webServiceParams));
-				return true;
-
-			case CORE_MESSAGE_DELETE_CONTACTS:
-				MoodleRestMessage.deleteContacts(parseIds(webServiceParams));
-				return true;
-
-			case CORE_MESSAGE_BLOCK_CONTACTS:
-				MoodleRestMessage.blockContacts(parseIds(webServiceParams));
-				return true;
-
-			case CORE_MESSAGE_UNBLOCK_CONTACTS:
-				MoodleRestMessage.unblockContacts(parseIds(webServiceParams));
-				return true;
-
-			case CORE_MESSAGE_GET_CONTACTS:
-				return MoodleRestMessage.getContacts();
-
-			case CORE_MESSAGE_SEND_INSTANT_MESSAGES:
-				return MoodleRestMessage.sendInstantMessage((MoodleMessage) webServiceParams);
-
-			case MOODLE_USER_GET_PICTURE:
-				InputStream inputStream = new URL(urlString).openStream();
-				Drawable drawable = Drawable.createFromStream(inputStream, null);
-				inputStream.close();
-				return drawable;
-
-			default:
-				return null;
-
-			}
-		} catch (Exception e) {
+			return loadFromNetwork((String) params[0], (String) params[1],
+					(MoodleServices) params[2], params[3]);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MoodleRestException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
+
+	}
+
+	private Object loadFromNetwork(String urlString, String token,
+			MoodleServices webService, Object webServiceParams)
+			throws UnsupportedEncodingException, MoodleRestException {
+
+		MoodleCallRestWebService.init(
+				urlString + "/webservice/rest/server.php", token);
+
+		long userId;
+		long courseId;
+		switch (webService) {
+		case CORE_ENROL_GET_USERS_COURSES:
+			userId = Long.parseLong((String) webServiceParams);
+			MoodleCourse[] courses = MoodleRestEnrol.getUsersCourses(userId);
+			return courses;
+
+		case CORE_USER_GET_USERS_BY_ID:
+			userId = Long.parseLong((String) webServiceParams);
+			MoodleUser user = MoodleRestUser.getUserById(userId);
+			return user;
+
+		case CORE_COURSE_GET_CONTENTS:
+			courseId = Long.parseLong((String) webServiceParams);
+			MoodleCourseContent[] courseContent = MoodleRestCourse
+					.getCourseContent(courseId, null);
+			return courseContent;
+		case CORE_MESSAGE_CREATE_CONTACTS:
+			MoodleRestMessage.createContacts(parseIds(webServiceParams));
+			return true;
+
+		case CORE_MESSAGE_DELETE_CONTACTS:
+			MoodleRestMessage.deleteContacts(parseIds(webServiceParams));
+			return true;
+
+		case CORE_MESSAGE_BLOCK_CONTACTS:
+			MoodleRestMessage.blockContacts(parseIds(webServiceParams));
+			return true;
+
+		case CORE_MESSAGE_UNBLOCK_CONTACTS:
+			MoodleRestMessage.unblockContacts(parseIds(webServiceParams));
+			return true;
+
+		case CORE_MESSAGE_GET_CONTACTS:
+			return MoodleRestMessage.getContacts();
+
+		case CORE_MESSAGE_SEND_INSTANT_MESSAGES:
+			return MoodleRestMessage
+					.sendInstantMessage((MoodleMessage) webServiceParams);
+		default:
+			return null;
+		}
+
 	}
 
 	/**
 	 * <p>
-	 * Method that parses a supposed id list object
+	 * Method that parses a suposed id list object
 	 * </p>
 	 *
 	 * @param Object
@@ -149,174 +144,34 @@ public class DataAsyncTask extends AsyncTask<Object, Void, Object> {
 
 	@Override
 	protected void onPostExecute(Object obj) {
-		cvt.cancel();
 
-		if (dialog != null && dialog.isShowing())
-			dialog.dismiss();
+	}
 
-		switch (webService) {
-		case CORE_ENROL_GET_USERS_COURSES:
-			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
-				mainActivityInterface.userAsyncTaskResult(obj);
+	/**
+	 * * Returns a Drawable object containing the image located at
+	 * 'imageWebAddress' if successful, and null otherwise. (Pre:
+	 * 'imageWebAddress' is non-null and non-empty; method should not be called
+	 * from the main/ui thread.)
+	 *
+	 * @param imageWebAddress
+	 * @return
+	 */
+	public static Drawable createDrawableFromUrl(String imageWebAddress) {
+		Drawable drawable = null;
 
-			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
+		final StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 
-			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-			break;
-
-		case CORE_USER_GET_USERS_BY_ID:
-			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
-				mainActivityInterface.userAsyncTaskResult(obj);
-
-			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-			break;
-
-		case CORE_COURSE_GET_CONTENTS:
-			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
-				mainActivityInterface.userAsyncTaskResult(obj);
-
-			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-			break;
-
-		case CORE_MESSAGE_CREATE_CONTACTS:
-			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
-				mainActivityInterface.userAsyncTaskResult(obj);
-
-			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-			break;
-
-		case CORE_MESSAGE_DELETE_CONTACTS:
-			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
-				mainActivityInterface.userAsyncTaskResult(obj);
-
-			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-			break;
-
-		case CORE_MESSAGE_BLOCK_CONTACTS:
-			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
-				mainActivityInterface.userAsyncTaskResult(obj);
-
-			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-			break;
-
-		case CORE_MESSAGE_UNBLOCK_CONTACTS:
-			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
-				mainActivityInterface.userAsyncTaskResult(obj);
-
-			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-			break;
-
-		case CORE_MESSAGE_GET_CONTACTS:
-			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
-				mainActivityInterface.userAsyncTaskResult(obj);
-
-			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-			break;
-
-		case CORE_MESSAGE_SEND_INSTANT_MESSAGES:
-			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
-				mainActivityInterface.userAsyncTaskResult(obj);
-
-			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-			break;
-
-		case MOODLE_USER_GET_PICTURE:
-			if (parentActivity.equalsIgnoreCase(MainActivity.class.getSimpleName()))
-				mainActivityInterface.userAsyncTaskResult(obj);
-
-			if (parentActivity.equalsIgnoreCase(UserDetailsActivity.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopicsPreview.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-
-			if (parentActivity.equalsIgnoreCase(FragTopics.class.getSimpleName()))
-				fillTheSpace = "TODO - Interface for each parent class";
-			mainActivityInterface.pictureAsyncTaskResult(obj);
-			break;
-
-		default:
-			break;
+		try {
+			final InputStream inputStream = new URL(imageWebAddress)
+					.openStream();
+			drawable = Drawable.createFromStream(inputStream, null);
+			inputStream.close();
+		} catch (final MalformedURLException ex) {
+		} catch (final IOException ex) {
 		}
+
+		return drawable;
 	}
-
-	private CountDownTimer createCountDownTimer() {
-		return new CountDownTimer(250, 10) {
-			@Override
-			public void onTick(long millisUntilFinished) {
-
-			}
-
-			@Override
-			public void onFinish() {
-				dialog = new ProgressDialog(context);
-				dialog.setMessage("Loading...");
-				dialog.setCancelable(false);
-				dialog.setCanceledOnTouchOutside(false);
-				dialog.show();
-			}
-		};
-	}
-
 }

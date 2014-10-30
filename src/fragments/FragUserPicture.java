@@ -1,5 +1,14 @@
 package fragments;
 
+import interfaces.InterDialogFrag;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import managers.ManAlertDialog;
+import model.ModConstants;
+import model.ModMessage;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -18,14 +27,14 @@ import android.widget.Button;
 
 import com.firetrap.moody.R;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
-import interfaces.UserPictureDialogInterface;
-import managers.ManAlertDialog;
-import model.ModConstants;
-import model.ModMessage;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 /**
  * @author firetrap
@@ -81,7 +90,7 @@ public class FragUserPicture extends DialogFragment {
 				// MEDIA GALLERY
 				selectedImagePath = getPath(selectedImageUri);
 
-				final UserPictureDialogInterface activity = (UserPictureDialogInterface) getActivity();
+				final InterDialogFrag activity = (InterDialogFrag) getActivity();
 				activity.onFinishEditDialog(selectedImagePath,
 						ModConstants.DIALOG_FRAG_USER_PIC);
 				this.dismiss();
@@ -98,7 +107,7 @@ public class FragUserPicture extends DialogFragment {
 				options.inSampleSize = 10;
 				cameraImagePath = destination.getAbsolutePath();
 
-				final UserPictureDialogInterface activity = (UserPictureDialogInterface) getActivity();
+				final InterDialogFrag activity = (InterDialogFrag) getActivity();
 				activity.onFinishEditDialog(cameraImagePath,
 						ModConstants.DIALOG_FRAG_USER_PIC);
 				this.dismiss();

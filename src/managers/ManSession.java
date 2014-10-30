@@ -1,18 +1,26 @@
 package managers;
 
+import java.util.HashMap;
+
+import model.ModConstants;
+import activities.LoginActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import java.util.HashMap;
-
-import activities.LoginActivity;
-import model.ModConstants;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 /**
  * @author firetrap
- * 
+ *
  */
 public class ManSession {
 	// Context
@@ -42,6 +50,19 @@ public class ManSession {
 
 		// Storing preference in preferences
 		editor.putString("PIC_PATH", preference);
+
+		// commit changes
+		editor.commit();
+	}
+
+
+	/**
+	 * @param preference
+	 */
+	public void appVersion(String preference) {
+
+		// Storing preference in preferences
+		editor.putString("appVersion", preference);
 
 		// commit changes
 		editor.commit();
@@ -100,9 +121,9 @@ public class ManSession {
 	}
 
 	/**
-	 * 
+	 *
 	 * Get stored session data
-	 * 
+	 *
 	 * @return HashMap<String, String>
 	 */
 	public HashMap<String, String> getUserDetails() {

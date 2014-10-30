@@ -43,7 +43,11 @@
                 android:layout_height="25dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="140dp"
-                android:layout_marginTop="10dp" android:background="@drawable/logout" android:contentDescription="@string/login_image" android:onClick="onClick" android:scaleType="fitXY"/>
+                android:layout_marginTop="10dp"
+                android:background="@drawable/logout"
+                android:contentDescription="@string/login_image"
+                android:scaleType="fitXY"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/fullname_textview"

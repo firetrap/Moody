@@ -1,7 +1,5 @@
 package managers;
 
-import android.content.Context;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -13,12 +11,23 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
+import android.content.Context;
+
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
+
 /**
  * @author firetrap
- * 
+ *
  */
 public class ManDataStore {
-	Context context;
+	Context	context;
 
 	/**
 	 * @param context
@@ -45,8 +54,7 @@ public class ManDataStore {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	private static Object deserialize(byte[] bytes) throws IOException,
-			ClassNotFoundException {
+	private static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
 		ByteArrayInputStream b = new ByteArrayInputStream(bytes);
 		ObjectInputStream o = new ObjectInputStream(b);
 		return o.readObject();
@@ -81,8 +89,7 @@ public class ManDataStore {
 
 	/**
 	 * @param fileName
-	 * @return deserialize(object) or null
-	 *  Loads the object
+	 * @return deserialize(object) or null Loads the object
 	 */
 	public Object getData(String fileName) {
 		String filePath = "/" + fileName + ".data";

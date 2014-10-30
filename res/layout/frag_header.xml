@@ -1,46 +1,48 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent" 
-	android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="fragments.FragTopicsPreview" >
 
-	<LinearLayout 
-	    android:id="@+id/topics_header_relative_layout"
-		android:layout_width="match_parent" 
-		android:layout_height="fill_parent"
-		android:layout_marginLeft="6dp" 
-		android:layout_marginRight="6dp"
-		android:layout_marginTop="2dp" 
-		android:orientation="horizontal">
+    <LinearLayout
+        android:id="@+id/topics_header_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal" >
 
-		<TextView
-		    android:id="@+id/course_path_textView"
-		    style="@style/CardsHeaderTitle"
-		    android:layout_width="0dip"
-		    android:layout_height="wrap_content"
-		    android:layout_gravity="left"
-		    android:layout_marginRight="10dp"
-		    android:layout_weight="1"
-		    android:ellipsize="start"
-		    android:paddingBottom="10dp"
-		    android:paddingLeft="10dp"
-		    android:paddingTop="10dp"
-		    android:singleLine="true"
-		    android:text="@string/course_path" />
+        <TextView
+            android:id="@+id/course_path_textView"
+            style="@style/CardsHeaderTitle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:ellipsize="start"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:text="@string/course_path" />
 
-		<!-- android:textColor="@color/card_title_text" -->
+        <!-- android:textColor="@color/card_title_text" -->
 
-		<ImageButton 
-		    android:id="@+id/add_favorites_button"
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content"
-			android:layout_marginTop="10dp" 
-			android:layout_marginRight="16dp"
-			android:adjustViewBounds="false" 
-			android:background="@android:color/transparent"
-			android:contentDescription="@string/add_favorite_description"
-			android:cropToPadding="false" 
-			android:onClick="onAddFavoritesClick"
-			android:scaleType="center" 
-			android:src="@drawable/add_favorites" />
-	</LinearLayout>
+        <ImageButton
+            android:id="@+id/add_favorites_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:adjustViewBounds="false"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/add_favorite_description"
+            android:cropToPadding="false"
+            android:onClick="onAddFavoritesClick"
+            android:scaleType="center"
+            android:src="@drawable/add_favorites" />
+    </LinearLayout>
 
 </FrameLayout>

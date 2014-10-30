@@ -166,6 +166,12 @@
     <string name="demo_add_favorite_message">You only receive notifications after you add courses to your favorites</string>
     <string name="topic_summary">Topic Summary</string>
     <string name="demo_changelog_title">Release Notes</string>
+
+    <!-- Strings Related to context menu -->
     <string name="menu_changelog">Release Notes</string>
+    <string name="logout_confirmation_title">Logout</string>
+    <string name="logout_confirmation_content">Are you sure?</string>
+    <string name="refresh_title">Refresh</string>
+
 
 </resources>

@@ -19,7 +19,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <ScrollView
-            android:id="@+id/scrollView1"
+            android:id="@+id/login_form_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/full_results_title" >

@@ -1,5 +1,10 @@
 package fragments;
 
+import java.util.ArrayList;
+
+import managers.ManSearch;
+import model.ObjectSearch;
+import ui.CardTextView;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,11 +14,15 @@ import android.widget.LinearLayout;
 
 import com.firetrap.moody.R;
 
-import java.util.ArrayList;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
-import managers.ManSearch;
-import model.ObjectSearch;
-import ui.CardTextView;
 
 public class FragSearch extends Fragment {
 

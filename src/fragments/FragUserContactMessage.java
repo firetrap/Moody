@@ -1,9 +1,14 @@
 /**
- * 
+ *
  */
 package fragments;
 
+import managers.ManAlertDialog;
+import managers.ManUserContacts;
+import model.ModMessage;
+import restPackage.MoodleContact;
 import android.app.DialogFragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +19,18 @@ import android.widget.ImageButton;
 
 import com.firetrap.moody.R;
 
-import managers.ManAlertDialog;
-import managers.ManUserContacts;
-import model.ModMessage;
-import restPackage.MoodleContact;
+/**
+ * License: This program is free software; you can redistribute it and/or modify
+ * it under the terms of the dual licensing in the root of the project
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
+ * for more details. Fábio Barreiros - Moody Founder
+ */
 
 /**
  * @author Sfbramos
- * 
+ *
  */
 public class FragUserContactMessage extends DialogFragment {
 	private View view;
