@@ -762,6 +762,10 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 		FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
 		switch (v.getId()) {
+		case R.id.course_path_textView:
+			initCoursesOverview();
+			break;
+
 		case R.id.login_image_button:
 
 			fm = getFragmentManager();

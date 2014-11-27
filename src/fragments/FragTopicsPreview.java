@@ -158,7 +158,7 @@ public class FragTopicsPreview extends Fragment {
 			addFavorites.setId(id);
 			addFavorites.setTag("add_favorites_button_" + courseId);
 		} else
-			((ImageButton) topicsHeaderView.findViewById(R.id.add_favorites_button)).setVisibility(View.GONE);
+			((ImageButton) topicsHeaderView.findViewById(R.id.add_favorites_button)).setVisibility(View.VISIBLE);
 
 		return topicsHeaderView;
 	}

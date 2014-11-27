@@ -178,9 +178,9 @@
     <dimen name="histogram_bar_padding">0.0dip</dimen>
     <dimen name="histogram_width">100.0dip</dimen>
     <dimen name="card_medium_large_text">20.0sp</dimen>
-    <dimen name="card_medium_header_text">18.0sp</dimen>
-    
+    <dimen name="card_medium_header_text">16.0sp</dimen>
 
-    
+
+
 
 </resources>

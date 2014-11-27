@@ -21,7 +21,9 @@
             android:layout_gravity="left"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
+            android:clickable="true"
             android:ellipsize="start"
+            android:onClick="onClick"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
@@ -38,11 +40,12 @@
             android:layout_marginTop="10dp"
             android:adjustViewBounds="false"
             android:background="@android:color/transparent"
+            android:clickable="false"
             android:contentDescription="@string/add_favorite_description"
             android:cropToPadding="false"
-            android:onClick="onAddFavoritesClick"
             android:scaleType="center"
-            android:src="@drawable/add_favorites" />
+            android:src="@drawable/is_favorite"
+            android:visibility="invisible" />
     </LinearLayout>
 
 </FrameLayout>
