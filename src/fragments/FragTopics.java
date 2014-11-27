@@ -35,6 +35,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -178,7 +179,11 @@ public class FragTopics extends Fragment {
 			View topicSummary = inflater.inflate(R.layout.topic_summary, null);
 
 			TextView summary = (TextView) topicSummary.findViewById(R.id.summary_text);
-			summary.setText(Html.fromHtml(summaryContent));
+
+			String parsed = new ManContents(getActivity().getApplicationContext()).removeImgFromHtml(summaryContent);
+
+			summary.setText(Html.fromHtml(parsed));
+
 			insertPoint.addView(topicSummary);
 		}
 		MoodleModule[] modulesArray = singleTopic.getMoodleModules();

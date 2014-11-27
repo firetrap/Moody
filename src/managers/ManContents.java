@@ -47,11 +47,11 @@ import connections.DataAsyncTask;
  */
 public class ManContents {
 	// ManSession Manager Class
-	ManSession		session;
-	Object			getContent;
+	ManSession session;
+	Object getContent;
 
-	Context			context;
-	ManDataStore	data;
+	Context context;
+	ManDataStore data;
 
 	/**
 	 * @param context
@@ -233,6 +233,23 @@ public class ManContents {
 	}
 
 	/**
+	 *
+	 * This method is necessary because Moody integrate img links inside text
+	 * files so for now this is a quick solution, another solution is to
+	 * transform this textview in a webview but we need first to extract the img
+	 * link, add params to be possible to get the img (ex: token) and return
+	 * this to the html so can webview be able to process
+	 *
+	 * @param html
+	 * @return html string without img
+	 */
+	public String removeImgFromHtml(String html) {
+		Document doc = Jsoup.parse(html);
+		doc.select("img").remove();
+		return doc.html();
+	}
+
+	/**
 	 * @param fileUrl
 	 * @param fileName
 	 */
@@ -240,7 +257,7 @@ public class ManContents {
 		String inputLine;
 		String outPut = "";
 
-		// This is the lazy way but is only get html files at this time can be
+		// This is the lazy way but is only to get html files at this time can be
 		// like this, but in a near future it will be inside an AsyncTask
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
@@ -295,12 +312,12 @@ public class ManContents {
 
 		// the formatting rules, implemented in a breadth-first DOM traverse
 		private class FormattingVisitor implements NodeVisitor {
-			private static final int	maxWidth	= 80;
-			private int					width		= 0;
-			private StringBuilder		accum		= new StringBuilder();	// holds
-																			// the
-																			// accumulated
-																			// text
+			private static final int maxWidth = 80;
+			private int width = 0;
+			private StringBuilder accum = new StringBuilder(); // holds
+																// the
+																// accumulated
+																// text
 
 			// hit when the node is first seen
 			@Override

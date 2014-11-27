@@ -52,7 +52,7 @@ import com.firetrap.moody.R;
  * This program is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Dual Licence
- * for more details. Fabio Barreiros - Moody Founder
+ * for more details. Fábio Barreiros - Moody Founder
  */
 
 /**
