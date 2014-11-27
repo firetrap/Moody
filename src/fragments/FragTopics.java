@@ -175,15 +175,11 @@ public class FragTopics extends Fragment {
 
 		String summaryContent = singleTopic.getSummary();
 		if (!summaryContent.isEmpty()) {
-
 			View topicSummary = inflater.inflate(R.layout.topic_summary, null);
-
 			TextView summary = (TextView) topicSummary.findViewById(R.id.summary_text);
 
 			String parsed = new ManContents(getActivity().getApplicationContext()).removeImgFromHtml(summaryContent);
-
 			summary.setText(Html.fromHtml(parsed));
-
 			insertPoint.addView(topicSummary);
 		}
 		MoodleModule[] modulesArray = singleTopic.getMoodleModules();
@@ -214,7 +210,6 @@ public class FragTopics extends Fragment {
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
 			int b = 0;
-			// if (!singleModule.getName().isEmpty()) {
 			if (singleModule.getName().trim().length() > 0) {
 				// Test if Char is human readable or garbage from moodle DB;
 				if (Character.isLetterOrDigit(singleModule.getName().trim().charAt(0))) {
@@ -222,63 +217,26 @@ public class FragTopics extends Fragment {
 					if (!Html.fromHtml(singleModule.getDescription()).toString().isEmpty()) {
 
 						String moduleDescription = singleModule.getDescription();
-
 						String parsed = new ManContents(getActivity().getApplicationContext()).parseFile(moduleDescription);
 						String cleared = clearSource(parsed);
 
-						/**
-						 *
-						 * Added a link to image because the impossibility of
-						 * access to images inside description, the function is
-						 * prepared to receive an image and display it. ISSUE
-						 * reported in
-						 * https://tracker.moodle.org/browse/MDL-43513
-						 *
-						 */
-						if (cleared.contains("youtube")) {
-							TextView bla = new TextView(getActivity());
+						if (cleared.contains("image"))
+							externalImageFileType(topicContent, parsed);
 
-							bla.setText(cleared);
-							bla.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(cleared), 0, 0, 0);
-							Linkify.addLinks(bla, Linkify.ALL);
+						if (cleared.contains("youtube"))
+							youtubeFileType(topicContent, cleared);
 
-							LinearLayout recebe = (LinearLayout) topicsContent.findViewById(R.id.test_ll);
-							recebe.addView(bla);
-
-							// String cleared = clearSource(parsed);
-							// topicContent.setText(cleared);
-							// topicContent.setCompoundDrawablesWithIntrinsicBounds(
-							// getCorrectDrawable(cleared), 0, 0, 0);
-							// Linkify.addLinks(topicContent, Linkify.ALL);
-						}
-
-						if (cleared.contains("image")) {
-							// topicContent.setVisibility(View.GONE);
-							// moduleImage.setVisibility(View.VISIBLE);
-							// moduleImage
-							// .setImageDrawable(LoadImageFromWebOperations(parsed));
-
-							topicContent
-									.setText(Html.fromHtml("<a href=" + parsed + ">" + "Image - accessible only from broswer" + "</a>"));
-							topicContent.setCompoundDrawablesWithIntrinsicBounds(R.drawable.jpg, 0, 0, 0);
-							topicContent.setMovementMethod(LinkMovementMethod.getInstance());
-
-						} else {
-
-							topicContent.setText(Html.fromHtml(moduleDescription));
-							if (getMimeType(moduleDescription) != null)
-								topicContent.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(moduleDescription), 0, 0, 0);
-							topicContent.setMovementMethod(LinkMovementMethod.getInstance());
-						}
+						// else
+						// textFileType(topicContent, moduleDescription);
 
 					} else {
 						topicContent.setVisibility(View.GONE);
 						b++;
-
 					}
-					if (singleModule.getContent() != null) {
+
+					if (singleModule.getContent() != null)
 						getModuleContents(singleModule, topicsContent);
-					} else {
+					else {
 						topicsContent.findViewById(R.id.module_files).setVisibility(View.GONE);
 						b++;
 
@@ -291,7 +249,33 @@ public class FragTopics extends Fragment {
 				}
 			}
 		}
-		// }
+	}
+
+	private void textFileType(TextView topicContent, String moduleDescription) {
+		topicContent.setText(Html.fromHtml(moduleDescription));
+		if (getMimeType(moduleDescription) != null)
+			topicContent.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(moduleDescription), 0, 0, 0);
+		topicContent.setMovementMethod(LinkMovementMethod.getInstance());
+	}
+
+	/**
+	 * Added a link to image because the impossibility of access to images
+	 * inside description, the function is prepared to receive an image and
+	 * display it. ISSUE reported in https://tracker.moodle.org/browse/MDL-43513
+	 *
+	 * @param topicContent
+	 * @param parsed
+	 */
+	private void externalImageFileType(TextView topicContent, String parsed) {
+		topicContent.setText(Html.fromHtml("<a href=" + parsed + ">" + parsed + "</a>"));
+		topicContent.setCompoundDrawablesWithIntrinsicBounds(R.drawable.jpg, 0, 0, 0);
+		topicContent.setMovementMethod(LinkMovementMethod.getInstance());
+	}
+
+	private void youtubeFileType(TextView topicContent, String cleared) {
+		topicContent.setText(cleared);
+		topicContent.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(cleared), 0, 0, 0);
+		Linkify.addLinks(topicContent, Linkify.ALL);
 	}
 
 	/**
@@ -332,11 +316,6 @@ public class FragTopics extends Fragment {
 						String indexURL = new ManContents(context).parseFile(url, moduleContents[j].getFilename() + courseId + topicId
 								+ singleModule.getId());
 						if (clearSource(indexURL).contains("image")) {
-							// moduleFile.setVisibility(View.GONE);
-							// moduleImage.setVisibility(View.VISIBLE);
-							// moduleImage
-							// .setImageDrawable(LoadImageFromWebOperations(indexURL));
-
 						} else {
 							moduleFile.setText(indexURL);
 							if (getCorrectDrawable(indexURL) != 0)
@@ -348,17 +327,10 @@ public class FragTopics extends Fragment {
 					}
 				}
 				if (moduleContents[j].getType().equals("url")) {
-					String fileName = moduleContents[j].getFilename();
-					fileName = ((fileName == null) || fileName.isEmpty()) ? "External Content" : moduleContents[j].getFilename();
-
-					moduleFile.setText(Html.fromHtml("<a href=" + url + ">" + fileName + "</a>"));
-
+					moduleFile.setText(Html.fromHtml("<a href=" + url + ">" + url + "</a>"));
 					moduleFile.setMovementMethod(LinkMovementMethod.getInstance());
-
 				}
-
 			}
-
 		}
 	}
 

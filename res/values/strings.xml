@@ -172,6 +172,7 @@
     <string name="logout_confirmation_title">Logout</string>
     <string name="logout_confirmation_content">Are you sure?</string>
     <string name="refresh_title">Refresh</string>
+    <string name="youtube_mime_text">Watch Video</string>
 
 
 </resources>
