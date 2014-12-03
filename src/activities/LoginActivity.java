@@ -255,7 +255,7 @@ public class LoginActivity extends Activity {
 	}
 
 	/**
-	 * Esconde o teclado
+	 * Hides the keyboard
 	 *
 	 * @author hsousa
 	 */

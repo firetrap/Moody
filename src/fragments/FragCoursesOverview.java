@@ -15,6 +15,7 @@ import restPackage.MoodleCourseContent;
 import restPackage.MoodleRestCourse;
 import restPackage.MoodleServices;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -435,7 +436,6 @@ public class FragCoursesOverview extends Fragment {
 	public void relaunchFragment() {
 		getFragmentManager().beginTransaction().detach(this).attach(this).commit();
 		getFragmentManager().executePendingTransactions();
-
 	}
 
 	@Override

@@ -510,7 +510,6 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 			fragmentTransaction.commit();
 		} else {
 			// If it's a normal startup
-			// initCoursesContent();
 			initCoursesOverview();
 		}
 	}
@@ -704,7 +703,6 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 
 	@Override
 	public void onBackPressed() {
-
 		if (getFragmentManager().getBackStackEntryCount() == 1) {
 			if (backPressed + 2000 > System.currentTimeMillis()) {
 				finish();
@@ -764,6 +762,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 		switch (v.getId()) {
 		case R.id.course_path_textView:
 			initCoursesOverview();
+			// clearBackStack();
 			break;
 
 		case R.id.login_image_button:
@@ -1038,7 +1037,6 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 	@Override
 	public void onBackStackChanged() {
 		if (getFragmentManager().getBackStackEntryCount() == 1) {
-
 		}
 	}
 
