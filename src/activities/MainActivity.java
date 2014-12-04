@@ -84,8 +84,6 @@ import android.widget.Toast;
 import bitmap.BitmapResizer;
 
 import com.firetrap.moody.R;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 /**
@@ -1114,7 +1112,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 					return user;
 
 				case CORE_COURSE_GET_CONTENTS:
-					courseId = Long.parseLong((String) webServiceParams);
+					courseId = Long.parseLong(webServiceParams);
 					MoodleCourseContent[] courseContent = MoodleRestCourse.getCourseContent(courseId, null);
 					return courseContent;
 

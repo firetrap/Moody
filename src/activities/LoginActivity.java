@@ -462,6 +462,7 @@ public class LoginActivity extends Activity {
 	 *
 	 */
 	private Runnable initActivity = new Runnable() {
+		@Override
 		public void run() {
 
 			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -495,12 +496,12 @@ public class LoginActivity extends Activity {
 
 					findViewById(R.id.login_logo).setVisibility(View.GONE);
 					findViewById(R.id.LoginFormContainer).setLayoutParams(
-							new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+							new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 					activityRootView.invalidate();
 
 				} else {
 					findViewById(R.id.login_logo).setVisibility(View.VISIBLE);
-					findViewById(R.id.LoginFormContainer).setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0, 2f));
+					findViewById(R.id.LoginFormContainer).setLayoutParams(new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, 0, 2f));
 					activityRootView.invalidate();
 
 				}

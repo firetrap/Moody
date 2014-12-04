@@ -332,7 +332,7 @@ public class FragTopicsPreview extends Fragment {
 			try {
 				switch (webService) {
 				case CORE_COURSE_GET_CONTENTS:
-					courseId = Long.parseLong((String) webServiceParams);
+					courseId = Long.parseLong(webServiceParams);
 					MoodleCourseContent[] courseContent = MoodleRestCourse.getCourseContent(courseId, null);
 					return courseContent;
 

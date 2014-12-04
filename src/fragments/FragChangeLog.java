@@ -37,6 +37,7 @@ public class FragChangeLog extends DialogFragment {
 				.setTitle(R.string.demo_changelog_title)
 				.setView(chgList)
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					@Override
 					public void onClick(DialogInterface dialog, int whichButton) {
 						dialog.dismiss();
 					}

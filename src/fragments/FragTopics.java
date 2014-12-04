@@ -35,7 +35,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
-import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -58,7 +57,7 @@ import com.google.android.gms.ads.AdView;
 
 /**
  * @author firetrap
- *
+ * 
  */
 public class FragTopics extends Fragment {
 
@@ -145,9 +144,9 @@ public class FragTopics extends Fragment {
 	}
 
 	/**
-	 *
+	 * 
 	 * This method is responsible to initialize the required layouts
-	 *
+	 * 
 	 */
 	private void initLayouts() {
 
@@ -275,18 +274,11 @@ public class FragTopics extends Fragment {
 		}
 	}
 
-	private void textFileType(TextView topicContent, String moduleDescription) {
-		topicContent.setText(Html.fromHtml(moduleDescription));
-		if (getMimeType(moduleDescription) != null)
-			topicContent.setCompoundDrawablesWithIntrinsicBounds(getCorrectDrawable(moduleDescription), 0, 0, 0);
-		topicContent.setMovementMethod(LinkMovementMethod.getInstance());
-	}
-
 	/**
 	 * Added a link to image because the impossibility of access to images
 	 * inside description, the function is prepared to receive an image and
 	 * display it. ISSUE reported in https://tracker.moodle.org/browse/MDL-43513
-	 *
+	 * 
 	 * @param topicContent
 	 * @param parsed
 	 */
@@ -303,11 +295,11 @@ public class FragTopics extends Fragment {
 	}
 
 	/**
-	 *
+	 * 
 	 * One of the most important method in the project, is responsible to get
 	 * the contents from the modules and display it in view according with which
 	 * type of data
-	 *
+	 * 
 	 * @param singleModule
 	 * @param topicsContent
 	 */
@@ -385,9 +377,9 @@ public class FragTopics extends Fragment {
 	}
 
 	/**
-	 *
+	 * 
 	 * Return the correct draw to the view
-	 *
+	 * 
 	 * @param url
 	 * @return drawable id
 	 */
