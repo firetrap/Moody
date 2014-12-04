@@ -89,6 +89,9 @@ public class FragTopicsPreview extends Fragment {
 		// Add the header to the main Layout
 		mainLayout.addView(topicsHeaderView);
 
+//		private LinearLayout mainLayout =
+
+
 		createTopicsContent(inflater, contentsLayout, courseId);
 
 		// add the linearLayout with the contents to scrollView
