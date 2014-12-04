@@ -28,6 +28,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.firetrap.moody.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
 /**
  * License: This program is free software; you can redistribute it and/or modify
@@ -54,6 +57,7 @@ public class FragTopicsPreview extends Fragment {
 	private Context context;
 	private String userId;
 	private ManDataStore data;
+	private AdView adView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,10 +91,9 @@ public class FragTopicsPreview extends Fragment {
 
 		View topicsHeaderView = createTopicsHeader(CourseName, courseId, inflater);
 		// Add the header to the main Layout
-		mainLayout.addView(topicsHeaderView);
+		mainLayout.addView(topicsHeaderView, 0);
 
-//		private LinearLayout mainLayout =
-
+		createAdView();
 
 		createTopicsContent(inflater, contentsLayout, courseId);
 
@@ -102,6 +105,46 @@ public class FragTopicsPreview extends Fragment {
 
 		return mainLayout;
 
+	}
+
+	private void createAdView() {
+		// Criar o adView.
+		adView = new AdView(getActivity());
+		adView.setAdUnitId(ModConstants.MY_AD_UNIT_ID);
+		adView.setAdSize(AdSize.BANNER);
+
+		// Pesquisar seu LinearLayout presumindo que ele foi dado
+		// o atributo android:id="@+id/mainLayout".
+
+		// Adicionar o adView a ele.
+		mainLayout.addView(adView);
+
+		// Iniciar uma solicitação genérica.
+		// AdRequest adRequest = new AdRequest.Builder().build();
+
+		// Test Mode
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice("9D8E5979743348F161179152A948D650").build();
+
+		// Carregar o adView com a solicitação de anúncio.
+		adView.loadAd(adRequest);
+	}
+
+	@Override
+	public void onResume() {
+		adView.resume();
+		super.onResume();
+	}
+
+	@Override
+	public void onPause() {
+		adView.pause();
+		super.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+		adView.destroy();
+		super.onDestroy();
 	}
 
 	/**

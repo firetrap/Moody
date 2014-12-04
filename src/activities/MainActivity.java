@@ -104,8 +104,6 @@ import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends Activity implements OnBackStackChangedListener, OnClickListener, InterDialogFrag {
 
-	private static final String MY_AD_UNIT_ID = "ca-app-pub-6892180394020125/7421079096";
-
 	private DrawerLayout moodydrawerLayout;
 
 	private HashMap<String, String> organizedCourses = new HashMap<String, String>();
@@ -166,23 +164,23 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 		warningMessage(new ModCheckConnection(getApplicationContext()).hasConnection(), Toast.LENGTH_LONG, null,
 				getString(R.string.no_internet));
 
-		// Criar o adView.
-		adView = new AdView(this);
-		adView.setAdUnitId(MY_AD_UNIT_ID);
-		adView.setAdSize(AdSize.BANNER);
-
-		// Pesquisar seu LinearLayout presumindo que ele foi dado
-		// o atributo android:id="@+id/mainLayout".
-		LinearLayout layout = (LinearLayout) findViewById(R.id.mainLayout);
-
-		// Adicionar o adView a ele.
-		layout.addView(adView);
-
-		// Iniciar uma solicitação genérica.
-		AdRequest adRequest = new AdRequest.Builder().build();
-
-		// Carregar o adView com a solicitação de anúncio.
-		adView.loadAd(adRequest);
+		// // Criar o adView.
+		// adView = new AdView(this);
+		// adView.setAdUnitId(ModConstants.MY_AD_UNIT_ID);
+		// adView.setAdSize(AdSize.BANNER);
+		//
+		// // Pesquisar seu LinearLayout presumindo que ele foi dado
+		// // o atributo android:id="@+id/mainLayout".
+		// LinearLayout layout = (LinearLayout) findViewById(R.id.mainLayout);
+		//
+		// // Adicionar o adView a ele.
+		// layout.addView(adView);
+		//
+		// // Iniciar uma solicitação genérica.
+		// AdRequest adRequest = new AdRequest.Builder().build();
+		//
+		// // Carregar o adView com a solicitação de anúncio.
+		// adView.loadAd(adRequest);
 
 	}
 
@@ -676,20 +674,20 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 		endTime = System.currentTimeMillis();
 		Log.d("MoodyPerformance", Long.toString(performanceMeasure(startTime, endTime)));
 		// changeLogCheckVersion();
-		adView.resume();
+		// adView.resume();
 		super.onResume();
 
 	}
 
 	@Override
 	protected void onDestroy() {
-		adView.destroy();
+		// adView.destroy();
 		super.onDestroy();
 	}
 
 	@Override
 	protected void onPause() {
-		adView.pause();
+		// adView.pause();
 		super.onPause();
 	}
 
