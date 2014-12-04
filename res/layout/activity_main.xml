@@ -12,6 +12,14 @@
         android:background="@color/C_Light_Grey"
         android:scrollbars="none" >
 
+     <LinearLayout
+         android:id="@+id/mainLayout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical" >
+
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/mainFragment"
             android:layout_width="match_parent"
