@@ -10,11 +10,11 @@ package model;
  */
 
 /**
- *
+ * 
  * ModConstants - Classe que contém todos os valores constants da aplicação.
- *
+ * 
  * @author Sérgio Andaluz Ramos
- *
+ * 
  */
 public final class ModConstants {
 
@@ -45,9 +45,9 @@ public final class ModConstants {
 	public static final String PREF_NAME = "MoodyPreferences";
 
 	/**
-	 *
+	 * 
 	 * Atributos Constants da Sessão do Moody.
-	 *
+	 * 
 	 **/
 
 	// Shared pref mode
@@ -63,10 +63,13 @@ public final class ModConstants {
 	// ADMob constants
 	public static final String MY_AD_UNIT_ID = "ca-app-pub-6892180394020125/7421079096";
 
+	// ADMob test devices id
+	public static final String ADS_TEST_DEVICE_ID = "CDAE3DBAB1769B345EB6D9395AA01440";
+
 	/**
-	 *
+	 * 
 	 * - Construtor privado - Assegura que classe não é instanciavel.
-	 *
+	 * 
 	 **/
 	private ModConstants() {
 	}

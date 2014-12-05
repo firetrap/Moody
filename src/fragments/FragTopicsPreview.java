@@ -117,13 +117,13 @@ public class FragTopicsPreview extends Fragment {
 		// o atributo android:id="@+id/mainLayout".
 
 		// Adicionar o adView a ele.
-		mainLayout.addView(adView);
+		mainLayout.addView(adView, 1);
 
 		// Iniciar uma solicitação genérica.
 		// AdRequest adRequest = new AdRequest.Builder().build();
 
 		// Test Mode
-		AdRequest adRequest = new AdRequest.Builder().addTestDevice("9D8E5979743348F161179152A948D650").build();
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
 
 		// Carregar o adView com a solicitação de anúncio.
 		adView.loadAd(adRequest);
@@ -131,19 +131,22 @@ public class FragTopicsPreview extends Fragment {
 
 	@Override
 	public void onResume() {
-		adView.resume();
+		if (adView != null)
+			adView.resume();
 		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
-		adView.pause();
+		if (adView != null)
+			adView.pause();
 		super.onPause();
 	}
 
 	@Override
 	public void onDestroy() {
-		adView.destroy();
+		if (adView != null)
+			adView.destroy();
 		super.onDestroy();
 	}
 

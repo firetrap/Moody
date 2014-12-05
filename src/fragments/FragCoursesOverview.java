@@ -47,7 +47,7 @@ import com.google.android.gms.ads.AdView;
 /**
  * @author FBARREI1 Fragment to display user courses in the mainActivity when
  *         its initialised, in another words a all courses overview
- * 
+ *
  */
 public class FragCoursesOverview extends Fragment {
 	MoodleCourse[] courses;
@@ -138,13 +138,13 @@ public class FragCoursesOverview extends Fragment {
 		// o atributo android:id="@+id/mainLayout".
 
 		// Adicionar o adView a ele.
-		mainLayout.addView(adView);
+		mainLayout.addView(adView, 1);
 
 		// Iniciar uma solicitação genérica.
 		// AdRequest adRequest = new AdRequest.Builder().build();
 
 		// Test Mode
-		AdRequest adRequest = new AdRequest.Builder().addTestDevice("9D8E5979743348F161179152A948D650").build();
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
 
 		// Carregar o adView com a solicitação de anúncio.
 		adView.loadAd(adRequest);
@@ -185,9 +185,9 @@ public class FragCoursesOverview extends Fragment {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method is responsible to initialise the required layouts
-	 * 
+	 *
 	 */
 	private void initLayouts() {
 
@@ -436,19 +436,22 @@ public class FragCoursesOverview extends Fragment {
 
 	@Override
 	public void onResume() {
-		adView.resume();
+		if (adView != null)
+			adView.resume();
 		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
-		adView.pause();
+		if (adView != null)
+			adView.pause();
 		super.onPause();
 	}
 
 	@Override
 	public void onDestroy() {
-		adView.destroy();
+		if (adView != null)
+			adView.destroy();
 		super.onDestroy();
 	}
 

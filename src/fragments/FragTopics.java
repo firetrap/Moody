@@ -57,7 +57,7 @@ import com.google.android.gms.ads.AdView;
 
 /**
  * @author firetrap
- * 
+ *
  */
 public class FragTopics extends Fragment {
 
@@ -103,6 +103,8 @@ public class FragTopics extends Fragment {
 				new FragTopicsAsync().execute();
 
 		}
+
+		// createAdView();
 		return myView;
 	}
 
@@ -131,22 +133,22 @@ public class FragTopics extends Fragment {
 		// o atributo android:id="@+id/mainLayout".
 
 		// Adicionar o adView a ele.
-		mainLayout.addView(adView);
+		mainLayout.addView(adView, 1);
 
 		// Iniciar uma solicitação genérica.
 		// AdRequest adRequest = new AdRequest.Builder().build();
 
 		// Test Mode
-		AdRequest adRequest = new AdRequest.Builder().addTestDevice("9D8E5979743348F161179152A948D650").build();
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
 
 		// Carregar o adView com a solicitação de anúncio.
 		adView.loadAd(adRequest);
 	}
 
 	/**
-	 * 
+	 *
 	 * This method is responsible to initialize the required layouts
-	 * 
+	 *
 	 */
 	private void initLayouts() {
 
@@ -278,7 +280,7 @@ public class FragTopics extends Fragment {
 	 * Added a link to image because the impossibility of access to images
 	 * inside description, the function is prepared to receive an image and
 	 * display it. ISSUE reported in https://tracker.moodle.org/browse/MDL-43513
-	 * 
+	 *
 	 * @param topicContent
 	 * @param parsed
 	 */
@@ -295,11 +297,11 @@ public class FragTopics extends Fragment {
 	}
 
 	/**
-	 * 
+	 *
 	 * One of the most important method in the project, is responsible to get
 	 * the contents from the modules and display it in view according with which
 	 * type of data
-	 * 
+	 *
 	 * @param singleModule
 	 * @param topicsContent
 	 */
@@ -377,9 +379,9 @@ public class FragTopics extends Fragment {
 	}
 
 	/**
-	 * 
+	 *
 	 * Return the correct draw to the view
-	 * 
+	 *
 	 * @param url
 	 * @return drawable id
 	 */
@@ -448,19 +450,22 @@ public class FragTopics extends Fragment {
 
 	@Override
 	public void onResume() {
-		adView.resume();
+		if (adView != null)
+			adView.resume();
 		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
-		adView.pause();
+		if (adView != null)
+			adView.pause();
 		super.onPause();
 	}
 
 	@Override
 	public void onDestroy() {
-		adView.destroy();
+		if (adView != null)
+			adView.destroy();
 		super.onDestroy();
 	}
 
@@ -544,7 +549,6 @@ public class FragTopics extends Fragment {
 	public void updateFragment() {
 		getFragmentManager().beginTransaction().detach(this).attach(this).commit();
 		getFragmentManager().executePendingTransactions();
-
 		createAdView();
 	}
 
