@@ -57,6 +57,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -157,7 +158,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 		// Logged user id
 		userId = session.getValues(ModConstants.KEY_ID, null);
 
-		drawerLayoutDynamicWidth();
+		setDrawerLayoutDynamicWidth();
 		getUserData();
 		initLeftContent();
 		intRightContent();
@@ -169,10 +170,13 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 
 	}
 
-	private void drawerLayoutDynamicWidth() {
+	/**
+	 *
+	 */
+	private void setDrawerLayoutDynamicWidth() {
 		moodydrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		// The width will be 70% of the available screen size
-		int screenWidth = (int) Math.round((getResources().getDisplayMetrics().widthPixels) * 0.65);
+		// The width will be 60% of the available screen size
+		int screenWidth = (int) Math.round((getResources().getDisplayMetrics().widthPixels) * 0.60);
 		leftScrollView = (ScrollView) findViewById(R.id.left_drawer);
 		rightScrollView = (ScrollView) findViewById(R.id.right_drawer);
 
@@ -690,6 +694,12 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 	protected void onPause() {
 		// adView.pause();
 		super.onPause();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		setDrawerLayoutDynamicWidth();
+		super.onConfigurationChanged(newConfig);
 	}
 
 	/*
