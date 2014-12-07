@@ -145,7 +145,7 @@
                     android:layout_height="2dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/multi_color_line" />
+                    android:background="@color/C_Light_Grey" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

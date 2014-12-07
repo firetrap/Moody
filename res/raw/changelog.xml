@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.7.5 alpha" changeDate="Dec 07,2014">
+		<changelogtext>Fixed Asynctask bugs</changelogtext>
+		<changelogtext>[b]New![/b] Revamped Login Layout</changelogtext>
+		<changelogtext>[b]New![/b] Revamped Launcher icon</changelogtext>
+		<changelogtext>Added admob to all fragments, because Moody it's free and we need some help :( </changelogtext>
+		<changelogtext>[b]Major issue![/b] Fixed problem with img tag inside topics summary</changelogtext>
+		<changelogtext>[b]Major issue![/b] Fixed some issues in fragtopics related to linkify and file types</changelogtext>
+		<changelogtext>Added isfavorite png</changelogtext>
+		<changelogtext>Added Google ads API to project</changelogtext>
+		<changelogtext>Wrapped ads in the header</changelogtext>
+		<changelogtext>Added multi devices layouts</changelogtext>
+		<changelogtext>Fixed Problem with screensize when rotation, now when it rotates it updates the screensize and redraw the drawerlayout</changelogtext>
+	</changelogversion>
+
     <changelogversion versionName="0.7.4 alpha" changeDate="Oct 06,2014">
 		<changelogtext>Fixed Asynctask bugs</changelogtext>
 		<changelogtext>[b]New![/b] Added new file type icons</changelogtext>
