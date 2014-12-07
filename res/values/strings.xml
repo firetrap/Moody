@@ -31,7 +31,7 @@
     <string name="prompt_url">Moodle URL</string>
     <string name="error_invalid_url">This url is invalid.</string>
     <string name="moody_trademark"><a href="http://firetrap.github.io/Moody">Moody</a></string>
-    <string name="licences"><a href="http://source.android.com/source/licenses.html">Apache Software License, Version 2.0</a></string>
+    <string name="licences"><a href="https://github.com/firetrap/Moody/blob/master/LICENCE.txt">Licence Version 1.0</a></string>
 
     <!-- Strings related to populate -->
     <string name="fullName_textView">User Name</string>

@@ -176,7 +176,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 	private void setDrawerLayoutDynamicWidth() {
 		moodydrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		// The width will be 60% of the available screen size
-		int screenWidth = (int) Math.round((getResources().getDisplayMetrics().widthPixels) * 0.60);
+		int screenWidth = (int) Math.round((getResources().getDisplayMetrics().widthPixels) * 0.65);
 		leftScrollView = (ScrollView) findViewById(R.id.left_drawer);
 		rightScrollView = (ScrollView) findViewById(R.id.right_drawer);
 

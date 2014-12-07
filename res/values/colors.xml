@@ -11,11 +11,12 @@
     <color name="C_Red_Salmon">#FF555A</color>
     <color name="C_Moodle_Orange">#FF9320</color>
     <color name="C_Medium_Green">#00B08D</color>
+    <color name="C_Dark_cyan">#4DB6AC</color>
     <color name="C_Agressive_Pink">#ff0099</color>
     <color name="C_Favorites_Pink">#BE245A</color>
     <color name="C_Tomato_Red">#ff393a</color>
 
-          <!-- Cards Colors -->
+      <!-- Cards Colors -->
     <color name="stroke">#dddddd</color>
     <color name="text_light">#66000000</color>
     <color name="card_text">#ff8d8d8d</color>
@@ -25,6 +26,6 @@
     <color name="card_separator">#ffe5e5e5</color>
     <color name="card_border">#ffdedede</color>
 
-    
-    
+
+
 </resources>

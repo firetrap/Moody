@@ -494,14 +494,12 @@ public class LoginActivity extends Activity {
 					// if more than 100 pixels,its probably a
 					// keyboard
 
-					findViewById(R.id.login_logo).setVisibility(View.GONE);
 					findViewById(R.id.LoginFormContainer).setLayoutParams(
 							new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 									android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 					activityRootView.invalidate();
 
 				} else {
-					findViewById(R.id.login_logo).setVisibility(View.VISIBLE);
 					findViewById(R.id.LoginFormContainer).setLayoutParams(
 							new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, 0, 2f));
 					activityRootView.invalidate();
