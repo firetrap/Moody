@@ -9,6 +9,7 @@ import java.net.URL;
 
 import managers.ManAlertDialog;
 import managers.ManSession;
+import model.ModConstants;
 import model.ModMessage;
 
 import org.json.JSONException;
@@ -41,7 +42,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.firetrap.moody.R;
@@ -179,9 +179,9 @@ public class LoginActivity extends Activity {
 		mPassword = mPasswordView.getText().toString().trim();
 
 		// FOR DEV ONLY, IT WILL CONNECT TO THE TESTS SERVER
-		mUrl = "193.137.46.10/default_site/Moody";
-		mUser = "student";
-		mPassword = "student";
+		mUrl = ModConstants.TEST_MODE_URL;
+		mUser = ModConstants.TEST_MODE_USER;
+		mPassword = ModConstants.TEST_MODE_PASSWORD;
 
 		boolean cancel = false;
 		String error = "Errors found: \n\n";
@@ -496,12 +496,14 @@ public class LoginActivity extends Activity {
 
 					findViewById(R.id.login_logo).setVisibility(View.GONE);
 					findViewById(R.id.LoginFormContainer).setLayoutParams(
-							new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+							new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+									android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 					activityRootView.invalidate();
 
 				} else {
 					findViewById(R.id.login_logo).setVisibility(View.VISIBLE);
-					findViewById(R.id.LoginFormContainer).setLayoutParams(new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, 0, 2f));
+					findViewById(R.id.LoginFormContainer).setLayoutParams(
+							new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, 0, 2f));
 					activityRootView.invalidate();
 
 				}

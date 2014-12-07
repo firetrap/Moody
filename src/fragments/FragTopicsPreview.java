@@ -111,7 +111,7 @@ public class FragTopicsPreview extends Fragment {
 		// Criar o adView.
 		adView = new AdView(getActivity());
 		adView.setAdUnitId(ModConstants.MY_AD_UNIT_ID);
-		adView.setAdSize(AdSize.BANNER);
+		adView.setAdSize(AdSize.SMART_BANNER);
 
 		// Pesquisar seu LinearLayout presumindo que ele foi dado
 		// o atributo android:id="@+id/mainLayout".

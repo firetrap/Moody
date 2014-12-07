@@ -47,7 +47,7 @@ import com.google.android.gms.ads.AdView;
 /**
  * @author FBARREI1 Fragment to display user courses in the mainActivity when
  *         its initialised, in another words a all courses overview
- * 
+ *
  */
 public class FragCoursesOverview extends Fragment {
 	MoodleCourse[] courses;
@@ -132,7 +132,7 @@ public class FragCoursesOverview extends Fragment {
 		// Criar o adView.
 		adView = new AdView(getActivity());
 		adView.setAdUnitId(ModConstants.MY_AD_UNIT_ID);
-		adView.setAdSize(AdSize.BANNER);
+		adView.setAdSize(AdSize.SMART_BANNER);
 
 		// Pesquisar seu LinearLayout presumindo que ele foi dado
 		// o atributo android:id="@+id/mainLayout".
@@ -185,9 +185,9 @@ public class FragCoursesOverview extends Fragment {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method is responsible to initialise the required layouts
-	 * 
+	 *
 	 */
 	private void initLayouts() {
 

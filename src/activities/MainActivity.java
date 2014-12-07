@@ -78,6 +78,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -129,6 +130,10 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 
 	private AdView adView;
 
+	private ScrollView leftScrollView;
+
+	private ScrollView rightScrollView;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -152,7 +157,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 		// Logged user id
 		userId = session.getValues(ModConstants.KEY_ID, null);
 
-		moodydrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		drawerLayoutDynamicWidth();
 		getUserData();
 		initLeftContent();
 		intRightContent();
@@ -162,24 +167,22 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 		warningMessage(new ModCheckConnection(getApplicationContext()).hasConnection(), Toast.LENGTH_LONG, null,
 				getString(R.string.no_internet));
 
-		// // Criar o adView.
-		// adView = new AdView(this);
-		// adView.setAdUnitId(ModConstants.MY_AD_UNIT_ID);
-		// adView.setAdSize(AdSize.BANNER);
-		//
-		// // Pesquisar seu LinearLayout presumindo que ele foi dado
-		// // o atributo android:id="@+id/mainLayout".
-		// LinearLayout layout = (LinearLayout) findViewById(R.id.mainLayout);
-		//
-		// // Adicionar o adView a ele.
-		// layout.addView(adView);
-		//
-		// // Iniciar uma solicitação genérica.
-		// AdRequest adRequest = new AdRequest.Builder().build();
-		//
-		// // Carregar o adView com a solicitação de anúncio.
-		// adView.loadAd(adRequest);
+	}
 
+	private void drawerLayoutDynamicWidth() {
+		moodydrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		// The width will be 70% of the available screen size
+		int screenWidth = (int) Math.round((getResources().getDisplayMetrics().widthPixels) * 0.65);
+		leftScrollView = (ScrollView) findViewById(R.id.left_drawer);
+		rightScrollView = (ScrollView) findViewById(R.id.right_drawer);
+
+		DrawerLayout.LayoutParams leftParams = (android.support.v4.widget.DrawerLayout.LayoutParams) leftScrollView.getLayoutParams();
+		DrawerLayout.LayoutParams rightParams = (android.support.v4.widget.DrawerLayout.LayoutParams) rightScrollView.getLayoutParams();
+		leftParams.width = screenWidth;
+		rightParams.width = screenWidth;
+
+		leftScrollView.setLayoutParams(leftParams);
+		rightScrollView.setLayoutParams(rightParams);
 	}
 
 	/**
