@@ -179,9 +179,9 @@ public class LoginActivity extends Activity {
 		mPassword = mPasswordView.getText().toString().trim();
 
 		// FOR DEV ONLY, IT WILL CONNECT TO THE TESTS SERVER
-		mUrl = ModConstants.TEST_MODE_URL;
-		mUser = ModConstants.TEST_MODE_USER;
-		mPassword = ModConstants.TEST_MODE_PASSWORD;
+		// mUrl = ModConstants.TEST_MODE_URL;
+		// mUser = ModConstants.TEST_MODE_USER;
+		// mPassword = ModConstants.TEST_MODE_PASSWORD;
 
 		boolean cancel = false;
 		String error = "Errors found: \n\n";

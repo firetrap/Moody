@@ -136,10 +136,11 @@ public class FragTopics extends Fragment {
 		mainLayout.addView(adView, 1);
 
 		// Iniciar uma solicitação genérica.
-		// AdRequest adRequest = new AdRequest.Builder().build();
+		AdRequest adRequest = new AdRequest.Builder().build();
 
 		// Test Mode
-		AdRequest adRequest = new AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
+		// AdRequest adRequest = new
+		// AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
 
 		// Carregar o adView com a solicitação de anúncio.
 		adView.loadAd(adRequest);

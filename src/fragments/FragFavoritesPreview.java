@@ -323,7 +323,7 @@ public class FragFavoritesPreview extends Fragment implements OnBackStackChanged
 	private MoodleCourse getCourse(Long id, MoodleCourse[] courses) {
 
 		for (MoodleCourse course : courses) {
-			if (Long.valueOf(course.getId()) == Long.valueOf(id))
+			if (Long.valueOf(course.getId()).compareTo(Long.valueOf(id)) == 0)
 				return course;
 		}
 

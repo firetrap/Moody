@@ -46,7 +46,7 @@ import com.google.android.gms.ads.AdView;
 
 /**
  * @author FBARREI1 Fragment to display user courses in the mainActivity when
- *         its initialised, in another words a all courses overview
+ *         its initialised, in another words all courses overview
  *
  */
 public class FragCoursesOverview extends Fragment {
@@ -141,10 +141,11 @@ public class FragCoursesOverview extends Fragment {
 		mainLayout.addView(adView, 1);
 
 		// Iniciar uma solicitação genérica.
-		// AdRequest adRequest = new AdRequest.Builder().build();
+		AdRequest adRequest = new AdRequest.Builder().build();
 
 		// Test Mode
-		AdRequest adRequest = new AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
+		// AdRequest adRequest = new
+		// AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
 
 		// Carregar o adView com a solicitação de anúncio.
 		adView.loadAd(adRequest);

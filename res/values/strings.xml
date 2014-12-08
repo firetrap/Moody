@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Moody</string>
+    <string name="app_name">Moody Student</string>
     <string name="menu_settings">Settings</string>
     <string name="hello_world">Hello Sergio</string>
     <string name="title_activity_menu_esq">Menu_esq</string>
