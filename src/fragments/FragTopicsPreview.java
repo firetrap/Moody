@@ -110,7 +110,7 @@ public class FragTopicsPreview extends Fragment {
 	private void createAdView() {
 		// Criar o adView.
 		adView = new AdView(getActivity());
-		adView.setAdUnitId(ModConstants.MY_AD_UNIT_ID);
+		adView.setAdUnitId(ModConstants.MY_ADMOB_UNIT_ID);
 		adView.setAdSize(AdSize.SMART_BANNER);
 
 		// Pesquisar seu LinearLayout presumindo que ele foi dado
@@ -120,11 +120,10 @@ public class FragTopicsPreview extends Fragment {
 		mainLayout.addView(adView, 1);
 
 		// Iniciar uma solicitação genérica.
-		AdRequest adRequest = new AdRequest.Builder().build();
+		// AdRequest adRequest = new AdRequest.Builder().build();
 
 		// Test Mode
-		// AdRequest adRequest = new
-		// AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
 
 		// Carregar o adView com a solicitação de anúncio.
 		adView.loadAd(adRequest);

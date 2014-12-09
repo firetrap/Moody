@@ -61,10 +61,10 @@ public final class ModConstants {
 	public static final String DIALOG_FRAG_USER_CLOUD_DRIVE = "com.google.android.apps.docs";
 
 	// ADMob constants
-	public static final String MY_AD_UNIT_ID = "ca-app-pub-6892180394020125/7421079096";
+	public static final String MY_ADMOB_UNIT_ID = "ca-app-pub-6892180394020125/7421079096";
 
 	// ADMob test devices id
-	public static final String ADS_TEST_DEVICE_ID = "CDAE3DBAB1769B345EB6D9395AA01440";
+	public static final String ADS_TEST_DEVICE_ID = "D1FB3FA9A4D6CDC5CBA3C5616D291323";
 
 	// Test mode to connect to test server
 	public static final String TEST_MODE_USER = "student";

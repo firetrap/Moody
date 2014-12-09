@@ -30,6 +30,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.firetrap.moody.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -83,7 +84,9 @@ public class FragCoursesOverview extends Fragment {
 
 	private View myView;
 
-	private AdView adView;
+	private AdView adMobView;
+
+	private LinearLayout adsLayout;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -129,26 +132,50 @@ public class FragCoursesOverview extends Fragment {
 	}
 
 	private void createAdView() {
-		// Criar o adView.
-		adView = new AdView(getActivity());
-		adView.setAdUnitId(ModConstants.MY_AD_UNIT_ID);
-		adView.setAdSize(AdSize.SMART_BANNER);
+		// Create the ads linearLayout witch will wrap the ads from 2 sources
+		adsLayout = new LinearLayout(getActivity());
+		adsLayout.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		adsLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-		// Pesquisar seu LinearLayout presumindo que ele foi dado
-		// o atributo android:id="@+id/mainLayout".
+		/**
+		 * Admob
+		 */
+		// Create adView.
+		adMobView = new AdView(getActivity());
+		adMobView.setAdUnitId(ModConstants.MY_ADMOB_UNIT_ID);
+		adMobView.setAdSize(AdSize.SMART_BANNER);
 
-		// Adicionar o adView a ele.
-		mainLayout.addView(adView, 1);
+		// Add adMobView to the adsadMobView layout
+		adsLayout.addView(adMobView, 0);
 
-		// Iniciar uma solicitação genérica.
-		AdRequest adRequest = new AdRequest.Builder().build();
+		// Init generic builder
+		// AdRequest adRequest = new AdRequest.Builder().build();
 
 		// Test Mode
-		// AdRequest adRequest = new
-		// AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
 
-		// Carregar o adView com a solicitação de anúncio.
-		adView.loadAd(adRequest);
+		// Load ads to the adView
+		adMobView.loadAd(adRequest);
+
+		/**
+		 * Revmob
+		 */
+		// // Starting RevMob session
+		// RevMob revmob = RevMob.start(getActivity()); // RevMob Media ID
+		// // configured in the
+		// // AndroidManifest.xml
+		// // file
+		//
+		// // Creating revMob banner
+		// RevMobBanner revMobView = revmob.createBanner(getActivity());
+		//
+		// // Add revMobView to the ads layout
+		// adsLayout.addView(revMobView, 1);
+		//
+
+		// add the 2 ads LinearLayout to the mainLayout
+		mainLayout.addView(adsLayout, 1);
 	}
 
 	private void initCoursesList() {
@@ -437,22 +464,22 @@ public class FragCoursesOverview extends Fragment {
 
 	@Override
 	public void onResume() {
-		if (adView != null)
-			adView.resume();
+		if (adMobView != null)
+			adMobView.resume();
 		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
-		if (adView != null)
-			adView.pause();
+		if (adMobView != null)
+			adMobView.pause();
 		super.onPause();
 	}
 
 	@Override
 	public void onDestroy() {
-		if (adView != null)
-			adView.destroy();
+		if (adMobView != null)
+			adMobView.destroy();
 		super.onDestroy();
 	}
 

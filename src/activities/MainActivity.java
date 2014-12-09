@@ -41,7 +41,6 @@ import restPackage.MoodleRestMessage;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
-import service.ServiceBackground;
 import ui.CardTextView;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -86,7 +85,11 @@ import android.widget.Toast;
 import bitmap.BitmapResizer;
 
 import com.firetrap.moody.R;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.revmob.RevMob;
 
 /**
  * License: This program is free software; you can redistribute it and/or modify
@@ -135,6 +138,10 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 
 	private ScrollView rightScrollView;
 
+	private RevMob revmob;
+
+	private InterstitialAd interstitial;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -168,6 +175,54 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 		warningMessage(new ModCheckConnection(getApplicationContext()).hasConnection(), Toast.LENGTH_LONG, null,
 				getString(R.string.no_internet));
 
+		// Load ads
+
+		// RevMob
+		initRevMob();
+
+		// AdMob
+		initAdMob();
+
+	}
+
+	private void initAdMob() {
+		// Create the interstitial.
+		interstitial = new InterstitialAd(this);
+		interstitial.setAdUnitId(ModConstants.MY_ADMOB_UNIT_ID);
+
+		// Create ad request.
+		// AdRequest adRequest = new AdRequest.Builder().build();
+
+		// Test Mode
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
+
+		// Begin loading your interstitial.
+		interstitial.loadAd(adRequest);
+
+		interstitial.setAdListener(new AdListener() {
+			public void onAdLoaded() {
+				// showAdmobInterstitial();
+			}
+
+			@Override
+			public void onAdClosed() {
+				initAdMob();
+			}
+		});
+	}
+
+	private void initRevMob() {
+		// RevMob
+		revmob = RevMob.start(this);
+	}
+
+	private void showRevmobInterstitial() {
+		revmob.showFullscreen(this);
+	}
+
+	private void showAdmobInterstitial() {
+		if (interstitial.isLoaded())
+			interstitial.show();
 	}
 
 	/**
@@ -753,6 +808,13 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 	public void onBackPressed() {
 		if (getFragmentManager().getBackStackEntryCount() == 1) {
 			if (backPressed + 2000 > System.currentTimeMillis()) {
+
+				// Display a Admob fullscreen ad when left app
+				showAdmobInterstitial();
+
+				// Display a revMob fullscreen ad when left app
+				// showRevmobInterstitial();
+
 				finish();
 			} else
 				Toast.makeText(this, getString(R.string.exit_msg), Toast.LENGTH_SHORT).show();
@@ -927,9 +989,10 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 			break;
 
 		case R.id.action_refresh:
-			startService(new Intent(this, ServiceBackground.class));
-			startActivity(new Intent(this, MainActivity.class));
-			setRefreshActionButtonState(true);
+			// startService(new Intent(this, ServiceBackground.class));
+			// startActivity(new Intent(this, MainActivity.class));
+			// setRefreshActionButtonState(true);
+			showAdmobInterstitial();
 			break;
 
 		case R.id.menu_changelog:

@@ -34,7 +34,6 @@ import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -126,7 +125,7 @@ public class FragTopics extends Fragment {
 	private void createAdView() {
 		// Criar o adView.
 		adView = new AdView(getActivity());
-		adView.setAdUnitId(ModConstants.MY_AD_UNIT_ID);
+		adView.setAdUnitId(ModConstants.MY_ADMOB_UNIT_ID);
 		adView.setAdSize(AdSize.SMART_BANNER);
 
 		// Pesquisar seu LinearLayout presumindo que ele foi dado
@@ -136,11 +135,10 @@ public class FragTopics extends Fragment {
 		mainLayout.addView(adView, 1);
 
 		// Iniciar uma solicitação genérica.
-		AdRequest adRequest = new AdRequest.Builder().build();
+		// AdRequest adRequest = new AdRequest.Builder().build();
 
 		// Test Mode
-		// AdRequest adRequest = new
-		// AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
 
 		// Carregar o adView com a solicitação de anúncio.
 		adView.loadAd(adRequest);
@@ -422,19 +420,42 @@ public class FragTopics extends Fragment {
 		return 0;
 	}
 
+	/**
+	 *
+	 * In the server test the URL given it's right and getmimeType is able to
+	 * return the correct mimeType but in the real Moodle server the giver URL
+	 * have some kind of issue which getMimeType return empty or null
+	 *
+	 * @param url
+	 * @return
+	 */
 	public static String getMimeType(String url) {
 		String type = null;
-		String extension = MimeTypeMap.getFileExtensionFromUrl(url);
 
-		if (extension != null) {
-			MimeTypeMap mime = MimeTypeMap.getSingleton();
-			type = mime.getMimeTypeFromExtension(extension);
-		}
-		// When the mimeType is not recognized by the mimeType List
-		if (extension.isEmpty()) {
-			if (url.contains((".flv")))
-				type = "video/x-flv";
-		}
+		if (url.contains((".flv")))
+			type = "video/x-flv";
+
+		if (url.contains((".pdf")))
+			type = "application/pdf";
+
+		if (url.contains((".doc")))
+			type = "application/msword";
+
+		if (url.contains((".xls")))
+			type = "application/vnd.ms-excel";
+
+		if (url.contains((".ppt")))
+			type = "application/vnd.ms-powerpoint";
+
+		if (url.contains((".jpeg")))
+			type = "image/jpeg";
+
+		if (url.contains((".png")))
+			type = "image/png";
+
+		if (url.contains((".gif")))
+			type = "image/gif";
+
 		return type;
 	}
 
