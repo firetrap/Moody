@@ -14,6 +14,7 @@ import restPackage.MoodleCourse;
 import restPackage.MoodleCourseContent;
 import restPackage.MoodleRestCourse;
 import restPackage.MoodleServices;
+import ads.MoodyAds;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
@@ -132,50 +133,8 @@ public class FragCoursesOverview extends Fragment {
 	}
 
 	private void createAdView() {
-		// Create the ads linearLayout witch will wrap the ads from 2 sources
-		adsLayout = new LinearLayout(getActivity());
-		adsLayout.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		adsLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-		/**
-		 * Admob
-		 */
-		// Create adView.
-		adMobView = new AdView(getActivity());
-		adMobView.setAdUnitId(ModConstants.MY_ADMOB_UNIT_ID);
-		adMobView.setAdSize(AdSize.SMART_BANNER);
-
-		// Add adMobView to the adsadMobView layout
-		adsLayout.addView(adMobView, 0);
-
-		// Init generic builder
-		// AdRequest adRequest = new AdRequest.Builder().build();
-
-		// Test Mode
-		AdRequest adRequest = new AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
-
-		// Load ads to the adView
-		adMobView.loadAd(adRequest);
-
-		/**
-		 * Revmob
-		 */
-		// // Starting RevMob session
-		// RevMob revmob = RevMob.start(getActivity()); // RevMob Media ID
-		// // configured in the
-		// // AndroidManifest.xml
-		// // file
-		//
-		// // Creating revMob banner
-		// RevMobBanner revMobView = revmob.createBanner(getActivity());
-		//
-		// // Add revMobView to the ads layout
-		// adsLayout.addView(revMobView, 1);
-		//
-
-		// add the 2 ads LinearLayout to the mainLayout
-		mainLayout.addView(adsLayout, 1);
+		// Add adMobView to the mainLayout
+		mainLayout.addView(new MoodyAds(getActivity()).createAdmobSmartBanner(), 1);
 	}
 
 	private void initCoursesList() {

@@ -41,7 +41,9 @@ import restPackage.MoodleRestMessage;
 import restPackage.MoodleRestUser;
 import restPackage.MoodleServices;
 import restPackage.MoodleUser;
+import service.ServiceBackground;
 import ui.CardTextView;
+import ads.MoodyAds;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -86,7 +88,6 @@ import bitmap.BitmapResizer;
 
 import com.firetrap.moody.R;
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.revmob.RevMob;
@@ -177,9 +178,6 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 
 		// Load ads
 
-		// RevMob
-		initRevMob();
-
 		// AdMob
 		initAdMob();
 
@@ -187,17 +185,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 
 	private void initAdMob() {
 		// Create the interstitial.
-		interstitial = new InterstitialAd(this);
-		interstitial.setAdUnitId(ModConstants.MY_ADMOB_UNIT_ID);
-
-		// Create ad request.
-		// AdRequest adRequest = new AdRequest.Builder().build();
-
-		// Test Mode
-		AdRequest adRequest = new AdRequest.Builder().addTestDevice(ModConstants.ADS_TEST_DEVICE_ID).build();
-
-		// Begin loading your interstitial.
-		interstitial.loadAd(adRequest);
+		interstitial = new MoodyAds(this).createAdmobInterstitial();
 
 		interstitial.setAdListener(new AdListener() {
 			public void onAdLoaded() {
@@ -206,18 +194,9 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 
 			@Override
 			public void onAdClosed() {
-				initAdMob();
+				// initAdMob();
 			}
 		});
-	}
-
-	private void initRevMob() {
-		// RevMob
-		revmob = RevMob.start(this);
-	}
-
-	private void showRevmobInterstitial() {
-		revmob.showFullscreen(this);
 	}
 
 	private void showAdmobInterstitial() {
@@ -813,7 +792,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 				showAdmobInterstitial();
 
 				// Display a revMob fullscreen ad when left app
-				// showRevmobInterstitial();
+				new MoodyAds(this).createRevmobInterstitial();
 
 				finish();
 			} else
@@ -989,10 +968,9 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 			break;
 
 		case R.id.action_refresh:
-			// startService(new Intent(this, ServiceBackground.class));
-			// startActivity(new Intent(this, MainActivity.class));
-			// setRefreshActionButtonState(true);
-			showAdmobInterstitial();
+			startService(new Intent(this, ServiceBackground.class));
+			startActivity(new Intent(this, MainActivity.class));
+			setRefreshActionButtonState(true);
 			break;
 
 		case R.id.menu_changelog:
