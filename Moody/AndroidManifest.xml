@@ -10,7 +10,7 @@
         android:protectionLevel="normal" />
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="13"
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="com.android.moody.permission.GET_SERVER_DATA" />
